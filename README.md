@@ -1,9 +1,5 @@
-# Junior-Challenge
-One Challenge to rule them all, One Challenge to find them, One Challenge to bring them all, and in the darkness bind them
-
 # Desafio Fullstack: Os Anéis do Poder
-
-Bem-vindo ao desafio de desenvolvimento fullstack! Aqui você terá a oportunidade de provar suas habilidades como desenvolvedor criando uma aplicação para gerenciar **os Anéis do Poder**, com base no universo de _O Senhor dos Anéis_. Prepare-se para embarcar nessa jornada épica!
+`One Challenge to rule them all, One Challenge to find them, One Challenge to bring them all, and in the darkness bind them`
 
 ## 💍 Contexto do Desafio
 
@@ -33,11 +29,11 @@ Criar uma API em **Node.js** com **TypeScript** para realizar as seguintes opera
 
 1. **Criar um Anel**  
    - O anel deverá ter as seguintes propriedades:
-     - `nome`: Nome do anel (ex: "Anel dos Elfos").
-     - `poder`: Uma breve descrição do poder do anel.
-     - `portador`: O nome do portador atual (Elfo, Anão, Homem, Sauron, etc.).
-     - `forjadoPor`: Quem forjou o anel (ex: "Celebrimbor", "Sauron").
-     - `quantidade`: Quantidade de anéis desse tipo (ex: 3 para os Elfos, 7 para os Anões, etc.).
+     - `nome`: Nome do anel (ex: "Narya, o anel do fogo").
+     - `poder`: Uma breve descrição do poder do anel (ex: "Seu portador ganha resistência ao fogo").
+     - `portador`: O nome do portador atual (Ex: Gandalf).
+     - `forjadoPor`: Quem forjou o anel (ex: Elfos).
+     - `imagem`: imagem de um anel genérica.
 
 2. **Listar os Anéis**  
    - A API deverá ser capaz de retornar uma lista com todos os anéis e suas propriedades.
