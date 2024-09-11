@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./styles/globals.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CreatePage from "./pages/Create/create";
 import HomePage from "./pages/Index";
