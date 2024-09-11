@@ -16,3 +16,7 @@ input, textarea {
 input::placeholder, textarea::placeholder {
   font-family: "Poppins", sans-serif;
 }
+
+body {
+ overflow-x: hidden;
+}

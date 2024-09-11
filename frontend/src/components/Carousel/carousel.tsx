@@ -3,7 +3,38 @@ import CardRing from "../CardRing/card-ring";
 
 const Carousel = () => {
 	return (
-		<Slider dots infinite speed={500} slidesToScroll={4} slidesToShow={4}>
+		<Slider
+			dots
+			initialSlide={0}
+			speed={500}
+			slidesToScroll={4}
+			slidesToShow={4}
+			pauseOnHover
+			autoplay
+			responsive={[
+				{
+					breakpoint: 1536,
+					settings: {
+						slidesToShow: 3,
+						slidesToScroll: 3,
+					},
+				},
+				{
+					breakpoint: 1028,
+					settings: {
+						slidesToShow: 2,
+						slidesToScroll: 2,
+					},
+				},
+				{
+					breakpoint: 640,
+					settings: {
+						slidesToShow: 1,
+						slidesToScroll: 1,
+					},
+				},
+			]}
+		>
 			<CardRing
 				name="Narya, o anel do fogo"
 				power="Seu portador ganha resistência ao fogo"
