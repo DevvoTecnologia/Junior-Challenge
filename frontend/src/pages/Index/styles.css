@@ -12,6 +12,9 @@
   font-size: 16px;
 }
 
-.card-container {
+.content-container {
   padding: 16px 0px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
 }

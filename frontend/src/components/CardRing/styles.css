@@ -1,15 +1,22 @@
 .card-ring {
   width: 98%;
-  background-color: #e5e5e5;
-  border: 1px solid #a3a3a3;
+  background-color: #171717;
+  border: 2px solid #525252;
   border-radius: 6px;
   padding: 16px;
+  color: #fff;
   display: flex;
   flex-direction: column;
+  transition: all 0.3s ease;
 }
 
 .card-ring > img {
   width: 100%;
   border-radius: 6px;
   margin-top: 8px;
+}
+
+.card-ring:hover {
+  background-color: #404040;
+  border: 2px solid #737373;
 }

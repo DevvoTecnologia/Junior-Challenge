@@ -1,5 +1,5 @@
 import Slider from "react-slick";
-import CardRing from "../CardRing/card-ring";
+import CardRing from "./CardRing/card-ring";
 
 const Carousel = () => {
 	return (

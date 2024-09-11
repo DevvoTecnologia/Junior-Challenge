@@ -1,4 +1,5 @@
-import Carousel from "../../components/Carousel/carousel";
+import Button from "../../components/Button/button";
+import Carousel from "../../components/carousel";
 import "./styles.css";
 
 const HomePage = () => {
@@ -11,7 +12,10 @@ const HomePage = () => {
 					Challenge to bring them all, and in the darkness bind them
 				</p>
 			</div>
-			<div className="card-container">
+			<div className="content-container">
+				<Button href="/create" type="button">
+					Crie um novo anel
+				</Button>
 				<Carousel />
 			</div>
 		</main>

@@ -1,0 +1,29 @@
+.button, .link-button {
+  font-size: 14px;
+  border-radius: 6px;
+  background-color: #171717;
+  color: #fff;
+  border: 2px solid #525252;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.button {
+  padding: 8px 12px;
+}
+
+.button:hover, .link-button:hover {
+  background-color: #404040;
+  border: 2px solid #737373;
+}
+
+.link-button > a {
+  color: #fff;
+  padding: 8px 12px;
+}
+
+.link-button {
+  width: fit-content;
+  height: 100%;
+  display: flex;
+}

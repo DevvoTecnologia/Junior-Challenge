@@ -1,0 +1,25 @@
+.input-container {
+  display: flex;
+  flex-direction: column;
+  row-gap: 4px;
+}
+
+.input-container > input {
+  background-color: #171717;
+  color: #fff;
+  border: 2px solid #525252;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.input-container > input:focus {
+  background-color: #404040;
+  border: 2px solid #737373;
+}
+
+.text-error {
+  color: red;
+  font-size: 12px;
+}
