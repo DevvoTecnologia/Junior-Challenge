@@ -1,6 +1,6 @@
 .form-create-ring {
   max-width: 768px;
-  margin: 16px auto;
+  width: 100%;
   border: 2px solid #525252;
   border-radius: 6px;
   padding: 12px;

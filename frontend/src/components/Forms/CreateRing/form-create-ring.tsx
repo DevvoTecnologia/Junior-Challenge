@@ -20,6 +20,10 @@ const FormCreateRing = () => {
 
 	return (
 		<form onSubmit={handleSubmit(createNewRing)} className="form-create-ring">
+			<div className="title-container">
+				<h1>Formulário de criação um novo anel</h1>
+				<p>Insira os dados e crie um novo anel</p>
+			</div>
 			<Input
 				id="name"
 				{...register("name")}

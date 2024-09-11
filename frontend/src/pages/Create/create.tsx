@@ -3,11 +3,7 @@ import "./styles.css";
 
 const CreatePage = () => {
 	return (
-		<main className="container">
-			<div className="title-container">
-				<h1>Formulário de criação um novo anel</h1>
-				<p>Insira os dados e crie um novo anel</p>
-			</div>
+		<main className="container centralize">
 			<FormCreateRing />
 		</main>
 	);
