@@ -1,13 +1,6 @@
+import { RingRequest } from '../../interfaces/ring-request';
 import { prismaClient } from '../../lib/prisma';
 import { ringLimits } from '../../validation/ring-limits';
-
-interface RingRequest {
-  name: string;
-  power: string;
-  bearer: string;
-  forgedBy: string;
-  image: string;
-}
 
 export class CreateRingService {
   async execute({ name, power, bearer, forgedBy, image }: RingRequest) {
@@ -20,7 +13,7 @@ export class CreateRingService {
         `${
           forgedBy === 'Sauron'
             ? `${forgedBy} já atingiu o limite de anéis`
-            : `os ${forgedBy} já atingiram o limite de anéis`
+            : `Os ${forgedBy} já atingiram o limite de anéis`
         }  (${ringLimits[forgedBy as keyof typeof ringLimits]}).`,
       );
     }

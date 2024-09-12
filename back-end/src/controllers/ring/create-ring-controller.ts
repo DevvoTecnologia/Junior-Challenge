@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 import { z } from 'zod';
 import { CreateRingService } from '../../services/ring/create-ring-service';
-import { ringSchema } from '../../validation/ring-schema';
+import { createRingSchema } from '../../validation/ring-schema';
 
 export class CreateRingController {
   async handle(req: Request, res: Response) {
     try {
-      const validatedData = ringSchema.parse(req.body);
+      const validatedData = createRingSchema.parse(req.body);
       const createRingService = new CreateRingService();
 
       const ring = await createRingService.execute(validatedData);
