@@ -1,140 +1,102 @@
-# Desafio Fullstack: Os Anéis de Poder
-_One Challenge to rule them all, One Challenge to find them, One Challenge to bring them all, and in the darkness bind them_
+# API para Gerenciamento de Anéis
+Esta API foi desenvolvida para gerenciar anéis com base em regras de negócios específicas. A API permite criar, listar, atualizar e deletar anéis, além de gerenciar autenticação de usuários.
 
-## 💍 Contexto do Desafio
+## Funcionalidades
 
-O grande mago J.R.R. Tolkien nos deixou a famosa frase:
+###  1 - Criação de Usuário
 
-> **Three Rings for the Elven-kings under the sky,  
-> Seven for the Dwarf-lords in their halls of stone,  
-> Nine for Mortal Men doomed to die,  
-> One for the Dark Lord on his dark throne  
-> In the Land of Mordor where the Shadows lie.  
-> One Ring to rule them all, One Ring to find them,  
-> One Ring to bring them all, and in the darkness bind them  
-> In the Land of Mordor where the Shadows lie.**
+**POST - /api/users/** 
 
-Sua missão será criar um CRUD (Create, Read, Update, Delete) para gerenciar os anéis e desenvolver um frontend para visualizar e manipular essas informações.
+Cria um usuário.
 
-## 🎯 Objetivo
+Exemplo de Requisição:
+```json
+{
+  "login": "testLogin",
+  "senha": "yourPassword"
+}
+```
 
-### Backend
-Criar uma API em **Node.js** com **TypeScript** para realizar as seguintes operações:
+###  2 - Autenticação de Usuário
 
-- **Criar** (POST) um novo anel.
-- **Listar** (GET) todos os anéis.
-- **Atualizar** (PUT) as informações de um anel.
-- **Deletar** (DELETE) um anel existente.
+**POST - /api/login**
 
-### Frontend
-Desenvolver uma interface simples em **React** com as seguintes telas:
+ Autentica um usuário e retorna um token JWT.
 
-- **Tela de Criação/Atualização**: Formulário para criar um novo anel ou atualizar um anel existente.
-- **Tela de Visualização**: Exibição dos anéis criados em um **carrossel**, mostrando as informações de cada anel (nome, poder, portador, forjadoPor e imagem).
+Exemplo de Requisição:
+```json
+{
+  "login": "testLogin",
+  "senha": "yourPassword"
+}
+```
 
-## ⚔️ Requisitos Funcionais
+### 3 - Gerenciamento de Anéis
 
-### Backend
+**POST - /api/anel**
 
-1. **Criar um Anel**  
-   O anel deverá ter as seguintes propriedades:
-   - `nome`: Nome do anel (ex: "Narya, o anel do fogo").
-   - `poder`: Uma breve descrição do poder do anel (ex: "Seu portador ganha resistência ao fogo").
-   - `portador`: O nome do portador atual (Ex: Gandalf).
-   - `forjadoPor`: Quem forjou o anel (ex: Elfos).
-   - `imagem`: URL de uma imagem genérica do anel.
+Cria um novo anel.
 
-2. **Regras de Negócio para Criação de Anéis**  
-   A API deverá garantir que a quantidade máxima de anéis criados respeite as seguintes regras:
-   
-   - **Elfos**: No máximo 3 anéis.
-   - **Anões**: No máximo 7 anéis.
-   - **Homens**: No máximo 9 anéis.
-   - **Sauron**: Apenas 1 anel.
+Exemplo de Requisição:
+```json
+{
+  "nome": "Narya, o anel do fogo",
+  "poder": "Seu portador ganha resistência ao fogo",
+  "portador": "Gandalf",
+  "forjadoPor": "Elfos",
+  "imagem": "https://exemplo.com/imagem_narya.jpg"
+}
+```
 
-   Caso o limite seja excedido, a criação deve ser rejeitada com uma mensagem de erro adequada.
+**GET - /api/anel**
 
-3. **Listar os Anéis**  
-   A API deverá retornar uma lista com todos os anéis e suas propriedades.
+Lista todos os anéis.
 
-4. **Atualizar um Anel**  
-   Deve ser possível atualizar as informações de um anel específico (ex: alterar o portador ou a descrição do poder).
+**GET - /api/anel/id**
 
-5. **Deletar um Anel**  
-   Deve ser possível remover um anel do banco de dados.
+Obtém um anel específico pelo ID.
 
-### Frontend
+**PUT - /api/anel/id**
 
-1. **Tela de Criação/Atualização de Anel**  
-   - Um formulário com os seguintes campos:
-     - `nome`: Campo de texto para o nome do anel.
-     - `poder`: Campo de texto para a descrição do poder do anel.
-     - `portador`: Campo de texto para o nome do portador.
-     - `forjadoPor`: Campo de texto para indicar quem forjou o anel.
-     - `imagem`: Como a imagem vai ser genérica você pode tanto deixar o uauário escolher entre as imagens que o próprio sistema fornece ou remover esse campo e deixar uma imagem default.
-   - Botões para:
-     - **Criar**: Submeter o formulário para criar um novo anel.
-     - **Atualizar**: Alterar as informações de um anel existente.
+Atualiza as informações de um anel.
 
-2. **Tela de Visualização dos Anéis**
-   - Exibir todos os anéis em um **carrossel** (ou grid), mostrando:
-     - Nome, poder, portador, forjadoPor, e a imagem do anel.
-   - O carrossel deve ser responsivo e permitir rolar entre os anéis cadastrados.
-   - Adicionar a possibilidade de **excluir** ou **editar** um anel diretamente dessa tela.
+**DELETE - /api/anel/id**
 
-## 🚀 Tecnologias
+Deleta um anel específico pelo ID.
 
-- **Backend**:
-  - **Node.js** com **TypeScript**
-  - **Express** (ou outro framework para criar a API)
-  - **Banco de Dados**: MySQL, PostgreSQL, MongoDB, etc.
-  - **ORM/ODM**: Sequelize, TypeORM ou Mongoose.
 
-- **Frontend**:
-  - **React**
-  - **Biblioteca para Carrossel**: Você pode utilizar bibliotecas como `react-slick` ou outra para implementar o carrossel.
+## Configuração do Ambiente
 
-## 🛠️ Instruções
+### 1 - Instale as dependências:
 
-1. Faça o **fork** deste repositório.
-2. Crie uma nova branch com o nome do seu desafio: `git checkout -b desafio-seu-nome`.
-3. Implemente sua solução backend e frontend conforme os requisitos descritos.
-4. Faça o **commit** das suas alterações: `git commit -m 'Desafio finalizado'`.
-5. Faça o **push** para a branch criada: `git push origin desafio-seu-nome`.
-6. Crie um **Pull Request** para o repositório principal.
-7. Envie um email para "contato@devvo.com.br" falando que finalizou seu desafio e encaminhando o link do Pull Request
+```bash
+npm install
+```
 
-## 📝 Regras e Critérios de Avaliação
+### 2 - Configure o arquivo .env:
 
-1. **Organização do código**: Estrutura clara e modularidade do código.
-2. **Boas práticas**: Uso de boas práticas de desenvolvimento, como SOLID e DRY.
-3. **Frontend**: Interface limpa, funcional e interativa (carrossel funcionando corretamente).
-4. **Validação da Regra de Negócio**: Implementação correta da validação do limite de anéis por portador.
-5. **Testes**: Testes unitários e/ou de integração serão um diferencial.
-6. **Documentação**: Adicione uma breve documentação da API e do frontend (pode ser no próprio README ou em uma ferramenta como Swagger).
+Crie um arquivo .env na raiz do projeto e adicione as seguintes variáveis:
 
-## 🔥 Desafios Extras (Opcional)
+- DB_TYPE=mysql
+- DB_HOST=localhost
+- DB_PORT=3306
+- DB_USERNAME=root
+- DB_PASSWORD=yourpassword
+- DB_NAME=DB_TESTE_DEVVO
 
-Se quiser ir além, aqui estão algumas sugestões de funcionalidades extras:
 
-- **Autenticação**: Implemente um sistema de autenticação (JWT, OAuth, etc.).
-- **Relacionamentos entre entidades**: Adicione relacionamentos entre os anéis e seus portadores (Ex: um portador pode ter mais de um anel, ou um anel pode ter sido passado por diferentes portadores ao longo do tempo).
-- **Animações no Frontend**: Adicione animações ao carrossel ou à interface de criação de anéis.
-- **Responsividade Avançada**: Certifique-se de que o carrossel e todas as funcionalidades são totalmente responsivas em diferentes dispositivos.
+## Notas:
+- DB_TYPE: Tipo de banco de dados (no seu caso, mysql).
+- DB_HOST: Endereço do banco de dados.
+- DB_PORT: Porta do banco de dados.
+- DB_USERNAME: Nome de usuário para o banco de dados.
+- DB_PASSWORD: Senha para o banco de dados.
+- DB_NAME: Nome do banco de dados.
 
-## 🧙‍♂️ Dicas
+### 3 - Execute a aplicação:
 
-- Divida a lógica do backend em camadas (Controllers, Services, Models).
-- Utilize hooks e componentes funcionais no frontend para um código mais limpo.
-- Utilize **TypeScript** tanto no backend quanto no frontend para garantir tipagem estática.
-- Planeje a interface para ser intuitiva e simples de usar.
+Inicie o servidor com:
 
-## 🧭 Referências
-
-- [Documentação do Node.js](https://nodejs.org/en/docs/)
-- [Documentação do TypeScript](https://www.typescriptlang.org/docs/)
-- [Documentação do React](https://reactjs.org/docs/getting-started.html)
-
----
-
-_May the Light of Eärendil guide you in this challenge!_
+```bash
+npm start
+```
