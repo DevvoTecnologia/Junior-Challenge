@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15-alpine
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: ${DB_NAME:-hub}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - /usr/src/app/node_modules
+
+    networks:
+      - app-network
+
+  app:
+    build: .
+    environment:
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      DB_NAME: ${DB_NAME:-hub}
+      DB_HOST: ${DB_NAME:-host}
+      DB_PORT: ${DB_PORT:-5432}
+      PORT: ${PORT:-3000}
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    networks:
+      - app-network
+    # volumes:
+    #       - .:/app  # Monta o diretório atual no contêiner
+    # command: npm run start:dev
+networks:
+  app-network:
+
+volumes:
+  postgres-data:
