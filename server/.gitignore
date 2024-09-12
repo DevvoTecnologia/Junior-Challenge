@@ -1,0 +1,10 @@
+.DS_*
+.vscode
+.env
+*.log
+logs
+**/*.backup.*
+**/*.back.*
+
+node_modules
+bower_components
