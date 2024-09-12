@@ -3,8 +3,11 @@ import { CreateRingController } from './controllers/ring/create-ring-controller'
 import { ListRingController } from './controllers/ring/list-ring-controller';
 import { UpdateRingController } from './controllers/ring/update-ring-controller';
 import { RemoveRingController } from './controllers/ring/remove-ring-controller';
+import { CreateUserController } from './controllers/user/create-user-controller';
 
 export const router = Router();
+
+router.post('/users', new CreateUserController().handle);
 
 router.get('/rings', new ListRingController().handle);
 router.post('/rings', new CreateRingController().handle);

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { z } from 'zod';
+import { ZodError } from 'zod';
 import { CreateRingService } from '../../services/ring/create-ring-service';
 import { createRingSchema } from '../../validation/ring-schema';
 
@@ -13,7 +13,7 @@ export class CreateRingController {
 
       return res.status(201).json(ring);
     } catch (error: any) {
-      if (error instanceof z.ZodError) {
+      if (error instanceof ZodError) {
         return res.status(400).json({ error: error.errors[0].message });
       }
 
