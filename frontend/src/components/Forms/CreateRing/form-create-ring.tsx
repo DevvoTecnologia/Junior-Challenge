@@ -6,9 +6,12 @@ import { type Anel, anelSchema } from "../../../utils/zod/ring";
 import Button from "../../Button/button";
 import { sendToast } from "../../../utils/utils";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import type { ApiResponse } from "../../../types/types";
 
 const FormCreateRing = () => {
 	const [isLoading, setIsLoading] = useState(false);
+	const navigate = useNavigate();
 	const {
 		register,
 		handleSubmit,
@@ -31,9 +34,11 @@ const FormCreateRing = () => {
 				},
 			);
 
+			const data = (await response.json()) as ApiResponse<Anel>;
+
 			if (!response.ok) {
 				sendToast({
-					message: "Ocorreu um erro ao enviar o formulário",
+					message: data.message ?? "Ocorreu um erro ao enviar o formulário",
 					type: "error",
 				});
 				return;
@@ -43,6 +48,7 @@ const FormCreateRing = () => {
 				message: "Anel criado com sucesso!",
 				type: "success",
 			});
+			navigate("/");
 		} catch (error) {
 			console.log(error);
 			sendToast({
@@ -85,7 +91,7 @@ const FormCreateRing = () => {
 				id="forgedBy"
 				label="Forjado Por"
 				{...register("forgedBy")}
-				placeholder="Forjado por ex: Elfos"
+				placeholder="Forjado por ex: Elfos, Anões, Homens e Sauron"
 				error={errors.forgedBy?.message}
 			/>
 			<Input

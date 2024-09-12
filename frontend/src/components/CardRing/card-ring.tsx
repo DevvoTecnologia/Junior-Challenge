@@ -1,7 +1,7 @@
-import type { Anel } from "../../utils/zod/ring";
 import "./styles.css";
+import { RingType } from "../../../../shared/types";
 
-const CardRing = ({ bearer, forgedBy, image, name, power }: Anel) => {
+const CardRing = ({ bearer, forgedBy, image, name, power }: RingType) => {
 	return (
 		<div className="card-ring">
 			<h2>{name}</h2>

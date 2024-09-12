@@ -12,6 +12,11 @@ export const getRings = async (): Promise<Ring[]> => {
 	return await ringRepository.find();
 };
 
+export const getCountByForgedBy = async (forgedBy: string): Promise<number> => {
+	const count = await ringRepository.count({ where: { forgedBy } });
+	return count;
+};
+
 export const updateRing = async (
 	id: string,
 	newData: Partial<Ring>,

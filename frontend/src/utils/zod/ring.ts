@@ -9,3 +9,4 @@ export const anelSchema = z.object({
 });
 
 export type Anel = z.infer<typeof anelSchema>;
+export type AnelDb = z.infer<typeof anelSchema> & { id: string };
