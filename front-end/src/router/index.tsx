@@ -17,7 +17,7 @@ const Router = () => {
         </Route>
 
         <Route element={<AuthGuard isPrivate={true} />}>
-          <Route path="/rings" element={<Home />} />
+          <Route path="/" element={<Home />} />
         </Route>
       </Routes>
     </BrowserRouter>

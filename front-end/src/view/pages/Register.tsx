@@ -1,8 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useRegister } from '@/hooks/use-register';
 import { Link } from 'react-router-dom';
 
 const Register = () => {
+  const { isPending, errors, register, onSubmit } = useRegister();
+
   return (
     <div className="w-full">
       <header className="flex flex-col items-center text-center">
@@ -22,11 +25,26 @@ const Register = () => {
         </p>
       </header>
 
-      <form className="mt-[60px] flex flex-col gap-4">
-        <Input placeholder="Nome" type="text" />
-        <Input placeholder="E-mail" type="email" />
-        <Input placeholder="Senha" type="password" />
-        <Button type="submit" className="mt-2">
+      <form className="mt-[60px] flex flex-col gap-4" onSubmit={onSubmit}>
+        <Input
+          placeholder="Nome"
+          type="text"
+          {...register('name')}
+          error={errors.name?.message}
+        />
+        <Input
+          placeholder="E-mail"
+          type="email"
+          {...register('email')}
+          error={errors.email?.message}
+        />
+        <Input
+          placeholder="Senha"
+          type="password"
+          {...register('password')}
+          error={errors.password?.message}
+        />
+        <Button type="submit" className="mt-2" isLoading={isPending}>
           Criar conta
         </Button>
       </form>
