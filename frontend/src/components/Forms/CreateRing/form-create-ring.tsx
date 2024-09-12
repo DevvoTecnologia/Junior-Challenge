@@ -4,8 +4,11 @@ import "./styles.css";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type Anel, anelSchema } from "../../../utils/zod/ring";
 import Button from "../../Button/button";
+import { sendToast } from "../../../utils/utils";
+import { useState } from "react";
 
 const FormCreateRing = () => {
+	const [isLoading, setIsLoading] = useState(false);
 	const {
 		register,
 		handleSubmit,
@@ -14,8 +17,41 @@ const FormCreateRing = () => {
 		resolver: zodResolver(anelSchema),
 	});
 
-	const createNewRing = (formData: Anel) => {
-		console.log(formData);
+	const createNewRing = async (formData: Anel) => {
+		try {
+			setIsLoading(true);
+			const response = await fetch(
+				`${process.env.REACT_APP_BACKEND_URL}/api/rings`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(formData),
+				},
+			);
+
+			if (!response.ok) {
+				sendToast({
+					message: "Ocorreu um erro ao enviar o formulário",
+					type: "error",
+				});
+				return;
+			}
+
+			sendToast({
+				message: "Anel criado com sucesso!",
+				type: "success",
+			});
+		} catch (error) {
+			console.log(error);
+			sendToast({
+				message: "Ocorreu um erro ao enviar o formulário",
+				type: "error",
+			});
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	return (
@@ -59,7 +95,9 @@ const FormCreateRing = () => {
 				placeholder="URL da imagem"
 				error={errors.image?.message}
 			/>
-			<Button type="submit">Enviar</Button>
+			<Button isLoading={isLoading} type="submit">
+				Enviar
+			</Button>
 		</form>
 	);
 };

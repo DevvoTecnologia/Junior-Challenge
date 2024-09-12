@@ -1,20 +1,26 @@
 import type { ButtonHTMLAttributes } from "react";
 import "./styles.css";
+import Spinner from "../Spinner/spinner";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 	href?: string;
+	isLoading?: boolean;
 };
 
-const Button = ({ href, ...props }: ButtonProps) => {
+const Button = ({ href, isLoading, children, ...props }: ButtonProps) => {
 	if (href) {
 		return (
-			<button className="link-button" {...props}>
-				<a href={href}>{props.children}</a>
+			<button disabled={isLoading} className="link-button" {...props}>
+				{isLoading ? <Spinner /> : <a href={href}>{children}</a>}
 			</button>
 		);
 	}
 
-	return <button className="button" {...props} />;
+	return (
+		<button disabled={isLoading} className="button" {...props}>
+			{isLoading ? <Spinner /> : children}
+		</button>
+	);
 };
 
 export default Button;

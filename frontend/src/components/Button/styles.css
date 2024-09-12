@@ -6,6 +6,7 @@
   border: 2px solid #525252;
   transition: all 0.3s ease;
   cursor: pointer;
+  height: 42px;
 }
 
 .button {

@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CreatePage from "./pages/Create/create";
 import HomePage from "./pages/Index";
+import { Toaster } from "react-hot-toast";
 
 const router = createBrowserRouter([
 	{
@@ -24,6 +25,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
 	<React.StrictMode>
+		<Toaster />
 		<RouterProvider router={router} />
 	</React.StrictMode>,
 );
