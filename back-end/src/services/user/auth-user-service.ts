@@ -16,8 +16,8 @@ export class AuthUserService {
     if (!passwordMatch) throw new Error('Email ou senha incorreto.');
 
     const jwtService = new JwtService();
-    const token = jwtService.generateToken(user.id);
+    const accessToken = jwtService.generateToken(user.id);
 
-    return { token };
+    return { accessToken };
   }
 }

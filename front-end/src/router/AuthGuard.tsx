@@ -4,9 +4,9 @@ import { Navigate, Outlet } from 'react-router-dom';
 const AuthGuard = ({ isPrivate }: { isPrivate?: boolean }) => {
   const { authorized } = useAuth();
 
-  if (!authorized && isPrivate) return <Navigate to="/" replace />;
+  if (!authorized && isPrivate) return <Navigate to="/login" replace />;
 
-  if (authorized && !isPrivate) return <Navigate to="/rings" replace />;
+  if (authorized && !isPrivate) return <Navigate to="/" replace />;
 
   return <Outlet />;
 };
