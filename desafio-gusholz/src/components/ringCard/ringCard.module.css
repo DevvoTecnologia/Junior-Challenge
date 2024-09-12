@@ -1,0 +1,10 @@
+.ringCard {
+  display: flex;
+  flex-direction: column;
+  background-color: #CBCBCB;
+  margin: 1rem;
+  padding: 2rem;
+  gap: 8px;
+  border-radius: 8px;
+  min-width: fit-content;
+}
