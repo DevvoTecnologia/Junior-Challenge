@@ -1,0 +1,25 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/server.js",
+  "private": true,
+  "scripts": {
+    "start": "node dist/server.js",
+    "dev": "tsx --env-file=.env --watch src/server.ts",
+    "build": "pnpm install --frozen-lockfile && npx tsc"
+  },
+  "keywords": [],
+  "author": "João Vítor Ferraz",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "pg": "^8.12.0",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.20"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.1"
+  }
+}

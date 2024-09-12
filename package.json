@@ -1,0 +1,27 @@
+{
+  "name": "Junior-Challenge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:backend": "pnpm --filter backend start",
+    "start:frontend": "pnpm --filter frontend start",
+    "dev": "pnpm run -r --parallel start",
+    "lint": "eslint \"**/*.{js,ts,tsx}\""
+  },
+  "keywords": [],
+  "private": true,
+  "author": "João Vítor Ferraz",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.10.0",
+    "@types/cors": "^2.8.17",
+    "@types/eslint__js": "^8.42.3",
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.5.4",
+    "eslint": "^9.10.0",
+    "eslint-config-prettier": "^9.1.0",
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.5.0"
+  }
+}
