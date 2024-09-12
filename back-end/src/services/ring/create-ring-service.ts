@@ -1,4 +1,5 @@
 import { prismaClient } from '../../lib/prisma';
+import { ringLimits } from '../../validation/ring-limits';
 
 interface RingRequest {
   name: string;
@@ -7,13 +8,6 @@ interface RingRequest {
   forgedBy: string;
   image: string;
 }
-
-const ringLimits = {
-  Elfos: 3,
-  Anões: 7,
-  Homens: 9,
-  Sauron: 1,
-};
 
 export class CreateRingService {
   async execute({ name, power, bearer, forgedBy, image }: RingRequest) {
