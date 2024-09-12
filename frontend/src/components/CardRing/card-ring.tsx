@@ -1,9 +1,11 @@
 import "./styles.css";
-import { RingType } from "../../../../shared/types";
+import type { RingType } from "../../../../shared/types";
+import RemoveRing from "../RemoveRing/remove-ring";
 
-const CardRing = ({ bearer, forgedBy, image, name, power }: RingType) => {
+const CardRing = ({ bearer, id, forgedBy, image, name, power }: RingType) => {
 	return (
 		<div className="card-ring">
+			<RemoveRing ringId={id} />
 			<h2>{name}</h2>
 			<p>
 				<b>Poder:</b> {power}

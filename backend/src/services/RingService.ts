@@ -1,3 +1,4 @@
+import type { DeleteResult } from "typeorm";
 import { Ring } from "../models/Ring";
 import { AppDataSource } from "../utils/data-source";
 
@@ -27,6 +28,6 @@ export const updateRing = async (
 	});
 };
 
-export const deleteRing = async (id: string): Promise<void> => {
-	await ringRepository.delete(id);
+export const deleteRing = async (id: string): Promise<DeleteResult> => {
+	return await ringRepository.delete(id);
 };

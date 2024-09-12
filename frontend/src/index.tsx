@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CreatePage from "./pages/Create/create";
 import HomePage from "./pages/Index";
 import { Toaster } from "react-hot-toast";
+import { RingProvider } from "./context/RingContext";
 
 const router = createBrowserRouter([
 	{
@@ -25,7 +26,9 @@ const root = ReactDOM.createRoot(
 
 root.render(
 	<React.StrictMode>
-		<Toaster />
-		<RouterProvider router={router} />
+		<RingProvider>
+			<Toaster />
+			<RouterProvider router={router} />
+		</RingProvider>
 	</React.StrictMode>,
 );

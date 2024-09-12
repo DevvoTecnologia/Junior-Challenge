@@ -38,16 +38,17 @@ const FormCreateRing = () => {
 
 			if (!response.ok) {
 				sendToast({
-					message: data.message ?? "Ocorreu um erro ao enviar o formulário",
+					message: data.message,
 					type: "error",
 				});
 				return;
 			}
 
 			sendToast({
-				message: "Anel criado com sucesso!",
+				message: data.message,
 				type: "success",
 			});
+
 			navigate("/");
 		} catch (error) {
 			console.log(error);

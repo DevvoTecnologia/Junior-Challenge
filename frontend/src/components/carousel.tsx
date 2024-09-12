@@ -1,22 +1,13 @@
 import Slider from "react-slick";
 import CardRing from "./CardRing/card-ring";
-import { useEffect, useState } from "react";
-import type { RingType } from "../../../shared/types";
+import { useRingContext } from "../context/RingContext";
 
 const Carousel = () => {
-	const [rings, setRings] = useState<RingType[]>([]);
-	console.log(rings);
+	const { rings, pendingRings } = useRingContext();
 
-	useEffect(() => {
-		fetch(`${process.env.REACT_APP_BACKEND_URL}/api/rings`, {
-			method: "GET",
-			headers: {
-				"Content-Type": "application/json",
-			},
-		})
-			.then(async (response) => await response.json())
-			.then((data) => setRings(data.data));
-	}, []);
+	if (pendingRings) {
+		return <p>Carregando aneis...</p>;
+	}
 
 	if (rings.length === 0) {
 		return <p>Você não tem nenhum anel criado!</p>;
@@ -64,6 +55,7 @@ const Carousel = () => {
 					bearer={ring.bearer}
 					forgedBy={ring.forgedBy}
 					image={ring.image}
+					id={ring.id}
 				/>
 			))}
 		</Slider>

@@ -9,6 +9,7 @@ import {
 } from "../services/RingService";
 import { anelSchema } from "../utils/zod/ring";
 import type { Request, Response } from "express";
+import { QueryFailedError } from "typeorm";
 
 const ringController = {
 	createRing: async (req: Request, res: Response) => {
@@ -31,7 +32,7 @@ const ringController = {
 			}
 
 			const ring = await createRing(body);
-			return res.status(HttpStatusCode.ok).json({
+			return res.status(HttpStatusCode.created).json({
 				data: ring,
 				message: "Anel criado com sucesso!",
 			});
@@ -83,15 +84,41 @@ const ringController = {
 	// 	}
 	// },
 
-	// deleteRing: async (req: Request, res: Response) => {
-	// 	try {
-	// 		const { id } = req.params;
-	// 		await deleteRing(Number(id));
-	// 		return res.status(204).send();
-	// 	} catch (error) {
-	// 		return res.status(400).json({ error: error.message });
-	// 	}
-	// },
+	deleteRing: async (req: Request, res: Response) => {
+		try {
+			const { id } = req.params;
+
+			if (!id) {
+				return res.status(HttpStatusCode.noContent).json({
+					message: "Dados inválidos",
+				});
+			}
+
+			const deletedRing = await deleteRing(id);
+
+			if (deletedRing.affected === 0) {
+				return res.status(HttpStatusCode.notFound).send({
+					message: "Anel não encontrado",
+				});
+			}
+
+			return res.status(HttpStatusCode.ok).send({
+				message: "Anel deletado com sucesso!",
+			});
+		} catch (error) {
+			console.log(error);
+
+			if (error instanceof QueryFailedError) {
+				return res.status(HttpStatusCode.badRequest).json({
+					message: "ID do anel fornecido é inválido.",
+				});
+			}
+
+			return res.status(HttpStatusCode.badRequest).json({
+				message: "Ocorreu um erro ao excluir um anel",
+			});
+		}
+	},
 };
 
 export default ringController;
