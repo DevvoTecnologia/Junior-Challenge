@@ -23,8 +23,8 @@ const Login = () => {
       </header>
 
       <form className="mt-[60px] flex flex-col gap-4">
-        <Input placeholder="E-mail" />
-        <Input placeholder="Senha" />
+        <Input placeholder="E-mail" type="email" />
+        <Input placeholder="Senha" type="password" />
         <Button type="submit" className="mt-2">
           Entrar
         </Button>

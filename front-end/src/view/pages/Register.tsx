@@ -1,3 +1,5 @@
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Link } from 'react-router-dom';
 
 const Register = () => {
@@ -20,7 +22,14 @@ const Register = () => {
         </p>
       </header>
 
-      <form></form>
+      <form className="mt-[60px] flex flex-col gap-4">
+        <Input placeholder="Nome" type="text" />
+        <Input placeholder="E-mail" type="email" />
+        <Input placeholder="Senha" type="password" />
+        <Button type="submit" className="mt-2">
+          Criar conta
+        </Button>
+      </form>
     </div>
   );
 };
