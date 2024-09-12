@@ -12,7 +12,6 @@
   "author": "Arthur Loyola",
   "license": "ISC",
   "dependencies": {
-    "@google/generative-ai": "^0.17.1",
     "@prisma/client": "^5.19.0",
     "axios": "^1.7.5",
     "bcrypt": "^5.1.1",

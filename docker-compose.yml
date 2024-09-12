@@ -1,13 +1,16 @@
 version: '3.8'
 services:
   app:
+    container_name: aneis_container_
     build: .
+    working_dir: /app/src
     ports:
       - "3000:3000"
     env_file:
       - .env
     depends_on:
       - db
+    restart: always
     volumes:
       - .:/app
       - /app/node_modules
