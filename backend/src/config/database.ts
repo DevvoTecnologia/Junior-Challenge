@@ -1,4 +1,6 @@
 import { DataSource } from 'typeorm';
+import { Owner } from '../models/Owner';
+import { Ring } from '../models/Ring';
 
 const dbClient = new DataSource({
   type: 'postgres',
@@ -9,7 +11,7 @@ const dbClient = new DataSource({
   database: process.env.DB_NAME || 'rings_of_power',
   synchronize: true,
   logging: false,
-  entities: [],
+  entities: [Ring, Owner],
   migrations: [],
   subscribers: [],
 });
