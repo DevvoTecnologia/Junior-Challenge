@@ -8,7 +8,6 @@ export class CreateUserController {
     try {
       const validatedData = signUpSchema.parse(req.body);
       const createUserService = new CreateUserService();
-
       const user = await createUserService.execute(validatedData);
 
       return res.status(201).json(user);

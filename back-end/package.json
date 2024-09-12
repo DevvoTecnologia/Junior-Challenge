@@ -4,8 +4,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
-    "dev": "nodemon src/server.ts"
+    "build": "prisma generate && npx prisma migrate deploy && tsc",
+    "dev": "ts-node-dev src/server.ts",
+    "start": "npm run build && node dist/server.js"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +17,7 @@
     "bcryptjs": "^2.4.3",
     "express": "^4.21.0",
     "jsonwebtoken": "^9.0.2",
+    "ts-node-dev": "^2.0.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -26,9 +28,7 @@
     "@types/node": "^22.5.4",
     "eslint": "^9.10.0",
     "globals": "^15.9.0",
-    "nodemon": "^3.1.4",
     "prisma": "^5.19.1",
-    "ts-node": "^10.9.2",
     "typescript": "^5.6.2",
     "typescript-eslint": "^8.5.0"
   }

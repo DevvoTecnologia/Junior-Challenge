@@ -8,7 +8,6 @@ export class UpdateRingController {
     try {
       const { id } = req.params;
       const validatedData = updateRingSchema.parse({ ...req.body, id });
-
       const updateRingService = new UpdateRingService();
       const updatedRing = await updateRingService.execute(validatedData);
 

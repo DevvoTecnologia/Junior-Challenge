@@ -8,7 +8,6 @@ export class CreateRingController {
     try {
       const validatedData = createRingSchema.parse(req.body);
       const createRingService = new CreateRingService();
-
       const ring = await createRingService.execute(validatedData);
 
       return res.status(201).json(ring);
