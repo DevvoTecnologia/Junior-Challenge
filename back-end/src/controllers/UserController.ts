@@ -18,5 +18,5 @@ export class UserController {
         }
     }
 
-    // Outros métodos para manipulação de requisições relacionadas a usuários
+
 }

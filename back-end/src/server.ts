@@ -1,11 +1,5 @@
-import express from 'express';
-import AppDataSource from './database/index'; // Ajuste o caminho conforme necessário
-import userRoutes from './routes/userRoutes';
-
-const app = express();
-
-app.use(express.json());
-app.use('/api', userRoutes);
+import AppDataSource from './database/index'; 
+import app from './app';
 
 AppDataSource.initialize()
     .then(() => {

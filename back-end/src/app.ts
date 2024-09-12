@@ -1,11 +1,13 @@
 import express from 'express';
+import 'reflect-metadata'; 
+import './database'; 
 import userRoutes from './routes/userRoutes';
-import './database'; // Configuração do TypeORM, garante que a conexão com o banco de dados seja estabelecida
-import 'reflect-metadata'; // Necessário para TypeORM
+import authRoutes from './routes/authRoutes';
 
 const app = express();
-app.use(express.json()); // Middleware para parsing de JSON
 
-app.use('/api', userRoutes); // Configura as rotas
+app.use(express.json()); 
+app.use('/api', userRoutes); 
+app.use('/api', authRoutes); 
 
 export default app;

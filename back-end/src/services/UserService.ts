@@ -16,5 +16,4 @@ export class UserService {
         return await this.userRepository.save(user);
     }
 
-    // Outros métodos para manipulação de usuários
 }
