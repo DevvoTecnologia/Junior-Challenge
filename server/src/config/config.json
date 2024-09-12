@@ -1,0 +1,10 @@
+{
+	"development": {
+		"username": "user",
+		"password": "password",
+		"database": "juniorchallenge",
+		"host": "127.0.0.1",
+		"port": 5432,
+		"dialect": "postgres"
+	}
+}
