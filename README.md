@@ -1,4 +1,5 @@
 # Desafio Fullstack: Os Anéis de Poder
+
 _One Challenge to rule them all, One Challenge to find them, One Challenge to bring them all, and in the darkness bind them_
 
 ## 💍 Contexto do Desafio
@@ -19,6 +20,7 @@ Sua missão será criar um CRUD (Create, Read, Update, Delete) para gerenciar os
 ## 🎯 Objetivo
 
 ### Backend
+
 Criar uma API em **Node.js** com **TypeScript** para realizar as seguintes operações:
 
 - **Criar** (POST) um novo anel.
@@ -27,6 +29,7 @@ Criar uma API em **Node.js** com **TypeScript** para realizar as seguintes opera
 - **Deletar** (DELETE) um anel existente.
 
 ### Frontend
+
 Desenvolver uma interface simples em **React** com as seguintes telas:
 
 - **Tela de Criação/Atualização**: Formulário para criar um novo anel ou atualizar um anel existente.
@@ -38,6 +41,7 @@ Desenvolver uma interface simples em **React** com as seguintes telas:
 
 1. **Criar um Anel**  
    O anel deverá ter as seguintes propriedades:
+
    - `nome`: Nome do anel (ex: "Narya, o anel do fogo").
    - `poder`: Uma breve descrição do poder do anel (ex: "Seu portador ganha resistência ao fogo").
    - `portador`: O nome do portador atual (Ex: Gandalf).
@@ -46,7 +50,7 @@ Desenvolver uma interface simples em **React** com as seguintes telas:
 
 2. **Regras de Negócio para Criação de Anéis**  
    A API deverá garantir que a quantidade máxima de anéis criados respeite as seguintes regras:
-   
+
    - **Elfos**: No máximo 3 anéis.
    - **Anões**: No máximo 7 anéis.
    - **Homens**: No máximo 9 anéis.
@@ -65,7 +69,8 @@ Desenvolver uma interface simples em **React** com as seguintes telas:
 
 ### Frontend
 
-1. **Tela de Criação/Atualização de Anel**  
+1. **Tela de Criação/Atualização de Anel**
+
    - Um formulário com os seguintes campos:
      - `nome`: Campo de texto para o nome do anel.
      - `poder`: Campo de texto para a descrição do poder do anel.
@@ -85,6 +90,7 @@ Desenvolver uma interface simples em **React** com as seguintes telas:
 ## 🚀 Tecnologias
 
 - **Backend**:
+
   - **Node.js** com **TypeScript**
   - **Express** (ou outro framework para criar a API)
   - **Banco de Dados**: MySQL, PostgreSQL, MongoDB, etc.

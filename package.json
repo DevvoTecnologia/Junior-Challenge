@@ -8,10 +8,10 @@
   },
   "lint-staged": {
     "api/**/*.{ts}": [
-      "cd api && eslint --fix"
+      "eslint --fix"
     ],
     "web/**/*.{ts,tsx}": [
-      "cd web && eslint --fix"
+      "eslint --fix"
     ]
   },
   "keywords": [],
