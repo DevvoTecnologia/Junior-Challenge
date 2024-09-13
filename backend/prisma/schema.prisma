@@ -17,8 +17,9 @@ model Customer {
   id         String @id @default(auto()) @map("_id") @db.ObjectId
   nome       String
   poder      String
-  portador   String 
-  forjadoPor String 
+  portador   String
+  forjadoPor String
+  imagem     String
 
   @@map("aneis")
 }

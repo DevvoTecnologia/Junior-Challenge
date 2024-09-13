@@ -5,11 +5,12 @@ interface CriarAneisProps{
     poder: string,
     portador: string,
     forjadoPor: string
+    imagem: string
 }
 
 class CriarAneis {
-    async executa({nome, poder, portador, forjadoPor}: CriarAneisProps){
-        if(!nome || !poder || !portador || !forjadoPor){
+    async executa({nome, poder, portador, forjadoPor, imagem}: CriarAneisProps){
+        if(!nome || !poder || !portador || !forjadoPor || !imagem){
             throw new Error("preencha os campos")
         }
         const aneisTeste = await prismaClient.customer.create({
@@ -18,6 +19,7 @@ class CriarAneis {
                 poder,
                 portador,
                 forjadoPor,
+                imagem,
             }
         })
         return aneisTeste
