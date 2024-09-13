@@ -21,7 +21,7 @@ export const useRings = () => {
     });
   }, [api]);
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['rings'],
     queryFn: () => ringsService.getAll(),
   });
@@ -32,6 +32,5 @@ export const useRings = () => {
     current,
     setApi,
     signOut,
-    refetchRings: refetch,
   };
 };

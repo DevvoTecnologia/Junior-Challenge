@@ -1,4 +1,5 @@
 import { CreateRingModal } from '@/components/modals/create-ring-modal';
+import { DeleteRingModal } from '@/components/modals/delete-ring-modal';
 import { Button } from '@/components/ui/button';
 import {
   Carousel,
@@ -9,11 +10,10 @@ import {
 } from '@/components/ui/carousel';
 import { useRings } from '@/hooks/use-rings';
 import { ExitIcon } from '@radix-ui/react-icons';
-import { Edit, Trash2 } from 'lucide-react';
+import { Edit } from 'lucide-react';
 
 const Home = () => {
-  const { rings, current, isLoading, refetchRings, setApi, signOut } =
-    useRings();
+  const { rings, current, isLoading, setApi, signOut } = useRings();
 
   return (
     <main className="h-screen relative overflow-hidden">
@@ -30,28 +30,22 @@ const Home = () => {
           <CarouselContent>
             {rings.map(ring => (
               <CarouselItem key={ring.id}>
-                <div className="bg-[#1c111f] flex flex-col justify-center items-center p-3 pb-0 rounded-xl">
-                  <div className="relative">
+                <div className="bg-[#1c111f] flex flex-col justify-between items-center p-3 pb-0 rounded-xl w-full h-[400px] max-w-xs">
+                  <div className="relative w-full h-[60%]">
+                    <DeleteRingModal ringId={ring.id} />
                     <Button
                       className="absolute top-3 right-3 z-[3]"
                       size="icon"
                     >
                       <Edit className="text-gray-800 size-5" />
                     </Button>
-                    <Button
-                      className="absolute top-3 left-3 z-[3]"
-                      size="icon"
-                      variant="destructive"
-                    >
-                      <Trash2 className="text-black size-5" />
-                    </Button>
                     <img
                       src={ring.image}
                       alt={ring.name}
-                      className="w-full z-[1] rounded-t-xl relative"
+                      className="w-full h-full object-cover z-[1] rounded-t-xl relative"
                     />
                   </div>
-                  <div className="flex flex-col -mt-10 z-[2] bg-[#231826] p-3 rounded-t-xl text-white">
+                  <div className="w-full flex flex-col flex-1 z-[2] bg-[#231826] p-3 rounded-t-xl text-white">
                     <strong>{ring.name}</strong>
                     <span>{ring.power}</span>
                     <div className="flex justify-between text-xs mt-3.5">
