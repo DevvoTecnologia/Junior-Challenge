@@ -1,0 +1,8 @@
+export const UPDATE_CARRIED = 'Atualização realizada com sucesso!'
+export const CREATE_CARRIED = 'Criação realizada com sucesso!'
+export const ITEM_REMOVED = 'Item removido com sucesso!'
+export const FILL_ALL_FIELDS = 'Por favor, preencha todos os campos!'
+export const SELECT_ITEM_DELETE = 'Por favor, informe o item que deseja exluir.'
+export const LOGIN_DONE = 'Login realizado sucesso!'
+export const SUCCESSFUL_REGISTRATION = 'Cadastro realizado sucesso!'
+export const INVALID_DATA = 'Dados inválidos!'
