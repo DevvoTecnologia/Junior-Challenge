@@ -1,50 +1,60 @@
-# React + TypeScript + Vite
+# Projeto de Anéis Mágicos
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este projeto é uma aplicação web para gerenciar uma coleção de anéis mágicos. Ele permite visualizar, adicionar, editar e excluir anéis, com detalhes como nome, poder, portador e forjador.
 
-Currently, two official plugins are available:
+## Tecnologias Utilizadas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React**: Biblioteca JavaScript para construção de interfaces de usuário.
+- **TypeScript**: Superset tipado de JavaScript para desenvolvimento mais seguro e produtivo.
+- **Tailwind CSS**: Framework CSS utilitário para estilização rápida e responsiva.
+- **Shadcn UI**: Biblioteca de componentes UI baseada em Radix UI e Tailwind.
+- **React Hook Form**: Biblioteca para gerenciamento de formulários em React.
+- **Zod**: Biblioteca de validação de esquemas para TypeScript.
 
-## Expanding the ESLint configuration
+## Pré-requisitos
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Antes de iniciar, certifique-se de ter instalado em sua máquina:
 
-- Configure the top-level `parserOptions` property like this:
+- Node.js (versão 14 ou superior)
+- npm (geralmente vem com o Node.js) ou yarn
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Instalação
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+1. Clone o repositório:
+   ```
+   git clone https://github.com/MateusJSouza/Junior-Challenge
+   ```
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+2. Navegue até o diretório do projeto:
+   ```
+   cd frontend
+   ```
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+3. Instale as dependências:
+   ```
+   npm install
+   ```
+
+## Executando o Projeto
+
+Para iniciar o servidor de desenvolvimento:
+  ```
+  npm run dev
+  ```
+
+O aplicativo estará disponível em `http://localhost:3000` (ou outra porta, se configurada diferentemente).
+
+## Estrutura do Projeto
+
+- `src/components`: Contém os componentes React, incluindo o formulário de anel e a lista de anéis.
+- `src/types`: Definições de tipos TypeScript, incluindo a interface `Ring`.
+- `src/validators`: Esquemas de validação Zod para os dados do anel.
+
+## Funcionalidades Principais
+
+- Visualização e deleção de anéis;
+- Formulário para adicionar e editar anéis;
+- Validação de dados do formulário usando Zod;
+- Design responsivo utilizando Tailwind CSS;
+- Sistema de autenticação com JWT.
+
