@@ -10,11 +10,11 @@ import {
 } from '@nestjs/common';
 import { ValidationPipe } from 'src/utils/Validation/ValidationPipe';
 import { createRingDTO, ringSchema } from './ring.dto';
-import { RingService } from './rings.service';
+import { RingsService } from './rings.service';
 
 @Controller('ring')
 export class RingController {
-  constructor(private readonly ringService: RingService) {}
+  constructor(private readonly ringService: RingsService) {}
 
   @Post()
   @UsePipes(new ValidationPipe(ringSchema))

@@ -5,11 +5,11 @@ import { ForgersModule } from '../forgers/forgers.module';
 import { Ring } from './ring.entity';
 import { RingController } from './rings.controller';
 import { RingsRepository } from './rings.repository';
-import { RingService } from './rings.service';
+import { RingsService } from './rings.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Ring]), CarriersModule, ForgersModule],
   controllers: [RingController],
-  providers: [RingService, RingsRepository],
+  providers: [RingsService, RingsRepository],
 })
 export class RingModule {}

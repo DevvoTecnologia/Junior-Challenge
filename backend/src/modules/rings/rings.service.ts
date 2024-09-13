@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CustomException } from 'src/utils/CustomException';
 import { CarriersService } from '../carriers/carriers.service';
 import { ForgersService } from '../forgers/forgers.service';
+import { CustomException } from './../../utils/CustomException';
 import { createRingDTO } from './ring.dto';
 import { Ring } from './ring.entity';
 import { RingsRepository } from './rings.repository';
 import { CheckMaxForge, Dependencies, DependenciesReturn } from './types';
 
 @Injectable()
-export class RingService {
+export class RingsService {
   constructor(
     private readonly repository: RingsRepository,
     private readonly carrierService: CarriersService,
