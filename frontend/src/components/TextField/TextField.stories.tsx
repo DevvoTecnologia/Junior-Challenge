@@ -7,6 +7,11 @@ export default {
   args: {
     label: "First name",
   },
+  argTypes: {
+    onInput: {
+      action: "onInput",
+    },
+  },
   parameters: {
     layout: "fullscreen",
   },
