@@ -29,7 +29,12 @@ export interface ComboboxProps extends ComponentProps<'button'> {
   ) => void;
 }
 
-export const Combobox = ({ error, setValue, ...props }: ComboboxProps) => {
+export const Combobox = ({
+  error,
+  defaultValue,
+  setValue,
+  ...props
+}: ComboboxProps) => {
   const [open, setOpen] = useState(false);
   const [value, setLocalValue] = useState('');
 

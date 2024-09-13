@@ -1,16 +1,18 @@
+import { Ring } from '@/entities/Ring';
 import { ringsService } from '@/services/ringsService';
 import { UpdateRingParams } from '@/services/ringsService/update';
-import { updateRingSchema } from '@/validation/ring-schema';
+import { ringSchema } from '@/validation/ring-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-type FormData = z.infer<typeof updateRingSchema>;
+type FormData = z.infer<typeof ringSchema>;
 
 export const useUpdateRingModal = (ringId: string) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [ring, setRing] = useState<Ring>();
   const queryClient = useQueryClient();
 
   const fetchRingData = async () => {
@@ -20,6 +22,7 @@ export const useUpdateRingModal = (ringId: string) => {
     setValue('bearer', ring.bearer || '');
     setValue('forgedBy', ring.forgedBy || '');
     setValue('image', ring.image || '');
+    setRing(ring);
   };
 
   useEffect(() => {
@@ -35,7 +38,7 @@ export const useUpdateRingModal = (ringId: string) => {
     clearErrors,
     formState: { errors },
   } = useForm<FormData>({
-    resolver: zodResolver(updateRingSchema),
+    resolver: zodResolver(ringSchema),
   });
 
   const { mutateAsync } = useMutation({
@@ -47,6 +50,7 @@ export const useUpdateRingModal = (ringId: string) => {
     try {
       await mutateAsync({ ...data, id: ringId });
       queryClient.invalidateQueries({ queryKey: ['rings'] });
+      setIsOpen(false);
     } catch {
       // TODO: toast
     }
@@ -55,6 +59,7 @@ export const useUpdateRingModal = (ringId: string) => {
   return {
     errors,
     isOpen,
+    ring,
     setIsOpen,
     register,
     setValue,

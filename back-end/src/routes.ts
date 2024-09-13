@@ -6,6 +6,7 @@ import { RemoveRingController } from './controllers/ring/remove-ring-controller'
 import { CreateUserController } from './controllers/user/create-user-controller';
 import { AuthUserController } from './controllers/user/auth-user-controller';
 import { isAuthenticated } from './middlewares/isAuthenticated';
+import { GetRingController } from './controllers/ring/get-ring-controller';
 
 export const router = Router();
 
@@ -13,6 +14,7 @@ router.post('/auth', new AuthUserController().handle);
 router.post('/users', new CreateUserController().handle);
 
 router.get('/rings', isAuthenticated, new ListRingController().handle);
+router.get('/rings/:id', isAuthenticated, new GetRingController().handle);
 router.post('/rings', isAuthenticated, new CreateRingController().handle);
 router.put('/rings/:id', isAuthenticated, new UpdateRingController().handle);
 router.delete('/rings/:id', isAuthenticated, new RemoveRingController().handle);

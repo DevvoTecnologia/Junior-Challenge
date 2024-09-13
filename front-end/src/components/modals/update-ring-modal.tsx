@@ -21,6 +21,7 @@ export const UpdateRingModal = ({ ringId }: UpdateRingModalProps) => {
   const {
     errors,
     isOpen,
+    ring,
     register,
     setValue,
     clearErrors,
@@ -64,7 +65,11 @@ export const UpdateRingModal = ({ ringId }: UpdateRingModalProps) => {
             {...register('bearer')}
             error={errors.bearer?.message}
           />
-          <Combobox setValue={setValue} error={errors.forgedBy?.message} />
+          <Combobox
+            value={ring?.forgedBy}
+            setValue={setValue}
+            error={errors.forgedBy?.message}
+          />
           <Input
             placeholder="Url da imagem"
             {...register('image')}

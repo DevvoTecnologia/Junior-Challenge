@@ -1,13 +1,13 @@
 import { ringsService } from '@/services/ringsService';
 import { CreateRingParams } from '@/services/ringsService/create';
-import { createRingSchema } from '@/validation/ring-schema';
+import { ringSchema } from '@/validation/ring-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-type FormData = z.infer<typeof createRingSchema>;
+type FormData = z.infer<typeof ringSchema>;
 
 export const useCreateRingModal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,7 +21,7 @@ export const useCreateRingModal = () => {
     clearErrors,
     formState: { errors },
   } = useForm<FormData>({
-    resolver: zodResolver(createRingSchema),
+    resolver: zodResolver(ringSchema),
   });
 
   const { mutateAsync } = useMutation({
