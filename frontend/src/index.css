@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --radius: 0.5rem;
-  }
+	:root {
+		--radius: 0.5rem;
+	}
 }
 
 @layer base {
-  * {
-    @apply rounded-md;
-  }
+	* {
+		@apply rounded-md;
+	}
 }
