@@ -32,7 +32,7 @@ export default function ViewRingsPage() {
 
   if (loading) return (
     <main className={styles.main}>
-      <NavBar isHomepage={false} />
+      <NavBar selectedPage={2} />
       <p>Loading...</p>
       <Footer />
     </main>
@@ -40,7 +40,7 @@ export default function ViewRingsPage() {
 
   return (
     <main className={styles.main}>
-      <NavBar isHomepage={false} />
+      <NavBar selectedPage={2} />
       <CardsSlider rings={rings} />
       <Footer />
     </main>
