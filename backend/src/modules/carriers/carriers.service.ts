@@ -1,20 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { CustomException } from 'src/utils/CustomException';
-import { Repository } from 'typeorm';
+import { CustomException } from './../../utils/CustomException';
 import { Carrier } from './carrier.entity';
+import { CarriersRepository } from './carriers.repository';
 
 @Injectable()
 export class CarriersService {
-  constructor(
-    @InjectRepository(Carrier)
-    private readonly carrierRepository: Repository<Carrier>,
-  ) {}
+  constructor(private repository: CarriersRepository) {}
 
   async createACarrier(name: string): Promise<Carrier> {
-    return await this.carrierRepository.save({
-      carrier_name: name,
-    });
+    return await this.repository.createACarrier(name);
   }
 
   async getCarrierById(id: number): Promise<Carrier | null> {
@@ -22,9 +16,7 @@ export class CarriersService {
       return null;
     }
 
-    const carrier = await this.carrierRepository.findOneBy({
-      carrier_id: id,
-    });
+    const carrier = await this.repository.getCarrierById(id);
 
     if (!carrier) {
       throw new CustomException({
@@ -37,8 +29,15 @@ export class CarriersService {
   }
 
   async getCarrierByName(name: string): Promise<Carrier | null> {
-    return await this.carrierRepository.findOneBy({
-      carrier_name: name,
-    });
+    const carrier = await this.repository.getCarrierByName(name);
+
+    if (!carrier) {
+      throw new CustomException({
+        errorCode: 'CARRIER NOT FOUND',
+        errorDescription: 'carrier not found',
+        statusCode: 400,
+      });
+    }
+    return carrier;
   }
 }

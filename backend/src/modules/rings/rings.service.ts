@@ -1,35 +1,49 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { CustomException } from 'src/utils/CustomException';
-import { Repository } from 'typeorm';
 import { CarriersService } from '../carriers/carriers.service';
-import { Forger } from '../forgers/forger.entity';
 import { ForgersService } from '../forgers/forgers.service';
 import { createRingDTO } from './ring.dto';
 import { Ring } from './ring.entity';
+import { RingsRepository } from './rings.repository';
+import { CheckMaxForge, Dependencies, DependenciesReturn } from './types';
 
 @Injectable()
 export class RingService {
   constructor(
-    @InjectRepository(Ring)
-    private readonly ringRepository: Repository<Ring>,
+    private readonly repository: RingsRepository,
     private readonly carrierService: CarriersService,
     private readonly forgerService: ForgersService,
   ) {}
 
-  async createARing(data: createRingDTO): Promise<Ring> {
-    const { forger_id, carrier_id, ring_image, ring_name, ring_power } = data;
+  async getDependencies({
+    carrier_id,
+    forger_id,
+  }: Dependencies): Promise<DependenciesReturn> {
     const carrier = await this.carrierService.getCarrierById(carrier_id);
     const forger = await this.forgerService.getForgerById(forger_id);
-    const rings = await this.listRingsByForge(forger);
+    return { carrier, forger };
+  }
 
-    if (rings.length >= forger.forger_max_forge) {
+  async checkMaxForge({ forger, condition }: CheckMaxForge) {
+    const rings = await this.repository.listRingsByForge(forger);
+
+    if (condition && rings.length >= forger.forger_max_forge) {
       throw new CustomException({
         errorCode: 'MAX FORGE',
         errorDescription: 'This forger has already achieved his limit',
         statusCode: 400,
       });
     }
+  }
+
+  async createARing(data: createRingDTO): Promise<Ring> {
+    const { forger_id, carrier_id, ring_image, ring_name, ring_power } = data;
+    const { carrier, forger } = await this.getDependencies({
+      forger_id,
+      carrier_id,
+    });
+
+    await this.checkMaxForge({ forger, condition: true });
 
     const dbRing = new Ring();
     dbRing.ring_image = ring_image;
@@ -38,24 +52,22 @@ export class RingService {
     dbRing.carrier = carrier;
     dbRing.forger = forger;
 
-    return await this.ringRepository.save(dbRing);
+    return await this.repository.createARing(dbRing);
   }
 
   async updateARing(id: number, data: createRingDTO) {
     const { forger_id, carrier_id, ring_image, ring_name, ring_power } = data;
 
     const ring = await this.showARing(id);
-    const carrier = await this.carrierService.getCarrierById(carrier_id);
-    const forger = await this.forgerService.getForgerById(forger_id);
-    const rings = await this.listRingsByForge(forger);
+    const { carrier, forger } = await this.getDependencies({
+      forger_id,
+      carrier_id,
+    });
 
-    if (forger !== ring.forger && rings.length >= forger.forger_max_forge) {
-      throw new CustomException({
-        errorCode: 'MAX FORGE',
-        errorDescription: 'This forger has already achieved his limit',
-        statusCode: 400,
-      });
-    }
+    await this.checkMaxForge({
+      forger,
+      condition: forger !== ring.forger,
+    });
 
     ring.ring_image = ring_image;
     ring.ring_name = ring_name;
@@ -65,7 +77,7 @@ export class RingService {
     ring.updated_at = new Date();
 
     try {
-      await this.ringRepository.update(id, ring);
+      await this.repository.updateARing({ id, data: ring });
       return {
         message: 'Ring updated',
       };
@@ -78,40 +90,13 @@ export class RingService {
     }
   }
 
-  async listRingsByForge(forger: Forger): Promise<Ring[]> {
-    const rings = await this.ringRepository.find({
-      where: {
-        forger: {
-          forger_id: forger.forger_id,
-        },
-      },
-    });
-    return rings;
-  }
-
   async listRings(): Promise<Ring[]> {
-    return await this.ringRepository.find({
-      relations: {
-        carrier: true,
-        forger: true,
-      },
-      where: {
-        deleted_at: null,
-      },
-    });
+    return await this.repository.listRings();
   }
 
   async showARing(id: number): Promise<Ring> {
-    const ring = await this.ringRepository.findOne({
-      where: {
-        ring_id: id,
-        deleted_at: null,
-      },
-      relations: {
-        forger: true,
-        carrier: true,
-      },
-    });
+    const ring = await this.repository.showARing(id);
+
     if (!ring) {
       throw new CustomException({
         errorCode: 'RING NOT FOUND',
@@ -122,20 +107,11 @@ export class RingService {
     return ring;
   }
 
-  async getARing(id: number) {
-    return await this.ringRepository.findOne({
-      where: {
-        ring_id: id,
-        deleted_at: null,
-      },
-    });
-  }
-
   async deleteARing(id: number) {
     const ring = await this.showARing(id);
 
     try {
-      await this.ringRepository.softDelete(ring.ring_id);
+      await this.repository.deleteARing(ring.ring_id);
       return {
         message: 'Ring deleted',
       };

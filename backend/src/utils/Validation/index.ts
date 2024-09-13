@@ -1,6 +1,5 @@
 import { ZodSchema } from 'zod';
 import { validateBody } from './validateBody';
-import { validateQuery } from './validateQuery';
 
 interface GateDictionary {
   [key: string]: (values: unknown, schema?: ZodSchema) => unknown;
@@ -15,7 +14,7 @@ export const validateGate: GateDictionary = {
   /**
    * To handle with query params
    */
-  query: (values) => validateQuery(values),
+  query: (values) => values,
   /**
    * To handle with body params
    */
