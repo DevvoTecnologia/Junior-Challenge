@@ -1,33 +1,39 @@
 import { NextResponse } from 'next/server';
-import AppDataSource from '../../../ormconfig'; // Ajuste o caminho conforme sua estrutura
-import { Ring } from '../../models/ring'; // Ajuste o caminho conforme sua estrutura
-import { NextApiRequest, NextApiResponse } from 'next';
+import AppDataSource from '../../../ormconfig'; // Adjust the path as needed
+import { Ring } from '../../models/ring'; // Adjust the path as needed
 
-// Função GET para buscar todos os anéis
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
+// Function to GET all rings
+export async function GET() {
   try {
+    if (!AppDataSource.isInitialized) {
+      await AppDataSource.initialize();
+    }
 
     const ringRepository = AppDataSource.getRepository(Ring);
-    const rings = await ringRepository.find();
+    const rings = ringRepository.find();
 
-    res.status(200).json({ "deu bom!": "sim" });
+    return NextResponse.json({ status: 200, data: rings });
   } catch (error) {
     console.error('Error fetching rings:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    return NextResponse.json({ status: 500, Error: 'Internal Server Error' });
   }
 }
 
-// Função POST para criar um novo anel
+// Function to POST a new ring
 export async function POST(request: Request) {
   try {
+    if (!AppDataSource.isInitialized) {
+      await AppDataSource.initialize();
+    }
+
     const { ringName, power, holder, madeBy, imageUrl } = await request.json();
 
-    // Verifique se todos os dados necessários estão presentes
+    // Verify if all necessary data is present
     if (!ringName || !power || !holder || !madeBy || !imageUrl) {
       return NextResponse.json({ status: 400, msg: 'Bad Request: Missing required fields' });
     }
 
-    const ringsRepository = AppDataSource.getRepository(Ring);
+    const ringRepository = AppDataSource.getRepository(Ring);
 
     const newRing = new Ring();
     newRing.ringName = ringName;
@@ -36,7 +42,7 @@ export async function POST(request: Request) {
     newRing.madeBy = madeBy;
     newRing.imageUrl = imageUrl;
 
-    await ringsRepository.save(newRing);
+    await ringRepository.save(newRing);
 
     return NextResponse.json({ status: 201, msg: 'Ring created successfully', data: newRing });
   } catch (error) {
