@@ -8,9 +8,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import paper from '@/assets/paper.png';
-import { Combobox } from '../ui/combo-box';
 import { useDeleteRingModal } from '@/hooks/use-delete-ring-modal';
 import { Trash2 } from 'lucide-react';
 

@@ -1,5 +1,6 @@
 import { CreateRingModal } from '@/components/modals/create-ring-modal';
 import { DeleteRingModal } from '@/components/modals/delete-ring-modal';
+import { UpdateRingModal } from '@/components/modals/update-ring-modal';
 import { Button } from '@/components/ui/button';
 import {
   Carousel,
@@ -13,7 +14,7 @@ import { ExitIcon } from '@radix-ui/react-icons';
 import { Edit } from 'lucide-react';
 
 const Home = () => {
-  const { rings, current, isLoading, setApi, signOut } = useRings();
+  const { rings, current, setApi, signOut } = useRings();
 
   return (
     <main className="h-screen relative overflow-hidden">
@@ -33,12 +34,7 @@ const Home = () => {
                 <div className="bg-[#1c111f] flex flex-col justify-between items-center p-3 pb-0 rounded-xl w-full h-[400px] max-w-xs">
                   <div className="relative w-full h-[60%]">
                     <DeleteRingModal ringId={ring.id} />
-                    <Button
-                      className="absolute top-3 right-3 z-[3]"
-                      size="icon"
-                    >
-                      <Edit className="text-gray-800 size-5" />
-                    </Button>
+                    <UpdateRingModal ringId={ring.id} />
                     <img
                       src={ring.image}
                       alt={ring.name}

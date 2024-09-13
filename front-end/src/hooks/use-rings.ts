@@ -21,14 +21,13 @@ export const useRings = () => {
     });
   }, [api]);
 
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ['rings'],
     queryFn: () => ringsService.getAll(),
   });
 
   return {
     rings: data ?? [],
-    isLoading,
     current,
     setApi,
     signOut,
