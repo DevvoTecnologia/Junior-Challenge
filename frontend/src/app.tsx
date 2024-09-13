@@ -6,10 +6,13 @@ import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogHeader } from 
 import { useRings } from "./hooks/use-rings";
 import { Toaster } from "./components/ui/sonner";
 import { RingFormData } from "./types/ring";
+import { logout } from "./services/auth";
+import { LoginForm } from "./components/login";
 
 export function App() {
   const { rings, editingRing, handleSubmit, handleEditRing, handleDeleteRing } = useRings()
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const onDialogClose = () => {
     setIsDialogOpen(false);
@@ -20,11 +23,34 @@ export function App() {
     setIsDialogOpen(false);
   };
 
+  const handleLogout = () => {
+    logout()
+    setIsAuthenticated(false)
+  }
+
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true)
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
+          <h1 className="text-2xl font-bold mb-6 text-center">Login</h1>
+          <LoginForm onLoginSuccess={handleLoginSuccess} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <Toaster />
       <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">Gerenciador de Anéis</h1>
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-2xl font-bold">Gerenciador de Anéis</h1>
+          <Button onClick={handleLogout}>Sair</Button>
+        </div>
         
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
@@ -38,10 +64,14 @@ export function App() {
           </DialogContent>
         </Dialog>
 
-        <RingList rings={rings} onEdit={(ring) => {
-          handleEditRing(ring);
-          setIsDialogOpen(true);
-        }} onDelete={handleDeleteRing} />
+        <RingList 
+          rings={rings} 
+          onEdit={(ring) => {
+            handleEditRing(ring);
+            setIsDialogOpen(true);
+          }} 
+          onDelete={handleDeleteRing} 
+        />
       </div>
     </>
   )
