@@ -1,0 +1,27 @@
+.login-module {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100%;
+
+  .input-login {
+    min-width: 380px;
+  }
+
+  .btn-login {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .login-module {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 16px;
+
+    .input-login {
+      min-width: 100%;
+    }
+  }
+}
