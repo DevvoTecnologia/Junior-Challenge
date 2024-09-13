@@ -1,9 +1,9 @@
 import { Sequelize } from "sequelize";
-import path from "path";
+import path from "node:path";
 
-const config = require(path.join(__dirname, "config", "config.json"))[
-	"development"
-];
+const config = require(
+	path.join(__dirname, "config", "config.json"),
+).development;
 
 export const sequelize = new Sequelize(
 	config.database,

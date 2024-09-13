@@ -1,6 +1,6 @@
 import { createId } from "@paralleldrive/cuid2";
 import { Ring } from "../models/Ring";
-import { RingAttributes, ForgedBy } from "../types/ring";
+import type { RingAttributes, ForgedBy } from "../types/ring";
 
 const ringLimits: Record<ForgedBy, number> = {
 	Elfos: 3,

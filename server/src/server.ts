@@ -17,7 +17,7 @@ app.use(express.json());
 
 // Inicialize o modelo Ring
 Ring.initialize(sequelize);
-User.initialize(sequelize)
+User.initialize(sequelize);
 
 // Rotas de autenticação
 app.post("/register", authController.register);
@@ -30,7 +30,7 @@ app.get("/rings", ringController.getRings);
 app.put("/update-ring/:id", ringController.updateRing);
 app.delete("/delete-ring/:id", ringController.deleteRing);
 
-const PORT = parseInt(env.PORT);
+const PORT = Number.parseInt(env.PORT);
 
 connectToDatabase().then(() => {
 	app.listen(PORT, () => {

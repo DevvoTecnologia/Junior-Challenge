@@ -1,5 +1,5 @@
-import { Model, DataTypes, Sequelize } from "sequelize";
-import { RingAttributes } from "../types/ring";
+import { Model, DataTypes, type Sequelize } from "sequelize";
+import type { RingAttributes } from "../types/ring";
 
 export class Ring extends Model<RingAttributes> implements RingAttributes {
 	public id!: string;
@@ -10,7 +10,7 @@ export class Ring extends Model<RingAttributes> implements RingAttributes {
 	public image!: string;
 
 	public static initialize(sequelize: Sequelize) {
-		this.init(
+		Ring.init(
 			{
 				id: {
 					type: DataTypes.STRING,

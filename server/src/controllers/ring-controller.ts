@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import * as ringService from "../services/ring-service";
 
 export const createRing = async (req: Request, res: Response) => {
