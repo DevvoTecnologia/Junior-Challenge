@@ -5,19 +5,30 @@ import { updateRing } from '@/services/update-ring'
 import { deleteRing } from '@/services/delete-ring'
 import { getRings } from '@/services/get-rings'
 import { toast } from 'sonner'
+import { isAuthenticated, logout } from '@/services/auth'
 
 export function useRings() {
   const [rings, setRings] = useState<Ring[]>([])
   const [editingRing, setEditingRing] = useState<Ring | undefined>(undefined)
 
+  const handleAuthError = (error: any) => {
+    if (error.response && error.response.status === 401) {
+      toast.error('Sessão expirada. Por favor, faça login novamente.')
+      logout()
+      window.location.reload()
+    }
+  }
+
   const fetchRings = useCallback(async () => {
+    if (!isAuthenticated) return;
     try {
       const fetchedRings = await getRings()
       setRings(fetchedRings)
     } catch (error) {
       toast.error('Erro ao buscar anéis')
+      // Não chame handleAuthError aqui
     }
-  }, [])
+  }, [isAuthenticated])
 
   useEffect(() => {
     fetchRings()
