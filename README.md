@@ -1,4 +1,4 @@
-# Desafio Fullstack: Anéis de Poder
+# Desafio Fullstack: Anéis de Poder - Concluído ✅
 
 ## 💡 Visão Geral
 
@@ -6,25 +6,26 @@ Implementei uma aplicação full-stack com um **backend** em Node.js (TypeScript
 
 ## 📸 Imagens e Vídeos
 
-<table>
-  <tr>
-    <td><img src="./media/login.png" alt="Login" width="300"/></td>
-    <td><img src="./media/create.gif" alt="Create" width="300"/></td>
-  </tr>
-  <tr>
-    <td align="center"><strong>Login</strong></td>
-    <td align="center"><strong>Create</strong></td>
-  </tr>
-  <tr>
-    <td><img src="./media/update.gif" alt="Update" width="300"/></td>
-    <td><img src="./media/delete.gif" alt="Delete" width="300"/></td>
-  </tr>
-  <tr>
-    <td align="center"><strong>Update</strong></td>
-    <td align="center"><strong>Delete</strong></td>
-  </tr>
-</table>
-
+<div style="display: flex; justify-content: center; align-items: center; text-align: center;">
+  <table>
+    <tr>
+      <td><img src="./media/login.png" alt="Login" width="450"/></td>
+      <td><img src="./media/create.gif" alt="Create" width="450"/></td>
+    </tr>
+    <tr>
+      <td><strong>Login</strong></td>
+      <td><strong>Create</strong></td>
+    </tr>
+    <tr>
+      <td><img src="./media/update.gif" alt="Update" width="450"/></td>
+      <td><img src="./media/delete.gif" alt="Delete" width="450"/></td>
+    </tr>
+    <tr>
+      <td><strong>Update</strong></td>
+      <td><strong>Delete</strong></td>
+    </tr>
+  </table>
+</div>
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -32,7 +33,7 @@ Implementei uma aplicação full-stack com um **backend** em Node.js (TypeScript
 - **Node.js** com **TypeScript**
 - **Express**
 - **Prisma ORM** para interação com o banco de dados
-- **PostgreSQL**
+- **PostgreSQL** usando **Docker**
 - **JWT** para autenticação
 - **Zod** para validação
 
@@ -58,7 +59,7 @@ Implementei uma aplicação full-stack com um **backend** em Node.js (TypeScript
 - CRUD de anéis via interface simples
 - Validações com Zod
 - Carrossel para exibição de anéis
-- Sistema de **notificações toast** para feedback ao usuário
+- Notificações toast para feedback ao usuário
 
 ## 📂 Estrutura do Projeto
 
@@ -72,6 +73,9 @@ Implementei uma aplicação full-stack com um **backend** em Node.js (TypeScript
 - **Componentes Funcionais**: Separados por responsabilidade (UI e lógica).
 - **Animações**: Implementadas nos inputs e toasts.
 - **Arquitetura**: Lógica separada dos componentes em custom hooks e **services** para requisições HTTP.
+
+### Docker:
+- **PostgreSQL**: O banco de dados é executado em um contêiner Docker para facilitar o desenvolvimento e a configuração.
 
 ---
 
