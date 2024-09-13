@@ -7,16 +7,14 @@ import {
   deleteUserService,
 } from '../../services/userService';
 import { comparePassword, generateToken, hashPassword } from '../../utils/authUtils';
-import prisma from '../../prismaClient';
+import User from '../../models/user'; // Importando o modelo Sequelize
 
-vi.mock('../../prismaClient', () => ({
+vi.mock('../../models/User', () => ({
   __esModule: true,
   default: {
-    user: {
-      create: vi.fn(),
-      findUnique: vi.fn(),
-      delete: vi.fn(),
-    },
+    create: vi.fn(),
+    findOne: vi.fn(),
+    destroy: vi.fn(),
   },
 }));
 
@@ -45,7 +43,7 @@ describe('User Service', () => {
     it('should create a user', async () => {
       const hashedPassword = 'hashedpassword';
       (hashPassword as Mock).mockResolvedValue(hashedPassword);
-      (prisma.user.create as Mock).mockResolvedValue({
+      (User.create as Mock).mockResolvedValue({
         id: 'mock-id',
         username: mockUser.username,
         email: mockUser.email,
@@ -67,7 +65,7 @@ describe('User Service', () => {
 
     it('should throw an error when creating a user fails', async () => {
       (hashPassword as Mock).mockResolvedValue('hashedpassword');
-      (prisma.user.create as Mock).mockRejectedValue(new Error('Database error'));
+      (User.create as Mock).mockRejectedValue(new Error('Database error'));
 
       await expect(
         createUserService(mockUser.username, mockUser.password, mockUser.email)
@@ -77,7 +75,7 @@ describe('User Service', () => {
 
   describe('loginUserService', () => {
     it('should login a user', async () => {
-      (prisma.user.findUnique as Mock).mockResolvedValue({
+      (User.findOne as Mock).mockResolvedValue({
         id: 'mock-id',
         username: mockUser.username,
         email: mockUser.email,
@@ -99,7 +97,7 @@ describe('User Service', () => {
     });
 
     it('should throw an error when user not found', async () => {
-      (prisma.user.findUnique as Mock).mockResolvedValue(null);
+      (User.findOne as Mock).mockResolvedValue(null);
 
       await expect(loginUserService(mockUser.email, mockUser.password)).rejects.toThrow(
         'User not found'
@@ -107,7 +105,7 @@ describe('User Service', () => {
     });
 
     it('should throw an error when password is invalid', async () => {
-      (prisma.user.findUnique as Mock).mockResolvedValue({
+      (User.findOne as Mock).mockResolvedValue({
         id: 'mock-id',
         username: mockUser.username,
         email: mockUser.email,
@@ -123,7 +121,7 @@ describe('User Service', () => {
 
   describe('getByUsername', () => {
     it('should get a user by username', async () => {
-      (prisma.user.findUnique as Mock).mockResolvedValue(mockUser);
+      (User.findOne as Mock).mockResolvedValue(mockUser);
 
       const user = await getByUsername(mockUser.username);
       expect(user).toEqual(mockUser);
@@ -132,7 +130,7 @@ describe('User Service', () => {
 
   describe('getByEmail', () => {
     it('should get a user by email', async () => {
-      (prisma.user.findUnique as Mock).mockResolvedValue(mockUser);
+      (User.findOne as Mock).mockResolvedValue(mockUser);
 
       const user = await getByEmail(mockUser.email);
       expect(user).toEqual(mockUser);
@@ -141,15 +139,15 @@ describe('User Service', () => {
 
   describe('deleteUserService', () => {
     it('should delete a user', async () => {
-      (prisma.user.findUnique as Mock).mockResolvedValue(mockUser);
-      (prisma.user.delete as Mock).mockResolvedValue(mockUser);
+      (User.findOne as Mock).mockResolvedValue(mockUser);
+      (User.destroy as Mock).mockResolvedValue(mockUser);
 
       const user = await deleteUserService('1');
       expect(user).toEqual(mockUser);
     });
 
     it('should throw an error when user to delete is not found', async () => {
-      (prisma.user.findUnique as Mock).mockResolvedValue(null);
+      (User.findOne as Mock).mockResolvedValue(null);
 
       await expect(deleteUserService('nonexistent-id')).rejects.toThrow('User not found');
     });

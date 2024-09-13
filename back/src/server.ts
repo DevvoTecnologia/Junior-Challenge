@@ -53,21 +53,22 @@ app.register(ringRoutes, { prefix: '/rings' });
 //   },
 // });
 
-app.listen({ host: '0.0.0.0', port: Number(port) }, (error: any, address: string) => {
-  if (error) {
-    console.error('Error starting server:', error);
-    process.exit(1);
-  }
-  (async () => {
+app.listen(
+  { host: '0.0.0.0', port: Number(port) },
+  async (error: any, address: string) => {
+    if (error) {
+      console.error('Error starting server:', error);
+      process.exit(1);
+    }
+
     try {
-      // await sequelize.authenticate();
-      // console.log('SEQUELIZE: DB CONNECTION SUCCESSFUL');
+      await sequelize.authenticate();
 
       await sequelize.sync();
-      console.log('SEQUELIZE: sync successful');
     } catch (error) {
       console.error('SEQUELIZE: DB CONNECTION ERROR:', error);
     }
-  })();
-  console.log(`Server listening at ${port}`);
-});
+
+    console.log(`Server listening at ${port}`);
+  }
+);

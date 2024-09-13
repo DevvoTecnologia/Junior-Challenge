@@ -1,3 +1,4 @@
+import { where } from 'sequelize';
 import User from '../models/user';
 import { comparePassword, generateToken, hashPassword } from '../utils/authUtils';
 import { FastifyError } from 'fastify';
@@ -14,7 +15,6 @@ export const createUserService = async (
       email,
       password: hashedPassword,
     });
-
     if (!result) {
       throw new Error('Error on create user');
     }
@@ -78,17 +78,17 @@ export const getByUsername = async (username: string) => {
 };
 
 export const getByEmail = async (email: string) => {
-  return User.findOne({
+  return await User.findOne({
     where: { email },
   });
 };
 
 export const getById = async (id: string) => {
-  return User.findByPk(id);
+  return await User.findOne({ where: { id } });
 };
 
 export const deleteUserService = async (id: string) => {
-  const user = await User.findByPk(id);
+  const user = await User.findOne({ where: { id } });
   if (!user) {
     const error: FastifyError = {
       statusCode: 404,

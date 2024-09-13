@@ -1,66 +1,72 @@
-export const createRingService = async (
-  title: string,
-  content: string,
-  authorId: string
-) => {
+import Ring from '../models/ring';
+
+export const createRingService = async (newRing: {
+  name: string;
+  power: string;
+  bearer: string;
+  forgedBy: string;
+  image?: string;
+}) => {
   try {
-    return await Ring.create({
-      data: {
-        title,
-        content,
-        authorId,
-      },
-    });
-  } catch {
-    throw new Error('Error on create ring on database');
+    const createdRing = await Ring.create(newRing, { returning: true });
+    return createdRing;
+  } catch (error) {
+    throw new Error('Error creating ring in the database: ' + error);
   }
 };
 
-export const updateRingService = async (
-  id: number,
-  title: string,
-  content: string,
-  authorId: string
-) => {
-  const ring = await getRingService(id);
+export const updateRingService = async (updatedRing: {
+  id: number;
+  name: string;
+  power: string;
+  bearer: string;
+  image?: string;
+}) => {
+  const ring = await getRingService(updatedRing.id);
 
-  if (ring?.authorId !== authorId) {
+  if (ring.bearer !== updatedRing.bearer) {
     throw new Error('Not authorized');
   }
 
-  return await Ring.update({
-    where: { id },
-    data: { title, content },
-  });
+  await Ring.update(
+    {
+      name: updatedRing.name,
+      power: updatedRing.power,
+      bearer: updatedRing.bearer,
+      image: updatedRing.image,
+    },
+    { where: { id: updatedRing.id } }
+  );
+
+  return await getRingService(updatedRing.id);
 };
 
-export const deleteRingService = async (id: string, bearerId: string) => {
-  const ring = await Ring.findUnique({ where: { id } });
+export const deleteRingService = async (id: number, bearerId: string) => {
+  const ring = await Ring.findOne({ where: { id } });
 
   if (!ring) {
     throw new Error('Ring not found');
   }
 
-  if (ring.bearerId !== bearerId) {
+  if (ring.bearer !== bearerId) {
     throw new Error('Not authorized');
   }
 
-  return await Ring.delete({ where: { id } });
+  await Ring.destroy({ where: { id } });
 };
 
-export const getRingService = async (id: string) => {
+export const getRingService = async (id: number) => {
   try {
-    const ring = await Ring.findUnique({ where: { id } });
+    const ring = await Ring.findOne({ where: { id } });
     if (!ring) {
       throw new Error('Ring not found');
     }
     return ring;
   } catch (error) {
-    console.error('Error fetching ring:', error);
     throw new Error('Database error occurred');
   }
 };
 
 export const getAllRingsService = async () => {
-  return await Ring.findMany({});
+  return await Ring.findAll();
 };

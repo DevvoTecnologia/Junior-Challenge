@@ -1,29 +1,51 @@
-import { DataTypes } from 'sequelize';
+// models/User.ts
+import { Model, DataTypes } from 'sequelize';
 import sequelize from './index';
+import { UUID } from 'crypto';
 
-const User = sequelize.define('User', {
-  id: {
-    type: DataTypes.STRING,
-    primaryKey: true,
-    defaultValue: DataTypes.UUIDV4,
+class User extends Model {
+  declare id: string;
+  declare username: string;
+  declare email: string;
+  declare password: string;
+  declare ringsWorn: string[];
+  declare ringsForged: string[] | null;
+}
+
+User.init(
+  {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      unique: true,
+      primaryKey: true,
+    },
+    email: {
+      type: DataTypes.STRING,
+      unique: true,
+      allowNull: false,
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    ringsWorn: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    ringsForged: {
+      type: DataTypes.JSON,
+      allowNull: true,
+    },
   },
-  username: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  ported_rings: {
-    type: DataTypes.STRING,
-  },
-});
+  {
+    sequelize,
+    modelName: 'User',
+  }
+);
 
 export default User;

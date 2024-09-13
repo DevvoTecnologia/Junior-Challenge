@@ -7,15 +7,12 @@ import {
   verifyToken,
 } from '../../utils/authUtils';
 
-const SECRET_KEY = 'test-secret-key'; // Para testes, use uma chave fixa
-process.env.JWT_SECRET_KEY = SECRET_KEY;
-
 describe('Auth Service', () => {
   it('deve hash a senha corretamente', async () => {
     const password = 'mySecret123';
     const hashedPassword = await hashPassword(password);
 
-    expect(hashedPassword).not.toBe(password); // O hash deve ser diferente da senha original
+    expect(hashedPassword).not.toBe(password);
   });
 
   it('deve comparar a senha corretamente', async () => {
@@ -23,25 +20,29 @@ describe('Auth Service', () => {
     const hashedPassword = await hashPassword(password);
 
     const isMatch = await comparePassword(password, hashedPassword);
-    expect(isMatch).toBe(true); // A comparação deve retornar true
+    expect(isMatch).toBe(true);
   });
 
   it('deve gerar um token corretamente', () => {
     const userId = 'user-123';
     const token = generateToken(userId);
 
-    expect(token).toBeDefined(); // O token deve ser definido
+    expect(token).toBeDefined();
   });
 
   it('deve verificar um token corretamente', () => {
     const userId = 'user-123';
     const token = generateToken(userId);
     const decoded = verifyToken(token);
-
-    // expect(decoded.userId).toBe(userId); // O payload do token deve conter o userId
+    console.groupCollapsed(decoded);
+    expect(decoded).toStrictEqual({
+      userId,
+      iat: expect.any(Number),
+      exp: expect.any(Number),
+    });
   });
 
   it('deve lançar um erro ao verificar um token inválido', () => {
-    expect(() => verifyToken('invalid-token')).toThrow(); // Deve lançar um erro para um token inválido
+    expect(() => verifyToken('invalid-token')).toThrow();
   });
 });

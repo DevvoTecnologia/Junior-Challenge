@@ -20,17 +20,22 @@ export async function ringRoutes(fastify: FastifyInstance) {
         description: 'This endpoint allows a user to create a new ring.',
         tags: ['Rings'],
         body: z.object({
-          title: z.string().max(16, 'Title must be less than 16 characters'),
-          content: z.string().max(1000, 'Content must be less than 1000 characters'),
-          image: z.any(),
+          name: z.string().max(16, 'Name must be less than 16 characters'),
+          power: z
+            .string()
+            .max(1000, 'Power description must be less than 1000 characters'),
+          bearer: z.string().uuid(),
+          forgedBy: z.string().uuid(), // Adicionei forgedBy
+          image: z.string().url().optional(),
         }),
         response: {
           201: z.object({
-            id: z.number(),
-            title: z.string(),
-            content: z.string(),
-            authorId: z.string().uuid(),
-            createdAt: z.date(),
+            id: z.number(), // Ajustado para number
+            name: z.string(),
+            power: z.string(),
+            bearer: z.string().uuid(),
+            forgedBy: z.string().uuid(),
+            image: z.string().optional(),
           }),
           400: z.object({
             error: z.string(),
@@ -51,19 +56,26 @@ export async function ringRoutes(fastify: FastifyInstance) {
         summary: 'Update ring',
         tags: ['Rings'],
         body: z.object({
-          title: z.string().max(16, 'O texto deve ser menor que 16 caracteres'),
-          content: z.string().max(1000),
+          name: z.string().max(16, 'Name must be less than 16 characters').optional(),
+          power: z
+            .string()
+            .max(1000, 'Power description must be less than 1000 characters')
+            .optional(),
+          bearer: z.string().uuid().optional(),
+          image: z.string().url().optional(),
         }),
         params: z.object({
-          ringId: z.string(),
+          ringId: z.string().transform(Number), // Alterado para number
         }),
         response: {
           200: z.object({
-            id: z.number(),
-            title: z.string(),
-            content: z.string(),
-            authorId: z.string().uuid(),
-            createdAt: z.date(),
+            id: z.number(), // Ajustado para number
+            name: z.string(),
+            power: z.string(),
+            bearer: z.string().uuid(),
+            forgedBy: z.string().uuid(),
+            image: z.string().optional(),
+            createdAt: z.string(), // Se necessário
           }),
           400: z.object({
             error: z.string(),
@@ -87,15 +99,16 @@ export async function ringRoutes(fastify: FastifyInstance) {
         summary: 'Get ring by id',
         tags: ['Rings'],
         params: z.object({
-          ringId: z.string(),
+          ringId: z.string().transform(Number), // Alterado para number
         }),
         response: {
           200: z.object({
-            id: z.number(),
-            title: z.string(),
-            content: z.string(),
-            authorId: z.string().uuid(),
-            createdAt: z.date(),
+            id: z.number(), // Ajustado para number
+            name: z.string(),
+            power: z.string(),
+            bearer: z.string().uuid(),
+            forgedBy: z.string().uuid(),
+            image: z.string().url().optional(),
           }),
           404: z.object({
             error: z.string(),
@@ -112,17 +125,16 @@ export async function ringRoutes(fastify: FastifyInstance) {
       schema: {
         summary: 'Get all rings',
         tags: ['Rings'],
-        querystring: z.object({
-          order: z.enum(['asc', 'desc']).default('desc').optional(),
-        }),
         response: {
           200: z.array(
             z.object({
-              id: z.number(),
-              title: z.string(),
-              content: z.string(),
-              authorId: z.string().uuid(),
-              createdAt: z.date(),
+              id: z.number(), // Ajustado para number
+              name: z.string(),
+              power: z.string(),
+              bearer: z.string().uuid(),
+              forgedBy: z.string().uuid(),
+              image: z.string().url().optional(),
+              createdAt: z.string(),
             })
           ),
           500: z.object({
@@ -141,7 +153,7 @@ export async function ringRoutes(fastify: FastifyInstance) {
         summary: 'Delete ring',
         tags: ['Rings'],
         params: z.object({
-          ringId: z.string(),
+          ringId: z.string().transform(Number),
         }),
         response: {
           204: z.object({}),

@@ -1,10 +1,15 @@
 // vitest.config.ts
+import { config } from 'dotenv';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
+    clearMocks: true,
+    env: {
+      ...config({ path: './.testing.env' }).parsed,
+    },
     coverage: {
       provider: 'v8',
       include: ['src/**/*.ts'],
