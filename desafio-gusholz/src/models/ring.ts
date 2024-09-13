@@ -1,22 +1,31 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
+export type AnelModel = {
+  "id": number,
+  "nome": string,
+  "forjadoPor": string,
+  "imagem": string,
+  "poder": string,
+  "portador": string
+}
+
 @Entity()
-export class Ring {
+export class Anel {
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Column()
-  ringName!: string;
+  nome!: string;
 
   @Column()
-  power!: string;
+  poder!: string;
 
   @Column()
-  holder!: string;
+  portador!: string;
 
   @Column()
-  madeBy!: string;
+  forjadoPor!: string;
 
   @Column()
-  imageUrl!: string;
+  imagem!: string;
 }
