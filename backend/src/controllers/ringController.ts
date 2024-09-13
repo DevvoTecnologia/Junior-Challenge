@@ -32,9 +32,10 @@ const ringController = {
 				});
 			}
 
-			const ring = await createRing(body);
+			await createRing(body);
+			const rings = await getRings();
 			return res.status(HttpStatusCode.created).json({
-				data: ring,
+				data: rings,
 				message: "Anel criado com sucesso!",
 			});
 		} catch (error) {
@@ -137,8 +138,10 @@ const ringController = {
 					.json({ message: "O anel não foi encontrado" });
 			}
 
+			const rings = await getRings();
+
 			return res.status(HttpStatusCode.ok).json({
-				data: updatedRing,
+				data: rings,
 				message: "Anel atualizado com sucesso!",
 			});
 		} catch (error) {

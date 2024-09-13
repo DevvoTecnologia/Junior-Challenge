@@ -1,5 +1,4 @@
 import toast from "react-hot-toast";
-import type { Anel } from "./zod/ring";
 
 export const sendToast = ({
 	message,
@@ -20,28 +19,6 @@ export const sendToast = ({
 	});
 };
 
-export const createNewRing = (formData: Anel): Promise<Response> => {
-	return new Promise((resolve, reject) => {
-		fetch(`${process.env.REACT_APP_BACKEND_URL}/api/rings`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(formData),
-		})
-			.then(async (response) => {
-				resolve(response);
-			})
-			.catch((error) => {
-				sendToast({
-					message: "Ocorreu um erro ao enviar o formulário",
-					type: "error",
-				});
-				reject(error);
-			});
-	});
-};
-
 export const getRingById = (ringId: string | undefined): Promise<Response> => {
 	return new Promise((resolve, reject) => {
 		if (!ringId) return reject("ID do anel não foi fornecido");
@@ -57,33 +34,6 @@ export const getRingById = (ringId: string | undefined): Promise<Response> => {
 			.catch((error) => {
 				sendToast({
 					message: "Ocorreu um erro ao buscar o anel",
-					type: "error",
-				});
-				reject(error);
-			});
-	});
-};
-
-export const editRing = (
-	ringId: string | undefined,
-	newData: Anel,
-): Promise<Response> => {
-	return new Promise((resolve, reject) => {
-		if (!ringId || !newData) return reject("Dados inválidos");
-
-		fetch(`${process.env.REACT_APP_BACKEND_URL}/api/rings/${ringId}`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(newData),
-		})
-			.then(async (response) => {
-				resolve(response);
-			})
-			.catch((error) => {
-				sendToast({
-					message: "Ocorreu um erro ao editar um anel",
 					type: "error",
 				});
 				reject(error);

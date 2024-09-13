@@ -4,13 +4,12 @@ import "./styles.css";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type Anel, anelSchema } from "../../../utils/zod/ring";
 import Button from "../../Button/button";
-import { createNewRing, sendToast } from "../../../utils/utils";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useRingContext } from "../../../context/RingContext";
 
 const FormCreateRing = () => {
 	const navigate = useNavigate();
-	const [isLoading, setIsLoading] = useState(false);
+	const { createNewRing, isPending } = useRingContext();
 	const {
 		register,
 		handleSubmit,
@@ -19,37 +18,12 @@ const FormCreateRing = () => {
 		resolver: zodResolver(anelSchema),
 	});
 
-	const submitFormCreateRing = (formData: Anel) => {
-		setIsLoading(true);
-		createNewRing(formData)
-			.then(async (response) => {
-				const data = await response.json();
+	const submitFormCreateRing = async (formData: Anel) => {
+		const success = await createNewRing(formData);
 
-				if (!response.ok) {
-					sendToast({
-						message: data.message,
-						type: "error",
-					});
-					return;
-				}
-
-				sendToast({
-					message: data.message,
-					type: "success",
-				});
-
-				navigate("/");
-			})
-			.catch((error) => {
-				console.log(error);
-				sendToast({
-					message: "Ocorreu um erro ao enviar o formulário",
-					type: "error",
-				});
-			})
-			.finally(() => {
-				setIsLoading(false);
-			});
+		if (success) {
+			navigate("/");
+		}
 	};
 
 	return (
@@ -67,7 +41,7 @@ const FormCreateRing = () => {
 				label="Nome"
 				placeholder="Nome ex: Narya, o anel do fogo"
 				error={errors.name?.message}
-				disabled={isLoading}
+				disabled={isPending.createNewRing}
 			/>
 			<Input
 				id="power"
@@ -75,7 +49,7 @@ const FormCreateRing = () => {
 				{...register("power")}
 				placeholder="Poder ex: Seu portador ganha resistência ao fogo"
 				error={errors.power?.message}
-				disabled={isLoading}
+				disabled={isPending.createNewRing}
 			/>
 			<Input
 				id="bearer"
@@ -83,7 +57,7 @@ const FormCreateRing = () => {
 				{...register("bearer")}
 				placeholder="Portador ex: Gandalf"
 				error={errors.bearer?.message}
-				disabled={isLoading}
+				disabled={isPending.createNewRing}
 			/>
 			<Input
 				id="forgedBy"
@@ -91,7 +65,7 @@ const FormCreateRing = () => {
 				{...register("forgedBy")}
 				placeholder="Forjado por ex: Elfos, Anões, Homens e Sauron"
 				error={errors.forgedBy?.message}
-				disabled={isLoading}
+				disabled={isPending.createNewRing}
 			/>
 			<Input
 				id="image"
@@ -99,9 +73,9 @@ const FormCreateRing = () => {
 				{...register("image")}
 				placeholder="URL da imagem"
 				error={errors.image?.message}
-				disabled={isLoading}
+				disabled={isPending.createNewRing}
 			/>
-			<Button isLoading={isLoading} type="submit">
+			<Button isLoading={isPending.createNewRing} type="submit">
 				Enviar
 			</Button>
 		</form>
