@@ -1,18 +1,19 @@
 import { Edit } from "lucide-react";
 import "./styles.css";
+import { Link } from "react-router-dom";
 
 type Props = {
 	ringId: string | undefined;
 };
 
-const EditRing = ({ ringId }: Props) => {
+const EditButton = ({ ringId }: Props) => {
 	return (
 		<button type="button" className="edit-button">
-			<a href={`/edit/${ringId}`}>
+			<Link to={`/edit/${ringId}`}>
 				<Edit size={18} color="#fff" />
-			</a>
+			</Link>
 		</button>
 	);
 };
 
-export default EditRing;
+export default EditButton;

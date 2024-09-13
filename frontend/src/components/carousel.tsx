@@ -37,7 +37,7 @@ const Carousel = () => {
 			>
 				{[1, 2, 3, 4].map((_, index) => (
 					<div key={index} className="skeleton-card">
-						<Skeleton style={{ width: "98%", height: 552 }} />
+						<Skeleton style={{ width: "98%", height: "100%" }} />
 					</div>
 				))}
 			</Slider>

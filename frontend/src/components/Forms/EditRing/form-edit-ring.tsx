@@ -4,29 +4,73 @@ import "./styles.css";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type Anel, type AnelDb, anelSchema } from "../../../utils/zod/ring";
 import Button from "../../Button/button";
-import { sendToast } from "../../../utils/utils";
 import { useState } from "react";
+import { editRing, sendToast } from "../../../utils/utils";
 import { useNavigate } from "react-router-dom";
-import type { ApiResponse } from "../../../types/types";
 
 type Props = {
-	defaultValues: AnelDb;
+	defaultValues: AnelDb | null;
 };
 
 const FormEditRing = ({ defaultValues }: Props) => {
+	const [isLoading, setIsLoading] = useState(false);
+	const navigate = useNavigate();
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm<Anel>({
 		resolver: zodResolver(anelSchema),
+		defaultValues: defaultValues ?? {
+			name: "",
+			power: "",
+			bearer: "",
+			forgedBy: "",
+			image: "",
+		},
 	});
 
+	const submitFormEditRing = (formData: Anel) => {
+		setIsLoading(true);
+		editRing(defaultValues?.id, formData)
+			.then(async (response) => {
+				const data = await response.json();
+
+				if (!response.ok) {
+					sendToast({
+						message: data.message,
+						type: "error",
+					});
+					return;
+				}
+
+				sendToast({
+					message: data.message,
+					type: "success",
+				});
+
+				navigate("/");
+			})
+			.catch((error) => {
+				console.log(error);
+				sendToast({
+					message: "Ocorreu um erro ao enviar o formulário",
+					type: "error",
+				});
+			})
+			.finally(() => {
+				setIsLoading(false);
+			});
+	};
+
 	return (
-		<form className="form-create-ring">
+		<form
+			onSubmit={handleSubmit(submitFormEditRing)}
+			className="form-create-ring"
+		>
 			<div className="title-container">
-				<h1>Formulário de criação um novo anel</h1>
-				<p>Insira os dados e crie um novo anel</p>
+				<h1>Formulário de edição de um anel</h1>
+				<p>Insira os dados e edite um anel</p>
 			</div>
 			<Input
 				id="name"
@@ -34,6 +78,7 @@ const FormEditRing = ({ defaultValues }: Props) => {
 				label="Nome"
 				placeholder="Nome ex: Narya, o anel do fogo"
 				error={errors.name?.message}
+				disabled={isLoading}
 			/>
 			<Input
 				id="power"
@@ -41,6 +86,7 @@ const FormEditRing = ({ defaultValues }: Props) => {
 				{...register("power")}
 				placeholder="Poder ex: Seu portador ganha resistência ao fogo"
 				error={errors.power?.message}
+				disabled={isLoading}
 			/>
 			<Input
 				id="bearer"
@@ -48,6 +94,7 @@ const FormEditRing = ({ defaultValues }: Props) => {
 				{...register("bearer")}
 				placeholder="Portador ex: Gandalf"
 				error={errors.bearer?.message}
+				disabled={isLoading}
 			/>
 			<Input
 				id="forgedBy"
@@ -55,6 +102,7 @@ const FormEditRing = ({ defaultValues }: Props) => {
 				{...register("forgedBy")}
 				placeholder="Forjado por ex: Elfos, Anões, Homens e Sauron"
 				error={errors.forgedBy?.message}
+				disabled={isLoading}
 			/>
 			<Input
 				id="image"
@@ -62,8 +110,11 @@ const FormEditRing = ({ defaultValues }: Props) => {
 				{...register("image")}
 				placeholder="URL da imagem"
 				error={errors.image?.message}
+				disabled={isLoading}
 			/>
-			<Button type="submit">Enviar</Button>
+			<Button isLoading={isLoading} type="submit">
+				Enviar
+			</Button>
 		</form>
 	);
 };

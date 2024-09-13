@@ -1,6 +1,7 @@
 import type { ButtonHTMLAttributes } from "react";
 import "./styles.css";
 import Spinner from "../Spinner/spinner";
+import { Link } from "react-router-dom";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 	href?: string;
@@ -11,7 +12,7 @@ const Button = ({ href, isLoading, children, ...props }: ButtonProps) => {
 	if (href) {
 		return (
 			<button disabled={isLoading} className="link-button" {...props}>
-				{isLoading ? <Spinner /> : <a href={href}>{children}</a>}
+				{isLoading ? <Spinner /> : <Link to={href}>{children}</Link>}
 			</button>
 		);
 	}

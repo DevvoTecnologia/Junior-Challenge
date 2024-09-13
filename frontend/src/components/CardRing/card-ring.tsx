@@ -1,14 +1,14 @@
 import "./styles.css";
 import type { RingType } from "../../../../shared/types";
 import RemoveRing from "../RemoveRing/remove-ring";
-import EditRing from "../EditRing/edit-ring";
+import EditButton from "../EditButton/edit-button";
 
 const CardRing = ({ bearer, id, forgedBy, image, name, power }: RingType) => {
 	return (
 		<div className="card-ring">
 			<RemoveRing ringId={id} />
 			<h3>{name}</h3>
-			<EditRing ringId={id} />
+			<EditButton ringId={id} />
 			<p>
 				<b>Poder:</b> {power}
 			</p>

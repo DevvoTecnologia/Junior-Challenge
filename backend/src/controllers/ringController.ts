@@ -28,7 +28,7 @@ const ringController = {
 			const limit = limits[body.forgedBy as keyof typeof limits];
 			if (limit !== undefined && countByForgedBy >= limit) {
 				return res.status(HttpStatusCode.conflict).json({
-					message: `${body.forgedBy} podem forjar no máximo ${limit} anéis`,
+					message: `${body.forgedBy} podem forjar no máximo ${limit} ${limit > 1 ? "anéis" : "anel"}`,
 				});
 			}
 
@@ -97,22 +97,56 @@ const ringController = {
 			console.log(error);
 			return res
 				.status(HttpStatusCode.badRequest)
-				.json({ message: "Ocorreu um erro ao listar os anéis" });
+				.json({ message: "Anel não encontrado" });
 		}
 	},
 
-	// updateRing: async (req: Request, res: Response) => {
-	// 	try {
-	// 		const { id } = req.params;
-	// 		const ring = await updateRing(Number(id), req.body);
-	// 		if (!ring) {
-	// 			return res.status(404).json({ message: "Ring not found" });
-	// 		}
-	// 		return res.status(200).json(ring);
-	// 	} catch (error) {
-	// 		return res.status(400).json({ error: error.message });
-	// 	}
-	// },
+	updateRing: async (req: Request, res: Response) => {
+		try {
+			const body = await anelSchema.parseAsync(req.body);
+
+			const { id } = req.params;
+
+			if (!id) {
+				return res.status(HttpStatusCode.noContent).json({
+					message: "Dados inválidos",
+				});
+			}
+
+			const countByForgedBy = await getCountByForgedBy(body.forgedBy);
+
+			const limits = {
+				Elfos: 3,
+				Anões: 7,
+				Homens: 9,
+				Sauron: 1,
+			};
+
+			const limit = limits[body.forgedBy as keyof typeof limits];
+			if (limit !== undefined && countByForgedBy >= limit) {
+				return res.status(HttpStatusCode.conflict).json({
+					message: `${body.forgedBy} podem forjar no máximo ${limit} ${limit > 1 ? "anéis" : "anel"}`,
+				});
+			}
+
+			const updatedRing = await updateRing(id, body);
+
+			if (!updatedRing) {
+				return res
+					.status(HttpStatusCode.notFound)
+					.json({ message: "O anel não foi encontrado" });
+			}
+
+			return res.status(HttpStatusCode.ok).json({
+				data: updatedRing,
+				message: "Anel atualizado com sucesso!",
+			});
+		} catch (error) {
+			return res.status(HttpStatusCode.badRequest).json({
+				message: "Ocorreu um erro ao editar um anel",
+			});
+		}
+	},
 
 	deleteRing: async (req: Request, res: Response) => {
 		try {

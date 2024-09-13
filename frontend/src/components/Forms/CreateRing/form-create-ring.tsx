@@ -67,6 +67,7 @@ const FormCreateRing = () => {
 				label="Nome"
 				placeholder="Nome ex: Narya, o anel do fogo"
 				error={errors.name?.message}
+				disabled={isLoading}
 			/>
 			<Input
 				id="power"
@@ -74,6 +75,7 @@ const FormCreateRing = () => {
 				{...register("power")}
 				placeholder="Poder ex: Seu portador ganha resistência ao fogo"
 				error={errors.power?.message}
+				disabled={isLoading}
 			/>
 			<Input
 				id="bearer"
@@ -81,6 +83,7 @@ const FormCreateRing = () => {
 				{...register("bearer")}
 				placeholder="Portador ex: Gandalf"
 				error={errors.bearer?.message}
+				disabled={isLoading}
 			/>
 			<Input
 				id="forgedBy"
@@ -88,6 +91,7 @@ const FormCreateRing = () => {
 				{...register("forgedBy")}
 				placeholder="Forjado por ex: Elfos, Anões, Homens e Sauron"
 				error={errors.forgedBy?.message}
+				disabled={isLoading}
 			/>
 			<Input
 				id="image"
@@ -95,6 +99,7 @@ const FormCreateRing = () => {
 				{...register("image")}
 				placeholder="URL da imagem"
 				error={errors.image?.message}
+				disabled={isLoading}
 			/>
 			<Button isLoading={isLoading} type="submit">
 				Enviar
