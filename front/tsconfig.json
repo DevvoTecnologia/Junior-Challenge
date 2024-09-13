@@ -1,0 +1,23 @@
+{
+
+  "compilerOptions": {
+    "lib": ["DOM","es2023","WebWorker"],
+    "module": "Node16",
+    "target": "es2022",    
+    "jsx": "react",
+
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "Node16",
+    "resolveJsonModule": true,
+    "allowImportingTsExtensions":true ,
+    "noEmit": true ,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*", "vite-env.d.ts"], // Inclua aqui
+  "exclude": ["node_modules", "dist"]
+}

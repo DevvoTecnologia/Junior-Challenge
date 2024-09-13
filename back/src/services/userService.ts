@@ -1,42 +1,44 @@
 import { where } from 'sequelize';
-import User from '../models/user';
 import { comparePassword, generateToken, hashPassword } from '../utils/authUtils';
 import { FastifyError } from 'fastify';
+import User from '../models/user';
 
-export const createUserService = async (
-  username: string,
-  password: string,
-  email: string
-): Promise<{ id: string; username: string; email: string }> => {
+export const createUserService = async (newUser: {
+  username: string;
+  password: string;
+  email: string;
+}): Promise<{ id: string; username: string; email: string }> => {
   try {
-    const hashedPassword = await hashPassword(password);
+    const hashedPassword = await hashPassword(newUser.password);
     const result = await User.create({
-      username,
-      email,
+      username: newUser.username,
+      email: newUser.email,
       password: hashedPassword,
     });
+
     if (!result) {
       throw new Error('Error on create user');
     }
-
-    return {
+    const data = {
       id: result.id,
       username: result.username,
       email: result.email,
     };
+    return data;
   } catch (error) {
+    console.error(error);
     throw new Error('Error creating user');
   }
 };
 
-export const loginUserService = async (
-  email: string,
-  password: string
-): Promise<{
+export const loginUserService = async (loginData: {
+  email: string;
+  password: string;
+}): Promise<{
   user: { email: string; id: string; username: string };
   token: string;
 } | null> => {
-  const user = await getByEmail(email);
+  const user = await getByEmail(loginData.email);
 
   if (!user) {
     const error: FastifyError = {
@@ -48,7 +50,7 @@ export const loginUserService = async (
     throw error;
   }
 
-  const isPasswordValid = await comparePassword(password, user.password);
+  const isPasswordValid = await comparePassword(loginData.password, user.password);
   if (!isPasswordValid) {
     const error: FastifyError = {
       statusCode: 401,
@@ -60,8 +62,7 @@ export const loginUserService = async (
   }
 
   const token = generateToken(user.id);
-
-  return {
+  const loggedUser = {
     user: {
       email: user.email,
       username: user.username,
@@ -69,6 +70,8 @@ export const loginUserService = async (
     },
     token,
   };
+
+  return loggedUser;
 };
 
 export const getByUsername = async (username: string) => {
@@ -84,7 +87,9 @@ export const getByEmail = async (email: string) => {
 };
 
 export const getById = async (id: string) => {
-  return await User.findOne({ where: { id } });
+  const user = await User.findOne({ where: { id } });
+
+  return user;
 };
 
 export const deleteUserService = async (id: string) => {

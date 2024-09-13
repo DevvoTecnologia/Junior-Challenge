@@ -34,7 +34,6 @@ describe('Auth Service', () => {
     const userId = 'user-123';
     const token = generateToken(userId);
     const decoded = verifyToken(token);
-    console.groupCollapsed(decoded);
     expect(decoded).toStrictEqual({
       userId,
       iat: expect.any(Number),

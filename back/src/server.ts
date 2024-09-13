@@ -11,6 +11,8 @@ import { app } from './app';
 import { ringRoutes } from './routes/ringRoutes';
 import { env } from 'process';
 import sequelize from './models';
+import { getAllRings } from './controllers/ringController';
+import { getAllRingsService } from './services/ringService';
 
 const port = env.PORT || 3000;
 
@@ -53,22 +55,20 @@ app.register(ringRoutes, { prefix: '/rings' });
 //   },
 // });
 
-app.listen(
-  { host: '0.0.0.0', port: Number(port) },
-  async (error: any, address: string) => {
-    if (error) {
-      console.error('Error starting server:', error);
-      process.exit(1);
-    }
-
-    try {
-      await sequelize.authenticate();
-
-      await sequelize.sync();
-    } catch (error) {
-      console.error('SEQUELIZE: DB CONNECTION ERROR:', error);
-    }
-
-    console.log(`Server listening at ${port}`);
+app.listen({ host: '0.0.0.0', port: Number(port) }, async (error: any) => {
+  if (error) {
+    console.error('Error starting server:', error);
+    process.exit(1);
   }
-);
+  // const rings = await getAllRingsService();
+  // console.log('rings:', rings);
+
+  try {
+    await sequelize.authenticate();
+    await sequelize.sync({ force: true });
+  } catch (error) {
+    console.error('SEQUELIZE: DB CONNECTION ERROR:', error);
+  }
+
+  console.log(`Server listening at ${port}`);
+});

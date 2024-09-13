@@ -7,10 +7,9 @@ import {
   updateRingService,
 } from '../services/ringService';
 import { authenticate } from '../middleware/authMiddleware';
-import { getById } from '../services/userService';
 
 interface RingParams {
-  ringId: string; // Mantém como string para receber do request
+  ringId: number;
 }
 
 export const getRing = async (
@@ -20,13 +19,14 @@ export const getRing = async (
   const { ringId } = request.params;
 
   try {
-    const ring = await getRingService(Number(ringId)); // Converte para número
+    const ring = await getRingService(ringId);
     if (!ring) {
       return reply.status(404).send({ error: 'Ring not found' });
     }
-    reply.status(200).send(ring);
+    return reply.status(200).send(ring);
   } catch (error) {
-    reply.status(500).send({ error: 'Internal Server Error' });
+    console.error(error);
+    return reply.status(500).send({ error: 'Internal Server Error' });
   }
 };
 
@@ -41,6 +41,7 @@ export const getAllRings = async (request: FastifyRequest, reply: FastifyReply) 
     const rings = await getAllRingsService();
     return reply.status(200).send(rings);
   } catch (error) {
+    console.error(error);
     return reply.status(500).send({ error: 'Internal Server Error' });
   }
 };
@@ -51,7 +52,8 @@ export const createRing = async (
       name: string;
       power: string;
       bearer: string;
-      image?: string;
+      forgedBy: string;
+      image: string;
     };
   }>,
   reply: FastifyReply
@@ -59,22 +61,25 @@ export const createRing = async (
   try {
     await authenticate(request, reply);
     const reqUser = request.user;
+
     if (!reqUser) {
-      return reply.status(400).send({ error: 'Token error' });
+      return reply.status(401).send({ error: 'User not authenticated' });
     }
 
-    const dataRing = { ...request.body, forgedBy: reqUser.userId };
-
-    const newRing = await createRingService(dataRing);
-    reply.status(201).send(newRing);
+    const newRing = await createRingService({
+      ...request.body,
+      forgedBy: reqUser.userId,
+    });
+    return reply.status(201).send(newRing);
   } catch (error) {
-    reply.status(500).send({ error: 'Internal Server Error' });
+    console.error(error);
+    return reply.status(500).send({ error: 'Internal Server Error' });
   }
 };
 
 export const updateRing = async (
   request: FastifyRequest<{
-    Params: { ringId: string }; // Recebe como string
+    Params: { ringId: string };
     Body: { name: string; power: string; bearer: string; image?: string };
   }>,
   reply: FastifyReply
@@ -82,28 +87,24 @@ export const updateRing = async (
   const { ringId } = request.params;
 
   try {
-    await authenticate(request, reply);
-    if (!request.user) {
-      return reply.status(400).send({ error: 'Token error' });
-    }
-    const dataRing = {
-      ...request.body,
-      forgedBy: request.user.userId,
-      id: Number(ringId),
-    };
-
     const ring = await getRingService(Number(ringId));
     if (!ring) {
       return reply.status(404).send({ error: 'Ring not found' });
     }
-    if (ring.bearer !== request.user.userId) {
-      return reply.status(401).send({ error: 'Unauthorized' });
-    }
 
-    const updatedRing = await updateRingService(dataRing);
+    const reqUser = request.user;
+
+    if (!reqUser) {
+      return reply.status(401).send({ error: 'User not authenticated' });
+    }
+    const updatedRing = await updateRingService({
+      ...request.body,
+      id: Number(ringId),
+    });
     return reply.status(200).send(updatedRing);
   } catch (error) {
-    reply.status(500).send({ error: 'Internal Server Error' });
+    console.error(error);
+    return reply.status(500).send({ error: 'Internal Server Error' });
   }
 };
 
@@ -112,26 +113,29 @@ export const deleteRing = async (
   reply: FastifyReply
 ) => {
   const { ringId } = request.params;
+
   try {
-    await authenticate(request, reply);
-
-    const reqUser = request.user;
-    if (!reqUser) {
-      return reply.status(400).send({ error: 'Token error' });
-    }
-
     const ring = await getRingService(ringId);
     if (!ring) {
       return reply.status(404).send({ error: 'Ring not found' });
     }
+    await authenticate(request, reply);
+    const reqUser = request.user;
+
+    if (!reqUser) {
+      return reply.status(401).send({ error: 'User not authenticated' });
+    }
+
     if (ring.bearer !== reqUser.userId) {
-      return reply.status(401).send({ error: 'Unauthorized' });
+      return reply
+        .status(403)
+        .send({ error: 'Forbidden: Unauthorized to delete this ring' });
     }
 
     await deleteRingService(ring.id, reqUser.userId);
-    reply.status(204).send();
+    return reply.status(204).send({});
   } catch (error) {
-    console.error(error); // Para ajudar na depuração
-    reply.status(500).send({ error: 'Internal Server Error' });
+    console.error(error);
+    return reply.status(500).send({ error: 'Internal Server Error' });
   }
 };

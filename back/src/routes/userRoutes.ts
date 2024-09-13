@@ -15,12 +15,17 @@ export async function userRoutes(app: FastifyInstance) {
           username: z.string().min(3, 'Username must be at least 3 characters long'),
           email: z.string().email('Invalid email address'),
           password: z.string().min(6, 'Password must be at least 6 characters long'),
+          class: z
+            .string()
+            .min(3, 'Username must be at least 3 characters long')
+            .optional(),
         }),
         response: {
           201: z.object({
             id: z.string().uuid(),
             username: z.string(),
             email: z.string(),
+            class: z.string().optional(),
           }),
           400: z.object({
             error: z.string(),
@@ -76,11 +81,13 @@ export async function userRoutes(app: FastifyInstance) {
         description: 'This endpoint allows an admin to delete a user by ID.',
         tags: ['Users'],
         params: z.object({
-          id: z.string().uuid('Invalid user ID format'),
+          id: z.string(),
         }),
         response: {
           200: z.object({
-            message: z.string(),
+            id: z.string().uuid(),
+            username: z.string(),
+            email: z.string(),
           }),
           400: z.object({
             error: z.string(),

@@ -1,6 +1,5 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { verifyToken } from '../utils/authUtils';
-import { error } from 'console';
 
 export const authenticate = async (request: FastifyRequest, reply: FastifyReply) => {
   const authHeader = request.headers.authorization;
@@ -23,7 +22,7 @@ export const authenticate = async (request: FastifyRequest, reply: FastifyReply)
     }
 
     request.user = decoded;
-  } catch (error) {
+  } catch (err) {
     return reply.code(401).send({ error: 'Token Unauthorized' });
   }
 };

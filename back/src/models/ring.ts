@@ -1,4 +1,3 @@
-// models/Ring.ts
 import { Model, DataTypes } from 'sequelize';
 import sequelize from './index';
 import User from './user';
@@ -9,13 +8,13 @@ class Ring extends Model {
   declare power: string;
   declare bearer: string;
   declare forgedBy: string;
-  declare image: string;
+  declare image: string | null;
 }
 
 Ring.init(
   {
     id: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
@@ -28,11 +27,17 @@ Ring.init(
       allowNull: false,
     },
     bearer: {
-      type: DataTypes.STRING,
+      type: DataTypes.UUID,
       allowNull: false,
+      references: {
+        model: 'Users',
+        key: 'id',
+      },
+      onDelete: 'NO ACTION',
+      onUpdate: 'CASCADE',
     },
     forgedBy: {
-      type: DataTypes.UUID,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     image: {
@@ -46,7 +51,6 @@ Ring.init(
   }
 );
 
-Ring.belongsTo(User, { foreignKey: 'forgedBy', as: 'forger' });
-User.hasMany(Ring, { foreignKey: 'forgedBy', as: 'rings' });
+Ring.belongsTo(User, { foreignKey: 'bearer', as: 'owner' });
 
 export default Ring;

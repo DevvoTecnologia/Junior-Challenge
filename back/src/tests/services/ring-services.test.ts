@@ -38,23 +38,24 @@ describe('Ring Service', () => {
       forgedBy: '6e6a460b-dd38-4cb5-b93d-103a7239149c',
     });
 
-    expect(result).toEqual(
-      expect.objectContaining({
-        name: 'Test Ring',
-        power: 'Invisibility',
-        bearer: '6e6a460b-dd38-4cb5-b93d-103a7239149c',
-        forgedBy: '6e6a460b-dd38-4cb5-b93d-103a7239149c',
-        id: expect.any(Number),
-      })
-    );
-
-    expect(Ring.create).toHaveBeenCalledWith({
+    expect(result).toEqual({
       name: 'Test Ring',
       power: 'Invisibility',
       bearer: '6e6a460b-dd38-4cb5-b93d-103a7239149c',
       forgedBy: '6e6a460b-dd38-4cb5-b93d-103a7239149c',
-      image: undefined,
+      id: 1,
     });
+
+    expect(Ring.create).toHaveBeenCalledWith(
+      {
+        name: 'Test Ring',
+        power: 'Invisibility',
+        bearer: '6e6a460b-dd38-4cb5-b93d-103a7239149c',
+        forgedBy: '6e6a460b-dd38-4cb5-b93d-103a7239149c',
+        image: undefined,
+      },
+      { returning: true }
+    );
   });
 
   it('should throw an error when creating a ring fails', async () => {
@@ -77,6 +78,7 @@ describe('Ring Service', () => {
       power: 'Old Power',
       bearer: '6e6a460b-dd38-4cb5-b93d-103a7239149c',
       forgedBy: '6e6a460b-dd38-4cb5-b93d-103a7239149c',
+      image: undefined,
     };
 
     (Ring.findOne as Mock).mockResolvedValue(mockRing);
@@ -88,8 +90,7 @@ describe('Ring Service', () => {
       power: 'New Power',
       bearer: '6e6a460b-dd38-4cb5-b93d-103a7239149c',
     });
-
-    expect(result).toEqual([1]);
+    expect(result).toEqual(mockRing);
     expect(Ring.update).toHaveBeenCalledWith(
       {
         name: 'New Ring',

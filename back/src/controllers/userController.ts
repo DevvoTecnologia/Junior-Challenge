@@ -3,6 +3,7 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import {
   createUserService,
   deleteUserService,
+  getById,
   getByUsername,
   loginUserService,
 } from '../services/userService';
@@ -13,14 +14,14 @@ export const registerUser = async (
   }>,
   reply: FastifyReply
 ) => {
-  const { username, password, email } = request.body;
-
   try {
-    if (await getByUsername(username)) {
+    const data = request.body;
+
+    if (await getByUsername(data.username)) {
       throw new Error('User already exists');
     }
-    const user = await createUserService(username, password, email);
-    reply.status(201).send(user);
+    const user = await createUserService(data);
+    reply.status(201).send({ id: user.id, email: user.email, username: user.username });
   } catch (error) {
     reply.status(500).send(error);
   }
@@ -32,14 +33,9 @@ export const loginUser = async (
   }>,
   reply: FastifyReply
 ) => {
-  const { email, password } = request.body;
-
   try {
-    if (!email) {
-      return reply.status(400).send({ error: 'Email is required.' });
-    }
-
-    const result = await loginUserService(email, password);
+    const loginData = request.body;
+    const result = await loginUserService(loginData);
 
     return reply.status(200).send(result);
   } catch (error: any) {

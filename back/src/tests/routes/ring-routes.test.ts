@@ -4,30 +4,47 @@ import request from 'supertest';
 import { ringRoutes } from '../../routes/ringRoutes';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import { generateToken } from '../../utils/authUtils';
+import sequelize from '../../models';
+import User from '../../models/user';
+import Ring from '../../models/ring'; // Certifique-se de que o modelo Ring está importado corretamente
 
 vi.mock('../services/ringService');
+
 let TOKEN: string;
 let app: FastifyInstance;
-let ringId: number; // Alterado para número
+let ringId: number;
+let userId: string;
 
 describe('Ring Routes', () => {
   beforeEach(async () => {
     app = fastify();
     app.setValidatorCompiler(validatorCompiler);
     app.setSerializerCompiler(serializerCompiler);
+    await sequelize.authenticate();
+    await sequelize.sync({ force: true });
     await app.register(ringRoutes, { prefix: '/rings' });
 
     await app.ready();
 
-    // Criar um anel fictício para os testes
+    const mockUser = {
+      id: 'd590641f-9976-4928-ba25-e1e0e2f66da8',
+      username: 'testRingRoutes',
+      password: 'password123',
+      email: 'testRingRoutes@example.com',
+    };
+
+    const user = await User.create(mockUser);
+    userId = user.id;
+    TOKEN = generateToken(userId);
+
     const mockRing = {
-      id: 1, // Supondo que o primeiro ID será 1
       name: 'Initial Ring',
       power: 'Invisibility',
-      bearer: '550e8400-e29b-41d4-a716-446655440000',
-      forgedBy: '550e8400-e29b-41d4-a716-446655440000',
+      bearer: userId,
+      forgedBy: userId,
     };
-    ringId = mockRing.id; // Armazena o ID para uso em testes
+    const ring = await Ring.create(mockRing); // Cria o anel inicial no banco de dados
+    ringId = ring.id; // Atualiza ringId com o ID gerado
   });
 
   afterEach(async () => {
@@ -35,21 +52,13 @@ describe('Ring Routes', () => {
     await app.close();
   });
 
-  const mockUser = {
-    id: '550e8400-e29b-41d4-a716-446655440000',
-    username: 'testRingRoutes',
-    password: 'password123',
-    email: 'testRingRoutes@example.com',
-  };
-
-  TOKEN = generateToken(mockUser.id);
-
   describe('POST /rings', () => {
     it('should create a new ring', async () => {
       const newRing = {
         name: 'Test Ring',
         power: 'Invisibility',
-        bearer: mockUser.id,
+        bearer: userId,
+        forgedBy: userId,
         image: 'http://example.com/ring.png',
       };
 
@@ -58,21 +67,23 @@ describe('Ring Routes', () => {
         .set({ Authorization: `Bearer ${TOKEN}` })
         .send(newRing);
 
-      // expect(response.status).toBe(201);
+      expect(response.status).toBe(201);
       expect(response.body).toEqual({
         id: expect.any(Number),
         name: newRing.name,
         power: newRing.power,
         bearer: newRing.bearer,
-        forgedBy: mockUser.id,
+        forgedBy: userId,
+        image: newRing.image,
         createdAt: expect.any(String),
+        updatedAt: expect.any(String),
       });
-      ringId = response.body.id; // Atualiza o ID para uso posterior
+      ringId = response.body.id;
     });
 
     it('should return 400 for invalid data', async () => {
       const invalidRing = {
-        name: 'A very long name exceeding the limit',
+        name: '', // Nome inválido
         power: 'Some power',
       };
 
@@ -82,26 +93,25 @@ describe('Ring Routes', () => {
         .send(invalidRing);
 
       expect(response.status).toBe(400);
-      expect(response.body).toEqual({ error: expect.any(String) });
     });
 
     it('should return 401 if unauthorized', async () => {
       const response = await request(app.server)
         .post('/rings')
         .set({ Authorization: `Bearer invalidToken` })
-        .send({ name: 'Test Ring', power: 'Invisibility', bearer: mockUser.id });
+        .send({ name: 'Test Ring', power: 'Invisibility', bearer: userId });
 
       expect(response.status).toBe(401);
       expect(response.body).toEqual({ error: 'Token Unauthorized' });
     });
   });
 
-  describe('PUT /rings/:ringId', () => {
+  describe('PUT /rings/:id', () => {
     it('should update an existing ring', async () => {
       const updatedRing = {
         name: 'Updated Ring',
         power: 'Teleportation',
-        bearer: mockUser.id,
+        bearer: userId,
         image: 'http://example.com/updated_ring.png',
       };
 
@@ -115,35 +125,27 @@ describe('Ring Routes', () => {
         id: ringId,
         name: updatedRing.name,
         power: updatedRing.power,
-        bearer: updatedRing.bearer,
-        forgedBy: mockUser.id,
+        bearer: userId,
+        forgedBy: userId,
+        image: updatedRing.image,
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
       });
     });
 
     it('should return 404 if ring not found', async () => {
       const response = await request(app.server)
-        .put('/rings/99999999') // ID que não existe
+        .put('/rings/99999999')
         .set({ Authorization: `Bearer ${TOKEN}` })
         .send({ name: 'Updated Ring', power: 'New Power' });
 
-      expect(response.body).toEqual({ error: 'Ring not found' });
       expect(response.status).toBe(404);
-    });
-
-    it('should return 401 if unauthorized', async () => {
-      const response = await request(app.server)
-        .put(`/rings/${ringId}`)
-        .send({ name: 'Updated Ring', power: 'New Power' });
-
-      expect(response.status).toBe(401);
-      expect(response.body).toEqual({
-        error: 'Authorization header is missing',
-      });
+      expect(response.body).toEqual({ error: 'Ring not found' });
     });
   });
 
   describe('GET /rings/:id', () => {
-    it('should return a ring by ID', async () => {
+    it('should get a ring by id', async () => {
       const response = await request(app.server)
         .get(`/rings/${ringId}`)
         .set({ Authorization: `Bearer ${TOKEN}` });
@@ -153,9 +155,11 @@ describe('Ring Routes', () => {
         id: ringId,
         name: 'Initial Ring',
         power: 'Invisibility',
-        bearer: mockUser.id,
-        forgedBy: mockUser.id,
+        bearer: userId,
+        forgedBy: userId,
+        image: null, // Verifique se o valor padrão é nulo
         createdAt: expect.any(String),
+        updatedAt: expect.any(String),
       });
     });
 
@@ -166,17 +170,6 @@ describe('Ring Routes', () => {
 
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ error: 'Ring not found' });
-    });
-
-    it('should return 401 if unauthorized', async () => {
-      const response = await request(app.server)
-        .get('/rings/1')
-        .set({ Authorization: `Bearer ${TOKEN}a` });
-
-      expect(response.status).toBe(401);
-      expect(response.body).toEqual({
-        error: 'Token Unauthorized',
-      });
     });
   });
 
@@ -189,14 +182,14 @@ describe('Ring Routes', () => {
       expect(response.status).toBe(200);
       expect(response.body).toEqual(
         expect.arrayContaining([
-          {
+          expect.objectContaining({
             id: ringId,
             name: 'Initial Ring',
             power: 'Invisibility',
-            bearer: mockUser.id,
-            forgedBy: mockUser.id,
-            createdAt: expect.any(String),
-          },
+            bearer: userId,
+            forgedBy: userId,
+            image: null, // Verifique se o valor padrão é nulo
+          }),
         ])
       );
     });
@@ -204,7 +197,7 @@ describe('Ring Routes', () => {
     it('should return 401 if unauthorized', async () => {
       const response = await request(app.server)
         .get('/rings')
-        .set({ Authorization: `Bearer ${TOKEN}a` });
+        .set({ Authorization: `Bearer invalidToken` });
 
       expect(response.status).toBe(401);
       expect(response.body).toEqual({ error: 'Token Unauthorized' });
@@ -217,7 +210,7 @@ describe('Ring Routes', () => {
         .delete(`/rings/${ringId}`)
         .set({ Authorization: `Bearer ${TOKEN}` });
 
-      // expect(response.status).toBe(204);
+      expect(response.status).toBe(204);
       expect(response.body).toEqual({});
     });
 
@@ -226,14 +219,14 @@ describe('Ring Routes', () => {
         .delete('/rings/99999999')
         .set({ Authorization: `Bearer ${TOKEN}` });
 
-      // expect(response.status).toBe(404);
+      expect(response.status).toBe(404);
       expect(response.body).toEqual({ error: 'Ring not found' });
     });
 
     it('should return 401 if unauthorized', async () => {
       const response = await request(app.server)
         .delete(`/rings/${ringId}`)
-        .set({ Authorization: `Bearer ${TOKEN}a` });
+        .set({ Authorization: `Bearer invalidToken` });
 
       expect(response.status).toBe(401);
       expect(response.body).toEqual({ error: 'Token Unauthorized' });

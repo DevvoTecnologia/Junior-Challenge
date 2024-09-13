@@ -7,10 +7,11 @@ import {
   loginUserService,
 } from '../../services/userService';
 import { FastifyRequest, FastifyReply } from 'fastify';
+import { hashPassword } from '../../utils/authUtils';
 
 vi.mock('../../services/userService');
 
-describe('UserController', () => {
+describe('UserController', async () => {
   let mockReply: FastifyReply;
 
   beforeEach(() => {
@@ -20,10 +21,9 @@ describe('UserController', () => {
     } as unknown as FastifyReply;
     vi.clearAllMocks();
   });
-
   const mockUser = {
     username: 'testuserController',
-    password: 'password123',
+    password: 'teste123',
     email: 'testController@example.com',
     id: 'mock-id',
   };
@@ -34,19 +34,35 @@ describe('UserController', () => {
       (createUserService as Mock).mockResolvedValue(mockUser);
 
       const mockRequest = {
-        body: mockUser,
-      } as FastifyRequest<{ Body: typeof mockUser }>;
+        body: {
+          username: mockUser.username,
+          email: mockUser.email,
+          password: mockUser.password,
+        },
+      } as FastifyRequest<{
+        Body: {
+          username: string;
+          password: string;
+          email: string;
+        };
+      }>;
 
       await registerUser(mockRequest, mockReply);
 
+      const hashedPassword = await hashPassword(mockUser.password);
+
       expect(getByUsername).toHaveBeenCalledWith(mockUser.username);
-      expect(createUserService).toHaveBeenCalledWith(
-        mockUser.username,
-        mockUser.password,
-        mockUser.email
-      );
+      expect(createUserService).toHaveBeenCalledWith({
+        email: mockUser.email,
+        password: mockUser.password,
+        username: mockUser.username,
+      });
       expect(mockReply.status).toHaveBeenCalledWith(201);
-      expect(mockReply.send).toHaveBeenCalledWith(mockUser);
+      expect(mockReply.send).toHaveBeenCalledWith({
+        email: mockUser.email,
+        id: mockUser.id,
+        username: mockUser.username,
+      });
     });
 
     it('should return 500 if user already exists', async () => {
@@ -79,25 +95,15 @@ describe('UserController', () => {
 
       await loginUser(mockRequest, mockReply);
 
-      expect(loginUserService).toHaveBeenCalledWith(mockUser.email, mockUser.password);
+      expect(loginUserService).toHaveBeenCalledWith({
+        email: mockUser.email,
+        password: mockUser.password,
+      });
       expect(mockReply.status).toHaveBeenCalledWith(200);
       expect(mockReply.send).toHaveBeenCalledWith({
         token: 'mock-token',
         user: mockUser,
       });
-    });
-
-    it('should return 400 if email is missing', async () => {
-      const mockRequest = {
-        body: {
-          password: mockUser.password,
-        },
-      } as FastifyRequest<{ Body: { email: string; password: string } }>;
-
-      await loginUser(mockRequest, mockReply);
-
-      expect(mockReply.status).toHaveBeenCalledWith(400);
-      expect(mockReply.send).toHaveBeenCalledWith({ error: 'Email is required.' });
     });
 
     it('should return 500 on login service failure', async () => {
