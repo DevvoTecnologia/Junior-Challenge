@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { Owner } from './Owner';
 
 @Entity()
@@ -22,5 +22,5 @@ export class Ring {
   image: string;
 
   @ManyToOne(() => Owner, (owner) => owner.rings)
-  currentOwner: Owner;
+  currentOwner: Relation<Owner>;
 }

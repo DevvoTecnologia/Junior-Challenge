@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Relation } from 'typeorm';
 import { Ring } from './Ring';
 
 @Entity()
@@ -10,5 +10,5 @@ export class Owner {
   name: string;
 
   @OneToMany(() => Ring, (ring) => ring.currentOwner)
-  rings: Ring[];
+  rings: Relation<Ring[]>;
 }
