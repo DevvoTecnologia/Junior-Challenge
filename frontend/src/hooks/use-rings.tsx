@@ -11,28 +11,34 @@ import type { AxiosError } from "axios";
 export function useRings() {
 	const [rings, setRings] = useState<Ring[]>([]);
 	const [editingRing, setEditingRing] = useState<Ring | undefined>(undefined);
+	const [isLoading, setIsLoading] = useState(false);
 
-	const handleAuthError = (error: AxiosError) => {
+	const handleAuthError = useCallback((error: AxiosError) => {
 		if (error.response && error.response.status === 401) {
 			toast.error("Sessão expirada. Por favor, faça login novamente.");
 			logout();
 			window.location.reload();
 		}
-	};
+	}, []);
 
 	const fetchRings = useCallback(async () => {
-		if (!isAuthenticated) return;
+		if (!isAuthenticated()) return;
+		setIsLoading(true);
 		try {
 			const fetchedRings = await getRings();
 			setRings(fetchedRings);
 		} catch (error) {
 			toast.error("Erro ao buscar anéis");
-			// Não chame handleAuthError aqui
+			handleAuthError(error as AxiosError);
+		} finally {
+			setIsLoading(false);
 		}
-	}, []);
+	}, [handleAuthError]);
 
 	useEffect(() => {
-		fetchRings();
+		if (isAuthenticated()) {
+			fetchRings();
+		}
 	}, [fetchRings]);
 
 	const handleCreateRing = async (data: RingFormData) => {
@@ -87,9 +93,10 @@ export function useRings() {
 	return {
 		rings,
 		editingRing,
+		isLoading,
 		handleSubmit,
 		handleEditRing,
 		handleDeleteRing,
-		handleAuthError,
+		fetchRings,
 	};
 }

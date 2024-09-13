@@ -24,6 +24,16 @@ export const login = async (
 	}
 };
 
+export const signUp = async (username: string, password: string) => {
+	try {
+		const response = await api.post("/register", { username, password });
+		return response.data;
+	} catch (error) {
+		console.error("Erro ao cadastrar:", error);
+		throw error;
+	}
+};
+
 export const logout = () => {
 	localStorage.removeItem("token");
 	localStorage.removeItem("user");
@@ -40,4 +50,10 @@ export const getToken = (): string | null => {
 export const getUser = (): { id: string; username: string } | null => {
 	const userStr = localStorage.getItem("user");
 	return userStr ? JSON.parse(userStr) : null;
+};
+
+export const checkAuthStatus = (): boolean => {
+	const token = localStorage.getItem("token");
+	const user = localStorage.getItem("user");
+	return !!token && !!user;
 };
