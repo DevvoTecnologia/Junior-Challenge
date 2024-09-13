@@ -7,6 +7,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useToast } from './use-toast';
 
 type FormData = z.infer<typeof ringSchema>;
 
@@ -14,6 +15,7 @@ export const useUpdateRingModal = (ringId: string) => {
   const [isOpen, setIsOpen] = useState(false);
   const [ring, setRing] = useState<Ring>();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const fetchRingData = async () => {
     const ring = await ringsService.getById(ringId);
@@ -51,8 +53,17 @@ export const useUpdateRingModal = (ringId: string) => {
       await mutateAsync({ ...data, id: ringId });
       queryClient.invalidateQueries({ queryKey: ['rings'] });
       setIsOpen(false);
-    } catch {
-      // TODO: toast
+      toast({
+        title: 'Anel editado com sucesso!',
+        duration: 3000,
+      });
+    } catch (e: any) {
+      toast({
+        title: 'Algo deu errado!',
+        description: e.response.data.error,
+        variant: 'destructive',
+        duration: 3000,
+      });
     }
   });
 

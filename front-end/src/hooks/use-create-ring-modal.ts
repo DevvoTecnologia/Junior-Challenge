@@ -6,12 +6,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useToast } from './use-toast';
 
 type FormData = z.infer<typeof ringSchema>;
 
 export const useCreateRingModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const {
     register,
@@ -34,8 +36,17 @@ export const useCreateRingModal = () => {
       queryClient.invalidateQueries({ queryKey: ['rings'] });
       reset();
       setIsOpen(false);
-    } catch {
-      // TODO: toast
+      toast({
+        title: 'Anel criado com sucesso!',
+        duration: 3000,
+      });
+    } catch (e: any) {
+      toast({
+        title: 'Algo deu errado!',
+        description: e.response.data.error,
+        variant: 'destructive',
+        duration: 3000,
+      });
     }
   });
 

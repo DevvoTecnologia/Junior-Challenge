@@ -6,11 +6,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useToast } from './use-toast';
 
 type FormData = z.infer<typeof registerSchema>;
 
 export const useRegister = () => {
   const { signIn } = useAuth();
+  const { toast } = useToast();
+
   const {
     register,
     handleSubmit,
@@ -29,8 +32,14 @@ export const useRegister = () => {
     try {
       const { accessToken } = await mutateAsync(data);
       signIn(accessToken);
-    } catch {
-      // TODO: toast
+      toast({ title: 'Bem-vindo!', duration: 3000 });
+    } catch (e: any) {
+      toast({
+        title: 'Erro!',
+        description: e.response.data.error,
+        variant: 'destructive',
+        duration: 3000,
+      });
     }
   });
 
