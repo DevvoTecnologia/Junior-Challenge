@@ -5,6 +5,10 @@ import { connectToDatabase, sequelize } from "./database";
 import { env } from "./env";
 
 import * as ringController from "./controllers/ring-controller";
+import * as authController from "./controllers/auth-controller";
+
+import { authMiddleware } from "./middleware/auth";
+import { User } from "./models/User";
 
 const app = express();
 
@@ -13,8 +17,14 @@ app.use(express.json());
 
 // Inicialize o modelo Ring
 Ring.initialize(sequelize);
+User.initialize(sequelize)
 
-// Rotas
+// Rotas de autenticação
+app.post("/register", authController.register);
+app.post("/login", authController.login);
+
+// Rotas protegidas
+app.use(authMiddleware);
 app.post("/create-ring", ringController.createRing);
 app.get("/rings", ringController.getRings);
 app.put("/update-ring/:id", ringController.updateRing);
