@@ -24,7 +24,7 @@ export class RingsService {
     return { carrier, forger };
   }
 
-  async checkMaxForge({ forger, condition }: CheckMaxForge) {
+  async checkMaxForge({ forger, condition }: CheckMaxForge): Promise<void> {
     const rings = await this.repository.listRingsByForge(forger);
 
     if (condition && rings.length >= forger.forger_max_forge) {
@@ -55,7 +55,7 @@ export class RingsService {
     return await this.repository.createARing(dbRing);
   }
 
-  async updateARing(id: number, data: createRingDTO) {
+  async updateARing(id: number, data: createRingDTO): Promise<{message: string}> {
     const { forger_id, carrier_id, ring_image, ring_name, ring_power } = data;
 
     const ring = await this.showARing(id);
@@ -107,7 +107,7 @@ export class RingsService {
     return ring;
   }
 
-  async deleteARing(id: number) {
+  async deleteARing(id: number): Promise<{message: string}> {
     const ring = await this.showARing(id);
 
     try {

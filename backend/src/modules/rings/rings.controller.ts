@@ -12,7 +12,7 @@ import { ValidationPipe } from 'src/utils/Validation/ValidationPipe';
 import { createRingDTO, ringSchema } from './ring.dto';
 import { RingsService } from './rings.service';
 
-@Controller('ring')
+@Controller('rings')
 export class RingController {
   constructor(private readonly ringService: RingsService) {}
 

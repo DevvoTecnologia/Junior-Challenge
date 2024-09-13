@@ -29,6 +29,7 @@ export class RingsRepository extends Repository<Ring> {
         forger: {
           forger_id: forger.forger_id,
         },
+        deleted_at: null
       },
     });
     return rings;
