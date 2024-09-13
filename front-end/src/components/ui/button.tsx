@@ -14,8 +14,8 @@ const buttonVariants = cva(
           'bg-[#fad785] text-black shadow hover:bg-[#fad785]/80 disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed',
         destructive:
           'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90',
-        outline:
-          'border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground',
+        combobox:
+          'outline-none bg-[#1c111f] rounded-lg border border-[#231826] px-3 h-[52px] text-gray-300 w-full pt-4 peer',
         secondary:
           'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',

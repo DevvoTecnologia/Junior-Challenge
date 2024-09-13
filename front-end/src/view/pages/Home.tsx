@@ -1,3 +1,4 @@
+import { CreateRingModal } from '@/components/modals/create-ring-modal';
 import { Button } from '@/components/ui/button';
 import {
   Carousel,
@@ -15,7 +16,7 @@ const Home = () => {
     useRings();
 
   return (
-    <main className="h-screen">
+    <main className="h-screen relative overflow-hidden">
       <Button
         onClick={signOut}
         size="icon"
@@ -75,6 +76,8 @@ const Home = () => {
           {current} de {rings.length}
         </div>
       </section>
+
+      <CreateRingModal />
     </main>
   );
 };
