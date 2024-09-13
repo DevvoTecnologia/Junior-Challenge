@@ -26,6 +26,12 @@
         "semi": false,
         "endOfLine": "lf"
       }
+    ],
+    "@typescript-eslint/no-useless-constructor": [
+      "warn",
+      {
+        "allowWhenImplements": true
+      }
     ]
   },
   "settings": {
