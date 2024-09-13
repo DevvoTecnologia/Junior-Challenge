@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { CriarPortadorDTO, BuscarTodosAneis } from "../dtos/portador.dto";
+import { CriarPortadorDTO, BuscarTodosAneisDTO } from "../dtos/portador.dto";
 import { Repository } from "./Repository";
 import { Portador } from "../entities/portador.entity";
 import { Anel } from "../entities/anel.entity";
@@ -25,7 +25,7 @@ export class PortadorRepository extends Repository {
         });
     }
 
-    async buscarTodosAneis(data: BuscarTodosAneis): Promise<Array<Anel>> {
+    async buscarTodosAneis(data: BuscarTodosAneisDTO): Promise<Array<Anel>> {
         return (
             await this.db.portador.findUnique({
                 where: {

@@ -4,6 +4,6 @@ export interface CriarPortadorDTO {
     senha: string;
 }
 
-export interface BuscarTodosAneis {
+export interface BuscarTodosAneisDTO {
     portadorId: string;
 }

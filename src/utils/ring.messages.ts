@@ -28,8 +28,10 @@ export const MESSAGES = {
     code: "DELETE_ERROR",
     description: "Erro ao deletar anel"
   },
-
   // Mensagens de sucesso
+  PORTADOR_CREATED: {
+    message: "Portador criado com sucesso!"
+  },
   ANEL_CREATED: {
     message: "Anel criado com sucesso"
   },
@@ -38,5 +40,8 @@ export const MESSAGES = {
   },
   ANEL_DELETED: {
     message: "Anel deletado com sucesso"
+  },
+  ANEIS_LISTED: {
+    message: "Lista de anéis recuperada com sucesso"
   }
 };

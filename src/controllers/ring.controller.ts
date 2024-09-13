@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { RingRepository } from "../repositories/ring.repository";
-import { CriarAnelDTO, AtualizarAnelDTO, DeletarAnelDTO } from "../dtos/ring.dto";
+import { RingService } from "../services/ring.service";
+import { CriarAnelDTO, AtualizarAnelDTO } from "../dtos/ring.dto";
 import { MESSAGES } from "../utils/ring.messages";
 
-const ringRepository = new RingRepository();
+const ringService = new RingService();
 
 const validarDadosAnel = (dto: CriarAnelDTO) => {
     return dto.nome && dto.poder && dto.portador && dto.forjadoPor && dto.imagem && dto.portadorId;
@@ -19,7 +19,7 @@ export const criarAnel = async (req: Request, res: Response): Promise<void> => {
             });
             return;
         }
-        const anel = await ringRepository.criarAnel(dto);
+        const anel = await ringService.criarAnel(dto);
         res.status(201).json({
             message: MESSAGES.ANEL_CREATED.message,
             data: anel
@@ -27,8 +27,8 @@ export const criarAnel = async (req: Request, res: Response): Promise<void> => {
     } catch (error) {
         console.error(error);
         res.status(500).json(
-            //@ts-ignore
-            MESSAGES[error.message]
+          //@ts-ignore
+          MESSAGES[error.message]
         );
     }
 };
@@ -36,9 +36,9 @@ export const criarAnel = async (req: Request, res: Response): Promise<void> => {
 export const listarAneis = async (req: Request, res: Response): Promise<void> => {
     try {
         const { portadorId } = req.body;
-        const aneis = await ringRepository.listarAneis(portadorId);
-        res.status(200).json({
-            message: "Lista de anéis recuperada com sucesso",
+        const aneis = await ringService.listarAneis(portadorId);
+        res.status(201).json({
+            message: MESSAGES.ANEIS_LISTED.message,
             data: aneis
         });
     } catch (error) {
@@ -52,7 +52,7 @@ export const atualizarAnel = async (req: Request, res: Response): Promise<void> 
         const id = req.params.id;
         const dto: AtualizarAnelDTO = req.body;
 
-        const anel = await ringRepository.atualizarAnel(id, dto);
+        const anel = await ringService.atualizarAnel(id, dto);
         if (!anel) {
             res.status(404).json({
                 error_code: MESSAGES.ANEL_NOT_FOUND.code,
@@ -73,8 +73,10 @@ export const atualizarAnel = async (req: Request, res: Response): Promise<void> 
 
 export const deletarAnel = async (req: Request, res: Response): Promise<void> => {
     try {
-        const id = req.params.id;
-        await ringRepository.deletarAnel(id);
+        const { id } = req.params;
+        const { portadorId } = req.body;
+        await ringService.deletarAnel({ id, portadorId });
+
         res.status(200).json({
             message: MESSAGES.ANEL_DELETED.message
         });
@@ -83,3 +85,4 @@ export const deletarAnel = async (req: Request, res: Response): Promise<void> =>
         res.status(500).json({ error: MESSAGES.DELETE_ERROR.description });
     }
 };
+

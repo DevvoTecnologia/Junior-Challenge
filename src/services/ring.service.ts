@@ -1,32 +1,31 @@
 import { CriarAnelDTO, AtualizarAnelDTO, DeletarAnelDTO } from '../dtos/ring.dto';
+import { RingRepository } from '../repositories/ring.repository';
 
 export class RingService {
-    private rings: any[] = [];
+    private ringRepository: RingRepository;
 
-    async criarAnel(dto: CriarAnelDTO) {
-        if (this.rings.filter(ring => ring.forjadoPor === dto.forjadoPor).length >= this.getMaxRings(dto.forjadoPor)) {
-            throw new Error('LIMIT_EXCEEDED');
-        }
-        const newRing = { id: this.rings.length + 1, ...dto };
-        this.rings.push(newRing);
-        return newRing;
+    constructor() {
+        this.ringRepository = new RingRepository();
     }
 
-    async listarAneis() {
-        return this.rings;
+    async criarAnel(dto: CriarAnelDTO) {
+        const aneisExistentes = await this.ringRepository.listarAneisPorForjador(dto.forjadoPor);
+        if (aneisExistentes.length >= this.getMaxRings(dto.forjadoPor)) {
+            throw new Error('LIMIT_EXCEEDED');
+        }
+        return this.ringRepository.criarAnel(dto);
+    }
+
+    async listarAneis(portadorId: string) {
+        return this.ringRepository.listarAneis(portadorId);
     }
 
     async atualizarAnel(id: string, dto: AtualizarAnelDTO) {
-        const ringIndex = this.rings.findIndex(ring => ring.id === parseInt(id, 10));
-        if (ringIndex === -1) throw new Error('NOT_FOUND');
-        this.rings[ringIndex] = { ...this.rings[ringIndex], ...dto };
-        return this.rings[ringIndex];
+        return this.ringRepository.atualizarAnel(id, dto);
     }
 
     async deletarAnel(dto: DeletarAnelDTO) {
-        const ringIndex = this.rings.findIndex(ring => ring.id === parseInt(dto.id, 10));
-        if (ringIndex === -1) throw new Error('NOT_FOUND');
-        this.rings.splice(ringIndex, 1);
+        return this.ringRepository.deletarAnel(dto.id);
     }
 
     private getMaxRings(forjadoPor: string) {
