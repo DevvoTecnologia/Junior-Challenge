@@ -1,6 +1,7 @@
 import NavBar from "@/components/navBar";
 import Footer from "@/components/footer";
 import styles from "./page.module.css";
+import Link from "next/link";
 
 export default function HomePage() {
   return (
@@ -21,6 +22,9 @@ export default function HomePage() {
           <li>Next.js para a criação da API e pelo gerenciamento eficiente de rotas</li>
           <li>Postgres para o banco de dados local e de produção</li>
         </ul>
+        <h4>Artes</h4>
+        <p>Todas as artes do site são de propriedade do artista Gurdro, e estão disponíveis no link:</p>
+        <Link href={"https://www.artstation.com/gurdro"}>https://www.artstation.com/gurdro</Link>
       </main>
       <Footer />
     </div>

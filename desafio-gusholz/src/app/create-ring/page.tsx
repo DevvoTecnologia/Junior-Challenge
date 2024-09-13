@@ -14,10 +14,10 @@ enum Tabs {
 }
 
 const imagesMock = [
-  "/static/images/one_ring_art.png",
-  "/static/images/one_ring_art.png",
-  "/static/images/one_ring_art.png",
-  "/static/images/one_ring_art.png",
+  "/static/images/ring-artwork-1.jpg",
+  "/static/images/ring-artwork-2.jpg",
+  "/static/images/ring-artwork-3.jpg",
+  "/static/images/ring-artwork-4.jpg",
 ]
 
 export default function Home() {

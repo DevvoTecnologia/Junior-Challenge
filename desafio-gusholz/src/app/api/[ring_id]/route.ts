@@ -11,27 +11,30 @@ export async function PUT(request: NextRequest, { params }: { params: { ring_id:
     }
 
     const ringRepository = AppDataSource.getRepository(Anel);
-    const ring = await ringRepository.findOne({ where: { id: ringId } });
+    const ringToUpdate = await ringRepository.findOne({ where: { id: ringId } });
 
-    if (!ring) {
-      return NextResponse.json({ status: 404, msg: 'Ring not found' });
+    if (ringToUpdate == null || ringToUpdate == undefined) {
+      return NextResponse.json({
+        status: 404,
+        msg: "Não foi possível encontrar um anel com esse id"
+      });
     }
 
-    const body = await request.json();
-    const { nome, poder, portador, feitoPor, imagem } = await request.json();
+    const { nome, poder, portador, forjadoPor, imagem } = await request.json();
 
-    // newRing.nome = nome;
-    // newRing.poder = poder;
-    // newRing.portador = portador;
-    // newRing.feitoPor = feitoPor;
-    // newRing.imagem = imagem;
 
-    await ringRepository.save(ring);
+    ringToUpdate.nome = nome;
+    ringToUpdate.poder = poder;
+    ringToUpdate.portador = portador;
+    ringToUpdate.forjadoPor = forjadoPor;
+    ringToUpdate.imagem = imagem;
+
+    await ringRepository.save(ringToUpdate);
 
     return NextResponse.json({
       status: 200,
       msg: "Anel atualizado com sucesso:",
-      data: ring
+      data: ringToUpdate
     });
   } catch (error) {
     return NextResponse.json({
