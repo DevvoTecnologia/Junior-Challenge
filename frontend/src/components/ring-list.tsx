@@ -32,33 +32,40 @@ export function RingList({ rings, onEdit, onDelete }: RingListProps) {
 								key={ring.id}
 								className="pl-4 md:basis-1/2 lg:basis-1/3"
 							>
-								<Card className="flex flex-col overflow-hidden h-[500px]">
-									<div className="relative pt-[60%]">
+								<Card className="flex flex-col h-full">
+									<div className="relative pt-[60%] sm:pt-[50%] md:pt-[40%]">
 										<img
 											src={ring.image || "/placeholder-ring.jpg"}
 											alt={ring.name}
 											className="absolute top-0 left-0 w-full h-full object-fit"
 										/>
 									</div>
-									<CardContent className="flex-grow p-6">
-										<h3 className="font-bold text-xl mb-3">{ring.name}</h3>
-										<p className="text-base mb-2">
+									<CardContent className="flex-grow p-4 sm:p-6">
+										<h3 className="font-bold text-lg sm:text-xl mb-2">
+											{ring.name}
+										</h3>
+										<p className="text-sm sm:text-base mb-1">
 											<strong>Poder:</strong> {ring.power}
 										</p>
-										<p className="text-base mb-2">
+										<p className="text-sm sm:text-base mb-1">
 											<strong>Portador:</strong> {ring.bearer}
 										</p>
-										<p className="text-base mb-2">
+										<p className="text-sm sm:text-base mb-1">
 											<strong>Forjado por:</strong> {ring.forgedBy}
 										</p>
 									</CardContent>
-									<CardFooter className="flex justify-between p-6">
-										<Button variant="outline" onClick={() => onEdit(ring)}>
+									<CardFooter className="flex justify-between p-4 sm:p-6">
+										<Button
+											variant="outline"
+											onClick={() => onEdit(ring)}
+											className="text-xs sm:text-sm"
+										>
 											Editar
 										</Button>
 										<Button
 											variant="destructive"
 											onClick={() => onDelete(ring.id)}
+											className="text-xs sm:text-sm"
 										>
 											Excluir
 										</Button>
