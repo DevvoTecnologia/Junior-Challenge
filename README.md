@@ -9,16 +9,16 @@ Implementei uma aplicação full-stack com um **backend** em Node.js (TypeScript
 <div style="display: flex; justify-content: center; align-items: center; text-align: center;">
   <table>
     <tr>
-      <td><img src="./media/login.png" alt="Login" width="400"/></td>
-      <td><img src="./media/create.gif" alt="Create" width="400"/></td>
+      <td><img src="./media/login.png" alt="Login" width="300"/></td>
+      <td><img src="./media/create.gif" alt="Create" width="300"/></td>
     </tr>
     <tr>
       <td><strong>Login</strong></td>
       <td><strong>Create</strong></td>
     </tr>
     <tr>
-      <td><img src="./media/update.gif" alt="Update" width="400"/></td>
-      <td><img src="./media/delete.gif" alt="Delete" width="400"/></td>
+      <td><img src="./media/update.gif" alt="Update" width="300"/></td>
+      <td><img src="./media/delete.gif" alt="Delete" width="300"/></td>
     </tr>
     <tr>
       <td><strong>Update</strong></td>
