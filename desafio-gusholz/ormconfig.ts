@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import { Ring } from "./src/models/ring";
+import { Anel } from "./src/models/ring";
 import 'reflect-metadata';
 
 const AppDataSource = new DataSource({
@@ -9,7 +9,7 @@ const AppDataSource = new DataSource({
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  entities: [Ring],
+  entities: [Anel],
   synchronize: true,
   logging: true,
 });
