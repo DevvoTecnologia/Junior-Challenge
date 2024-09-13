@@ -2,15 +2,18 @@ import { useForm } from "react-hook-form";
 import Input from "../../Input/input";
 import "./styles.css";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type Anel, anelSchema } from "../../../utils/zod/ring";
+import { type Anel, type AnelDb, anelSchema } from "../../../utils/zod/ring";
 import Button from "../../Button/button";
-import { createNewRing, sendToast } from "../../../utils/utils";
-import { useNavigate } from "react-router-dom";
+import { sendToast } from "../../../utils/utils";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import type { ApiResponse } from "../../../types/types";
 
-const FormCreateRing = () => {
-	const navigate = useNavigate();
-	const [isLoading, setIsLoading] = useState(false);
+type Props = {
+	defaultValues: AnelDb;
+};
+
+const FormEditRing = ({ defaultValues }: Props) => {
 	const {
 		register,
 		handleSubmit,
@@ -19,44 +22,8 @@ const FormCreateRing = () => {
 		resolver: zodResolver(anelSchema),
 	});
 
-	const submitFormCreateRing = (formData: Anel) => {
-		setIsLoading(true);
-		createNewRing(formData)
-			.then(async (response) => {
-				const data = await response.json();
-
-				if (!response.ok) {
-					sendToast({
-						message: data.message,
-						type: "error",
-					});
-					return;
-				}
-
-				sendToast({
-					message: data.message,
-					type: "success",
-				});
-
-				navigate("/");
-			})
-			.catch((error) => {
-				console.log(error);
-				sendToast({
-					message: "Ocorreu um erro ao enviar o formulário",
-					type: "error",
-				});
-			})
-			.finally(() => {
-				setIsLoading(false);
-			});
-	};
-
 	return (
-		<form
-			onSubmit={handleSubmit(submitFormCreateRing)}
-			className="form-create-ring"
-		>
+		<form className="form-create-ring">
 			<div className="title-container">
 				<h1>Formulário de criação um novo anel</h1>
 				<p>Insira os dados e crie um novo anel</p>
@@ -96,11 +63,9 @@ const FormCreateRing = () => {
 				placeholder="URL da imagem"
 				error={errors.image?.message}
 			/>
-			<Button isLoading={isLoading} type="submit">
-				Enviar
-			</Button>
+			<Button type="submit">Enviar</Button>
 		</form>
 	);
 };
 
-export default FormCreateRing;
+export default FormEditRing;

@@ -1,12 +1,47 @@
 import Slider from "react-slick";
 import CardRing from "./CardRing/card-ring";
 import { useRingContext } from "../context/RingContext";
+import Skeleton from "./Skeleton/skeleton";
 
 const Carousel = () => {
-	const { rings, pendingRings } = useRingContext();
+	const { rings, isPending } = useRingContext();
 
-	if (pendingRings) {
-		return <p>Carregando aneis...</p>;
+	if (isPending.getAllRings) {
+		return (
+			<Slider
+				dots={false}
+				arrows={false}
+				speed={500}
+				slidesToShow={4}
+				infinite={false}
+				responsive={[
+					{
+						breakpoint: 1536,
+						settings: {
+							slidesToShow: 3,
+						},
+					},
+					{
+						breakpoint: 1028,
+						settings: {
+							slidesToShow: 2,
+						},
+					},
+					{
+						breakpoint: 640,
+						settings: {
+							slidesToShow: 1,
+						},
+					},
+				]}
+			>
+				{[1, 2, 3, 4].map((_, index) => (
+					<div key={index} className="skeleton-card">
+						<Skeleton style={{ width: "98%", height: 552 }} />
+					</div>
+				))}
+			</Slider>
+		);
 	}
 
 	if (rings.length === 0) {
@@ -15,34 +50,28 @@ const Carousel = () => {
 
 	return (
 		<Slider
-			dots
-			initialSlide={0}
+			dots={false}
+			arrows={false}
 			speed={500}
-			slidesToScroll={rings.length >= 4 ? 4 : rings.length}
-			slidesToShow={rings.length >= 4 ? 4 : rings.length}
-			pauseOnHover
+			slidesToShow={4}
 			infinite={false}
-			autoplay
 			responsive={[
 				{
 					breakpoint: 1536,
 					settings: {
 						slidesToShow: 3,
-						slidesToScroll: 3,
 					},
 				},
 				{
 					breakpoint: 1028,
 					settings: {
 						slidesToShow: 2,
-						slidesToScroll: 2,
 					},
 				},
 				{
 					breakpoint: 640,
 					settings: {
 						slidesToShow: 1,
-						slidesToScroll: 1,
 					},
 				},
 			]}

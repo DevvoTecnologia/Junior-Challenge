@@ -1,27 +1,31 @@
 import {
 	createContext,
-	useState,
 	useContext,
 	type ReactNode,
 	type FC,
-	useEffect,
+	useState,
 	useCallback,
+	useEffect,
 } from "react";
-import type { Anel, AnelDb } from "../utils/zod/ring";
+import type { AnelDb } from "../utils/zod/ring";
 import type { ApiResponse } from "../types/types";
 import { sendToast } from "../utils/utils";
 
 type RingContextType = {
 	rings: AnelDb[];
-	pendingRings: boolean;
-	pendingRemoveRing: boolean;
+	isPending: {
+		deleteRing: boolean;
+		getAllRings: boolean;
+	};
 	deleteRing: (ringId: string | undefined) => Promise<void>;
 };
 
 const RingContext = createContext<RingContextType>({
 	rings: [],
-	pendingRemoveRing: false,
-	pendingRings: false,
+	isPending: {
+		deleteRing: false,
+		getAllRings: false,
+	},
 	deleteRing: async () => {},
 });
 
@@ -29,11 +33,16 @@ export const useRingContext = () => useContext(RingContext);
 
 export const RingProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const [rings, setRings] = useState<AnelDb[]>([]);
-	const [pendingRings, setPendingRings] = useState<boolean>(false);
-	const [pendingRemoveRing, setPendingRemoveRing] = useState<boolean>(false);
+	const [isPending, setIsPending] = useState({
+		deleteRing: false,
+		getAllRings: false,
+	});
 
-	const fetchRings = useCallback(async () => {
-		setPendingRings(true);
+	const getAllRings = useCallback(async () => {
+		setIsPending({
+			deleteRing: false,
+			getAllRings: true,
+		});
 		try {
 			const response = await fetch(
 				`${process.env.REACT_APP_BACKEND_URL}/api/rings`,
@@ -47,19 +56,25 @@ export const RingProvider: FC<{ children: ReactNode }> = ({ children }) => {
 			const data = (await response.json()) as ApiResponse<AnelDb[]>;
 			setRings(data.data);
 		} finally {
-			setPendingRings(false);
+			setIsPending({
+				deleteRing: false,
+				getAllRings: false,
+			});
 		}
 	}, []);
 
 	useEffect(() => {
-		fetchRings();
-	}, [fetchRings]);
+		getAllRings();
+	}, [getAllRings]);
 
 	const deleteRing = async (ringId: string | undefined) => {
 		if (!ringId) return;
 
 		try {
-			setPendingRemoveRing(true);
+			setIsPending({
+				deleteRing: true,
+				getAllRings: false,
+			});
 
 			const response = await fetch(
 				`${process.env.REACT_APP_BACKEND_URL}/api/rings/${ringId}`,
@@ -71,7 +86,7 @@ export const RingProvider: FC<{ children: ReactNode }> = ({ children }) => {
 				},
 			);
 
-			const data = (await response.json()) as ApiResponse<Anel>;
+			const data = (await response.json()) as ApiResponse<AnelDb[]>;
 
 			if (!response.ok) {
 				sendToast({
@@ -86,7 +101,7 @@ export const RingProvider: FC<{ children: ReactNode }> = ({ children }) => {
 				type: "success",
 			});
 
-			await fetchRings();
+			setRings(data.data);
 		} catch (error) {
 			console.log(error);
 			sendToast({
@@ -94,7 +109,10 @@ export const RingProvider: FC<{ children: ReactNode }> = ({ children }) => {
 				type: "error",
 			});
 		} finally {
-			setPendingRemoveRing(false);
+			setIsPending({
+				deleteRing: false,
+				getAllRings: false,
+			});
 		}
 	};
 
@@ -102,9 +120,8 @@ export const RingProvider: FC<{ children: ReactNode }> = ({ children }) => {
 		<RingContext.Provider
 			value={{
 				deleteRing,
+				isPending,
 				rings,
-				pendingRemoveRing,
-				pendingRings,
 			}}
 		>
 			{children}

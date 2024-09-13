@@ -1,0 +1,12 @@
+.form-create-ring {
+  max-width: 768px;
+  width: 100%;
+  border: 2px solid #525252;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.form-create-ring > button {
+  width: 100%;
+  margin-top: 12px;
+}

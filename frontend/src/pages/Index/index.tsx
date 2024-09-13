@@ -1,8 +1,13 @@
+import { useEffect } from "react";
 import Button from "../../components/Button/button";
-import Carousel from "../../components/carousel";
 import "./styles.css";
+import Carousel from "../../components/carousel";
 
 const HomePage = () => {
+	useEffect(() => {
+		document.title = "Desafio Júnior | Home";
+	}, []);
+
 	return (
 		<main className="container">
 			<div className="title-container">

@@ -13,6 +13,10 @@ export const getRings = async (): Promise<Ring[]> => {
 	return await ringRepository.find();
 };
 
+export const getRingById = async (id: string): Promise<Ring | null> => {
+	return await ringRepository.findOne({ where: { id } });
+};
+
 export const getCountByForgedBy = async (forgedBy: string): Promise<number> => {
 	const count = await ringRepository.count({ where: { forgedBy } });
 	return count;

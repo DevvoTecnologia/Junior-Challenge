@@ -8,11 +8,16 @@ import CreatePage from "./pages/Create/create";
 import HomePage from "./pages/Index";
 import { Toaster } from "react-hot-toast";
 import { RingProvider } from "./context/RingContext";
+import EditPage from "./pages/Edit/edit";
 
 const router = createBrowserRouter([
 	{
 		path: "/create",
 		element: <CreatePage />,
+	},
+	{
+		path: "/edit/:id",
+		element: <EditPage />,
 	},
 	{
 		path: "/",

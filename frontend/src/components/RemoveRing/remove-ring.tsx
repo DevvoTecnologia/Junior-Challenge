@@ -8,7 +8,7 @@ type Props = {
 };
 
 const RemoveRing = ({ ringId }: Props) => {
-	const { deleteRing, pendingRemoveRing } = useRingContext();
+	const { deleteRing, isPending } = useRingContext();
 
 	return (
 		<button
@@ -16,7 +16,7 @@ const RemoveRing = ({ ringId }: Props) => {
 			type="button"
 			className="remove-button"
 		>
-			{pendingRemoveRing ? <Spinner /> : <Trash size={18} color="#fff" />}
+			{isPending.deleteRing ? <Spinner /> : <Trash size={18} color="#fff" />}
 		</button>
 	);
 };

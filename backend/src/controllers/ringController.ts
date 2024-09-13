@@ -4,6 +4,7 @@ import {
 	createRing,
 	deleteRing,
 	getCountByForgedBy,
+	getRingById,
 	getRings,
 	updateRing,
 } from "../services/RingService";
@@ -71,6 +72,35 @@ const ringController = {
 		}
 	},
 
+	getRingById: async (req: Request, res: Response) => {
+		try {
+			const { id } = req.params;
+
+			if (!id) {
+				return res.status(HttpStatusCode.noContent).json({
+					message: "Dados inválidos",
+				});
+			}
+
+			const ring = await getRingById(id);
+
+			if (!ring) {
+				return res
+					.status(HttpStatusCode.notFound)
+					.json({ message: "Anel não encontrado" });
+			}
+
+			return res
+				.status(HttpStatusCode.ok)
+				.json({ data: ring, message: "Anel encontrado" });
+		} catch (error) {
+			console.log(error);
+			return res
+				.status(HttpStatusCode.badRequest)
+				.json({ message: "Ocorreu um erro ao listar os anéis" });
+		}
+	},
+
 	// updateRing: async (req: Request, res: Response) => {
 	// 	try {
 	// 		const { id } = req.params;
@@ -102,8 +132,11 @@ const ringController = {
 				});
 			}
 
+			const rings = await getRings();
+
 			return res.status(HttpStatusCode.ok).send({
 				message: "Anel deletado com sucesso!",
+				data: rings,
 			});
 		} catch (error) {
 			console.log(error);
