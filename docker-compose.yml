@@ -3,14 +3,13 @@ services:
   app:
     container_name: aneis_container_
     build: .
-    working_dir: /app/src
+    working_dir: /app
     ports:
       - "3000:3000"
     env_file:
       - .env
     depends_on:
       - db
-    restart: always
     volumes:
       - .:/app
       - /app/node_modules
@@ -21,7 +20,7 @@ services:
     container_name: db-aneisDb
     restart: always
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 88255632

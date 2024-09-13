@@ -6,22 +6,20 @@ export class RingRepository extends Repository {
 
     // Criar um novo anel
     async criarAnel(dto: CriarAnelDTO): Promise<Anel> {
-        // Lógica para verificar a quantidade de anéis
         const anelExistente = await this.db.anel.findMany({
             where: { forjadoPor: dto.forjadoPor },
         });
         if (anelExistente.length >= this.getMaxRings(dto.forjadoPor)) {
-            throw new Error('LIMIT_EXCEEDED');
+            throw new Error('ANEL_EXCEEDED_LIMIT');
         }
-
         return this.db.anel.create({
-            data: dto,
+            data: dto as any,
         });
     }
 
     // Listar todos os anéis
-    async listarAneis(): Promise<Array<Anel>> {
-        return this.db.anel.findMany();
+    async listarAneis(portadorId: string): Promise<Array<Anel>> {
+        return this.db.anel.findMany({where: {portadorId}});
     }
 
     // Atualizar um anel existente
@@ -33,9 +31,9 @@ export class RingRepository extends Repository {
     }
 
     // Deletar um anel
-    async deletarAnel(dto: DeletarAnelDTO): Promise<void> {
+    async deletarAnel(id: string): Promise<void> {
         await this.db.anel.delete({
-            where: { id: dto.id },
+            where: { id: id },
         });
     }
 

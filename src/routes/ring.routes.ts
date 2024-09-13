@@ -1,22 +1,17 @@
 import { Router } from "express";
 import { criarAnel, listarAneis, atualizarAnel, deletarAnel } from "../controllers/ring.controller";
+import {authMiddleware} from "../middlewares/auth.middleware";
 
 const router = Router();
 
 router
-    .route('/criar')
-    .post(criarAnel);
+    .route('/anel')
+    .post(authMiddleware, criarAnel)
+    .get(authMiddleware, listarAneis);
 
 router
-    .route('/listar')
-    .get(listarAneis);
-
-router
-    .route('/atualizar/:id')
-    .put(atualizarAnel);
-
-router
-    .route('/deletar')
-    .delete(deletarAnel);
+    .route('/anel/:id')
+    .put(authMiddleware, atualizarAnel)
+    .delete(authMiddleware, deletarAnel)
 
 export default router;

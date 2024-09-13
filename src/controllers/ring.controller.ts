@@ -6,13 +6,12 @@ import { MESSAGES } from "../utils/ring.messages";
 const ringRepository = new RingRepository();
 
 const validarDadosAnel = (dto: CriarAnelDTO) => {
-    return dto.nome && dto.poder && dto.portador && dto.forjadoPor && dto.imagem && dto.portadorId && dto.forjadorId;
+    return dto.nome && dto.poder && dto.portador && dto.forjadoPor && dto.imagem && dto.portadorId;
 };
 
 export const criarAnel = async (req: Request, res: Response): Promise<void> => {
     try {
         const dto: CriarAnelDTO = req.body;
-
         if (!validarDadosAnel(dto)) {
             res.status(400).json({
                 error_code: MESSAGES.INVALID_DATA.code,
@@ -20,7 +19,6 @@ export const criarAnel = async (req: Request, res: Response): Promise<void> => {
             });
             return;
         }
-
         const anel = await ringRepository.criarAnel(dto);
         res.status(201).json({
             message: MESSAGES.ANEL_CREATED.message,
@@ -28,13 +26,17 @@ export const criarAnel = async (req: Request, res: Response): Promise<void> => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: MESSAGES.CREATION_ERROR.description });
+        res.status(500).json(
+            //@ts-ignore
+            MESSAGES[error.message]
+        );
     }
 };
 
 export const listarAneis = async (req: Request, res: Response): Promise<void> => {
     try {
-        const aneis = await ringRepository.listarAneis();
+        const { portadorId } = req.body;
+        const aneis = await ringRepository.listarAneis(portadorId);
         res.status(200).json({
             message: "Lista de anéis recuperada com sucesso",
             data: aneis
@@ -71,10 +73,9 @@ export const atualizarAnel = async (req: Request, res: Response): Promise<void> 
 
 export const deletarAnel = async (req: Request, res: Response): Promise<void> => {
     try {
-        const dto: DeletarAnelDTO = req.body;
-
-        await ringRepository.deletarAnel(dto);
-        res.status(204).json({
+        const id = req.params.id;
+        await ringRepository.deletarAnel(id);
+        res.status(200).json({
             message: MESSAGES.ANEL_DELETED.message
         });
     } catch (error) {

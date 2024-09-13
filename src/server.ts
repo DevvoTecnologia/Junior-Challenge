@@ -4,9 +4,17 @@ import express from "express";
 import authRoutes from "./routes/auth.routes";
 import portadorRoutes from "./routes/portador.routes";
 import ringRoutes from "./routes/ring.routes";
+const cors = require("cors");
 
 const app = express();
 app.use(express.json());
+
+app.use(
+    cors({
+        origin: "*",
+    })
+);
+
 
 // Rotas
 app.use(authRoutes);

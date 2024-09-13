@@ -5,7 +5,6 @@ export interface CriarAnelDTO {
     forjadoPor: string;
     imagem: string;
     portadorId: string;
-    forjadorId: string;
 }
 
 export interface AtualizarAnelDTO {

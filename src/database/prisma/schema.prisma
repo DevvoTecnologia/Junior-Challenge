@@ -29,17 +29,5 @@ model Anel {
   Portador   Portador? @relation(fields: [portadorId], references: [id])
   portadorId String?
 
-  Forjador   Forjador @relation(fields: [forjadorId], references: [id])
-  forjadorId String
-
   @@map("anel")
-}
-
-model Forjador {
-  id       String @id @default(uuid())
-  name     String
-  forjaMax Int
-  Anel     Anel[]
-
-  @@map("forjador")
 }

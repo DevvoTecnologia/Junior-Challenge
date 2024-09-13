@@ -8,6 +8,10 @@ export const MESSAGES = {
     code: "ANEL_NOT_FOUND",
     description: "O anel com o ID fornecido não foi encontrado"
   },
+  ANEL_EXCEEDED_LIMIT: {
+    code: "LIMIT_EXCEEDED",
+    description: "A quantidade máxima de anéis desse forjador foi atingida"
+  },
   CREATION_ERROR: {
     code: "CREATION_ERROR",
     description: "Erro ao criar anel"

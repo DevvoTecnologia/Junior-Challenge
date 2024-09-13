@@ -8,7 +8,7 @@ export const criarPortador = async (req: Request, res: Response): Promise<void> 
     try {
         const dto: CriarPortadorDTO = req.body;
         await portadorService.createCustomer(dto);
-        res.status(201).send();
+        res.status(201).send({ success: "Portador Criado com sucesso!" });
     } catch (error) {
         res.status(500).json({ error: "Erro ao criar portador" });
     }

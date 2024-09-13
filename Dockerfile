@@ -9,7 +9,7 @@ RUN npx prisma generate
 RUN npm run build
 FROM node:18-alpine
 
-WORKDIR /app/src
+WORKDIR /app
 RUN apk add --no-cache postgresql-client
 
 COPY --from=builder /app/dist ./dist
