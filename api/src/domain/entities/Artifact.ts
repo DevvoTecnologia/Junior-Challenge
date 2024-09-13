@@ -1,5 +1,3 @@
-import { nanoid } from 'nanoid'
-
 export class Artifact {
   id?: string
   name: string
@@ -16,12 +14,12 @@ export class Artifact {
     forgedBy?: string,
     id?: string,
   ) {
-    this.id = id || nanoid()
     this.name = name
     this.power = power
+    this.imageUrl = imageUrl
     this.bearer = bearer
     this.forgedBy = forgedBy
-    this.imageUrl = imageUrl
+    this.id = id
   }
 
   changeBearer(newBearer?: string): void {

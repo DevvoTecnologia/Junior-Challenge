@@ -27,12 +27,7 @@
         "endOfLine": "lf"
       }
     ],
-    "@typescript-eslint/no-useless-constructor": [
-      "warn",
-      {
-        "allowWhenImplements": true
-      }
-    ]
+    "@typescript-eslint/no-useless-constructor": "warn"
   },
   "settings": {
     "import/parsers": {
