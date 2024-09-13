@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import AppDataSource from "../../../../ormconfig"; // Adjust the path as necessary
-import { Anel } from '../../../models/ring'; // Adjust the path as necessary
+import AppDataSource from "../../../../ormconfig";
+import { Anel } from '../../../models/ring';
 
-// Handle PUT (Update a ring)
 export async function PUT(request: NextRequest, { params }: { params: { ring_id: string } }) {
-  const ringId = parseInt(params.ring_id, 10); // Convert string to number
+  const ringId = parseInt(params.ring_id, 10);
 
   try {
     if (!AppDataSource.isInitialized) {
@@ -29,16 +28,22 @@ export async function PUT(request: NextRequest, { params }: { params: { ring_id:
 
     await ringRepository.save(ring);
 
-    return NextResponse.json({ status: 200, msg: 'Ring updated successfully', data: ring });
+    return NextResponse.json({
+      status: 200,
+      msg: "Anel atualizado com sucesso:",
+      data: ring
+    });
   } catch (error) {
-    console.error('Error updating ring:', error);
-    return NextResponse.json({ status: 500, msg: 'Internal Server Error' });
+    return NextResponse.json({
+      status: 500,
+      msg: "Erro: não foi possível atualizar o anel selecionado",
+      erro: error
+    });
   }
 }
 
-// Handle DELETE (Delete a ring)
 export async function DELETE(request: NextRequest, { params }: { params: { ring_id: string } }) {
-  const ringId = parseInt(params.ring_id, 10); // Convert string to number
+  const ringId = parseInt(params.ring_id, 10);
 
   try {
     if (!AppDataSource.isInitialized) {
@@ -54,9 +59,15 @@ export async function DELETE(request: NextRequest, { params }: { params: { ring_
 
     await ringRepository.remove(ring);
 
-    return NextResponse.json({ status: 200, msg: 'Ring deleted successfully' });
+    return NextResponse.json({
+      status: 200,
+      msg: "Anel deletado com sucesso!"
+    });
   } catch (error) {
-    console.error('Error deleting ring:', error);
-    return NextResponse.json({ status: 500, msg: 'Internal Server Error' });
+    return NextResponse.json({
+      status: 500,
+      msg: "Erro: não foi possível deletar novo anel",
+      erro: error
+    });
   }
 }

@@ -1,8 +1,7 @@
-import { NextResponse } from 'next/server';
-import AppDataSource from '../../../ormconfig'; // Adjust the path as needed
-import { Anel } from '../../models/ring'; // Adjust the path as needed
+import { NextResponse } from "next/server";
+import AppDataSource from "../../../ormconfig";
+import { Anel } from "../../models/ring";
 
-// Function to GET all rings
 export async function GET() {
   try {
     if (!AppDataSource.isInitialized) {
@@ -10,21 +9,21 @@ export async function GET() {
     }
 
     const ringRepository = AppDataSource.getRepository(Anel);
-
-    // Await the result of find()
     const rings = await ringRepository.find();
 
-    // Return the response with status and data
-    return NextResponse.json({ status: 200, data: rings });
+    return NextResponse.json({
+      status: 200,
+      data: rings
+    });
   } catch (error) {
-    console.error('Error fetching rings:', error);
-
-    // Handle error
-    return NextResponse.json({ status: 500, Error: 'Internal Server Error' });
+    return NextResponse.json({
+      status: 500,
+      msg: "Erro: não foi retornar os anéis criados",
+      erro: error
+    });
   }
 }
 
-// Function to POST a new ring
 export async function POST(request: Request) {
   try {
     if (!AppDataSource.isInitialized) {
@@ -49,9 +48,16 @@ export async function POST(request: Request) {
 
     await ringRepository.save(novoAnel);
 
-    return NextResponse.json({ status: 201, msg: 'Ring created successfully', data: novoAnel });
+    return NextResponse.json({
+      status: 201,
+      msg: "Anel criado com sucesso!",
+      data: novoAnel
+    });
   } catch (error) {
-    console.error('Error creating ring:', error);
-    return NextResponse.json({ status: 500, msg: 'Internal Server Error' });
+    return NextResponse.json({
+      status: 500,
+      msg: "Erro: não foi possível criar um novo anel",
+      erro: error
+    });
   }
 }
