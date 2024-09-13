@@ -1,0 +1,16 @@
+node_modules
+.data
+.env
+.env.test
+.env.local
+.DS_Store
+dist
+coverage
+tmp/*.*
+tmp/uploads/*
+!tmp/.gitkeep
+!tmp/uploads/.gitkeep
+.terraform*
+terraform.tfstate*
+tfapply*
+public/index.html
