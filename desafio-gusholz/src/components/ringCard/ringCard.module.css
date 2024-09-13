@@ -8,3 +8,18 @@
   border-radius: 8px;
   min-width: fit-content;
 }
+
+.imagesContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.iconsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px
+}
+
+.icon:hover {
+  cursor: pointer;
+}

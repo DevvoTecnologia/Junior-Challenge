@@ -6,6 +6,7 @@ import NavBar from "@/components/navBar";
 import Button from "@/components/button";
 import Footer from "@/components/footer";
 import MadeBy from "@/models/madeBy";
+import Modal from "@/components/modal";
 
 interface FormData {
   nome: string;
@@ -34,11 +35,12 @@ enum Tabs {
 export default function Home() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedTab, setSelectedTab] = useState<Tabs>(Tabs.create);
+  const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     nome: "",
     poder: "",
     portador: "",
-    forjadoPor: "",
+    forjadoPor: "Elfos",
     imagem: "",
   });
 
@@ -59,15 +61,45 @@ export default function Home() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setFormData({
+      nome: "",
+      poder: "",
+      portador: "",
+      forjadoPor: "Elfos",
+      imagem: "",
+    })
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     const finalData = {
       ...formData,
       imagem: formData.imagem
     };
 
     console.log(finalData);
-    // onSubmit(finalData);
+
+    try {
+      const response = await fetch('/api', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(finalData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setShowModal(true);
+      } else {
+        console.error('Failed to submit:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   };
 
   return (
@@ -192,6 +224,9 @@ export default function Home() {
             </div>
             : <></>}
         </form>
+        {showModal && (
+          <Modal message="Anel criado com sucesso!" onClose={handleCloseModal} />
+        )}
         <Button action={handleSubmit} buttonText={selectedTab === Tabs.create ? "Criar Anel" : "Atualizar Anel"}></Button>
       </main>
       <Footer />

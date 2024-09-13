@@ -6,53 +6,51 @@ import RingCard from "@/components/ringCard";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import MadeBy from "@/models/madeBy";
-
-const mockRings = [
-  {
-    ringName: "The one ring",
-    power: "Make you go to the dark realms",
-    holder: "Sauron",
-    madeBy: MadeBy.elfs,
-    imageUrl: "/static/images/one_ring_second_art.png",
-  },
-  {
-    ringName: "The white ring",
-    power: "Make you bright during dark times",
-    holder: "Gandalf",
-    madeBy: MadeBy.dwarfs,
-    imageUrl: "/static/images/one_ring_second_art.png",
-  },
-  {
-    ringName: "The red ring",
-    power: "Make you immune to high temperatures",
-    holder: "Bilbo",
-    madeBy: MadeBy.dwarfs,
-    imageUrl: "/static/images/one_ring_second_art.png",
-  },
-  {
-    ringName: "The blue ring",
-    power: "Make you breathe underwater",
-    holder: "Legolas",
-    madeBy: MadeBy.elfs,
-    imageUrl: "/static/images/one_ring_second_art.png",
-  },
-];
+import { useState, useEffect } from "react";
+import { AnelModel } from "@/models/ring";
 
 export default function ViewRingsPage() {
+  const [rings, setRings] = useState<AnelModel[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchRings = async () => {
+    try {
+      const response = await fetch('/api');
+      const data = await response.json();
+      setRings(data.data);
+    } catch (error) {
+      console.error('Error fetching rings:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRings();
+  }, []);
+
+
+  if (loading) return (
+    <main className={styles.main}>
+      <NavBar isHomepage={false} />
+      <p>Loading...</p>
+      <Footer />
+    </main>
+  )
+
   return (
     <main className={styles.main}>
       <NavBar isHomepage={false} />
-      <CardsSlider />
+      <CardsSlider rings={rings} />
       <Footer />
     </main>
   );
 }
 
-export function CardsSlider() {
-  var settings = {
+export function CardsSlider({ rings }: { rings: AnelModel[] }) {
+  const settings = {
     dots: true,
-    infinite: true,
+    infinite: rings.length > 1, // Ensure infinite scroll is based on the number of items
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
@@ -61,18 +59,26 @@ export function CardsSlider() {
   return (
     <div style={{ maxWidth: '50%', overflow: "hidden" }}>
       <Slider {...settings}>
-        {mockRings.map((ring, index) => (
-          <div className={styles.carrousel} key={index} >
-            <RingCard
-              ringName={ring.ringName}
-              power={ring.power}
-              holder={ring.holder}
-              madeBy={ring.madeBy}
-              imageUrl={ring.imageUrl}
-            />
+        {rings.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '20px' }}>
+            <p>ta vazio paizao</p>
           </div>
-        ))}
+        ) : (
+          rings.map((ring, index) => (
+            <div className={styles.carrousel} key={index}>
+              <RingCard
+                id={ring.id}
+                nome={ring.nome}
+                poder={ring.poder}
+                portador={ring.portador}
+                forjadoPor={ring.forjadoPor}
+                imagem={ring.imagem}
+              />
+            </div>
+          ))
+        )}
       </Slider>
+      <svg width={20} height={20}></svg>
     </div>
   );
 }
