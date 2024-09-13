@@ -1,0 +1,24 @@
+{
+  "name": "challengedevvo",
+  "version": "1.0.0",
+  "description": "_One Challenge to rule them all, One Challenge to find them, One Challenge to bring them all, and in the darkness bind them_",
+  "main": "index.js",
+  "scripts": {
+    "start":"nodemon src/index.ts",
+    "build":"tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.5.4",
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2"
+  }
+}
