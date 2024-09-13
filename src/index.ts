@@ -7,6 +7,8 @@ import { MongoCreateRingRepository } from "./repositories/get-rings/create-ring/
 import { CreateRingController } from "./controllers/create-ring/create-ring";
 import { MongoUpdateRingRepository } from "./repositories/update-ring/mongo-update-ring";
 import { UpdateRingController } from "./controllers/update-ring/update-ring";
+import { MongoDeleteRingRepository } from "./repositories/delete-ring/mongo-delete-ring";
+import { DeleteRingController } from "./controllers/delete-ring/delete-ring";
 
 const main = async () => {
   config();
@@ -50,6 +52,20 @@ const main = async () => {
 
     const { body, statusCode } = await updateRingController.handle({
       body: req.body,
+      params: req.params,
+    });
+
+    res.status(statusCode).send(body);
+  });
+
+  app.delete("/rings/:id", async (req, res) => {
+    const mongoDeleteRingRepository = new MongoDeleteRingRepository();
+
+    const deleteRingController = new DeleteRingController(
+      mongoDeleteRingRepository
+    );
+
+    const { body, statusCode } = await deleteRingController.handle({
       params: req.params,
     });
 
