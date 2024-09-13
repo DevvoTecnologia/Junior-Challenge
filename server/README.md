@@ -24,34 +24,33 @@ Este é o backend para o projeto de gerenciamento de anéis mágicos. Ele fornec
 ## Configuração
 
 1. Clone o repositório:
-    ```
-    git clone https://github.com/MateusJSouza/Junior-Challenge
-    ```
-2. Navegue até o diretório do projeto:
-    ```
-    cd server
-    ```
+   ```
+   git clone https://github.com/MateusJSouza/Junior-Challenge
+   ```
 
-3. Instale as dependências:
-    ```
-    npm install
-    ```
+2. Instale as dependências:
+   ```
+   npm install
+   ```
 
-4. Crie um arquivo `.env` na raiz do projeto e configure as variáveis de ambiente:
-    ```
-    JWT_SECRET=sua_chave_secreta_muito_segura_aqui
-    DATABASE_URL=postgres://user:password@localhost:5432/juniorchallenge
-    PORT=3000
-    ```
+3. Crie um arquivo `.env` na raiz do projeto e configure as variáveis de ambiente:
+   ```
+   JWT_SECRET=sua_chave_secreta_muito_segura_aqui
+   DATABASE_URL=postgres://user:password@localhost:5432/juniorchallenge
+   PORT=3000
+   ```
 
-5. Configure o banco de dados:
-    - Crie um banco de dados PostgreSQL
-    - Atualize o arquivo `src/config/config.json` com as credenciais do seu banco de dados
+4. Inicie o banco de dados PostgreSQL usando Docker:
+   ```
+   docker-compose up -d
+   ```
+   Isso irá criar e iniciar um container Docker com o PostgreSQL usando as configurações definidas no arquivo `docker-compose.yaml`.
 
-6. Execute as migrações do banco de dados:
-      ```
-      npx sequelize-cli db:migrate
-      ```
+5. Execute as migrações do banco de dados para criar as tabelas necessárias:
+   ```
+   npx sequelize-cli db:migrate
+   ```
+   Este comando criará todas as tabelas definidas nas migrações do Sequelize.
 
 ## Executando o Projeto
 
@@ -59,7 +58,6 @@ Para iniciar o servidor em modo de desenvolvimento:
 ```
 npm run dev
 ```
-
 
 O servidor estará rodando em `http://localhost:3000` (ou na porta especificada no arquivo `.env`).
 
