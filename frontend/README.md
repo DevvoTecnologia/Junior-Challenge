@@ -58,3 +58,8 @@ O aplicativo estará disponível em `http://localhost:3000` (ou outra porta, se 
 - Design responsivo utilizando Tailwind CSS;
 - Sistema de autenticação com JWT.
 
+----------------------------------------
+
+<p align="center">
+  Desenvolvido por <a href="https://github.com/MateusJSouza">Mateus Jesus</a>
+</p>
