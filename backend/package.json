@@ -1,10 +1,13 @@
 {
    "name": "backend",
    "version": "1.0.0",
-   "description": "",
-   "main": "index.js",
+  "description": "Backend criado para um desafio técnico.",
+   "main": "src/server.ts",
+   "type": "module",
    "scripts": {
       "dev": "tsx watch src/server.ts",
+      "test": "vitest",
+      "test:coverage": "vitest run --coverage",
       "typeorm": "typeorm-ts-node-commonjs",
       "migration:dev": "cross-env NODE_ENV=dev typeorm-ts-node-commonjs migration:run -d src/database/typeorm/data-source.ts",
       "migration:prod": "cross-env NODE_ENV=prod typeorm-ts-node-commonjs migration:run -d rc/database/typeorm/data-source.js"
@@ -17,7 +20,8 @@
       "@types/node": "^16.11.10",
       "ts-node": "10.9.1",
       "tsx": "^4.19.1",
-      "typescript": "4.5.2"
+      "typescript": "4.5.2",
+      "vitest": "^2.1.1"
    },
    "dependencies": {
       "cross-env": "^7.0.3",
@@ -25,6 +29,7 @@
       "pg": "^8.4.0",
       "reflect-metadata": "^0.1.13",
       "typeorm": "0.3.20",
+      "vite-tsconfig-paths": "^5.0.1",
       "zod": "^3.23.8"
    }
 }

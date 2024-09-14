@@ -1,4 +1,5 @@
-import { RingRepository } from "@/repository/rings/repository"
+import { RingRepository } from "@/repositories/rings/ring-repository"
+import { RingNotExistError } from "../errors/ring-not-exist"
 
 type DeleteServiceRequest = {
   ringId: string
@@ -11,7 +12,7 @@ export class DeleteService {
     const findRing = await this.ringRespository.findById(ringId)
 
     if (!findRing) {
-      throw new Error()
+      throw new RingNotExistError()
     }
 
     await this.ringRespository.delete(ringId)
