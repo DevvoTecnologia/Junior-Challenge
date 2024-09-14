@@ -24,7 +24,7 @@ export const Button: FC<ButtonProps> = ({
   return (
     <button
       className={twMerge(
-        "p-2 rounded-md duration-150 disabled:pointer-events-none disabled:bg-zinc-300 disabled:text-zinc-400",
+        "p-2 rounded-md duration-150 disabled:pointer-events-none disabled:bg-zinc-300 disabled:text-zinc-400 flex items-center justify-center gap-2",
         variantStyles[variant],
         className
       )}
