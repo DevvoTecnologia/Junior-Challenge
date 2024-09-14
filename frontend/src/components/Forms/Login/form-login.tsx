@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useUserContext } from "../../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { setCookie } from "nookies";
+import { motion } from "framer-motion";
 
 const FormLogin = () => {
 	const { login, isPending } = useUserContext();
@@ -32,7 +33,12 @@ const FormLogin = () => {
 	};
 
 	return (
-		<form onSubmit={handleSubmit(submitFormLogin)} className="form-create-ring">
+		<motion.form
+			initial={{ opacity: 0, y: -20 }}
+			whileInView={{ opacity: 1, y: 0 }}
+			onSubmit={handleSubmit(submitFormLogin)}
+			className="form-create-ring"
+		>
 			<div className="title-container">
 				<h1>Faça o login</h1>
 				<p>Insira os dados e então faça o login</p>
@@ -60,7 +66,7 @@ const FormLogin = () => {
 			<Button isLoading={isPending.login} type="submit">
 				Enviar
 			</Button>
-		</form>
+		</motion.form>
 	);
 };
 

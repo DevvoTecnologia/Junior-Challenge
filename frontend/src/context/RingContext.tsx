@@ -76,7 +76,7 @@ export const RingProvider: FC<{ children: ReactNode }> = ({ children }) => {
 		} catch (error) {
 			console.log(error);
 			sendToast({
-				message: "Ocorreu um erro ao remover um anel",
+				message: "Ocorreu um erro ao listar os anéis",
 				type: "error",
 			});
 		} finally {

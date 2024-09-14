@@ -2,13 +2,31 @@ import "./styles.css";
 import type { RingType } from "../../../../shared/types";
 import RemoveRing from "../RemoveRing/remove-ring";
 import EditButton from "../EditButton/edit-button";
+import { motion } from "framer-motion";
 
 const CardRing = ({ bearer, id, forgedBy, image, name, power }: RingType) => {
 	return (
-		<div className="card-ring">
-			<RemoveRing ringId={id} />
+		<motion.div className="card-ring" whileHover="hover">
+			<motion.div
+				initial={{ opacity: 0 }}
+				variants={{
+					hover: { opacity: 1 },
+				}}
+			>
+				<RemoveRing ringId={id} />
+			</motion.div>
+
 			<h3>{name}</h3>
-			<EditButton ringId={id} />
+
+			<motion.div
+				initial={{ opacity: 0 }}
+				variants={{
+					hover: { opacity: 1 },
+				}}
+			>
+				<EditButton ringId={id} />
+			</motion.div>
+
 			<p>
 				<b>Poder:</b> {power}
 			</p>
@@ -19,7 +37,7 @@ const CardRing = ({ bearer, id, forgedBy, image, name, power }: RingType) => {
 				<b>Forjado por:</b> {forgedBy}
 			</p>
 			<img src={image} alt={name} />
-		</div>
+		</motion.div>
 	);
 };
 

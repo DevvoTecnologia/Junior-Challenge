@@ -6,6 +6,7 @@ import { type Register, registerSchema } from "../../../utils/zod/register";
 import { useUserContext } from "../../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { setCookie } from "nookies";
+import { motion } from "framer-motion";
 
 const FormRegister = () => {
 	const { createAccount, isPending } = useUserContext();
@@ -35,7 +36,9 @@ const FormRegister = () => {
 	};
 
 	return (
-		<form
+		<motion.form
+			initial={{ opacity: 0, y: -20 }}
+			whileInView={{ opacity: 1, y: 0 }}
 			onSubmit={handleSubmit(submitFormRegister)}
 			className="form-create-ring"
 		>
@@ -76,7 +79,7 @@ const FormRegister = () => {
 			<Button isLoading={isPending.createAccount} type="submit">
 				Enviar
 			</Button>
-		</form>
+		</motion.form>
 	);
 };
 

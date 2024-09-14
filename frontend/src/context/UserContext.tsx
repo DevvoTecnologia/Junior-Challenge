@@ -9,19 +9,21 @@ import {
 import type { ApiResponse } from "../types/types";
 import { sendToast } from "../utils/utils";
 import type { User, UserDb } from "../utils/zod/user";
-import { parseCookies } from "nookies";
+import { destroyCookie, parseCookies } from "nookies";
 
 type UserContextType = {
 	isLogin: boolean;
 	isPending: {
 		createAccount: boolean;
 		login: boolean;
+		isLogined: boolean;
 	};
 	createAccount: (user: User) => Promise<string | null | undefined>;
 	login: (
 		email: string,
 		password: string,
 	) => Promise<string | null | undefined>;
+	logout: () => void;
 };
 
 const UserContext = createContext<UserContextType>({
@@ -29,9 +31,11 @@ const UserContext = createContext<UserContextType>({
 	isPending: {
 		createAccount: false,
 		login: false,
+		isLogined: false,
 	},
 	createAccount: async () => null,
 	login: async () => null,
+	logout: async () => null,
 });
 
 export const useUserContext = () => useContext(UserContext);
@@ -41,15 +45,34 @@ export const UserProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const [isPending, setIsPending] = useState({
 		createAccount: false,
 		login: false,
+		isLogined: false,
 	});
 
 	useEffect(() => {
-		const { userToken } = parseCookies();
+		setIsPending((prev) => ({
+			...prev,
+			isLogined: true,
+		}));
+		const cookies = parseCookies(null);
+		const userToken = cookies.userToken;
 
 		if (userToken) {
 			setIsLogin(true);
+		} else {
+			setIsLogin(false);
 		}
+
+		setIsPending((prev) => ({
+			...prev,
+			isLogined: false,
+		}));
 	}, []);
+
+	const logout = () => {
+		destroyCookie(null, "userToken");
+		setIsLogin(false);
+		window.location.reload();
+	};
 
 	const createAccount = async (
 		user: User,
@@ -164,6 +187,7 @@ export const UserProvider: FC<{ children: ReactNode }> = ({ children }) => {
 				isPending,
 				isLogin,
 				login,
+				logout,
 			}}
 		>
 			{children}

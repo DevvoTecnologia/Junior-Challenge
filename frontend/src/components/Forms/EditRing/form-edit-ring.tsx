@@ -6,6 +6,7 @@ import { type Anel, type AnelDb, anelSchema } from "../../../utils/zod/ring";
 import Button from "../../Button/button";
 import { useNavigate } from "react-router-dom";
 import { useRingContext } from "../../../context/RingContext";
+import { motion } from "framer-motion";
 
 type Props = {
 	defaultValues: AnelDb | null;
@@ -38,7 +39,9 @@ const FormEditRing = ({ defaultValues }: Props) => {
 	};
 
 	return (
-		<form
+		<motion.form
+			initial={{ opacity: 0, y: -20 }}
+			whileInView={{ opacity: 1, y: 0 }}
 			onSubmit={handleSubmit(submitFormEditRing)}
 			className="form-create-ring"
 		>
@@ -93,7 +96,7 @@ const FormEditRing = ({ defaultValues }: Props) => {
 			<Button isLoading={isPending.editRing} type="submit">
 				Enviar
 			</Button>
-		</form>
+		</motion.form>
 	);
 };
 

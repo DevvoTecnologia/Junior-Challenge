@@ -1,7 +1,8 @@
+import type { HTMLAttributes } from "react";
 import "./styles.css";
 
-const Spinner = () => {
-	return <div className="loader" />;
+const Spinner = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
+	return <div style={props.style} className="loader" />;
 };
 
 export default Spinner;

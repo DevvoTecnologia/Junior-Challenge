@@ -6,6 +6,7 @@ import { type Anel, anelSchema } from "../../../utils/zod/ring";
 import Button from "../../Button/button";
 import { useNavigate } from "react-router-dom";
 import { useRingContext } from "../../../context/RingContext";
+import { motion } from "framer-motion";
 
 const FormCreateRing = () => {
 	const navigate = useNavigate();
@@ -27,7 +28,9 @@ const FormCreateRing = () => {
 	};
 
 	return (
-		<form
+		<motion.form
+			initial={{ opacity: 0, y: -20 }}
+			whileInView={{ opacity: 1, y: 0 }}
 			onSubmit={handleSubmit(submitFormCreateRing)}
 			className="form-create-ring"
 		>
@@ -78,7 +81,7 @@ const FormCreateRing = () => {
 			<Button isLoading={isPending.createNewRing} type="submit">
 				Enviar
 			</Button>
-		</form>
+		</motion.form>
 	);
 };
 
