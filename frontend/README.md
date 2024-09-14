@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend - Sistema de Gestão de Anéis
 
-## Getting Started
+Este é o frontend do projeto **Sistema de Gestão de Anéis**, desenvolvido utilizando **React** e **TypeScript**.
 
-First, run the development server:
+## Funcionalidades
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Cadastro de usuários
+- Login e autenticação
+- Visualização de anéis cadastrados
+- Criação de anéis por meio de modal
+- Atualização de anéis por meio de modal e deleção por botão
+- Atribuição de portadores aos anéis
+- Interface amigável para interação com a API do backend
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tecnologias Utilizadas
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **React**: Biblioteca JavaScript para construção de interfaces.
+- **TypeScript**: Superconjunto de JavaScript que adiciona tipagem estática.
+- **Axios**: Cliente HTTP para comunicação com o backend.
+- **React Router**: Gerenciamento de rotas.
+- **React-Slick**: Para carrosel do dashboard.
+- **JWT (JSON Web Tokens)**: Gerenciamento de autenticação e autorização.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Instalação
 
-## Learn More
+Siga os passos abaixo para rodar o projeto localmente:
 
-To learn more about Next.js, take a look at the following resources:
+1. Instale as dependências:
+    ```bash
+    npm install
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. Configure as variáveis de ambiente: Crie um arquivo **.env.local** na raiz do projeto com base no arquivo _**.env.example.**_
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+3. Execute o projeto:
+   ```bash
+   npm run dev
+   
+O servidor será iniciado em http://localhost:3000
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Estrutura de Pastas
+   ```bash
+   src/
+   ├── app/                            # Componentes reutilizáveis
+        ├── api/auth/[...nextauth]     # Autenticacao
+        ├── auth/signin and signup     # Páginas de login e cadastro
+        ├── components                 # Componentes reutilizáveis
+        ├── components                 # Dashboard onde ocorre tudo em relacao ao projeto
+   ├── hooks/                          # Hooks customizados
+   ├── models/                         # Modelos de dados utilizados na aplicação
+   ├── providers/                      # Providers para gerenciamento de estado e contexto
+   ├── services/                       # Comunicação com a API (Axios)
+   ├── types/                          # Tipos TypeScript utilizados no projeto
+   └── utils/                          # Funções utilitárias
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Rotas Das Paginas:
+* **_/auth/signin_**: Página de login do sistema.
+* **_/auth/signup_**: Página de cadastro de novos usuários.
+* **_/dashboard_**: Página principal para visualização e gerenciamento dos anéis cadastrados.
