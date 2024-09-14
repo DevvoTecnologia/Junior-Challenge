@@ -10,6 +10,8 @@ Confira o projeto em ação. O deploy da aplicação front-end está hospedado n
 
 [https://junior-challenge-p1pa.vercel.app/](https://junior-challenge-p1pa.vercel.app/)
 
+Desafio recebido em 11/09/2024 e finalizado em 14/09/2024 ✅
+
 ## 🎯 Objetivo e Abordagem
 
 Meu objetivo principal foi criar uma solução simples, eficiente e esteticamente agradável, tanto no back-end quanto no front-end. O desafio proporcionou uma oportunidade para demonstrar habilidades essenciais de desenvolvimento, e entre delas, destaco meu esforço para evidenciar minha capacidade de organização por toda codebase e de me manter atualizado com as melhores práticas, sempre revisitadas, da indústria.
