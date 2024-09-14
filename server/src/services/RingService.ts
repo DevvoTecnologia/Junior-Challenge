@@ -17,44 +17,74 @@ export class RingService {
     this.ringRepository = ringRepository;
   }
 
-  async create({
-    name,
-    power,
-    owner,
-    forgedBy,
-    image,
-  }: CreateRingDTO): Promise<Ring> {
-    const ringCount = await this.ringRepository.countRingsByForgedBy(forgedBy);
-    const maxLimit = LIMITS[forgedBy];
+  public getForgedByOptions(): string[] {
+    return Object.values(ForgedBy);
+  }
 
-    if (ringCount >= maxLimit) {
-      throw new Error(`Limite máximo de anéis para ${forgedBy} atingido.`);
+  async create(createRingDTO: CreateRingDTO): Promise<Ring> {
+    const { name, power, owner, forgedBy, image } = createRingDTO;
+    try {
+      const ringCount =
+        await this.ringRepository.countRingsByForgedBy(forgedBy);
+      const maxLimit = LIMITS[forgedBy];
+
+      if (ringCount >= maxLimit) {
+        throw new Error(`Limite máximo de anéis para ${forgedBy} atingido.`);
+      }
+
+      const ring = this.ringRepository.create({
+        name,
+        power,
+        owner,
+        forgedBy,
+        image,
+      });
+      return await this.ringRepository.save(ring);
+    } catch (error) {
+      // Log the error or handle it as needed
+      console.error('Error creating ring:', error);
+      throw new Error('Erro ao criar o anel.');
     }
-
-    const ring = this.ringRepository.create({
-      name,
-      power,
-      owner,
-      forgedBy,
-      image,
-    });
-    return this.ringRepository.save(ring);
   }
 
   async list(): Promise<Ring[]> {
-    return this.ringRepository.find();
+    try {
+      return await this.ringRepository.find();
+    } catch (error) {
+      // Log the error or handle it as needed
+      console.error('Error listing rings:', error);
+      throw new Error('Erro ao listar os anéis.');
+    }
   }
 
   async get(id: string): Promise<Ring> {
-    return this.ringRepository.findOneByOrFail({ id });
+    try {
+      return await this.ringRepository.findOneByOrFail({ id });
+    } catch (error) {
+      // Log the error or handle it as needed
+      console.error(`Error fetching ring with id ${id}:`, error);
+      throw new Error(`Erro ao buscar o anel com id ${id}.`);
+    }
   }
 
   async update(id: string, updateData: Partial<Ring>): Promise<Ring> {
-    await this.ringRepository.update(id, updateData);
-    return this.ringRepository.findOneByOrFail({ id });
+    try {
+      await this.ringRepository.update(id, updateData);
+      return await this.ringRepository.findOneByOrFail({ id });
+    } catch (error) {
+      // Log the error or handle it as needed
+      console.error(`Error updating ring with id ${id}:`, error);
+      throw new Error(`Erro ao atualizar o anel com id ${id}.`);
+    }
   }
 
   async delete(id: string): Promise<void> {
-    await this.ringRepository.delete(id);
+    try {
+      await this.ringRepository.delete(id);
+    } catch (error) {
+      // Log the error or handle it as needed
+      console.error(`Error deleting ring with id ${id}:`, error);
+      throw new Error(`Erro ao deletar o anel com id ${id}.`);
+    }
   }
 }

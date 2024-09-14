@@ -6,8 +6,8 @@ export const ringRouter = Router();
 const ringRepository = new RingRepository(); // Injetando a implementação
 const ringController = new RingController(ringRepository);
 
-ringRouter.options(
-  '/forged-by',
+ringRouter.get(
+  '/forgers',
   ringController.getForgedByOptions.bind(ringController),
 );
 

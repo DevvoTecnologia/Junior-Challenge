@@ -10,9 +10,9 @@ export class RingController {
     this.ringService = new RingService(ringRepository);
   }
 
-  async getForgedByOptions(req: Request, res: Response): Promise<Response> {
-    const forgedByOptions = Object.values(ForgedBy);
-    return res.json(forgedByOptions);
+  public getForgedByOptions(req: Request, res: Response): void {
+    const options = this.ringService.getForgedByOptions();
+    res.json(options);
   }
 
   async create(req: Request, res: Response): Promise<Response> {
