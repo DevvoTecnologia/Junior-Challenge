@@ -1,0 +1,63 @@
+/* src/components/Card.css */
+.card {
+  height: 350px;
+  border-radius: 8px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: start;
+  align-items: end;
+}
+
+.card-info {
+  display: flex;
+  background: rgb(0, 0, 0, 0.8);
+  padding: 10px;
+  color: white;
+  font-size: 0.9em;
+  row-gap: 4px;
+  flex-direction: column;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  column-gap: 8px;
+}
+
+.icon {
+  width: 15px;
+  height: 15px;
+}
+
+.card-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.card-button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8em; /* Diminuir o tamanho dos botões */
+}
+
+.card-button.edit {
+  background-color: #007bff;
+  color: white;
+}
+
+.card-button.delete {
+  background-color: #dc3545; /* Cor vermelha para o botão de exclusão */
+  color: white;
+}
+
+.card:hover .card-image {
+  opacity: 0.7; /* Efeito de fade na imagem ao passar o mouse */
+}
