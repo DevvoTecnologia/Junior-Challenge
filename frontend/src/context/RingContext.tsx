@@ -4,8 +4,6 @@ import {
 	type ReactNode,
 	type FC,
 	useState,
-	useCallback,
-	useEffect,
 } from "react";
 import type { Anel, AnelDb } from "../utils/zod/ring";
 import type { ApiResponse } from "../types/types";

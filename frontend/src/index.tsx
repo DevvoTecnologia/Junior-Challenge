@@ -13,15 +13,16 @@ import Header from "./components/Layout/Header/header";
 import LoginPage from "./pages/Login/login";
 import RegisterPage from "./pages/Register/register";
 import { UserProvider } from "./context/UserContext";
+import ProtectedRoute from "./protectedRoutes";
 
 const router = createBrowserRouter([
 	{
 		path: "/create",
-		element: <CreatePage />,
+		element: <ProtectedRoute component={<CreatePage />} />,
 	},
 	{
 		path: "/edit/:id",
-		element: <EditPage />,
+		element: <ProtectedRoute component={<EditPage />} />,
 	},
 	{
 		path: "/Login",
