@@ -1,140 +1,105 @@
-# Desafio Fullstack: Os Anéis de Poder
-_One Challenge to rule them all, One Challenge to find them, One Challenge to bring them all, and in the darkness bind them_
 
-## 💍 Contexto do Desafio
+# Gerenciamento de Anéis - Teste Técnico Devvo
 
-O grande mago J.R.R. Tolkien nos deixou a famosa frase:
+## Descrição do Projeto
 
-> **Three Rings for the Elven-kings under the sky,  
-> Seven for the Dwarf-lords in their halls of stone,  
-> Nine for Mortal Men doomed to die,  
-> One for the Dark Lord on his dark throne  
-> In the Land of Mordor where the Shadows lie.  
-> One Ring to rule them all, One Ring to find them,  
-> One Ring to bring them all, and in the darkness bind them  
-> In the Land of Mordor where the Shadows lie.**
+O **Gerenciamento de Anéis** é uma aplicação web desenvolvida como parte do teste técnico para a empresa **Devvo**. O objetivo é gerenciar anéis mágicos com funcionalidades de **CRUD** (Create, Read, Update, Delete), além de autenticação de usuários. O backend foi implementado em **Node.js com TypeScript** e o frontend em **React**, utilizando **MySQL** para o armazenamento de dados.
 
-Sua missão será criar um CRUD (Create, Read, Update, Delete) para gerenciar os anéis e desenvolver um frontend para visualizar e manipular essas informações.
+## Funcionalidades
 
-## 🎯 Objetivo
+- **Cadastro de Anéis:** Permite que o usuário adicione novos anéis ao sistema.
+- **Edição de Anéis:** Permite que o usuário edite as informações de anéis existentes.
+- **Deleção de Anéis:** O usuário pode remover anéis do sistema.
+- **Listagem de Anéis:** Exibe os anéis em um carrossel, com informações detalhadas.
+- **Autenticação de Usuários:** Sistema de login e cadastro de usuários, utilizando **JWT** para autenticação.
 
-### Backend
-Criar uma API em **Node.js** com **TypeScript** para realizar as seguintes operações:
+## Requisitos Técnicos
 
-- **Criar** (POST) um novo anel.
-- **Listar** (GET) todos os anéis.
-- **Atualizar** (PUT) as informações de um anel.
-- **Deletar** (DELETE) um anel existente.
+- **Docker** e **Docker Compose** para rodar o banco de dados.
+- **Node.js** com **TypeScript** para o backend.
+- **React** para o frontend.
+- **MySQL** para o armazenamento de dados.
 
-### Frontend
-Desenvolver uma interface simples em **React** com as seguintes telas:
+## Configuração do Projeto
 
-- **Tela de Criação/Atualização**: Formulário para criar um novo anel ou atualizar um anel existente.
-- **Tela de Visualização**: Exibição dos anéis criados em um **carrossel**, mostrando as informações de cada anel (nome, poder, portador, forjadoPor e imagem).
+### 1. Configuração do Banco de Dados
 
-## ⚔️ Requisitos Funcionais
+Suba o banco de dados MySQL utilizando o Docker. Navegue até a pasta `backend` e execute o seguinte comando:
 
-### Backend
+```bash
+docker-compose up -d
+```
 
-1. **Criar um Anel**  
-   O anel deverá ter as seguintes propriedades:
-   - `nome`: Nome do anel (ex: "Narya, o anel do fogo").
-   - `poder`: Uma breve descrição do poder do anel (ex: "Seu portador ganha resistência ao fogo").
-   - `portador`: O nome do portador atual (Ex: Gandalf).
-   - `forjadoPor`: Quem forjou o anel (ex: Elfos).
-   - `imagem`: URL de uma imagem genérica do anel.
+Isso criará e inicializará o container do MySQL.
 
-2. **Regras de Negócio para Criação de Anéis**  
-   A API deverá garantir que a quantidade máxima de anéis criados respeite as seguintes regras:
-   
-   - **Elfos**: No máximo 3 anéis.
-   - **Anões**: No máximo 7 anéis.
-   - **Homens**: No máximo 9 anéis.
-   - **Sauron**: Apenas 1 anel.
+### 2. Configuração do Backend
 
-   Caso o limite seja excedido, a criação deve ser rejeitada com uma mensagem de erro adequada.
+Instale as dependências do backend e rode o servidor:
 
-3. **Listar os Anéis**  
-   A API deverá retornar uma lista com todos os anéis e suas propriedades.
+```bash
+cd backend
+npm install
+npm run dev
+```
 
-4. **Atualizar um Anel**  
-   Deve ser possível atualizar as informações de um anel específico (ex: alterar o portador ou a descrição do poder).
+O backend estará disponível em `http://localhost:3001`.
 
-5. **Deletar um Anel**  
-   Deve ser possível remover um anel do banco de dados.
+### 3. Configuração do Frontend
 
-### Frontend
+Em uma nova aba do terminal, navegue até a pasta `frontend`, instale as dependências e inicie o servidor do frontend:
 
-1. **Tela de Criação/Atualização de Anel**  
-   - Um formulário com os seguintes campos:
-     - `nome`: Campo de texto para o nome do anel.
-     - `poder`: Campo de texto para a descrição do poder do anel.
-     - `portador`: Campo de texto para o nome do portador.
-     - `forjadoPor`: Campo de texto para indicar quem forjou o anel.
-     - `imagem`: Como a imagem vai ser genérica você pode tanto deixar o uauário escolher entre as imagens que o próprio sistema fornece ou remover esse campo e deixar uma imagem default.
-   - Botões para:
-     - **Criar**: Submeter o formulário para criar um novo anel.
-     - **Atualizar**: Alterar as informações de um anel existente.
+```bash
+cd ../frontend
+npm install
+npm start
+```
 
-2. **Tela de Visualização dos Anéis**
-   - Exibir todos os anéis em um **carrossel** (ou grid), mostrando:
-     - Nome, poder, portador, forjadoPor, e a imagem do anel.
-   - O carrossel deve ser responsivo e permitir rolar entre os anéis cadastrados.
-   - Adicionar a possibilidade de **excluir** ou **editar** um anel diretamente dessa tela.
+O frontend estará disponível em `http://localhost:3000`.
 
-## 🚀 Tecnologias
+### 4. Testando a Aplicação
 
-- **Backend**:
-  - **Node.js** com **TypeScript**
-  - **Express** (ou outro framework para criar a API)
-  - **Banco de Dados**: MySQL, PostgreSQL, MongoDB, etc.
-  - **ORM/ODM**: Sequelize, TypeORM ou Mongoose.
+1. Acesse `http://localhost:3000` no navegador.
+2. Faça login ou cadastre-se.
+3. Utilize as funcionalidades de criar, editar, deletar e visualizar anéis.
 
-- **Frontend**:
-  - **React**
-  - **Biblioteca para Carrossel**: Você pode utilizar bibliotecas como `react-slick` ou outra para implementar o carrossel.
+## Estrutura do Projeto
 
-## 🛠️ Instruções
+O projeto segue o padrão de arquitetura **MSC** (Model-Service-Controller) e está organizado da seguinte forma:
 
-1. Faça o **fork** deste repositório.
-2. Crie uma nova branch com o nome do seu desafio: `git checkout -b desafio-seu-nome`.
-3. Implemente sua solução backend e frontend conforme os requisitos descritos.
-4. Faça o **commit** das suas alterações: `git commit -m 'Desafio finalizado'`.
-5. Faça o **push** para a branch criada: `git push origin desafio-seu-nome`.
-6. Crie um **Pull Request** para o repositório principal.
-7. Envie um email para "contato@devvo.com.br" falando que finalizou seu desafio e encaminhando o link do Pull Request
+```
+/
+├── backend/              # Código-fonte do backend (Node.js, TypeScript)
+│   ├── src/              # Contém os arquivos principais do backend
+│   │   ├── controllers/  # Controladores responsáveis por receber as requisições
+│   │   ├── models/       # Modelos que representam as entidades e o banco de dados
+│   │   ├── services/     # Lógica de negócio aplicada entre o Controller e o Model
+│   │   └── routes/       # Rotas que mapeiam os endpoints da API
+│   ├── .env              # Arquivo de configuração das variáveis de ambiente
+│   └── docker-compose.yml  # Arquivo de configuração para o banco de dados MySQL
+├── frontend/             # Código-fonte do frontend (React, TypeScript)
+│   ├── src/              # Código principal do frontend
+│   └── public/           # Arquivos estáticos e index.html
+└── README.md             # Documentação do projeto
+```
 
-## 📝 Regras e Critérios de Avaliação
+## Rodando Testes no Backend
 
-1. **Organização do código**: Estrutura clara e modularidade do código.
-2. **Boas práticas**: Uso de boas práticas de desenvolvimento, como SOLID e DRY.
-3. **Frontend**: Interface limpa, funcional e interativa (carrossel funcionando corretamente).
-4. **Validação da Regra de Negócio**: Implementação correta da validação do limite de anéis por portador.
-5. **Testes**: Testes unitários e/ou de integração serão um diferencial.
-6. **Documentação**: Adicione uma breve documentação da API e do frontend (pode ser no próprio README ou em uma ferramenta como Swagger).
+Para rodar os testes no backend, use o comando abaixo:
 
-## 🔥 Desafios Extras (Opcional)
+1. Navegue até o diretório do backend:
 
-Se quiser ir além, aqui estão algumas sugestões de funcionalidades extras:
+```bash
+cd backend
+```
 
-- **Autenticação**: Implemente um sistema de autenticação (JWT, OAuth, etc.).
-- **Relacionamentos entre entidades**: Adicione relacionamentos entre os anéis e seus portadores (Ex: um portador pode ter mais de um anel, ou um anel pode ter sido passado por diferentes portadores ao longo do tempo).
-- **Animações no Frontend**: Adicione animações ao carrossel ou à interface de criação de anéis.
-- **Responsividade Avançada**: Certifique-se de que o carrossel e todas as funcionalidades são totalmente responsivas em diferentes dispositivos.
+2. Rode os testes com o comando:
 
-## 🧙‍♂️ Dicas
+```bash
+npm test
+```
 
-- Divida a lógica do backend em camadas (Controllers, Services, Models).
-- Utilize hooks e componentes funcionais no frontend para um código mais limpo.
-- Utilize **TypeScript** tanto no backend quanto no frontend para garantir tipagem estática.
-- Planeje a interface para ser intuitiva e simples de usar.
+Os testes utilizam **Jest** e cobrem as funcionalidades principais do projeto, incluindo a criação, listagem, atualização e exclusão de anéis.
 
-## 🧭 Referências
+## Conclusão
 
-- [Documentação do Node.js](https://nodejs.org/en/docs/)
-- [Documentação do TypeScript](https://www.typescriptlang.org/docs/)
-- [Documentação do React](https://reactjs.org/docs/getting-started.html)
-
----
-
-_May the Light of Eärendil guide you in this challenge!_
+Esse projeto foi estruturado para facilitar a execução, utilizando **Docker** para o banco de dados e uma instalação simples de dependências para o frontend e backend. Com as instruções acima, você poderá rodar a aplicação de maneira rápida e eficiente.
