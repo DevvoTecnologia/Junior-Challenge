@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid'
 
 @Entity('artifacts')
 export class Artifact {
-  @PrimaryColumn({ type: 'varchar', length: 21 }) // Tamanho do ID para nanoid
+  @PrimaryColumn({ type: 'varchar', length: 21 })
   id!: string
 
   @Column({ type: 'varchar', length: 255 })
@@ -16,7 +16,7 @@ export class Artifact {
   bearer?: string
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  forgedBy?: string
+  forgedById?: string
 
   @Column({ type: 'varchar', length: 255 })
   imageUrl!: string

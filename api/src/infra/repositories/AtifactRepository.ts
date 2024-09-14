@@ -11,8 +11,8 @@ export class ArtifactTypeORMRepository implements ArtifactRepository {
     this.ormRepository = AppDataSource.getRepository(Artifact)
   }
 
-  async create(artifact: ArtifactDTO): Promise<ArtifactDTO> {
-    const createdArtifact = this.ormRepository.create(artifact)
+  async create(artifactDTO: ArtifactDTO): Promise<ArtifactDTO> {
+    const createdArtifact = this.ormRepository.create(artifactDTO)
     await this.ormRepository.save(createdArtifact)
     return createdArtifact
   }
@@ -26,8 +26,20 @@ export class ArtifactTypeORMRepository implements ArtifactRepository {
     return this.ormRepository.find()
   }
 
-  async update(artifact: Required<ArtifactDTO>): Promise<void> {
-    await this.ormRepository.update(artifact.id, artifact)
+  async update(artifactDTO: ArtifactDTO): Promise<void> {
+    if (!artifactDTO.id) {
+      throw new Error('Artifact ID é obrigatório.')
+    }
+
+    const updateData: Partial<Artifact> = {
+      name: artifactDTO.name,
+      power: artifactDTO.power,
+      bearer: artifactDTO.bearer,
+      forgedById: artifactDTO.forgedById,
+      imageUrl: artifactDTO.imageUrl,
+    }
+
+    await this.ormRepository.update(artifactDTO.id, updateData)
   }
 
   async delete(id: string): Promise<void> {
