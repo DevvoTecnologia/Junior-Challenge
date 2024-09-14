@@ -17,7 +17,6 @@ export default function Slide({ ring, handleOpenModal }: SlideProps) {
   const handleDeleteRing = async () => {
     setIsDeleting(true);
     await bindedDeleteRingAction();
-    setIsDeleting(false);
   };
 
   return (
