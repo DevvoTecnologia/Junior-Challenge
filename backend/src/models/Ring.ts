@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { User } from "./User";
 
 @Entity()
 export class Ring {
@@ -13,6 +14,12 @@ export class Ring {
 
 	@Column()
 	bearer: string;
+
+	@ManyToOne(
+		() => User,
+		(user) => user.rings,
+	)
+	user: User;
 
 	@Column()
 	forgedBy: string;

@@ -11,12 +11,16 @@ import {
 import { anelSchema } from "../utils/zod/ring";
 import type { Request, Response } from "express";
 import { QueryFailedError } from "typeorm";
+import type { Ring } from "../models/Ring";
+import { checkForgingLimit } from "../utils/utils";
 
 const ringController = {
 	createRing: async (req: Request, res: Response) => {
 		try {
 			const body = await anelSchema.parseAsync(req.body);
-			const countByForgedBy = await getCountByForgedBy(body.forgedBy);
+			const userId = (req as any).user?.id;
+
+			const countByForgedBy = await getCountByForgedBy(body.forgedBy, userId);
 
 			const limits = {
 				Elfos: 3,
@@ -32,10 +36,8 @@ const ringController = {
 				});
 			}
 
-			await createRing(body);
-			const rings = await getRings();
+			await createRing(body, userId);
 			return res.status(HttpStatusCode.created).json({
-				data: rings,
 				message: "Anel criado com sucesso!",
 			});
 		} catch (error) {
@@ -58,9 +60,17 @@ const ringController = {
 		}
 	},
 
-	getRings: async (req: Request, res: Response) => {
+	getRingsByUserId: async (req: Request, res: Response) => {
 		try {
-			const rings = await getRings();
+			const userId = (req as any).user?.id;
+
+			if (!userId) {
+				return res.status(HttpStatusCode.noContent).json({
+					message: "Dados inválidos",
+				});
+			}
+
+			const rings = await getRings(userId);
 
 			return res
 				.status(HttpStatusCode.ok)
@@ -75,15 +85,22 @@ const ringController = {
 
 	getRingById: async (req: Request, res: Response) => {
 		try {
-			const { id } = req.params;
+			const { ringId } = req.params;
+			const userId = (req as any).user?.id;
 
-			if (!id) {
+			if (!ringId) {
 				return res.status(HttpStatusCode.noContent).json({
 					message: "Dados inválidos",
 				});
 			}
 
-			const ring = await getRingById(id);
+			const ring = await getRingById(ringId);
+
+			if (ring?.user.id !== userId) {
+				return res.status(HttpStatusCode.forbidden).json({
+					message: "Você não tem permissão para acessar este anel",
+				});
+			}
 
 			if (!ring) {
 				return res
@@ -105,32 +122,34 @@ const ringController = {
 	updateRing: async (req: Request, res: Response) => {
 		try {
 			const body = await anelSchema.parseAsync(req.body);
+			const { ringId } = req.params;
+			const userId = (req as any).user?.id;
 
-			const { id } = req.params;
-
-			if (!id) {
+			if (!ringId) {
 				return res.status(HttpStatusCode.noContent).json({
 					message: "Dados inválidos",
 				});
 			}
 
-			const countByForgedBy = await getCountByForgedBy(body.forgedBy);
+			const ring = await getRingById(ringId);
 
-			const limits = {
-				Elfos: 3,
-				Anões: 7,
-				Homens: 9,
-				Sauron: 1,
-			};
-
-			const limit = limits[body.forgedBy as keyof typeof limits];
-			if (limit !== undefined && countByForgedBy >= limit) {
-				return res.status(HttpStatusCode.conflict).json({
-					message: `${body.forgedBy} podem forjar no máximo ${limit} ${limit > 1 ? "anéis" : "anel"}`,
-				});
+			if (!ring) {
+				return res
+					.status(HttpStatusCode.notFound)
+					.json({ message: "Anel não encontrado" });
 			}
 
-			const updatedRing = await updateRing(id, body);
+			const result = await checkForgingLimit(
+				body.forgedBy,
+				userId,
+				getCountByForgedBy,
+			);
+
+			if (result) {
+				return res.status(result.statusCode).json({ message: result.message });
+			}
+
+			const updatedRing = await updateRing(ringId, body);
 
 			if (!updatedRing) {
 				return res
@@ -138,13 +157,11 @@ const ringController = {
 					.json({ message: "O anel não foi encontrado" });
 			}
 
-			const rings = await getRings();
-
 			return res.status(HttpStatusCode.ok).json({
-				data: rings,
 				message: "Anel atualizado com sucesso!",
 			});
 		} catch (error) {
+			console.log(error);
 			return res.status(HttpStatusCode.badRequest).json({
 				message: "Ocorreu um erro ao editar um anel",
 			});
@@ -153,15 +170,15 @@ const ringController = {
 
 	deleteRing: async (req: Request, res: Response) => {
 		try {
-			const { id } = req.params;
+			const { ringId } = req.params;
 
-			if (!id) {
+			if (!ringId) {
 				return res.status(HttpStatusCode.noContent).json({
 					message: "Dados inválidos",
 				});
 			}
 
-			const deletedRing = await deleteRing(id);
+			const deletedRing = await deleteRing(ringId);
 
 			if (deletedRing.affected === 0) {
 				return res.status(HttpStatusCode.notFound).send({
@@ -169,11 +186,8 @@ const ringController = {
 				});
 			}
 
-			const rings = await getRings();
-
 			return res.status(HttpStatusCode.ok).send({
 				message: "Anel deletado com sucesso!",
-				data: rings,
 			});
 		} catch (error) {
 			console.log(error);

@@ -2,10 +2,10 @@
   font-size: 14px;
   border-radius: 6px;
   background-color: #171717;
-  color: #fff;
   border: 2px solid #525252;
   transition: all 0.3s ease;
   cursor: pointer;
+  color: #fff;
   height: 42px;
 }
 
@@ -21,10 +21,33 @@
 .link-button > a {
   color: #fff;
   padding: 8px 12px;
+  transition: all 0.3s ease;
 }
 
 .link-button {
   width: fit-content;
   height: 100%;
   display: flex;
+}
+
+.button.outline, .link-button.outline {
+  font-size: 14px;
+  border-radius: 6px;
+  background-color: transparent;
+  border: 2px solid #171717;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  height: 42px;
+}
+
+.link-button.outline > a {
+  color: #171717;
+}
+
+.button.outline:hover, .link-button.outline:hover {
+  background-color: #171717;
+}
+
+.button.outline:hover a, .link-button.outline:hover a {
+  color: #fff; 
 }

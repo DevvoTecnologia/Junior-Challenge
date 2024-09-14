@@ -53,6 +53,7 @@ const FormEditRing = ({ defaultValues }: Props) => {
 				placeholder="Nome ex: Narya, o anel do fogo"
 				error={errors.name?.message}
 				disabled={isPending.editRing}
+				maxLength={32}
 			/>
 			<Input
 				id="power"
@@ -61,6 +62,7 @@ const FormEditRing = ({ defaultValues }: Props) => {
 				placeholder="Poder ex: Seu portador ganha resistência ao fogo"
 				error={errors.power?.message}
 				disabled={isPending.editRing}
+				maxLength={32}
 			/>
 			<Input
 				id="bearer"
@@ -69,6 +71,7 @@ const FormEditRing = ({ defaultValues }: Props) => {
 				placeholder="Portador ex: Gandalf"
 				error={errors.bearer?.message}
 				disabled={isPending.editRing}
+				maxLength={32}
 			/>
 			<Input
 				id="forgedBy"
@@ -77,6 +80,7 @@ const FormEditRing = ({ defaultValues }: Props) => {
 				placeholder="Forjado por ex: Elfos, Anões, Homens e Sauron"
 				error={errors.forgedBy?.message}
 				disabled={isPending.editRing}
+				maxLength={32}
 			/>
 			<Input
 				id="image"

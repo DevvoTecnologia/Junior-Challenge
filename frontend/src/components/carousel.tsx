@@ -2,11 +2,16 @@ import Slider from "react-slick";
 import CardRing from "./CardRing/card-ring";
 import { useRingContext } from "../context/RingContext";
 import Skeleton from "./Skeleton/skeleton";
+import { useEffect } from "react";
 
 const Carousel = () => {
-	const { rings, isPending } = useRingContext();
+	const { rings, isPending, getAllRings } = useRingContext();
 
-	if (isPending.getAllRings) {
+	useEffect(() => {
+		getAllRings();
+	}, []);
+
+	if (isPending.getAllRings || !rings) {
 		return (
 			<Slider
 				dots={false}
@@ -45,7 +50,7 @@ const Carousel = () => {
 	}
 
 	if (rings.length === 0) {
-		return <p>Você não tem nenhum anel criado!</p>;
+		return <h3>Você não tem nenhum anel criado!</h3>;
 	}
 
 	return (

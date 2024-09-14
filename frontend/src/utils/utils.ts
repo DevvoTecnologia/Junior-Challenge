@@ -1,3 +1,4 @@
+import { parseCookies } from "nookies";
 import toast from "react-hot-toast";
 
 export const sendToast = ({
@@ -22,10 +23,13 @@ export const sendToast = ({
 export const getRingById = (ringId: string | undefined): Promise<Response> => {
 	return new Promise((resolve, reject) => {
 		if (!ringId) return reject("ID do anel não foi fornecido");
+		const { userToken } = parseCookies();
+
 		fetch(`${process.env.REACT_APP_BACKEND_URL}/api/rings/${ringId}`, {
 			method: "GET",
 			headers: {
 				"Content-Type": "application/json",
+				Authorization: `Bearer ${userToken}`,
 			},
 		})
 			.then(async (response) => {

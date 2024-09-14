@@ -1,9 +1,10 @@
 import { useEffect } from "react";
-import Button from "../../components/Button/button";
 import "./styles.css";
 import Carousel from "../../components/carousel";
+import { useUserContext } from "../../context/UserContext";
 
 const HomePage = () => {
+	const { isLogin } = useUserContext();
 	useEffect(() => {
 		document.title = "Desafio Júnior | Home";
 	}, []);
@@ -18,10 +19,11 @@ const HomePage = () => {
 				</p>
 			</div>
 			<div className="content-container">
-				<Button href="/create" type="button">
-					Crie um novo anel
-				</Button>
-				<Carousel />
+				{isLogin ? (
+					<Carousel />
+				) : (
+					<h3>É necessário fazer o login para acessar os anéis</h3>
+				)}
 			</div>
 		</main>
 	);

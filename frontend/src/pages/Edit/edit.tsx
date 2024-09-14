@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import FormEditRing from "../../components/Forms/EditRing/form-edit-ring";
 import type { AnelDb } from "../../utils/zod/ring";
 import { getRingById, sendToast } from "../../utils/utils";
 import type { ApiResponse } from "../../types/types";
-import { CircleArrowLeft } from "lucide-react";
 
 const EditPage = () => {
 	const [defaultValues, setDefaultValues] = useState<AnelDb | null>(null);
@@ -44,11 +43,6 @@ const EditPage = () => {
 
 	return (
 		<main className="container centralize">
-			<button className="back-button" type="button">
-				<Link to="/">
-					<CircleArrowLeft color="#fff" size={20} />
-				</Link>
-			</button>
 			{isLoading ? (
 				<p>Carregando</p>
 			) : (

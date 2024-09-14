@@ -9,6 +9,10 @@ import HomePage from "./pages/Index";
 import { Toaster } from "react-hot-toast";
 import { RingProvider } from "./context/RingContext";
 import EditPage from "./pages/Edit/edit";
+import Header from "./components/Layout/Header/header";
+import LoginPage from "./pages/Login/login";
+import RegisterPage from "./pages/Register/register";
+import { UserProvider } from "./context/UserContext";
 
 const router = createBrowserRouter([
 	{
@@ -18,6 +22,14 @@ const router = createBrowserRouter([
 	{
 		path: "/edit/:id",
 		element: <EditPage />,
+	},
+	{
+		path: "/Login",
+		element: <LoginPage />,
+	},
+	{
+		path: "/register",
+		element: <RegisterPage />,
 	},
 	{
 		path: "/",
@@ -31,9 +43,12 @@ const root = ReactDOM.createRoot(
 
 root.render(
 	<React.StrictMode>
-		<RingProvider>
-			<Toaster />
-			<RouterProvider router={router} />
-		</RingProvider>
+		<UserProvider>
+			<RingProvider>
+				<Toaster />
+				<Header />
+				<RouterProvider router={router} />
+			</RingProvider>
+		</UserProvider>
 	</React.StrictMode>,
 );
