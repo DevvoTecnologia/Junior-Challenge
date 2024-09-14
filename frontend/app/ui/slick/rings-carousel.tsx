@@ -1,20 +1,13 @@
 'use client';
 
 import type { ExistingRing } from '@/app/lib/definitions';
-import Modal from '@/app/ui/modal/modal';
+import ModalContent from '@/app/ui/modal/modal-content';
 import Slide from '@/app/ui/slick/slide';
 import { useState } from 'react';
 import Slider from 'react-slick';
+import ModalContainer from '../modal/modal-container';
 
-const closeModalState = {
-  isOpen: false,
-  ring: null,
-};
-
-type openModalState = {
-  isOpen: true;
-  ring: ExistingRing;
-};
+type ModalState = { isOpen: false; ring: null } | { isOpen: true; ring: ExistingRing };
 
 export default function RingsCarousel({ rings }: { rings: ExistingRing[] }) {
   const settings = {
@@ -26,10 +19,10 @@ export default function RingsCarousel({ rings }: { rings: ExistingRing[] }) {
     fade: true,
   };
 
-  const [modal, setModal] = useState<typeof closeModalState | openModalState>(closeModalState);
+  const [modal, setModal] = useState<ModalState>({ isOpen: false, ring: null });
 
   const handleCloseModal = () => {
-    setModal(closeModalState);
+    setModal({ isOpen: false, ring: null });
   };
 
   const handleOpenModal = (ring: ExistingRing) => {
@@ -48,7 +41,9 @@ export default function RingsCarousel({ rings }: { rings: ExistingRing[] }) {
           ))}
         </Slider>
       </div>
-      <Modal isOpen={modal.isOpen} ring={modal.ring} handleCloseModal={handleCloseModal} />
+      <ModalContainer isOpen={modal.isOpen} handleCloseModal={handleCloseModal}>
+        {modal.isOpen && <ModalContent ring={modal.ring} handleCloseModal={handleCloseModal} />}
+      </ModalContainer>
     </>
   );
 }
