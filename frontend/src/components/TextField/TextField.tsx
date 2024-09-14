@@ -2,10 +2,16 @@ import { FC, useState } from "react";
 
 export type TextFieldProps = {
   label?: string;
+  initialValue?: string;
   onInput?: (value: string) => void;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
-export const TextField: FC<TextFieldProps> = ({ label, onInput, ...rest }) => {
+export const TextField: FC<TextFieldProps> = ({
+  label,
+  initialValue,
+  onInput,
+  ...rest
+}) => {
   const [value, setValue] = useState("");
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +32,7 @@ export const TextField: FC<TextFieldProps> = ({ label, onInput, ...rest }) => {
       <input
         id={label}
         {...rest}
-        value={value}
+        value={initialValue || value}
         onChange={onChange}
         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg hover:border-blue-500 focus:ring-1 focus:ring-blue-500 block w-full p-2.5 outline-none disabled:bg-gray-200 disabled:pointer-events-none"
       />
