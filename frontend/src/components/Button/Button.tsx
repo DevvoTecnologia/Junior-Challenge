@@ -1,9 +1,11 @@
 import { FC } from "react";
+import { twMerge } from "tailwind-merge";
 
 export type ButtonProps = {
   icon?: React.ReactNode;
   variant?: "primary" | "edit" | "delete";
   disabled?: boolean;
+  className?: string;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const Button: FC<ButtonProps> = ({
@@ -11,6 +13,7 @@ export const Button: FC<ButtonProps> = ({
   icon,
   variant = "primary",
   disabled = false,
+  className,
 }) => {
   const variantStyles = {
     primary: "bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700",
@@ -20,7 +23,11 @@ export const Button: FC<ButtonProps> = ({
 
   return (
     <button
-      className={`${variantStyles[variant]} p-2 rounded-md duration-150 disabled:pointer-events-none disabled:bg-zinc-300 disabled:text-zinc-400`}
+      className={twMerge(
+        "p-2 rounded-md duration-150 disabled:pointer-events-none disabled:bg-zinc-300 disabled:text-zinc-400",
+        variantStyles[variant],
+        className
+      )}
       disabled={disabled}
     >
       {!!icon && icon}
