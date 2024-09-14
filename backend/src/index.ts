@@ -4,11 +4,12 @@ import routes from "./routes";
 import { associations } from "./db/models/associations";
 import { resolve } from "path";
 import errorHandler from "./middlewares/errorHandler";
+var cors = require("cors");
 
 dotenv.config();
 
 const app = express();
-
+app.use(cors());
 routes(app);
 app.use(errorHandler);
 
