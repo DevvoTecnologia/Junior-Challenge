@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@vercel/postgres": "^0.10.0",
     "dotenv": "^16.4.5",
     "next": "14.2.10",
     "pg": "^8.12.0",
