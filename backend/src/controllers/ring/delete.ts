@@ -1,7 +1,9 @@
+import { RingTypeORMRepository } from '@/repository/rings/typeorm'
+import { DeleteService } from '@/services/ring/delete'
 import { Request, Response } from 'express'
 import { z } from 'zod'
 
-export class DeleteRing {
+export class DeleteController {
   async execute(request: Request, response: Response) {
     const deleteRingBody = z.object({
       id: z.string()
@@ -10,21 +12,16 @@ export class DeleteRing {
     const { id } = deleteRingBody.parse(request.body)
 
     try {
-      console.log({
-        id
+      const ringRepository = new RingTypeORMRepository()
+      const service = new DeleteService(ringRepository)
+
+      await service.execute({
+        ringId: id
       })
 
-      response.send({
-        id
-      })
+      return response.status(202).send();
     } catch(err) {
       console.error(err)
     }
   }
 }
-
-// nome: Nome do anel (ex: "Narya, o anel do fogo").
-// poder: Uma breve descrição do poder do anel (ex: "Seu portador ganha resistência ao fogo").
-// portador: O nome do portador atual (Ex: Gandalf).
-// forjadoPor: Quem forjou o anel (ex: Elfos).
-// imagem: URL de uma imagem genérica do anel.
