@@ -10,6 +10,7 @@ type RadioFieldsetProps = {
   }[];
   legend: string;
   validatedField: possibleFieldStatus | null;
+  defaultValue?: string;
 };
 
 export default function RadioFieldset({
@@ -17,6 +18,7 @@ export default function RadioFieldset({
   inputs,
   legend,
   validatedField,
+  defaultValue,
 }: RadioFieldsetProps) {
   const { pending } = useFormStatus();
   let isInvalid = undefined;
@@ -42,6 +44,7 @@ export default function RadioFieldset({
               name={name}
               value={input.value}
               aria-invalid={isInvalid}
+              defaultChecked={defaultValue === input.value}
             />
             <label htmlFor={input.id}>{input.label}</label>
           </span>
