@@ -1,4 +1,3 @@
-// src/services/__tests__/RingService.test.ts
 import { RingService } from './RingService';
 import { IRingRepository } from '../repositories/interfaces/IRingRepository';
 import { ForgedBy, Ring } from '../entities/Ring';

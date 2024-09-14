@@ -1,4 +1,3 @@
-// src/services/RingService.ts
 import { IRingRepository } from '../repositories/interfaces/IRingRepository';
 import { Ring, ForgedBy } from '../entities/Ring';
 import { CreateRingDTO } from '../dtos/CreateRingDTO';
