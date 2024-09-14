@@ -2,6 +2,7 @@ import { getRing } from "@/api/get-ring";
 import FormRing from "@/components/formRing";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 function EditRing() {
@@ -10,8 +11,14 @@ function EditRing() {
   
   const {data: ring} = useQuery({
     queryKey: ['ring', id],
-    queryFn: () => getRing(id),
+    queryFn: () => getRing(Number(id)),
   })
+
+  useEffect(() => {
+    if(!id){
+      navigate('/');
+    }
+  }, [])
 
   return (
     <div className="h-screen w-full">
@@ -30,7 +37,6 @@ function EditRing() {
           <FormRing ring={ring}/>
       </div>
       </div>
-      <img src="/assets/crew.svg" alt="" className="absolute w-full bottom-0"/>
     </div>
   )
 }

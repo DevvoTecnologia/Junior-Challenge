@@ -34,6 +34,7 @@ export class RingController {
 
   @Patch(':id')
   async updateARing(@Param('id') id: string, @Body() data: createRingDTO) {
+    console.log(data);
     return await this.ringService.updateARing(Number(id), data);
   }
 

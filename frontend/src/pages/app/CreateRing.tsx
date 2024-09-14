@@ -24,7 +24,6 @@ function CreateRing() {
           <FormRing />
       </div>
       </div>
-      <img src="/assets/crew.svg" alt="" className="absolute w-full bottom-0"/>
     </div>
   )
 }

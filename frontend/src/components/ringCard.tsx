@@ -1,21 +1,19 @@
 import { CompleteRing } from "@/models/Ring";
 import { textLimiter } from "@/utils/TextHandler";
 import { useNavigate } from "react-router-dom";
+import { DeleteDialog } from "./deleteDialog";
 import { Button } from "./ui/button";
 
 export function RingCard({ring}: {ring: CompleteRing}) {
   const navigate = useNavigate();
-  console.log(ring)
   
   return (
     <div className="relative bg-white rounded-3xl flex flex-col gap-6 justify-center items-center py-6 px-14 z-10 h-[355px]  text-center">
       <div className="absolute top-3 right-3">
-        <Button className="bg-red-500 rounded-xl py-5 px-3 hover:bg-red-700 transition-colors duration-300">
-          <img src="/assets/trash.svg" alt="" className="w-4 h-4" />
-        </Button>
+        <DeleteDialog id={ring.ring_id}/>
       </div>
-      <div className="bg-slate-500 h-[90px] w-[90px] min-h-[90px] rounded-xl overflow-hidden">
-        <img src={ring.ring_image} alt="" />
+      <div className="bg-slate-500 h-[90px] w-[90px] min-h-[90px] rounded-xl overflow-hidden flex justify-center items-center">
+        <img loading="lazy" src={ring.ring_image} alt="" width={90} height={90} className="object-cover h-full" />
       </div>
       <div className="flex flex-col items-center">
         <h2 className="text-xl font-bold">{textLimiter(ring.ring_name,14)}</h2>
