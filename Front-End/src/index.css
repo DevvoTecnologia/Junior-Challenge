@@ -3,22 +3,18 @@
 @tailwind utilities;
 
 
-.slick-slider {
-  position: relative;
-}
 
 .carousel-container .slick-slide {
   padding: 0 10px; /* Ajuste o valor conforme necessário */
 }
 
 .slick-slide {
-  display: flex;
   justify-content: center; /* Centraliza os cards horizontalmente */
   align-items: center; /* Alinha verticalmente os cards */
 }
 
 .slick-slide img {
-  max-height: 300px; /* Define uma altura máxima para as imagens */
+  
   object-fit: cover; /* Faz com que as imagens cubram o espaço disponível */
 }
 

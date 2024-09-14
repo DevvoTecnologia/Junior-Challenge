@@ -1,4 +1,4 @@
-import { FiTrash, FiEdit } from "react-icons/fi"; 
+import { FiTrash, FiEdit } from "react-icons/fi";
 import { api } from "./service/api";
 import { useEffect, useState, useRef, FormEvent } from "react";
 import "slick-carousel/slick/slick.css";
@@ -11,10 +11,11 @@ interface RingsProps {
   powerName: string;
   ownerName: string;
   builtBy: string;
-  imageUrl?: string; // Novo campo para URL da imagem
+  imageUrl?: string; // Campo para URL da imagem
 }
 
 export default function App() {
+
   const [rings, setRings] = useState<RingsProps[]>([]);
   const [editingRing, setEditingRing] = useState<RingsProps | null>(null); // Estado para edição
   const ringRef = useRef<HTMLInputElement | null>(null);
@@ -28,47 +29,67 @@ export default function App() {
   }, []);
 
   async function loadRings() {
-    const response = await api.get("/rings");
-    setRings(response.data);
+    try {
+      const response = await api.get("/rings");
+      setRings(response.data);
+    } catch (error) {
+      console.error("Erro ao carregar anéis:", error);
+    }
   }
 
   async function handleSubmit(event: FormEvent) {
-    event.preventDefault();
+  event.preventDefault();
 
-    // Defina uma imagem padrão caso o usuário não insira uma
-    const defaultImageUrl = "https://via.placeholder.com/150"; // URL da imagem padrão
+  if (!builtRef.current?.value) return;
 
-    if (!builtRef.current?.value) return;
+  const payload = {
+    ringName: ringRef.current?.value || "",
+    powerName: powerRef.current?.value || "",
+    ownerName: ownerRef.current?.value || "",
+    builtBy: builtRef.current?.value || "",
+    imageUrl: imageUrlRef.current?.value || ""
+  };
 
-    const payload = {
-      ringName: ringRef.current?.value,
-      powerName: powerRef.current?.value,
-      ownerName: ownerRef.current?.value,
-      builtBy: builtRef.current?.value,
-      imageUrl: imageUrlRef.current?.value || defaultImageUrl, // Usar a imagem fornecida ou a padrão
-    };
-
+  try {
     if (editingRing) {
-      // Se estiver em modo de edição, fazer uma requisição PATCH
       const response = await api.patch(`/rings/${editingRing.id}`, payload);
-
       const updatedRings = rings.map((ring) =>
         ring.id === editingRing.id ? response.data : ring
       );
       setRings(updatedRings);
-      setEditingRing(null); // Reseta o modo de edição
+      setEditingRing(null);
     } else {
-      // Se não estiver editando, cria um novo anel
       const response = await api.post("/rings", payload);
-
       setRings((allRings) => [...allRings, response.data]);
+    }
+  } catch (error) {
+    if (error.response) {
+      // Erro com resposta do servidor
+      console.error("Erro de resposta do servidor:", error.response.data);
+      alert(`Erro: ${JSON.stringify(error.response.data)}`); // Exibe a mensagem de erro
+    } else if (error.request) {
+      // Erro na solicitação
+      console.error("Erro na solicitação:", error.request);
+      alert("Erro na solicitação. Verifique sua conexão com o servidor.");
+    } else {
+      // Erro desconhecido
+      console.error("Erro desconhecido:", error.message);
+      alert(`Erro desconhecido: ${error.message}`);
     }
   }
 
+  // Limpar os campos após o submit
+  ringRef.current!.value = "";
+  powerRef.current!.value = "";
+  ownerRef.current!.value = "";
+  builtRef.current!.value = "";
+  imageUrlRef.current!.value = "";
+}
+
+
   async function handleDelete(id: string) {
     try {
-      await api.delete(`rings/${id}`);
-
+      await api.delete(`/rings/${id}`);
       const allRings = rings.filter((ring) => ring.id !== id);
       setRings(allRings);
     } catch (err) {
@@ -82,35 +103,17 @@ export default function App() {
     powerRef.current!.value = ring.powerName;
     ownerRef.current!.value = ring.ownerName;
     builtRef.current!.value = ring.builtBy;
-    imageUrlRef.current!.value = ring.imageUrl || ""; 
+    imageUrlRef.current!.value = ring.imageUrl || ""; // Adiciona valor da URL da imagem
   }
 
-  const settings = {
+  const sliderSettings = {
     dots: true,
-    infinite: true,
+    infinite: rings.length > 1,
     speed: 500,
-    slidesToShow: 2,
+    slidesToShow: 2, // Exibir dois slides
     slidesToScroll: 1,
+    arrows: false,
     autoplay: true,
-    autoplaySpeed: 3000,
-    centerMode: true,
-    centerPadding: '20px', // Ajuste o padding central
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-          centerPadding: '20px', // Ajuste o padding central
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 1,
-          centerPadding: '20px', // Ajuste o padding central
-        },
-      },
-    ],
   };
 
   return (
@@ -119,34 +122,46 @@ export default function App() {
         <h1 className="text-4xl font-medium text-white">Aneis</h1>
 
         <form className="flex flex-col my-6" onSubmit={handleSubmit}>
-          <label className="font-medium text-white">Nome do anel</label>
+          <label className="font-medium text-white">Nome do anel:</label>
           <input
             type="text"
-            placeholder="Mirkwood, o anel da Floresta"
+            placeholder="Nome do anel"
             className="w-full mb-5 p-2 rounded"
             ref={ringRef}
           />
+
           <label className="font-medium text-white">Poder do anel:</label>
           <input
             type="text"
-            placeholder="“You shall not pass!”"
+            placeholder="Poder do anel"
             className="w-full mb-5 p-2 rounded"
             ref={powerRef}
           />
+
           <label className="font-medium text-white">Portador do anel:</label>
           <input
             type="text"
-            placeholder="Eru Iluvatar"
+            placeholder="Portador"
             className="w-full mb-5 p-2 rounded"
             ref={ownerRef}
           />
+
           <label className="font-medium text-white">Forjado por:</label>
           <input
             type="text"
-            placeholder="Elfos, Anões, Homens ou Sauron"
+            placeholder="Forjado por"
             className="w-full mb-5 p-2 rounded"
             ref={builtRef}
           />
+
+          <label className="font-medium text-white">URL da imagem:</label>
+          <input
+            type="text"
+            placeholder="URL da imagem"
+            className="w-full mb-5 p-2 rounded"
+            ref={imageUrlRef}
+          />
+
           <input
             type="submit"
             value={editingRing ? "Atualizar Anel" : "Forjar Anel"}
@@ -155,11 +170,11 @@ export default function App() {
         </form>
 
         <section className="relative">
-          <Slider {...settings} className="carousel-container">
+          <Slider {...sliderSettings} className="carousel-container">
             {rings.map((item) => (
               <div
                 key={item.id}
-                className="w-[300px] mx-4 p-4 bg-white rounded-lg shadow-lg" // Largura personalizada e espaçamento
+                className="p-4 bg-white rounded-lg shadow-lg"
               >
                 <img
                   src={item.imageUrl}
