@@ -17,7 +17,5 @@ export const validateOwner = async (req: Request, res: Response, next: NextFunct
     return res.status(400).json({ errors: errors.map((error) => error.constraints) });
   }
 
-  req.body.validatedOwner = owner;
-
   next();
 };

@@ -17,7 +17,5 @@ export const validateRing = async (req: Request, res: Response, next: NextFuncti
     return res.status(400).json({ errors: errors.map((error) => error.constraints) });
   }
 
-  req.body.validatedRing = ring;
-
   next();
 };
