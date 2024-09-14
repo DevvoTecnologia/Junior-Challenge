@@ -4,15 +4,17 @@ import { Ring } from '../models/Ring';
 
 export const validateRing = async (req: Request, res: Response, next: NextFunction) => {
   const ring = new Ring();
-  const { ring: ringData } = req.body;
-  ring.name = ringData.name;
-  ring.power = ringData.power;
-  ring.forgedBy = ringData.forgedBy;
-  ring.image = ringData.image;
+  const ringData = req.body.ring;
 
-  const errors = await validate(ring);
+  if (!ringData || typeof ringData !== 'object') {
+    return res.status(400).json({ status: 'error', message: 'No ring object provided' });
+  }
+
+  Object.assign(ring, ringData);
+
+  const errors = await validate(ring, { validationError: { target: false } });
   if (errors.length > 0) {
-    return res.status(400).json({ errors: errors });
+    return res.status(400).json({ errors: errors.map((error) => error.constraints) });
   }
 
   req.body.validatedRing = ring;

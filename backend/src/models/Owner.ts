@@ -8,9 +8,9 @@ export class Owner {
   id: number;
 
   @Column({ type: 'varchar', length: 255 })
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(255)
+  @IsString({ message: 'O nome do proprietário deve ser uma string' })
+  @IsNotEmpty({ message: 'O nome do proprietário não pode estar vazio' })
+  @MaxLength(255, { message: 'O nome do proprietário não pode ter mais de 255 caracteres' })
   name: string;
 
   @OneToMany(() => Ring, (ring) => ring.currentOwner)
