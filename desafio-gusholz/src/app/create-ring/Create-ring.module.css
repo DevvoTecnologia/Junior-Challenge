@@ -107,3 +107,8 @@
   color: #f1efef;
   margin: 0;
 }
+
+.emptyLabel {
+  color: #f1efef;
+  font-size: 24px;
+}

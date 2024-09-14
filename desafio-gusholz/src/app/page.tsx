@@ -14,13 +14,12 @@ export default function HomePage() {
           <li>Cumprir os requisitos estabelecidos</li>
           <li>Garantir uma boa usabilidade</li>
           <li>Garantir feedbacks ao usuário com base em suas ações</li>
-          <li>Criar um ambiente de produção simples para facilitar a utilização do sistema </li>
         </ol>
         <h2>Stack utilizada</h2>
         <ul>
-          <li>React.js para o front-end, com typescript</li>
-          <li>Next.js para a criação da API e pelo gerenciamento eficiente de rotas</li>
-          <li>Postgres para o banco de dados local e de produção</li>
+          <li>React.js para o front-end</li>
+          <li>Next.js para a criação da API</li>
+          <li>Postgres para o banco de dados local</li>
         </ul>
         <h4>Artes</h4>
         <p>Todas as artes do site são de propriedade do artista Gurdro, e estão disponíveis no link:</p>

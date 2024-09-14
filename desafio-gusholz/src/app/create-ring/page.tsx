@@ -228,7 +228,6 @@ export default function Home() {
               </div>
             </div>
             : <>
-              <h1 className={styles.header}>Selecione o anel que deseja atualizar</h1>
               {isLoading ? (
                 <span>Carregando</span>
               ) : (
@@ -236,6 +235,7 @@ export default function Home() {
                   {rings.length > 0 ? (
                     rings.map((ring) => (
                       <div className={styles.ringDisplay} key={ring.id}>
+                        <h1 className={styles.header}>Selecione o anel que deseja atualizar</h1>
                         <NextImage
                           src={ring.imagem}
                           alt={`Imagem do anel ${ring.nome}`}
@@ -251,7 +251,7 @@ export default function Home() {
                       </div>
                     ))
                   ) : (
-                    <span>Nenhum anel disponível</span>
+                    <span className={styles.emptyLabel}>Nenhum anel disponível para atualização</span>
                   )}
                 </div>
               )}
