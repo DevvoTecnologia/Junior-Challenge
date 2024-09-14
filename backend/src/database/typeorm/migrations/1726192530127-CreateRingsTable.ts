@@ -36,7 +36,7 @@ export class CreateTaskTable1718032596042 implements MigrationInterface {
                     {
                         name: "forgedBy",
                         type: "enum",
-                        enum: ["elf", "dwarf", "Man", "sauron"],
+                        enum: ["elf", "dwarf", "man", "sauron"],
                         isNullable: false,
                     },
                     {

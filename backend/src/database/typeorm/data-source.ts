@@ -1,6 +1,6 @@
 import { DataSource, DataSourceOptions } from "typeorm"
-import { env } from "../../env"
-import { Ring } from "../../models/ring"
+import { env } from "@/env"
+import { Ring } from "@/models/ring"
 
 const options: DataSourceOptions = {
     type: env.DATABASE_TYPE,
