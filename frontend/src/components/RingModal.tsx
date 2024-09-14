@@ -1,4 +1,3 @@
-// src/components/RingModal.tsx
 import React from 'react';
 import {
   Modal,

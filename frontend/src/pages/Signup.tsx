@@ -1,4 +1,3 @@
-// src/pages/Signup.tsx
 import React, { useState } from 'react';
 import { TextField, Button, Box, Typography } from '@mui/material';
 import { signup, login } from '../services/auth'; // Importa o login também

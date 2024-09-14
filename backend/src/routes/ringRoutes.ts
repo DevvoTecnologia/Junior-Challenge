@@ -1,5 +1,3 @@
-// src/routes/ringRoutes.ts
-
 import { Router } from 'express';
 import RingController from '../controllers/RingController';
 
