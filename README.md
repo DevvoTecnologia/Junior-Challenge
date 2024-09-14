@@ -6,7 +6,7 @@ Olá, pessoal da Devvo! Estou empolgado em compartilhar minha experiência e o r
 
 ## 🚀 Demo
 
-Confira o projeto em ação. O deploy da aplicação front-end está hospedado na Vercel, e o back-end / banco de dados no Render. É possível que haja algum tipo de delay inicial já que o Render desabilita os containers após um tempo de inatividade:
+Confira o projeto em ação. O deploy da aplicação front-end está hospedado na Vercel, e o back-end / banco de dados no Render. **É possível que haja algum tipo de delay inicial** já que o Render desabilita os containers após um tempo de inatividade:
 
 [https://junior-challenge-p1pa.vercel.app/](https://junior-challenge-p1pa.vercel.app/)
 
