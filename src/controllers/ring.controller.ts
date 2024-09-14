@@ -26,10 +26,11 @@ export const criarAnel = async (req: Request, res: Response): Promise<void> => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json(
-          //@ts-ignore
-          MESSAGES[error.message]
-        );
+        res.status(500).json({
+            code: MESSAGES.CREATION_ERROR.code,
+            message: MESSAGES.CREATION_ERROR.description
+
+        });
     }
 };
 
