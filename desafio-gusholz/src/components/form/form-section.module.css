@@ -1,0 +1,17 @@
+.formularioContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.formularioLabel {
+  color: #fafafa;
+  margin-bottom: 2px;
+}
+
+.formularioInputField {
+  border-radius: 4px;
+  background-color: #fafafa;
+  border: none;
+  min-width: 30rem;
+  padding: 0.5rem;
+}

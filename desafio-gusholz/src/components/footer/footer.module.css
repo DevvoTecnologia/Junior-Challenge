@@ -1,0 +1,16 @@
+@font-face {
+  font-family: elfic;
+  src: url(../../../public/static/fonts/elfic_font.woff2);
+}
+
+.footerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  margin-top: 4rem;
+}
+
+.footerText {
+  font-family: elfic;
+}
