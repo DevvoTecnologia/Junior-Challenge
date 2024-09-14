@@ -1,0 +1,11 @@
+{
+  "type": "mysql",
+  "host": "db",
+  "port": 3306,
+  "username": "root",
+  "password": "password",
+  "database": "ringsdb",
+  "entities": ["src/models/*.ts"],
+  "synchronize": true,
+  "logging": false
+}
