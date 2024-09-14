@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  postgresql:
+    image: 'bitnami/postgresql:latest'
+    ports: 
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=rings
+    volumes: 
+      - rings_pg_data:/bitnami/postgresql  
+
+volumes: 
+  rings_pg_data:
