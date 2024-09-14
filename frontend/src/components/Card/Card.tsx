@@ -23,7 +23,7 @@ export const Card: FC<CardProps> = ({
 }) => {
   return (
     <div className="w-full h-full rounded-lg border border-gray-700 bg-gray-800 overflow-hidden text-white">
-      <img src={image} alt={name} className="h-56 object-cover w-full" />
+      <img src={image} alt={name} className="h-40 object-cover w-full" />
 
       <div className="p-4 space-y-2">
         <h2 className="text-xl font-semibold">{name}</h2>
