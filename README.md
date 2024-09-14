@@ -16,17 +16,22 @@ Certifique-se de ter o seguinte instalado em sua máquina:
 ### Clonar o Repositório
 
 ```bash
-git clone https://github.com/cguifernandes/don-saude.git
+git clone https://github.com/cguifernandes/Junior-Challenge.git
+```
+
+### Entrar na branch
+```bash
+git checkout desafio-cguifernandes
 ```
 
 ### Entrar na pasta
 ```bash
-cd don-saude
+cd Junior-Challenge
 ```
 
 ### Entrar na client
 ```bash
-cd client
+cd frontend
 ```
 
 ### Instalar dependências
@@ -41,7 +46,7 @@ cd ..
 
 ### Entrar na client
 ```bash
-cd server
+cd backend
 ```
 
 ### Instalar dependências
@@ -51,8 +56,8 @@ npm install
 
 ### Rodar projeto
 ```bash
-/client => npm start
-/server => npm run dev
+/backend => npm run dev
+/frontend => npm start
 ```
 
 O banco utilizado foi o PostgreSQL e criado de forma local, logo será necessário alterar os dados no arquivo data-source.ts
@@ -65,12 +70,11 @@ O sistema possui as seguintes funcionalidades:
 
 - Login com autenticação JWT
 - Rotas protegidas
-- Função de pesquisa de colaboradores
-- Paginação de resultados de colaboradores
-- CRUD completo para gerenciamento de colaboradores
+- CRUD completo de anéis
 - Divisão clara entre front-end e back-end
 - Um código com baixo acoplamento
+- Animações com framer-motion
 
 ## Documentaão da API
 
-Foi utilizado o Swagger Hub para a criação da documentação da API: https://app.swaggerhub.com/apis/GuilhermeFernandes/don-saude/1.0.0
+Foi utilizado o Swagger Hub para a criação da documentação da API: https://app.swaggerhub.com/apis/GuilhermeFernandes/desafio-junior/1.0.0
