@@ -17,3 +17,5 @@ export type APIRingData = {
   ring: Omit<Ring, 'id'>;
   owner: Omit<Owner, 'id'>;
 };
+
+export type ExistingRing = Ring & { currentOwner: Owner };
