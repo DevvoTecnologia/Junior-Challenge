@@ -8,8 +8,8 @@ export default function (ringController: RingController) {
 
   router.get('/', ringController.getAllRings);
   router.post('/', validateRing, validateOwner, ringController.createRing);
-  router.put('/:id', validateRing, validateOwner, ringController.updateRing);
-  router.delete('/:id', ringController.deleteRing);
+  router.put('/:ringId', validateRing, validateOwner, ringController.updateRing);
+  router.delete('/:ringId', ringController.deleteRing);
 
   return router;
 }
