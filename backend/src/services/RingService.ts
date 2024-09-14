@@ -25,7 +25,14 @@ export class RingService {
     const isRingLimitValid = await this.validateRingLimit(forgedBy);
 
     if (!isRingLimitValid) {
-      throw new ConflictError(`Ring limit exceeded for ${forgedBy}`);
+      const limit = RING_LIMITS[forgedBy];
+      throw new ConflictError(
+        `O limite de ${
+          limit === 1 ? 'anel' : 'anéis'
+        } para ${forgedBy} é ${limit}. Delete um anel forjado dele${
+          limit === 1 ? '' : 's'
+        } e tente novamente.`,
+      );
     }
 
     const owner = await this.ownerService.findOrCreateOwner(ownerData);
@@ -78,6 +85,6 @@ export class RingService {
 
   async validateRingLimit(forgedBy: Ring['forgedBy']): Promise<boolean> {
     const count = await this.ringRepository.count({ where: { forgedBy } });
-    return count <= RING_LIMITS[forgedBy];
+    return count < RING_LIMITS[forgedBy];
   }
 }
