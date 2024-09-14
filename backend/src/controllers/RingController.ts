@@ -26,8 +26,8 @@ export class RingController {
   updateRing = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { ringId } = req.params;
-      const ringData = req.body;
-      const updatedRing = await this.ringService.updateRing(Number(ringId), ringData);
+      const { ring: ringData, owner: ownerData } = req.body;
+      const updatedRing = await this.ringService.updateRing(Number(ringId), ringData, ownerData);
       res.status(200).json(updatedRing);
     } catch (error) {
       next(error);
