@@ -27,7 +27,7 @@
         "endOfLine": "lf"
       }
     ],
-    "@typescript-eslint/no-useless-constructor": "warn", // Correção aqui
+    "no-useless-constructor": "off",
     "@typescript-eslint/no-explicit-any": "off"
   },
   "settings": {

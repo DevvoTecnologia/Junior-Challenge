@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "tsx watch src/main/server.ts",
     "migration:generate": "tsx src/utils/generate-migration.ts",
     "migration:run": "tsx ./node_modules/typeorm/cli -d ./src/infra/data-source.ts migration:run"
   },

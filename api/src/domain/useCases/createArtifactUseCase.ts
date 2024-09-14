@@ -1,3 +1,5 @@
+import { ArtifactDTO } from '@/application/dto/ArtifactDTO'
+
 export type CreateArtifactInput = {
   name: string
   power: string
@@ -7,5 +9,5 @@ export type CreateArtifactInput = {
 }
 
 export interface CreateArtifactUseCase {
-  execute: (input: CreateArtifactInput) => Promise<void>
+  execute: (input: CreateArtifactInput) => Promise<ArtifactDTO>
 }
