@@ -2,7 +2,7 @@ import "dotenv/config";
 
 import express from "express";
 import authRoutes from "./routes/auth.routes";
-import portadorRoutes from "./routes/portador.routes";
+import portadorRoutes from "./routes/user.routes";
 import ringRoutes from "./routes/ring.routes";
 const cors = require("cors");
 

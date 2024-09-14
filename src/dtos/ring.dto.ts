@@ -4,7 +4,7 @@ export interface CriarAnelDTO {
     portador: string;
     forjadoPor: string;
     imagem: string;
-    portadorId: string;
+    userId: string;
 }
 
 export interface AtualizarAnelDTO {
@@ -17,5 +17,5 @@ export interface AtualizarAnelDTO {
 
 export interface DeletarAnelDTO {
     id: string;
-    portadorId: string;
+    userId: string;
 }

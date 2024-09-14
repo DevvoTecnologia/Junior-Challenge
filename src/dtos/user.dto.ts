@@ -1,9 +1,9 @@
-export interface CriarPortadorDTO {
+export interface CriarUserDTO {
     nome: string;
     email: string;
     senha: string;
 }
 
 export interface BuscarTodosAneisDTO {
-    portadorId: string;
+    userId: string;
 }

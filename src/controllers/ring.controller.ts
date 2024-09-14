@@ -6,7 +6,7 @@ import { MESSAGES } from "../utils/ring.messages";
 const ringService = new RingService();
 
 const validarDadosAnel = (dto: CriarAnelDTO) => {
-    return dto.nome && dto.poder && dto.portador && dto.forjadoPor && dto.imagem && dto.portadorId;
+    return dto.nome && dto.poder && dto.portador && dto.forjadoPor && dto.imagem && dto.userId;
 };
 
 export const criarAnel = async (req: Request, res: Response): Promise<void> => {
@@ -74,8 +74,8 @@ export const atualizarAnel = async (req: Request, res: Response): Promise<void> 
 export const deletarAnel = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params;
-        const { portadorId } = req.body;
-        await ringService.deletarAnel({ id, portadorId });
+        const { userId } = req.body;
+        await ringService.deletarAnel({ id, userId });
 
         res.status(200).json({
             message: MESSAGES.ANEL_DELETED.message

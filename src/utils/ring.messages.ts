@@ -29,8 +29,8 @@ export const MESSAGES = {
     description: "Erro ao deletar anel"
   },
   // Mensagens de sucesso
-  PORTADOR_CREATED: {
-    message: "Portador criado com sucesso!"
+  USER_CREATED: {
+    message: "Usuario criado com sucesso!"
   },
   ANEL_CREATED: {
     message: "Anel criado com sucesso"

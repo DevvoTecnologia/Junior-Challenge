@@ -5,5 +5,4 @@ export interface Anel {
     portador: string;
     forjadoPor: string;
     imagem: string;
-    portadorId: string;
 }

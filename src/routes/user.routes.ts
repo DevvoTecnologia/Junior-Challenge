@@ -1,15 +1,15 @@
 import { Router } from "express";
-import { criarPortador, buscarTodosAneis } from "../controllers/portador.controller";
+import { criarUser, buscarTodosAneis } from "../controllers/user.controller";
 import { authMiddleware } from "../middlewares/auth.middleware";
 
 const router = Router();
 
 router
-    .route('/portador')
-    .post(criarPortador)
+    .route('/signup')
+    .post(criarUser)
 
 router
-    .route('/portador/aneis')
+    .route('/user/aneis')
     .get(authMiddleware, buscarTodosAneis)
 
 export default router;
