@@ -14,6 +14,8 @@ export type validatedFields = {
   [key: string]: possibleFieldStatus;
 };
 
+const REQUIRED_PROPERTIES = ['name', 'power', 'forgedBy', 'image', 'ownerName'];
+
 export function validateRingProperties(properties: RawRingData) {
   const result = FormSchema.safeParse(properties);
 
@@ -21,8 +23,7 @@ export function validateRingProperties(properties: RawRingData) {
     return null;
   }
 
-  const REQUIRED_PROPERTIES = ['name', 'power', 'forgedBy', 'image', 'ownerName'];
-  const validatedFields: { [key: string]: possibleFieldStatus } = {};
+  const validatedFields: validatedFields = {};
   let successProperties = [...REQUIRED_PROPERTIES];
 
   result.error.errors.forEach((error) => {
