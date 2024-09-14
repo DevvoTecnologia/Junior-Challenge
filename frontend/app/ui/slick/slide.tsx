@@ -1,13 +1,24 @@
 'use client';
 
 import { deleteRing } from '@/app/actions/deleteRing';
-import type { Ring } from '@/app/lib/definitions';
+import type { ExistingRing } from '@/app/lib/definitions';
 import styles from '@/app/ui/slick/slide.module.css';
 import { useState } from 'react';
 
-export default function Slide({ ring }: { ring: Ring }) {
-  const handleDeleteRing = deleteRing.bind(null, ring.id);
+type SlideProps = {
+  ring: ExistingRing;
+  handleOpenModal: (ring: ExistingRing) => void;
+};
+
+export default function Slide({ ring, handleOpenModal }: SlideProps) {
+  const bindedDeleteRingAction = deleteRing.bind(null, ring.id);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDeleteRing = async () => {
+    setIsDeleting(true);
+    await bindedDeleteRingAction();
+    setIsDeleting(false);
+  };
 
   return (
     <div className={styles.slide}>
@@ -21,14 +32,13 @@ export default function Slide({ ring }: { ring: Ring }) {
         Forjado por: <strong>{ring.forgedBy}</strong>
       </small>
       <img src={ring.image} alt={ring.name} />
+      <h4>Portador: {ring.currentOwner.name}</h4>
       <div role="group">
-        <button>Editar</button>
+        <button disabled={isDeleting} onClick={() => handleOpenModal(ring)}>
+          Editar
+        </button>
         <button
-          onClick={async () => {
-            setIsDeleting(true);
-            await handleDeleteRing();
-            setIsDeleting(false);
-          }}
+          onClick={handleDeleteRing}
           className="contrast"
           disabled={isDeleting}
           aria-busy={isDeleting}

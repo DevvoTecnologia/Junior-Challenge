@@ -1,0 +1,37 @@
+.modal_container {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 50;
+  -webkit-backdrop-filter: var(--pico-modal-overlay-backdrop-filter);
+  backdrop-filter: var(--pico-modal-overlay-backdrop-filter);
+  background-color: var(--pico-modal-overlay-background-color);
+  color: var(--pico-color);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+  touch-action: auto;
+}
+
+.open {
+  display: flex;
+}
+
+.modal_container dialog {
+  min-height: fit-content !important;
+  height: auto !important;
+  top: 50% !important;
+  left: 50% !important;
+  right: unset !important;
+  bottom: unset !important;
+  transform: translate(-50%, -50%) !important;
+  -webkit-backdrop-filter: unset !important;
+  backdrop-filter: unset !important;
+  background-color: unset !important;
+  color: unset !important;
+  min-width: max-content !important;
+  width: unset !important;
+}
