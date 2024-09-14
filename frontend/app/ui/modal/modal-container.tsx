@@ -20,8 +20,6 @@ export default function ModalContainer({
       className={containerClass}
       onClick={(e) => {
         e.stopPropagation();
-        console.log(e.target);
-        console.log(e.currentTarget);
         if (e.target === e.currentTarget) {
           handleCloseModal();
         }
