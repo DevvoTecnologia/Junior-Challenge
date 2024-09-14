@@ -26,11 +26,8 @@ export class ArtifactTypeORMRepository implements ArtifactRepository {
     return this.ormRepository.find()
   }
 
-  async update(artifact: ArtifactDTO): Promise<ArtifactDTO> {
+  async update(artifact: Required<ArtifactDTO>): Promise<void> {
     await this.ormRepository.update(artifact.id, artifact)
-    return this.ormRepository.findOneBy({
-      id: artifact.id,
-    }) as Promise<ArtifactDTO>
   }
 
   async delete(id: string): Promise<void> {

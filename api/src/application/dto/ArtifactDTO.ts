@@ -1,5 +1,5 @@
 export interface ArtifactDTO {
-  id: string
+  id?: string
   name: string
   power: string
   bearer?: string
