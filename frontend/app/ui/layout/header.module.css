@@ -1,0 +1,13 @@
+.header {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title {
+  margin-bottom: 0;
+}
