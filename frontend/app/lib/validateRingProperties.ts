@@ -1,5 +1,5 @@
-import type { RawRingData } from './definitions';
-import { FormSchema } from './form-schema';
+import type { RawRingData } from '@/app/lib/definitions';
+import { FormSchema } from '@/app/lib/form-schema';
 
 export type possibleFieldStatus =
   | {

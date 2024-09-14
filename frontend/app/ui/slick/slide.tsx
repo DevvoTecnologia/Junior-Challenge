@@ -1,9 +1,9 @@
 'use client';
 
+import { deleteRing } from '@/app/actions/deleteRing';
+import type { Ring } from '@/app/lib/definitions';
+import styles from '@/app/ui/slick/slide.module.css';
 import { useState } from 'react';
-import { deleteRing } from '../../actions/deleteRing';
-import { Ring } from '../../lib/definitions';
-import styles from './slide.module.css';
 
 export default function Slide({ ring }: { ring: Ring }) {
   const handleDeleteRing = deleteRing.bind(null, ring.id);

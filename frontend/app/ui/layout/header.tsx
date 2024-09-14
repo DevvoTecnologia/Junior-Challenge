@@ -1,12 +1,11 @@
 'use client';
 
+import styles from '@/app/ui/layout/header.module.css';
 import { Shell } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React from 'react';
-import styles from './header.module.css';
 
-const Header = () => {
+export default function Header() {
   const pathname = usePathname();
   const isNew = pathname.includes('new');
   const isHome = pathname === '/';
@@ -37,6 +36,4 @@ const Header = () => {
       </nav>
     </header>
   );
-};
-
-export default Header;
+}

@@ -1,10 +1,10 @@
 'use server';
 
+import type { APIRingData } from '@/app/lib/definitions';
+import type { validatedFields } from '@/app/lib/validateRingProperties';
+import { validateRingProperties } from '@/app/lib/validateRingProperties';
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
-import type { APIRingData } from '../lib/definitions';
-import type { validatedFields } from '../lib/validateRingProperties';
-import { validateRingProperties } from '../lib/validateRingProperties';
 
 export type FormState =
   | null

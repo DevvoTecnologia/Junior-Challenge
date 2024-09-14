@@ -1,10 +1,10 @@
 'use client';
 
+import { createRing } from '@/app/actions/createRing';
+import Input from '@/app/ui/form/input';
+import RadioFieldset from '@/app/ui/form/radio-fieldset';
+import SubmitButton from '@/app/ui/form/submit-button';
 import { useFormState } from 'react-dom';
-import { createRing } from '../actions/createRing';
-import Input from '../ui/form/input';
-import RadioFieldset from '../ui/form/radio-fieldset';
-import SubmitButton from '../ui/form/submit-button';
 
 export default function NewRingPage() {
   const [state, formAction] = useFormState(createRing, null);

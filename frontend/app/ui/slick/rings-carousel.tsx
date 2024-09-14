@@ -1,8 +1,8 @@
 'use client';
 
+import type { Ring } from '@/app/lib/definitions';
+import Slide from '@/app/ui/slick/slide';
 import Slider from 'react-slick';
-import { Ring } from '../../lib/definitions';
-import Slide from './slide';
 
 export default function RingsCarousel({ rings }: { rings: Ring[] }) {
   const settings = {

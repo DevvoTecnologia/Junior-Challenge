@@ -1,6 +1,6 @@
-import { Ring } from './lib/definitions';
-import styles from './page.module.css';
-import RingsCarousel from './ui/slick/rings-carousel';
+import type { Ring } from '@/app/lib/definitions';
+import styles from '@/app/page.module.css';
+import RingsCarousel from '@/app/ui/slick/rings-carousel';
 
 async function getRings() {
   try {

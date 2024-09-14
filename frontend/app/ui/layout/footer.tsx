@@ -1,9 +1,8 @@
+import styles from '@/app/ui/layout/footer.module.css';
 import { Atom, Palette } from 'lucide-react';
 import Link from 'next/link';
-import React from 'react';
-import styles from './footer.module.css';
 
-const Footer = () => {
+export default function Footer() {
   return (
     <footer className={styles.footer}>
       <ul className={styles.list}>
@@ -29,6 +28,4 @@ const Footer = () => {
       </ul>
     </footer>
   );
-};
-
-export default Footer;
+}
