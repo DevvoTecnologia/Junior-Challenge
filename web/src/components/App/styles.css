@@ -1,0 +1,27 @@
+.screen {
+  width: 100%;
+  background-color: #f6f5fc;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  padding: 64px 0;
+  row-gap: 36px;
+}
+
+.title {
+  font-size: 48px;
+  font-weight: 800;
+  color: #414040;
+}
+
+.title span {
+  color: #8c18f8;
+}
+
+@media (max-width: 600px) {
+  .scrren {
+    padding: 32px 16px;
+  }
+}

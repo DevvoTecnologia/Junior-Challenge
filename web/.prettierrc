@@ -1,0 +1,10 @@
+{
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "endOfLine": "auto",
+  "jsxSingleQuote": false,
+  "printWidth": 80,
+  "arrowParens": "avoid",
+  "proseWrap": "preserve"
+}

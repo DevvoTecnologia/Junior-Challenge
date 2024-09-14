@@ -1,0 +1,9 @@
+.slick-slider {
+  max-width: 100%; /* Garante que o slider não ultrapasse a largura da tela */
+  margin: 0 auto; /* Centraliza o slider */
+}
+
+.slick-initialized .slick-slide {
+  display: block;
+  padding: 0 10px;
+}

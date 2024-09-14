@@ -1,0 +1,23 @@
+.select {
+  width: 100%;
+  height: 52px;
+  background: #ffff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.04);
+  border-radius: 4px;
+  border: 2px solid #ffff;
+  padding: 0 16px;
+  outline: none;
+  font-size: 1rem;
+  appearance: none;
+  transition: border-color 0.2s ease-in;
+}
+
+.select:focus {
+  border-color: #8c18f8; /* Cor primária */
+}
+
+.select[disabled] {
+  background: #f5f5f5; /* Cor de fundo para desativado */
+  border-color: #e0e0e0; /* Cor da borda para desativado */
+  opacity: 1;
+}

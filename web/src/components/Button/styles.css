@@ -1,0 +1,51 @@
+.button {
+  background-color: #8c18f8;
+  color: #f2f2f2;
+  font-weight: 500;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hover: efeito de cor e leve elevação */
+.button:hover {
+  background-color: #7a12e3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Ativo: leve "afundamento" e sombra */
+.button:active {
+  background-color: #6d0fcb;
+  transform: translateY(1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Foco: adição de outline para acessibilidade */
+.button:focus {
+  outline: 3px solid rgba(140, 24, 248, 0.5);
+  outline-offset: 2px;
+}
+
+.button[disabled] {
+  background: #ccc !important;
+  cursor: default;
+}
+
+.button.delete {
+  background-color: #e74c3c; /* Vermelho */
+}
+
+.button.delete:hover {
+  background-color: #c0392b; /* Vermelho escuro no hover */
+}

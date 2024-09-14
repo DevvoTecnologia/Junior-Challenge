@@ -1,0 +1,33 @@
+.modal-overlay {
+  position: fixed; /* Fixa o modal em relação à viewport */
+  top: 0;
+  left: 0;
+  width: 100vw; /* Cobre toda a largura da tela */
+  height: 100vh; /* Cobre toda a altura da tela */
+  background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente */
+  display: flex;
+  align-items: center; /* Centraliza verticalmente */
+  justify-content: center; /* Centraliza horizontalmente */
+  z-index: 9999; /* Coloca o modal acima de todos os outros elementos */
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 500px; /* Define uma largura máxima */
+  width: 100%; /* Faz o modal responsivo */
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  flex-direction: column;
+  row-gap: 16px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px; /* Espaçamento entre os botões */
+  margin-top: 16px;
+}

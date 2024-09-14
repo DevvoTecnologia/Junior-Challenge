@@ -1,0 +1,27 @@
+.input {
+  width: 100%;
+  height: 52px;
+  background: #ffff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.04);
+  border-radius: 4px;
+  border: none;
+  padding: 0 16px;
+  outline: none;
+  border: 2px solid #ffff;
+  transition: border-color 0.2s ease-in;
+  appearance: none;
+}
+
+.input:focus {
+  border: 2px solid #8c18f8; /* Cor primária */
+}
+
+.input.error {
+  color: #f00; /* Cor para erro */
+  border-color: #f00 !important;
+}
+
+.input[disabled] {
+  background: #f5f5f5; /* Cor para fundo desativado */
+  border-color: #e0e0e0; /* Cor para borda desativada */
+}
