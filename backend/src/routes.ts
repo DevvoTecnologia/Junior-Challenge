@@ -18,4 +18,5 @@ export async function routes(fastify: FastifyInstance, options: FastifyPluginOpt
         return new DeletarAneisController().handle(request, reply)
     })
     
+    
 }
