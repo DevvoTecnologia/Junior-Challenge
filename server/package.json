@@ -6,6 +6,7 @@
   "author": "Eduardo Silva <edu.silva.e08@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "start": "ts-node src/main.ts",
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules src/main.ts",
     "build": "tsc",
     "lint": "eslint .",
