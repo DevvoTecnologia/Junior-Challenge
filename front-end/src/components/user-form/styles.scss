@@ -1,0 +1,95 @@
+.user-form-container {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 2rem;
+    top: 10rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 25rem;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+
+    h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+
+        div {
+            margin-bottom: 1rem;
+
+            label {
+                display: block;
+                font-size: 0.875rem;
+                margin-bottom: 0.5rem;
+                color: #555;
+            }
+
+            input {
+                width: 100%;
+                padding: 0.75rem;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 1rem;
+
+                &:focus {
+                    border-color: #007bff;
+                    outline: none;
+                }
+            }
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+        .buttons-container {
+            height: 5rem;
+            width: 100%;
+            align-items: center;
+            display: flex;
+            justify-content: space-around;
+
+            button {
+                border: none;
+                border-radius: 4px;
+                width: 6rem;
+                padding: 0.75rem;
+                font-size: 1rem;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+
+                &.login-btn {
+                    background-color: #007a33;
+                    color: hsl(0, 0%, 100%);
+
+                    &:hover {
+                        background-color: #005a1b;
+                    }
+                }
+
+                &.register-btn {
+                    background-color: #d4af37;
+                    color: #fff;
+
+                    &:hover {
+                        background-color: #b89c2d;
+                    }
+                }
+
+                &.back-btn {
+                    color: #fff;
+                    background-color: #6c757d;
+                    &:hover {
+                        background-color: #5a5a5a;
+                    }
+                }
+            }
+        }
+    }
+}

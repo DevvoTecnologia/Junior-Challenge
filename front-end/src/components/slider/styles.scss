@@ -1,0 +1,159 @@
+// styles.scss
+
+.ring-slider-container {
+    width: 100%;
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    .slick-slider {
+        width: 50%;
+
+        .slick-slide {
+            padding: 1rem;
+            align-items: center;
+            justify-content: space-around;
+            display: flex !important;
+            flex-direction: column-reverse;
+            .ring-details {
+                overflow-wrap: break-word;
+                padding: 1rem;
+                border-radius: 1rem;
+                background-color: #282827;
+                display: flex;
+                align-items: center;
+                text-align: center;
+                justify-content: flex-start;
+                flex-direction: column;
+                p {
+                    padding: 0.5rem;
+                    color: #eecc09;
+                }
+                .detail {
+                    color: #fff;
+                }
+            }
+            .ring-item {
+                display: flex;
+                height: 30rem;
+                width: 100%;
+                align-items: center;
+                flex-direction: column;
+                justify-content: center;
+                .add-btn {
+                    margin: 0.5rem;
+                    padding: 0.5rem 1rem;
+                    font-size: 00.8rem;
+                    color: #fff;
+                    background-color: #007bff;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    transition: background-color 0.3s ease;
+                    &:hover {
+                        background-color: #0056b3;
+                    }
+                }
+            }
+
+            h2 {
+                font-size: 1.25rem;
+                color: #006d0d;
+                margin-bottom: 0.5rem;
+                text-align: center;
+            }
+
+            p {
+                font-size: 1rem;
+                color: #555;
+                margin-bottom: 0.5rem;
+                text-align: center;
+            }
+
+            img {
+                max-width: 100%;
+                height: auto;
+                border-radius: 8px;
+                margin-bottom: 1rem;
+            }
+
+            .ring-actions {
+                width: 100%;
+                align-items: center;
+                justify-content: center;
+                display: flex;
+                button {
+                    margin: 0.5rem;
+                    padding: 0.5rem 1rem;
+                    font-size: 00.8rem;
+                    color: #fff;
+                    background-color: #007bff;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    transition: background-color 0.3s ease;
+
+                    &:hover {
+                        background-color: #0056b3;
+                    }
+
+                    &:first-of-type {
+                        background-color: #28a745;
+
+                        &:hover {
+                            background-color: #218838;
+                        }
+                    }
+
+                    &:last-of-type {
+                        background-color: #dc3545;
+
+                        &:hover {
+                            background-color: #c82333;
+                        }
+                    }
+                }
+            }
+        }
+
+        .slick-prev,
+        .slick-next {
+            border-radius: 5px;
+            font-size: 1.5rem;
+            z-index: 1;
+
+            &:before {
+                color: #fff;
+            }
+        }
+
+        .slick-prev {
+            left: 10px;
+        }
+
+        .slick-next {
+            right: 10px;
+        }
+
+        .slick-dots {
+            li {
+                margin: 0 0.25rem;
+
+                button {
+                    width: 0.5rem;
+                    height: 0.5rem;
+                    border-radius: 50%;
+                    background-color: #007bff;
+
+                    &:before {
+                        display: none;
+                    }
+                }
+
+                &.slick-active button {
+                    background-color: #0056b3;
+                }
+            }
+        }
+    }
+}
