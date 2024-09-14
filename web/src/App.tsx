@@ -1,5 +1,9 @@
 import '@/styles/index.css'
 
+import { RouterProvider } from 'react-router-dom'
+
+import { router } from '@/routes'
+
 export function App() {
-  return <>APP RODANDO</>
+  return <RouterProvider router={router} />
 }
