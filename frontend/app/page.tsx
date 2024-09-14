@@ -9,8 +9,8 @@ export default async function Home() {
       <div className={styles.container + ' container-fluid'}>
         <h1 className={styles.title}>Anéis no mundo</h1>
         <hr />
-        {rings && <RingsCarousel rings={rings} />}
-        {!rings && <p className="text-center">Nenhum anel encontrado :(</p>}
+        {rings && rings.length > 0 && <RingsCarousel rings={rings} />}
+        {(!rings || rings.length === 0) && <p className="text-center">Nenhum anel encontrado :(</p>}
       </div>
     </>
   );
