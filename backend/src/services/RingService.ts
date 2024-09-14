@@ -64,12 +64,15 @@ export class RingService {
     updatedOwnerData: Omit<Owner, 'id' | 'rings'>,
   ): Promise<Ring> {
     const { forgedBy } = updatedRingData;
-    await this.checkLimit(forgedBy);
 
     const ring = await this.ringRepository.findOne({
       where: { id: ringId },
       relations: ['currentOwner'],
     });
+
+    if (ring.forgedBy !== forgedBy) {
+      await this.checkLimit(forgedBy);
+    }
 
     if (!ring) {
       throw new NotFoundError(`Anel não encontrado`);

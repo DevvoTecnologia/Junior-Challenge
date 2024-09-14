@@ -9,7 +9,12 @@ import { RingService } from './services/RingService';
 
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+  origin: 'https://junior-challenge-delta.vercel.app',
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use(checkJSONReq);
