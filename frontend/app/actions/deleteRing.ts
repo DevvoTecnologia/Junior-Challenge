@@ -1,17 +1,16 @@
 'use server';
 
 import { revalidateTag } from 'next/cache';
+import apiDeleteRing from '../api/deleteRing';
+import wait from '../utils/scrips';
 
 export async function deleteRing(ringId: number) {
-  try {
-    await new Promise((resolve) => setTimeout(resolve, 3000));
-    await fetch(`http://localhost:3000/rings/${ringId}`, {
-      method: 'DELETE',
-    });
-  } catch (e) {
-    console.error(e);
-    return { error: 'Failed to delete ring' };
-  } finally {
+  await wait(2000);
+  const res = await apiDeleteRing(ringId);
+
+  if (res === 'success') {
     revalidateTag('rings');
   }
+
+  return res;
 }
