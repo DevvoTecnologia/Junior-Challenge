@@ -1,140 +1,64 @@
 # Desafio Fullstack: Os Anéis de Poder
-_One Challenge to rule them all, One Challenge to find them, One Challenge to bring them all, and in the darkness bind them_
 
-## 💍 Contexto do Desafio
+## 🌟 Introdução
 
-O grande mago J.R.R. Tolkien nos deixou a famosa frase:
+Olá, pessoal da Devvo! Estou empolgado em compartilhar minha experiência e o resultado do desafio que recebi há exatos três dias atrás. Este documento serve como uma visão geral do projeto, destacando minha abordagem, as tecnologias utilizadas e os resultados alcançados.
 
-> **Three Rings for the Elven-kings under the sky,  
-> Seven for the Dwarf-lords in their halls of stone,  
-> Nine for Mortal Men doomed to die,  
-> One for the Dark Lord on his dark throne  
-> In the Land of Mordor where the Shadows lie.  
-> One Ring to rule them all, One Ring to find them,  
-> One Ring to bring them all, and in the darkness bind them  
-> In the Land of Mordor where the Shadows lie.**
+## 🚀 Demo
 
-Sua missão será criar um CRUD (Create, Read, Update, Delete) para gerenciar os anéis e desenvolver um frontend para visualizar e manipular essas informações.
+Confira o projeto em ação. O deploy da aplicação front-end está hospedado na Vercel, e o back-end / banco de dados no Render. É possível que haja algum tipo de delay inicial já que o Render desabilita os containers após um tempo de inatividade:
 
-## 🎯 Objetivo
+[https://junior-challenge-p1pa.vercel.app/](https://junior-challenge-p1pa.vercel.app/)
 
-### Backend
-Criar uma API em **Node.js** com **TypeScript** para realizar as seguintes operações:
+## 🎯 Objetivo e Abordagem
 
-- **Criar** (POST) um novo anel.
-- **Listar** (GET) todos os anéis.
-- **Atualizar** (PUT) as informações de um anel.
-- **Deletar** (DELETE) um anel existente.
+Meu objetivo principal foi criar uma solução simples, eficiente e esteticamente agradável, tanto no back-end quanto no front-end. O desafio proporcionou uma oportunidade para demonstrar habilidades essenciais de desenvolvimento, e entre delas, destaco meu esforço para evidenciar minha capacidade de organização por toda codebase e de me manter atualizado com as melhores práticas, sempre revisitadas, da indústria.
 
-### Frontend
-Desenvolver uma interface simples em **React** com as seguintes telas:
+## 💻 Frontend
 
-- **Tela de Criação/Atualização**: Formulário para criar um novo anel ou atualizar um anel existente.
-- **Tela de Visualização**: Exibição dos anéis criados em um **carrossel**, mostrando as informações de cada anel (nome, poder, portador, forjadoPor e imagem).
+Para o frontend, optei por utilizar a stack:
 
-## ⚔️ Requisitos Funcionais
+- **Next.js 14 / React / TS / PicoCSS**: Aproveitando os novos Server Components para melhorar performance, SEO e reduzir a dependência de JavaScript no cliente.
 
-### Backend
+Esta abordagem resultou em uma aplicação moderna e eficiente e com um baixo nível de dependências - além dessas mencionadas, teve o Slick e o Zod. Fico impressionado com a capacidade de responsividade da aplicação a partir do Next.js e suas novas atualizações, consegui implementar os estados e animações de uma forma bem menos dependente de bibliotecas externas e com uso de código no cliente. Acho que essa plataforma de Server Components ainda tem muito a melhorar, mas já é uma realidade que merece bastante atenção!
 
-1. **Criar um Anel**  
-   O anel deverá ter as seguintes propriedades:
-   - `nome`: Nome do anel (ex: "Narya, o anel do fogo").
-   - `poder`: Uma breve descrição do poder do anel (ex: "Seu portador ganha resistência ao fogo").
-   - `portador`: O nome do portador atual (Ex: Gandalf).
-   - `forjadoPor`: Quem forjou o anel (ex: Elfos).
-   - `imagem`: URL de uma imagem genérica do anel.
+Para finalizar, gostaria de explicar essa escolha da stack acima por acreditar que posso sempre tentar algo diferente e me mostrar flexível. Eu quis ir além de outros projetos que já fiz e estão disponíveis no meu GitHub - por exemplo, o mais recente foi uma landing page feita com Astro + React + TailwindCSS para um amigo meu. Segue o link caso tenham interesse [Github](https://github.com/p1padev/gztrentin-v2).
 
-2. **Regras de Negócio para Criação de Anéis**  
-   A API deverá garantir que a quantidade máxima de anéis criados respeite as seguintes regras:
-   
-   - **Elfos**: No máximo 3 anéis.
-   - **Anões**: No máximo 7 anéis.
-   - **Homens**: No máximo 9 anéis.
-   - **Sauron**: Apenas 1 anel.
+## 🛠 Backend
 
-   Caso o limite seja excedido, a criação deve ser rejeitada com uma mensagem de erro adequada.
+No backend, segui as instruções fornecidas e explorei novas tecnologias:
 
-3. **Listar os Anéis**  
-   A API deverá retornar uma lista com todos os anéis e suas propriedades.
+- **TypeORM**: Primeira experiência com esta ORM, testando minhas habilidades e capacidade de aprendizado com documentação em prazo rápido.
+- **Express**: Utilizando minha familiaridade prévia com o framework.
+- **PostgreSQL**: Meus estudos recentes vinham abarcando SQL e Postgres, e foi uma ótima oportunidade para colocar em prática.
 
-4. **Atualizar um Anel**  
-   Deve ser possível atualizar as informações de um anel específico (ex: alterar o portador ou a descrição do poder).
+Adotei o modelo MSC (Model-Service-Controller) para uma clara separação de responsabilidades como sugerido por vocês, resultando em um código bem organizado para o meu gosto.
 
-5. **Deletar um Anel**  
-   Deve ser possível remover um anel do banco de dados.
+## 🏗 Estrutura do Projeto
 
-### Frontend
+- **Monorepo**: Configurado com PNPM e workspaces.
+- **ESLint**: Regras aplicadas globalmente.
+- **TypeScript**: Configurações específicas para front-end e back-end devido às suas naturezas distintas.
 
-1. **Tela de Criação/Atualização de Anel**  
-   - Um formulário com os seguintes campos:
-     - `nome`: Campo de texto para o nome do anel.
-     - `poder`: Campo de texto para a descrição do poder do anel.
-     - `portador`: Campo de texto para o nome do portador.
-     - `forjadoPor`: Campo de texto para indicar quem forjou o anel.
-     - `imagem`: Como a imagem vai ser genérica você pode tanto deixar o uauário escolher entre as imagens que o próprio sistema fornece ou remover esse campo e deixar uma imagem default.
-   - Botões para:
-     - **Criar**: Submeter o formulário para criar um novo anel.
-     - **Atualizar**: Alterar as informações de um anel existente.
+## ✅ Checklist de Realizações
 
-2. **Tela de Visualização dos Anéis**
-   - Exibir todos os anéis em um **carrossel** (ou grid), mostrando:
-     - Nome, poder, portador, forjadoPor, e a imagem do anel.
-   - O carrossel deve ser responsivo e permitir rolar entre os anéis cadastrados.
-   - Adicionar a possibilidade de **excluir** ou **editar** um anel diretamente dessa tela.
+- [x] Organização do código
+- [x] Boas práticas de desenvolvimento
+- [x] Frontend interativo e responsivo
+- [x] Implementação correta da validação do limite de anéis por portador
+- [ ] Testes unitários e/ou de integração (a ser implementado)
+- [x] Documentação da API e do frontend (em progresso)
 
-## 🚀 Tecnologias
+## 📚 Documentação
 
-- **Backend**:
-  - **Node.js** com **TypeScript**
-  - **Express** (ou outro framework para criar a API)
-  - **Banco de Dados**: MySQL, PostgreSQL, MongoDB, etc.
-  - **ORM/ODM**: Sequelize, TypeORM ou Mongoose.
+- [Documentação do Backend](./backend/README.md)
+- [Documentação do Frontend](./frontend/README.md)
 
-- **Frontend**:
-  - **React**
-  - **Biblioteca para Carrossel**: Você pode utilizar bibliotecas como `react-slick` ou outra para implementar o carrossel.
+## 🔮 Próximos Passos
 
-## 🛠️ Instruções
-
-1. Faça o **fork** deste repositório.
-2. Crie uma nova branch com o nome do seu desafio: `git checkout -b desafio-seu-nome`.
-3. Implemente sua solução backend e frontend conforme os requisitos descritos.
-4. Faça o **commit** das suas alterações: `git commit -m 'Desafio finalizado'`.
-5. Faça o **push** para a branch criada: `git push origin desafio-seu-nome`.
-6. Crie um **Pull Request** para o repositório principal.
-7. Envie um email para "contato@devvo.com.br" falando que finalizou seu desafio e encaminhando o link do Pull Request
-
-## 📝 Regras e Critérios de Avaliação
-
-1. **Organização do código**: Estrutura clara e modularidade do código.
-2. **Boas práticas**: Uso de boas práticas de desenvolvimento, como SOLID e DRY.
-3. **Frontend**: Interface limpa, funcional e interativa (carrossel funcionando corretamente).
-4. **Validação da Regra de Negócio**: Implementação correta da validação do limite de anéis por portador.
-5. **Testes**: Testes unitários e/ou de integração serão um diferencial.
-6. **Documentação**: Adicione uma breve documentação da API e do frontend (pode ser no próprio README ou em uma ferramenta como Swagger).
-
-## 🔥 Desafios Extras (Opcional)
-
-Se quiser ir além, aqui estão algumas sugestões de funcionalidades extras:
-
-- **Autenticação**: Implemente um sistema de autenticação (JWT, OAuth, etc.).
-- **Relacionamentos entre entidades**: Adicione relacionamentos entre os anéis e seus portadores (Ex: um portador pode ter mais de um anel, ou um anel pode ter sido passado por diferentes portadores ao longo do tempo).
-- **Animações no Frontend**: Adicione animações ao carrossel ou à interface de criação de anéis.
-- **Responsividade Avançada**: Certifique-se de que o carrossel e todas as funcionalidades são totalmente responsivas em diferentes dispositivos.
-
-## 🧙‍♂️ Dicas
-
-- Divida a lógica do backend em camadas (Controllers, Services, Models).
-- Utilize hooks e componentes funcionais no frontend para um código mais limpo.
-- Utilize **TypeScript** tanto no backend quanto no frontend para garantir tipagem estática.
-- Planeje a interface para ser intuitiva e simples de usar.
-
-## 🧭 Referências
-
-- [Documentação do Node.js](https://nodejs.org/en/docs/)
-- [Documentação do TypeScript](https://www.typescriptlang.org/docs/)
-- [Documentação do React](https://reactjs.org/docs/getting-started.html)
+- Implementar testes unitários para solidificar a qualidade do código.
+- Implementar desafios extras com relação de entidades.
 
 ---
 
-_May the Light of Eärendil guide you in this challenge!_
+Agradeço a oportunidade de participar deste desafio. Foi uma experiência enriquecedora que me permitiu demonstrar minhas habilidades e também aprender novas tecnologias. Estou ansioso para discutir mais sobre o projeto e minha abordagem.

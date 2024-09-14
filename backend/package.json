@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node dist/server.js",
     "dev": "tsx --env-file=.env --watch src/server.ts",
-    "build": "pnpm install --frozen-lockfile && npx tsc",
+    "build": "pnpm install && npx tsc",
     "seed": "tsx --env-file=.env src/runSeed.ts"
   },
   "keywords": [],
