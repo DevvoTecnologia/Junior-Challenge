@@ -23,7 +23,7 @@ export async function seedDatabase() {
       name: 'The One Ring',
       power: 'Domínio sobre todos os outros anéis',
       forgedBy: 'Sauron',
-      image: 'https://example.com/one-ring.jpg',
+      image: 'https://upload.wikimedia.org/wikipedia/commons/d/d4/One_Ring_Blender_Render.png',
       currentOwner: sauron,
     }),
   ];
