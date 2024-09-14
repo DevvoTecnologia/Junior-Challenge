@@ -10,35 +10,58 @@ interface AneisProps {
   imagem: string;
 }
 
-export function CriarEdicao() {
+type ForjadoPor = "elfos" | "anoes" | "homens" | "sauron";
+
+const CriarEdicao = () => {
   const [aneis, setAneis] = useState<AneisProps[]>([]);
+  const [forjadoPor, setForjadoPor] = useState<ForjadoPor | "">("");
+  const [error, setError] = useState<string | null>(null);
+  const [anelSelecionado, setAnelSelecionado] = useState<AneisProps | null>(
+    null
+  );
   const [showDropdown, setShowDropdown] = useState(false);
-  const [selectedAnel, setSelectedAnel] = useState<AneisProps | null>(null);
 
   const nomeRef = useRef<HTMLInputElement | null>(null);
   const poderRef = useRef<HTMLInputElement | null>(null);
   const portadorRef = useRef<HTMLInputElement | null>(null);
-  const forjadorRef = useRef<HTMLInputElement | null>(null);
   const imagemRef = useRef<HTMLInputElement | null>(null);
+  const [MensagemDeSucesso, setMensagemDeSucesso] = useState<string | null>(
+    null
+  );
 
   useEffect(() => {
     carregarAneis();
   }, []);
 
   useEffect(() => {
-    if (selectedAnel) {
-      // Atualiza os campos do formulário com os dados do anel selecionado
-      nomeRef.current!.value = selectedAnel.nome;
-      poderRef.current!.value = selectedAnel.poder;
-      portadorRef.current!.value = selectedAnel.portador;
-      forjadorRef.current!.value = selectedAnel.forjadoPor;
-      imagemRef.current!.value = selectedAnel.imagem;
+    if (anelSelecionado) {
+      nomeRef.current!.value = anelSelecionado.nome;
+      poderRef.current!.value = anelSelecionado.poder;
+      portadorRef.current!.value = anelSelecionado.portador;
+      setForjadoPor(anelSelecionado.forjadoPor as ForjadoPor);
+      imagemRef.current!.value = anelSelecionado.imagem;
     }
-  }, [selectedAnel]);
+  }, [anelSelecionado]);
 
   async function carregarAneis() {
-    const response = await api.get("/listaAneis");
-    setAneis(response.data);
+    try {
+      const response = await api.get("/listaAneis");
+      setAneis(response.data);
+    } catch (error) {
+      setError("Erro ao carregar anéis.");
+    }
+  }
+
+  async function obterQuantidadeExistente(forjadoPor: ForjadoPor) {
+    try {
+      const response = await api.get(`/aneis/count`, {
+        params: { forjadoPor },
+      });
+      return response.data.count;
+    } catch (error) {
+      setError("Erro ao verificar a quantidade de anéis.");
+      return 0;
+    }
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -48,44 +71,55 @@ export function CriarEdicao() {
       !nomeRef.current?.value ||
       !poderRef.current?.value ||
       !portadorRef.current?.value ||
-      !forjadorRef.current?.value ||
+      !forjadoPor ||
       !imagemRef.current?.value ||
-      !selectedAnel?.id
+      !anelSelecionado?.id
     ) {
+      setError("Todos os campos são obrigatórios.");
       return;
     }
 
-    const response = await api.put(`/aneis/${selectedAnel.id}`, {
-      nome: nomeRef.current?.value,
-      poder: poderRef.current?.value,
-      portador: portadorRef.current?.value,
-      forjadoPor: forjadorRef.current?.value,
-      imagem: imagemRef.current?.value,
-    });
+    const quantidadeExistente = await obterQuantidadeExistente(
+      forjadoPor as ForjadoPor
+    );
 
-    setAneis((todosAneis) => [...todosAneis, response.data]);
+    const limites: Record<ForjadoPor, number> = {
+      elfos: 3,
+      anoes: 7,
+      homens: 9,
+      sauron: 1,
+    };
 
-    // Limpa os campos após salvar
-    setSelectedAnel(null);
-    nomeRef.current.value = "";
-    poderRef.current.value = "";
-    portadorRef.current.value = "";
-    forjadorRef.current.value = "";
-    imagemRef.current.value = "";
-  }
+    if (quantidadeExistente >= limites[forjadoPor as ForjadoPor]) {
+      setError("Limite de anéis atingido para este forjador.");
+      return;
+    }
 
-  async function handleDelete(id: string) {
     try {
-      await api.delete("/aneis", {
-        params: {
-          id: id,
-        },
+      const response = await api.put(`/aneis/${anelSelecionado.id}`, {
+        nome: nomeRef.current?.value,
+        poder: poderRef.current?.value,
+        portador: portadorRef.current?.value,
+        forjadoPor: forjadoPor,
+        imagem: imagemRef.current?.value,
       });
 
-      const todosAneis = aneis.filter((anel) => anel.id !== id);
-      setAneis(todosAneis);
+      setAneis((todosAneis) =>
+        todosAneis.map((anel) =>
+          anel.id === anelSelecionado.id ? response.data : anel
+        )
+      );
+
+      setAnelSelecionado(null);
+      nomeRef.current!.value = "";
+      poderRef.current!.value = "";
+      portadorRef.current!.value = "";
+      imagemRef.current!.value = "";
+      setForjadoPor("");
+      setError(null);
+      setMensagemDeSucesso("Anél Atuzalizado!");
     } catch (error) {
-      console.log(error);
+      setError("Erro ao atualizar o anel.");
     }
   }
 
@@ -94,39 +128,57 @@ export function CriarEdicao() {
   };
 
   const handleAnelSelect = (anel: AneisProps) => {
-    setSelectedAnel(anel);
-    if (nomeRef.current) nomeRef.current.value = anel.nome;
-    if (poderRef.current) poderRef.current.value = anel.poder;
-    if (portadorRef.current) portadorRef.current.value = anel.portador;
-    if (forjadorRef.current) forjadorRef.current.value = anel.forjadoPor;
-    if (imagemRef.current) imagemRef.current.value = anel.imagem;
+    setAnelSelecionado(anel);
     setShowDropdown(false);
   };
 
   return (
-    <div className="w-full min-h-screen bg-gray-800 flex justify-center px-4">
-      <main className="my-10 w-full md:max-w-2xl">
-        <form className="flex flex-col my-6" onSubmit={handleSubmit}>
-          <div className="relative">
+    <div className="w-full min-h-screen bg-gradient-to-r from-gray-700 to-gray-900 flex justify-center items-center px-4 py-6">
+      <main className="w-full max-w-lg bg-gray-800 rounded-lg shadow-lg p-6">
+        <h1 className="text-3xl font-semibold text-white mb-6 text-center">
+          Edição de Anéis
+        </h1>
+        {error && <div className="text-red-400 mb-4 text-center">{error}</div>}
+        {MensagemDeSucesso && (
+          <div className="text-green-400 mb-4 text-center">
+            {MensagemDeSucesso}
+          </div>
+        )}
+        <form className="flex flex-col" onSubmit={handleSubmit}>
+          <div className="relative mb-5">
             <button
               type="button"
-              className="w-full mb-5 p-2 rounded bg-white border border-gray-300 text-black text-left flex items-center justify-between"
+              className="w-full p-3 rounded-lg bg-gray-700 border border-gray-600 text-white text-left flex items-center justify-between hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500"
               onClick={handleDropdownToggle}
             >
-              {selectedAnel ? selectedAnel.nome : "Selecione um anel"}
+              {anelSelecionado ? anelSelecionado.nome : "Selecione um anel"}
+              <svg
+                className="w-4 h-4 ml-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 9l-7 7-7-7"
+                ></path>
+              </svg>
             </button>
             {showDropdown && (
-              <ul className="absolute z-10 bg-white border border-gray-300 w-full max-h-60 overflow-auto">
+              <ul className="absolute z-10 bg-gray-700 border border-gray-600 w-full mt-1 rounded-lg max-h-60 overflow-auto shadow-lg">
                 {aneis.map((anel) => (
                   <li
                     key={anel.id}
                     onClick={() => handleAnelSelect(anel)}
-                    className="flex items-center p-2 cursor-pointer hover:bg-gray-100"
+                    className="flex items-center p-3 cursor-pointer hover:bg-gray-600"
                   >
                     <img
                       src={anel.imagem}
                       alt={anel.nome}
-                      className="w-10 h-10 object-cover mr-2"
+                      className="w-12 h-12 object-cover mr-3 rounded"
                     />
                     {anel.nome}
                   </li>
@@ -134,250 +186,66 @@ export function CriarEdicao() {
               </ul>
             )}
           </div>
-          <label className="font-medium text-white">Nome do Anel</label>
+          <label className="text-white font-medium mb-2">Nome do Anel</label>
           <input
             type="text"
             placeholder="Digite aqui o Nome do Anel"
-            className="w-full mb-5 p-2 rounded"
+            className="w-full mb-4 p-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
             ref={nomeRef}
           />
-          <label className="font-medium text-white">Poder Dele: </label>
+          <label className="text-white font-medium mb-2">Poder Dele:</label>
           <input
             type="text"
             placeholder="Digite aqui o Poder do Anel"
-            className="w-full mb-5 p-2 rounded"
+            className="w-full mb-4 p-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
             ref={poderRef}
           />
-          <label className="font-medium text-white">Portador do Anel</label>
+          <label className="text-white font-medium mb-2">
+            Portador do Anel
+          </label>
           <input
             type="text"
             placeholder="Digite aqui o Portador do Anel"
-            className="w-full mb-5 p-2 rounded"
+            className="w-full mb-4 p-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
             ref={portadorRef}
           />
-          <label className="font-medium text-white">Forjado Por:</label>
+          <label className="text-white font-medium mb-2">Forjado Por:</label>
+          <select
+            id="forjadoPor"
+            value={forjadoPor}
+            onChange={(e) => setForjadoPor(e.target.value as ForjadoPor)}
+            className="w-full mb-4 p-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
+          >
+            <option value="">Selecione uma opção</option>
+            <option value="elfos">Elfos</option>
+            <option value="anoes">Anões</option>
+            <option value="sauron">Sauron</option>
+            <option value="homens">Homens</option>
+          </select>
           <input
             type="text"
             placeholder="Digite aqui o Nome de quem forjou o Anel"
-            className="w-full mb-5 p-2 rounded bg-white"
-            ref={forjadorRef}
-            style={{ textTransform: "capitalize" }}
+            className="w-full mb-4 p-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 disabled:bg-gray-600"
+            value={forjadoPor}
             disabled
           />
-          <label className="font-medium text-white">Foto do Anel</label>
+          <label className="text-white font-medium mb-2">Foto do Anel</label>
           <input
             type="text"
             placeholder="Digite aqui o URL da Imagem do Anel"
-            className="w-full mb-5 p-2 rounded"
+            className="w-full mb-6 p-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500"
             ref={imagemRef}
           />
           <input
             type="submit"
             value={"Salvar Edição!"}
-            className="cursor-pointer w-full p-2 bg-green-500 rounded font-medium"
+            className="w-full p-3 rounded-lg bg-green-600 text-white font-semibold hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-500 cursor-pointer"
           />
         </form>
       </main>
     </div>
   );
-}
+};
 
-// import { useEffect, useState, useRef, FormEvent } from "react";
-// import { FiTrash } from "react-icons/fi";
-// import { api } from "../services/api";
+export default CriarEdicao;
 
-// interface AneisProps {
-//   id: string;
-//   nome: string;
-//   poder: string;
-//   portador: string;
-//   forjadoPor: string;
-//   imagem: string;
-// }
-
-// const CriarEdicao = () => {
-//   const [aneis, setAneis] = useState<AneisProps[]>([]);
-
-//   const nomeRef = useRef<HTMLInputElement | null>(null);
-//   const poderRef = useRef<HTMLInputElement | null>(null);
-//   const portadorRef = useRef<HTMLInputElement | null>(null);
-//   const forjadorRef = useRef<HTMLInputElement | null>(null);
-//   const imagemRef = useRef<HTMLInputElement | null>(null);
-
-//   const [forjadoPor, setForjadoPor] = useState<string>("");
-
-//   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-//     setForjadoPor(event.target.value);
-//   };
-
-//   useEffect(() => {
-//     carregarAneis();
-//   }, []);
-
-//   async function carregarAneis() {
-//     const response = await api.get("/listaAneis");
-//     setAneis(response.data);
-//   }
-
-//   async function handleSubmit(e: FormEvent) {
-//     e.preventDefault();
-
-//     if (
-//       !nomeRef.current?.value ||
-//       !poderRef.current?.value ||
-//       !portadorRef.current?.value ||
-//       !forjadorRef.current?.value ||
-//       !imagemRef.current?.value
-//     ) {
-//       return;
-//     }
-
-//     const response = await api.post("/aneis", {
-//       nome: nomeRef.current?.value,
-//       poder: poderRef.current?.value,
-//       portador: portadorRef.current?.value,
-//       forjadoPor: forjadorRef.current?.value,
-//       imagem: imagemRef.current?.value,
-//     });
-
-//     setAneis((todosAneis) => [...todosAneis, response.data]);
-
-//     nomeRef.current.value = "";
-//     poderRef.current.value = "";
-//     portadorRef.current.value = "";
-//     forjadorRef.current.value = "";
-//     imagemRef.current.value = "";
-//   }
-
-//   async function handleDelete(id: string) {
-//     try {
-//       await api.delete("/aneis", {
-//         params: {
-//           id: id,
-//         },
-//       });
-
-//       const todosAneis = aneis.filter((anel) => anel.id !== id);
-
-//       setAneis(todosAneis);
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
-//   return (
-//     <div className="w-full min-h-screen bg-gray-800 flex justify-center px-4">
-//       <main className="my-10 w-full md: max-w-2xl">
-//         <h1 className="text-4xl font-medium text-white">Aneis do Poder</h1>
-//         <select
-//           id="forjadoPor"
-//           value={forjadoPor}
-//           onChange={handleChange}
-//           className="w-full mb-5 p-2 rounded"
-//         >
-//           <option value="">Selecione uma opção</option>
-//           <option value="elfos">Elfos</option>
-//           <option value="anoes">Anões</option>
-//           <option value="sauron">Sauron</option>
-//           <option value="homens">Homens</option>
-//         </select>
-
-//         <form className="flex flex-col my-6" onSubmit={handleSubmit}>
-//           <label className="font-medium text-white">Nome do Anel</label>
-//           <input
-//             type="text"
-//             placeholder="Digite aqui o Nome do Anel"
-//             className="w-full mb-5 p-2 rounded"
-//             ref={nomeRef}
-//           />
-//           <label className="font-medium text-white">Poder Dele: </label>
-//           <input
-//             type="text"
-//             placeholder="Digite aqui o Poder do Anel"
-//             className="w-full mb-5 p-2 rounded"
-//             ref={poderRef}
-//           />
-
-//           <label className="font-medium text-white">Portador do Anel</label>
-//           <input
-//             type="text"
-//             placeholder="Digite aqui o Portador do Anel"
-//             className="w-full mb-5 p-2 rounded"
-//             ref={portadorRef}
-//           />
-
-//           <label className="font-medium text-white">Forjado Por:</label>
-//           <select
-//             id="forjadoPor"
-//             value={forjadoPor}
-//             onChange={handleChange}
-//             className="w-full mb-5 p-2 rounded"
-//           >
-//             <option value="">Selecione uma opção</option>
-//             <option value="elfos">Elfos</option>
-//             <option value="anoes">Anões</option>
-//             <option value="sauron">Sauron</option>
-//             <option value="homens">Homens</option>
-//           </select>
-//           <input
-//             type="text"
-//             placeholder="Digite aqui o Nome de quem forjou o Anel"
-//             className="w-full mb-5 p-2 rounded bg-white"
-//             ref={forjadorRef}
-//             value={forjadoPor}
-//             style={{ textTransform: "capitalize" }}
-//             disabled
-//           />
-
-//           <label className="font-medium text-white">Foto do Anel</label>
-//           <input
-//             type="text"
-//             placeholder="Digite aqui o Nome de quem forjou o Anel"
-//             className="w-full mb-5 p-2 rounded"
-//             ref={imagemRef}
-//           />
-//           <input
-//             type="submit"
-//             value={"EDITAR!"}
-//             className="cursor-pointer w-full p-2 bg-green-500 rounded font-medium"
-//           />
-//         </form>
-
-//         {/* <section className="flex flex-col gap-4">
-//           {aneis.map((anel) => (
-//             <article
-//               className="w-full bg-white rounded p-2 relative hover:scale-105 duration-200"
-//               key={anel.id}
-//             >
-//               <p>
-//                 <span className="font-medium"> Nome: </span> {anel.nome}
-//               </p>
-//               <p>
-//                 <span className="font-medium"> Poder: </span> {anel.poder}
-//               </p>
-//               <p>
-//                 <span className="font-medium"> Forjado Por: </span>
-//                 {anel.forjadoPor}
-//               </p>
-//               <p>
-//                 <span className="font-medium"> Portador: </span> {anel.portador}
-//               </p>
-//               <p>
-//                 <span className="font-medium">
-//                   <img src={anel.imagem} />
-//                 </span>
-//               </p>
-//               <button
-//                 className="bg-red-600 w-7 h-7 flex items-center justify-center rounded-lg absolute right-0 -top-2"
-//                 onClick={() => handleDelete(anel.id)}
-//               >
-//                 <FiTrash size={18} color="#FFF" />
-//               </button>
-//             </article>
-//           ))}
-//         </section> */}
-//       </main>
-//     </div>
-//   );
-// };
-
-// export default CriarEdicao;

@@ -1,4 +1,8 @@
-# Desafio Fullstack: Os Anéis de Poder
+
+
+
+
+<!-- # Desafio Fullstack: Os Anéis de Poder
 _One Challenge to rule them all, One Challenge to find them, One Challenge to bring them all, and in the darkness bind them_
 
 ## 💍 Contexto do Desafio
@@ -137,4 +141,78 @@ Se quiser ir além, aqui estão algumas sugestões de funcionalidades extras:
 
 ---
 
-_May the Light of Eärendil guide you in this challenge!_
+_May the Light of Eärendil guide you in this challenge!_ -->
+
+## Projeto Anéis do Poder 🔮
+ - Este projeto é uma aplicação para gerenciar anéis mágicos, permitindo a criação, visualização e edição dos  - anéis com informações detalhadas. O sistema é construído com as seguintes tecnologias:
+
+## Tecnologias Utilizadas 🛠️
+ - TypeScript: Para garantir a segurança e robustez do código tanto no backend quanto no frontend.
+ - MongoDB: Banco de dados NoSQL para armazenar informações dos anéis.
+ - Prisma: ORM para facilitar o gerenciamento e a consulta dos dados no MongoDB.
+ - Fastify: Framework rápido e eficiente para criar APIs no backend.
+ - React: Biblioteca para construir a interface do usuário no frontend.
+ - Node.js: Ambiente de execução para o backend.
+ - Tailwind CSS: Framework de CSS para estilização moderna e responsiva.
+
+ ## 🛠️ API
+A API é a parte central do sistema, responsável por gerenciar todas as operações relacionadas aos anéis mágicos. A seguir, você encontrará uma visão geral dos principais endpoints disponíveis.
+
+1. Endpoints de Anéis
+Obter Lista de Anéis: Este endpoint permite que você recupere uma lista de todos os anéis registrados no sistema. Ele fornece informações gerais sobre cada anel, como nome, poder, portador, forjador e imagem.
+
+Obter Detalhes de um Anel: Utilizando este endpoint, você pode buscar detalhes específicos de um anel, fornecendo seu ID. As informações retornadas incluem nome, poder, portador, forjador e imagem do anel.
+
+Criar um Novo Anel: Este endpoint é utilizado para adicionar um novo anel ao sistema. Você deve fornecer o nome, poder, portador, forjador e imagem do anel. Após a criação, o sistema retorna os dados do anel recém-criado.
+
+Atualizar um Anel: Com este endpoint, é possível atualizar as informações de um anel existente, fornecendo seu ID e os novos dados para nome, poder, portador, forjador e imagem.
+
+Excluir um Anel: Este endpoint remove um anel específico do sistema usando seu ID. Após a exclusão, uma mensagem de confirmação é retornada.
+
+2. Endpoints de Contagem
+Obter Contagem de Anéis por Forjador: Este endpoint permite verificar quantos anéis foram registrados para um tipo específico de forjador (elfos, anões, homens, ou Sauron). Ele ajuda a controlar o limite de anéis permitidos para cada forjador.
+
+## 🧪 Testes
+Para testar os endpoints da API, utilizei a ferramenta Postman. Essa ferramenta ajuda a garantir que todos os endpoints estejam funcionando conforme esperado.
+
+
+Configure o Ambiente:
+
+Crie um arquivo .env na pasta backend baseado no arquivo .env.example. Atualize com as configurações do MongoDB
+
+
+Sim, incluir uma seção sobre as telas do sistema é uma ótima ideia para fornecer uma visão completa sobre a interface do usuário. Vou criar uma seção de Telas para o README, detalhando as principais telas e suas funcionalidades:
+
+## 📱 Telas
+1. Tela de Criação de Anéis
+Nesta tela, os usuários podem adicionar novos anéis ao sistema. A interface inclui campos para inserir o nome do anel, seu poder, o portador, o forjador e o URL da imagem do anel. Há também um menu suspenso para selecionar o tipo de forjador (elfos, anões, homens, ou Sauron). Após preencher todos os campos obrigatórios, o usuário pode salvar o novo anel.
+
+Nome do Anel: Campo para inserir o nome do anel.
+Poder do Anel: Campo para descrever o poder do anel.
+Portador do Anel: Campo para especificar quem é o portador do anel.
+Forjado Por: Menu suspenso para selecionar o tipo de forjador.
+Nome de quem forjou o Anel: Campo que é automaticamente preenchido com base na seleção do menu suspenso.
+Foto do Anel: Campo para inserir o URL da imagem do anel.
+Botão de Salvar: Salva o novo anel no sistema.
+![](image-1.png)
+
+
+
+2. Tela de Edição de Anéis
+A tela de edição permite que os usuários atualizem as informações de um anel existente. Os campos são pré-preenchidos com os dados atuais do anel, e os usuários podem modificar qualquer informação antes de salvar as alterações.
+
+Seleção de Anel: Menu suspenso para selecionar o anel a ser editado.
+Campos de Edição: Campos preenchidos com os dados atuais do anel que podem ser alterados (nome, poder, portador, etc.).
+Botão de Salvar: Atualiza as informações do anel no sistema.
+3. Tela de Visualização de Anéis
+Esta tela exibe uma lista ou um carrossel com todos os anéis registrados. Cada item na lista mostra uma imagem do anel e suas informações básicas, como nome, poder, portador e forjador. A interface é interativa e pode incluir botões para editar ou excluir anéis.
+![](image.png)
+
+
+Carrossel de Anéis: Exibe todos os anéis em um formato visualmente atraente.
+Informações do Anel: Exibe o nome, poder, portador e forjador do anel.
+Botão de Excluir: Permite remover um anel da lista.
+Botão de Editar: Permite acessar a tela de edição para modificar as informações do anel.
+![](image-2.png)
+
+
