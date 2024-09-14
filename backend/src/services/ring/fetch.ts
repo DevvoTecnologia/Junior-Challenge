@@ -1,4 +1,4 @@
-import { RingRepository } from "@/repository/rings/repository"
+import { RingRepository } from "@/repositories/rings/ring-repository"
 
 export class FetchService {
     constructor(private ringRespository: RingRepository) { }

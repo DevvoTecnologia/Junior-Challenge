@@ -1,10 +1,12 @@
 import { Router } from 'express'
-import { RegisterRing } from '@/controllers/ring/register'
-import { FetchRing } from './controllers/ring/fetch'
+import { DeleteController, RegisterController, UpdaterController } from './controllers/ring'
+import { FetchController } from './controllers/ring/fetch'
 
 const routes = Router()
 
-routes.post("/rings", new RegisterRing().execute)
-routes.get("/rings/fetch", new FetchRing().execute)
+routes.get("/rings/fetch", new FetchController().execute)
+routes.post("/rings", new RegisterController().execute)
+routes.put("/rings/:ringId", new UpdaterController().execute)
+routes.delete("/rings/:ringId", new DeleteController().execute)
 
 export { routes }

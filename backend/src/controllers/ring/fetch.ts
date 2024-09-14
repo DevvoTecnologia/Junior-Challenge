@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { RingTypeORMRepository } from '@/repository/rings/typeorm'
+import { RingTypeORMRepository } from '@/repositories/rings/typeorm'
 import { FetchService } from '@/services/ring/fetch'
 
 export class FetchController {
@@ -11,9 +11,9 @@ export class FetchController {
 
       const { rings } = await service.execute()
 
-      return response.status(200).send({ rings });
+      return response.status(200).send({ rings })
     } catch (err) {
-      console.error(err)
+      return response.status(500).send({ message: "Internal server error." })
     }
   }
 }
