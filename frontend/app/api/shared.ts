@@ -7,7 +7,7 @@ class APIError extends Error {
   }
 }
 
-export const BASE_URL = `http://localhost:3000`;
+export const BASE_URL = `https://junior-challenge.onrender.com`;
 
 type parameters = {
   method: 'POST' | 'PUT';
