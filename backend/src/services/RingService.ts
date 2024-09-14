@@ -17,23 +17,32 @@ export class RingService {
 
   constructor(private ownerService: OwnerService) {}
 
+  private async validateRingLimit(forgedBy: Ring['forgedBy']): Promise<boolean> {
+    const count = await this.ringRepository.count({ where: { forgedBy } });
+    return count < RING_LIMITS[forgedBy];
+  }
+
+  private checkLimit = async (forgedBy) => {
+    const isRingLimitValid = await this.validateRingLimit(forgedBy);
+
+    if (!isRingLimitValid) {
+      const limit = RING_LIMITS[forgedBy];
+      const isPlural = limit > 1;
+      const ringText = `O limite de ${isPlural ? 'anéis' : 'anel'} para ${forgedBy} é ${limit}.`;
+      const instructionText = `Delete um anel forjado ${
+        isPlural ? 'deles' : 'dele'
+      } e tente novamente.`;
+
+      throw new ConflictError(ringText + ' ' + instructionText);
+    }
+  };
+
   async createRingWithOwner(
     ringData: Omit<Ring, 'id' | 'currentOwner'>,
     ownerData: Omit<Owner, 'id' | 'rings'>,
   ): Promise<Ring> {
     const { forgedBy } = ringData;
-    const isRingLimitValid = await this.validateRingLimit(forgedBy);
-
-    if (!isRingLimitValid) {
-      const limit = RING_LIMITS[forgedBy];
-      throw new ConflictError(
-        `O limite de ${
-          limit === 1 ? 'anel' : 'anéis'
-        } para ${forgedBy} é ${limit}. Delete um anel forjado dele${
-          limit === 1 ? '' : 's'
-        } e tente novamente.`,
-      );
-    }
+    await this.checkLimit(forgedBy);
 
     const owner = await this.ownerService.findOrCreateOwner(ownerData);
 
@@ -49,24 +58,38 @@ export class RingService {
     return this.ringRepository.find({ relations: ['currentOwner'] });
   }
 
-  async updateRing(ringId: number, ringData: Partial<Ring>): Promise<Ring> {
+  async updateRing(
+    ringId: number,
+    updatedRingData: Omit<Ring, 'id' | 'currentOwner'>,
+    updatedOwnerData: Omit<Owner, 'id' | 'rings'>,
+  ): Promise<Ring> {
+    const { forgedBy } = updatedRingData;
+    await this.checkLimit(forgedBy);
+
     const ring = await this.ringRepository.findOne({
       where: { id: ringId },
       relations: ['currentOwner'],
     });
 
     if (!ring) {
-      throw new NotFoundError(`Ring with id ${ringId} not found`);
+      throw new NotFoundError(`Anel não encontrado`);
     }
 
-    if (ringData.currentOwner && ringData.currentOwner.name !== ring.currentOwner.name) {
-      const newOwner = await this.ownerService.findOrCreateOwner(ringData.currentOwner);
+    const currentOwnerName = ring.currentOwner.name;
+    const currentOwnerID = ring.currentOwner.id;
+    const hasNewOwner = currentOwnerName !== updatedOwnerData.name;
+
+    if (hasNewOwner) {
+      const newOwner = await this.ownerService.findOrCreateOwner(updatedOwnerData);
       ring.currentOwner = newOwner;
     }
 
-    Object.assign(ring, ringData);
+    Object.assign(ring, updatedRingData);
 
-    return this.ringRepository.save(ring);
+    const updatedRing = await this.ringRepository.save(ring);
+    this.ownerService.checkAndDeleteOwner(currentOwnerID);
+
+    return updatedRing;
   }
 
   async deleteRing(ringId: number): Promise<void> {
@@ -76,15 +99,10 @@ export class RingService {
     });
 
     if (!ring) {
-      throw new NotFoundError(`Ring with id ${ringId} not found`);
+      throw new NotFoundError(`Anel não encontrado`);
     }
 
     await this.ringRepository.remove(ring);
     await this.ownerService.checkAndDeleteOwner(ring.currentOwner.id);
-  }
-
-  async validateRingLimit(forgedBy: Ring['forgedBy']): Promise<boolean> {
-    const count = await this.ringRepository.count({ where: { forgedBy } });
-    return count < RING_LIMITS[forgedBy];
   }
 }
