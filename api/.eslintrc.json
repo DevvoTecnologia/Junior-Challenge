@@ -27,7 +27,8 @@
         "endOfLine": "lf"
       }
     ],
-    "@typescript-eslint/no-useless-constructor": "warn"
+    "@typescript-eslint/no-useless-constructor": "warn", // Correção aqui
+    "@typescript-eslint/no-explicit-any": "off"
   },
   "settings": {
     "import/parsers": {
