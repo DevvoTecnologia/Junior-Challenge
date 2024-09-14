@@ -15,3 +15,18 @@
 .submitButton:hover {
   background-color: #e0dcdc;
 }
+
+.disabledButton {
+  background-color: #CBCBCB;
+  opacity: 60%;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  padding: 1rem;
+  font-size: 20px;
+  text-align: center;
+  cursor: not-allowed;
+  display: inline-block;
+  transition: background-color 0.3s;
+  margin-top: 1rem;
+}

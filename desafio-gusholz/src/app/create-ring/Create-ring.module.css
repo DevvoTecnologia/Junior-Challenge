@@ -39,7 +39,7 @@
   background-color: #575757;
   gap: 15px;
   padding: 2rem;
-  max-width: fit-content;
+  max-width: 40rem;
   border-radius: 0% 5%;
 }
 
@@ -86,4 +86,24 @@
 
 .selectedImage {
   border: 5px solid #f1efef;
+}
+
+.ringContainer {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ringName {
+  color: #f1efef;
+}
+
+.ringDisplay {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  color: #f1efef;
+  margin: 0;
 }

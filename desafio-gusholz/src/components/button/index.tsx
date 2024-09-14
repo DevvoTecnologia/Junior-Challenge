@@ -1,7 +1,12 @@
 import styles from "./button.module.css"
 
-export default function Button(props: { action: (e: React.FormEvent) => void, buttonText: string }) {
+export default function Button(props: { action: (e: React.FormEvent) => void, buttonText: string, condition: boolean }) {
   return (
-    <button onClick={props.action} type="submit" className={styles.submitButton}>{props.buttonText}</button>
+    <button
+      disabled={!props.condition}
+      onClick={props.action}
+      type="submit"
+      className={!props.condition ? styles.disabledButton : styles.submitButton}>{props.buttonText}
+    </button>
   )
 }
