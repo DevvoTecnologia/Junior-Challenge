@@ -1,23 +1,22 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
+import { Ring } from "../../App";
 import { Button } from "../Button";
 import { TextField } from "../TextField";
 
-export type Data = {
-  name: string;
-  power: string;
-  holder: string;
-  forgedBy: string;
-  image: string;
-};
-
 export type FormProps = {
-  initialValues?: Data;
-  onFormSubmit?: (data: Data) => void;
+  initialValues?: Ring | null;
+  handleSubmit?: (e: React.FormEvent) => void;
+  onDataChange?: (data: Ring) => void;
 };
 
-export const Form: FC<FormProps> = ({ initialValues, onFormSubmit }) => {
-  const [data, setData] = useState<Data>(
+export const Form: FC<FormProps> = ({
+  initialValues,
+  handleSubmit,
+  onDataChange,
+}) => {
+  const [data, setData] = useState<Ring>(
     initialValues || {
+      _id: "",
       name: "",
       power: "",
       holder: "",
@@ -26,18 +25,28 @@ export const Form: FC<FormProps> = ({ initialValues, onFormSubmit }) => {
     }
   );
 
-  const handleInput = (field: string, value: string) => {
-    setData((data) => ({
-      ...data,
-      [field]: value,
-    }));
-  };
+  useEffect(() => {
+    if (initialValues) {
+      setData(initialValues);
+    }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    return () => {
+      setData({
+        _id: "",
+        name: "",
+        power: "",
+        holder: "",
+        forgedBy: "",
+        image: "",
+      });
+    };
+  }, [initialValues]);
 
-    onFormSubmit?.(data);
-  };
+  useEffect(() => {
+    if (onDataChange) {
+      onDataChange(data);
+    }
+  }, [data, onDataChange]);
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit}>
@@ -46,44 +55,44 @@ export const Form: FC<FormProps> = ({ initialValues, onFormSubmit }) => {
         name="name"
         placeholder="Nome"
         label="Nome"
-        initialValue={initialValues?.name}
-        onInput={(value) => handleInput("name", value as string)}
+        value={data.name}
+        onChange={(e) => setData({ ...data, name: e.target.value })}
       />
       <TextField
         type="text"
         name="power"
         placeholder="Poder"
         label="Poder"
-        initialValue={initialValues?.power}
-        onInput={(value) => handleInput("power", value as string)}
+        value={data.power}
+        onChange={(e) => setData({ ...data, power: e.target.value })}
       />
       <TextField
         type="text"
         name="holder"
         placeholder="Portador"
         label="Portador"
-        initialValue={initialValues?.holder}
-        onInput={(value) => handleInput("holder", value as string)}
+        value={data.holder}
+        onChange={(e) => setData({ ...data, holder: e.target.value })}
       />
       <TextField
         type="text"
         name="forgedBy"
         placeholder="Forjado por"
         label="Forjado por"
-        initialValue={initialValues?.forgedBy}
-        onInput={(value) => handleInput("forgedBy", value as string)}
+        value={data.forgedBy}
+        onChange={(e) => setData({ ...data, forgedBy: e.target.value })}
       />
       <TextField
         type="text"
         name="image"
         placeholder="Imagem"
         label="Imagem"
-        initialValue={initialValues?.image}
-        onInput={(value) => handleInput("image", value as string)}
+        value={data.image}
+        onChange={(e) => setData({ ...data, image: e.target.value })}
       />
 
       <Button className="w-full" type="submit">
-        Criar
+        Eviar
       </Button>
     </form>
   );
