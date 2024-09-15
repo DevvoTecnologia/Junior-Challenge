@@ -1,7 +1,10 @@
+import {ReactNode} from "react";
+
+
 interface IButton {
     enable?: boolean,
     color: string,
-    label: string,
+    label: string | ReactNode,
     onClick: () => void,
     border?: boolean,
     textColor?: string,
@@ -22,7 +25,7 @@ export default function Button({
     return (
         <button
             disabled={!enable}
-            className={`py-1 px-4 rounded-lg text-lg shadow w-40 ${border ? "border-2" : ""} ${style}`}
+            className={`font-light text-sm py-3 px-6 rounded-lg shadow w-44 ${border ? "border-2" : ""} ${style}`}
             style={{backgroundColor: color, color: textColor}}
             onClick={onClick}
         >

@@ -12,6 +12,10 @@ export const MESSAGES = {
     code: "LIMIT_EXCEEDED",
     description: "A quantidade máxima de anéis desse forjador foi atingida"
   },
+  CREATION_USER_ERROR: {
+    code: 'CREATION_USER_ERROR',
+    message: 'Erro ao cadastrar usuário.'
+  },
   CREATION_ERROR: {
     code: "CREATION_ERROR",
     description: "Erro ao criar anel"

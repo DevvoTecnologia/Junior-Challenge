@@ -2,6 +2,37 @@
 
 Este é o frontend do projeto **Sistema de Gestão de Anéis**, desenvolvido utilizando **React** e **TypeScript**.
 
+## 📸 Imagens e Vídeos
+
+<div style="display: flex; justify-content: center; align-items: center; text-align: center;">
+  <table>
+    <tr>
+      <td><img src="/media/LoginPage.png" alt="Login" width="350"/></td>
+      <td><img src="/media/RegisterPage.png" alt="Cadastro" width="350"/></td>
+    </tr>
+    <tr>
+      <td><strong>Login</strong></td>
+      <td><strong>Cadastro</strong></td>
+    </tr>
+    <tr>
+      <td><img src="/media/DashBoardPage.png" alt="Dashboard" width="350"/></td>
+      video
+    </tr>
+    <tr>
+      <td><strong>Dashboard</strong></td>
+      <td><strong>Evento de Criação</strong></td>
+    </tr>
+    <tr>
+    video  <td><img src="/media/update.gif" alt="Update" width="350"/></td>
+    video  <td><img src="/media/delete.gif" alt="Delete" width="350"/></td>
+    </tr>
+    <tr>
+      <td><strong>Evento de Editar com Listagem de Ex-Donos do Anel</strong></td>
+      <td><strong>Evento de Deletar Anel</strong></td>
+    </tr>
+  </table>
+</div>
+
 ## Funcionalidades
 
 - Cadastro de usuários
@@ -14,11 +45,12 @@ Este é o frontend do projeto **Sistema de Gestão de Anéis**, desenvolvido uti
 
 ## Tecnologias Utilizadas
 
-- **React**: Biblioteca JavaScript para construção de interfaces.
+- **React**: Biblioteca JavaScript para construção de interfaces com NextJS.
 - **TypeScript**: Superconjunto de JavaScript que adiciona tipagem estática.
 - **Axios**: Cliente HTTP para comunicação com o backend.
 - **React Router**: Gerenciamento de rotas.
 - **React-Slick**: Para carrosel do dashboard.
+- **React Toastify**: Para mensagens de aviso.
 - **JWT (JSON Web Tokens)**: Gerenciamento de autenticação e autorização.
 
 ## Instalação
@@ -29,16 +61,18 @@ Siga os passos abaixo para rodar o projeto localmente:
     ```bash
     npm install
 
-2. Configure as variáveis de ambiente: Crie um arquivo **.env.local** na raiz do projeto com base no arquivo _**.env.example.**_
+2. Configure as variáveis de ambiente: Crie um arquivo **.env.local** na raiz do projeto com base no arquivo
+   _**.env.example.**_
 
 
 3. Execute o projeto:
    ```bash
    npm run dev
-   
+
 O servidor será iniciado em http://localhost:3000
 
 ### Estrutura de Pastas
+
    ```bash
    src/
    ├── app/                            # Componentes reutilizáveis
@@ -55,6 +89,7 @@ O servidor será iniciado em http://localhost:3000
    ```
 
 ### Rotas Das Paginas:
+
 * **_/auth/signin_**: Página de login do sistema.
 * **_/auth/signup_**: Página de cadastro de novos usuários.
 * **_/dashboard_**: Página principal para visualização e gerenciamento dos anéis cadastrados.

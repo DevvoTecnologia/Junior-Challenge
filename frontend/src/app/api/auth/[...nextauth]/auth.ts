@@ -2,6 +2,7 @@ import { NextAuthOptions } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import Api from '../../../../services/api';
 import jwt from 'jsonwebtoken';
+import { SIGNIN_MESSAGES } from '@/utils/signin.msg';
 
 export const nextAuthOptions: NextAuthOptions = {
     providers: [
@@ -13,14 +14,17 @@ export const nextAuthOptions: NextAuthOptions = {
             },
             async authorize(credentials, _) {
                 const api = new Api();
-                console.log(credentials, 'authorization')
                 const response = await api.login({
                     //@ts-ignore
                     email: credentials?.email,
                     //@ts-ignore
                     senha: credentials?.senha,
 
-                });
+                }).catch(
+                    error => {
+                        throw new Error(error?.response?.data?.error || SIGNIN_MESSAGES.LOGIN_ERROR);
+                    }
+                );
                 const {authorization}: any = response.data;
                 const tokenDecoded: any = (jwt.decode(authorization));
                 return authorization && tokenDecoded ? {

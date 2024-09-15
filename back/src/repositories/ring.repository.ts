@@ -13,8 +13,8 @@ export class RingRepository extends Repository {
         return this.db.anel.findMany({ where: { userId } , include: {HistoricoPortador: true } },);
     }
 
-    async listarAneisPorForjador(forjadoPor: string): Promise<Array<Anel>> {
-        return this.db.anel.findMany({ where: { forjadoPor } });
+    async listarAneisPorForjador(forjadoPor: string, userId: string): Promise<Array<Anel>> {
+        return this.db.anel.findMany({ where: { forjadoPor, userId } });
     }
 
     async atualizarAnel(id: string, dto: AtualizarAnelDTO): Promise<Anel | null> {

@@ -2,7 +2,7 @@ import "dotenv/config";
 
 import express from "express";
 import authRoutes from "./routes/auth.routes";
-import portadorRoutes from "./routes/user.routes";
+import userRoutes from "./routes/user.routes";
 import ringRoutes from "./routes/ring.routes";
 const cors = require("cors");
 
@@ -18,7 +18,7 @@ app.use(
 
 // Rotas
 app.use(authRoutes);
-app.use(portadorRoutes);
+app.use(userRoutes);
 app.use(ringRoutes);
 
 const port = process.env.PORT || 3000;

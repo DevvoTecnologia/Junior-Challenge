@@ -20,7 +20,7 @@ export default function ModalMensagens({ mensagens, modalOpen, setModalOpen }: a
                         <p>Nenhuma mensagem recebida ainda.</p>
                     ) : (
                         mensagens.map((mensagem: string, index: number) => (
-                            <div key={index} className="mb-2 p-2 bg-gray-100 rounded">
+                            <div key={index} className="mb-2 p-2 bg-gray-100 rounded text-black">
                                 {mensagem}
                             </div>
                         ))

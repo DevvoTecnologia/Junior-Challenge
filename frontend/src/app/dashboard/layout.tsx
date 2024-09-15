@@ -6,7 +6,7 @@ export default async function DashboardLayout({children}: { children: React.Reac
     const user: any = await getServerSession(nextAuthOptions);
 
     if (!user) {
-        return <h2 className="w-full h-full py-52 text-center font-bold text-2xl">Não autorizado!<span
+        return <h2 className="w-full h-full py-52 text-center font-bold text-2xl text-white">Não autorizado!<span
             className="font-light"> Faça login para acessar.</span>
         </h2>;
     }

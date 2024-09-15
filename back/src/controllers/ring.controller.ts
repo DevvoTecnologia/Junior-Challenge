@@ -10,12 +10,13 @@ const validarDadosAnel = (dto: CriarAnelDTO) => {
 };
 
 export const criarAnel = async (req: Request, res: Response): Promise<void> => {
+    const dto: CriarAnelDTO = req.body;
     try {
-        const dto: CriarAnelDTO = req.body;
+
         if (!validarDadosAnel(dto)) {
             res.status(400).json({
-                error_code: MESSAGES.INVALID_DATA.code,
-                error_description: MESSAGES.INVALID_DATA.description,
+                code: MESSAGES.INVALID_DATA.code,
+                message: MESSAGES.INVALID_DATA.description,
             });
             return;
         }
@@ -25,26 +26,35 @@ export const criarAnel = async (req: Request, res: Response): Promise<void> => {
             data: anel
         });
     } catch (error) {
+        const ringService = new RingService();
+        const maxRings = ringService.getMaxRings(dto.forjadoPor);
+        const aneisExstentes = await ringService.listarAneisPorForjador(dto.forjadoPor, dto.userId);
+        if (aneisExstentes.length >= maxRings) {
+            res.status(500).json({
+                code: MESSAGES.ANEL_EXCEEDED_LIMIT.code,
+                message: MESSAGES.ANEL_EXCEEDED_LIMIT.description
+            });
+            return;
+        }
         console.error(error);
         res.status(500).json({
             code: MESSAGES.CREATION_ERROR.code,
             message: MESSAGES.CREATION_ERROR.description
-
         });
     }
 };
 
 export const listarAneis = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { portadorId } = req.body;
-        const aneis = await ringService.listarAneis(portadorId);
+        const { userId } = req.body;
+        const aneis = await ringService.listarAneis(userId);
         res.status(201).json({
             message: MESSAGES.ANEIS_LISTED.message,
             data: aneis
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: MESSAGES.LIST_ERROR.description });
+        res.status(500).json({ message: MESSAGES.LIST_ERROR.description });
     }
 };
 
@@ -56,8 +66,8 @@ export const atualizarAnel = async (req: Request, res: Response): Promise<void> 
         const anel = await ringService.atualizarAnel(id, dto);
         if (!anel) {
             res.status(404).json({
-                error_code: MESSAGES.ANEL_NOT_FOUND.code,
-                error_description: MESSAGES.ANEL_NOT_FOUND.description,
+                code: MESSAGES.ANEL_NOT_FOUND.code,
+                message: MESSAGES.ANEL_NOT_FOUND.description,
             });
             return;
         }
@@ -68,7 +78,7 @@ export const atualizarAnel = async (req: Request, res: Response): Promise<void> 
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: MESSAGES.UPDATE_ERROR.description });
+        res.status(500).json({ message: MESSAGES.UPDATE_ERROR.description });
     }
 };
 
@@ -83,7 +93,7 @@ export const deletarAnel = async (req: Request, res: Response): Promise<void> =>
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: MESSAGES.DELETE_ERROR.description });
+        res.status(500).json({ message: MESSAGES.DELETE_ERROR.description });
     }
 };
 

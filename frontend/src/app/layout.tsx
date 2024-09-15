@@ -1,11 +1,18 @@
 import type {Metadata} from "next";
-import {Inter} from "next/font/google";
+import {Poppins} from "next/font/google";
 import "./globals.css";
 import NextAuthSessionProvider from "@/providers/sessionProvider";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import ToastProvider from "@/providers/toastProvider";
+import React from "react";
 
-const inter = Inter({subsets: ["latin"]});
+const poppins = Poppins({
+    weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+    subsets: ['latin'],
+    variable: '--font-poppins'
+});
+
 
 export const metadata: Metadata = {
     title: "Create Next App",
@@ -20,7 +27,12 @@ export default function RootLayout({
     return (
         <NextAuthSessionProvider>
             <html lang="pt-br">
-            <body className={`${inter.className} flex flex-col justify-center items-center h-screen bg-gray-900`}>{children}</body>
+            <body
+                className={`${poppins.className} ${poppins.variable} flex flex-col font-poppins justify-center items-center h-screen bg-gray-900`}>
+            <ToastProvider>
+                {children}
+            </ToastProvider>
+            </body>
             </html>
         </NextAuthSessionProvider>
     );

@@ -1,5 +1,6 @@
 import { CriarAnelDTO, AtualizarAnelDTO, DeletarAnelDTO } from '../dtos/ring.dto';
 import { RingRepository } from '../repositories/ring.repository';
+import {MESSAGES} from "../utils/ring.messages";
 
 export class RingService {
     private ringRepository: RingRepository;
@@ -9,9 +10,9 @@ export class RingService {
     }
 
     async criarAnel(dto: CriarAnelDTO) {
-        const aneisExistentes = await this.ringRepository.listarAneisPorForjador(dto.forjadoPor);
+        const aneisExistentes = await this.ringRepository.listarAneisPorForjador(dto.forjadoPor, dto.userId);
         if (aneisExistentes.length >= this.getMaxRings(dto.forjadoPor)) {
-            throw new Error('LIMIT_EXCEEDED');
+            throw new Error(MESSAGES.ANEL_EXCEEDED_LIMIT.description);
         }
         return this.ringRepository.criarAnel(dto);
     }
@@ -19,7 +20,9 @@ export class RingService {
     async listarAneis(portadorId: string) {
         return this.ringRepository.listarAneis(portadorId);
     }
-
+    async listarAneisPorForjador(forjadoPor: string, userId: string) {
+        return this.ringRepository.listarAneisPorForjador(forjadoPor, userId);
+    }
     async atualizarAnel(id: string, dto: AtualizarAnelDTO) {
         return this.ringRepository.atualizarAnel(id, dto);
     }
@@ -28,7 +31,7 @@ export class RingService {
         return this.ringRepository.deletarAnel(dto.id);
     }
 
-    private getMaxRings(forjadoPor: string) {
+    getMaxRings(forjadoPor: string) {
         switch (forjadoPor) {
             case 'Elfos': return 3;
             case 'Anões': return 7;

@@ -11,7 +11,7 @@ export const criarUser = async (req: Request, res: Response): Promise<void> => {
         await userService.createCustomer(dto);
         res.status(201).json({ message: MESSAGES.USER_CREATED.message });
     } catch (error) {
-        res.status(500).json({ error: MESSAGES.CREATION_ERROR.description });
+        res.status(500).json({ error: MESSAGES.CREATION_USER_ERROR.message});
     }
 };
 
@@ -25,7 +25,6 @@ export const buscarTodosAneis = async (req: Request, res: Response): Promise<voi
             data: aneis
         });
     } catch (error) {
-        console.log(error);
         res.status(500).json({ error: MESSAGES.LIST_ERROR.description });
     }
 };
