@@ -4,6 +4,7 @@ import Api from '../../../../services/api';
 import jwt from 'jsonwebtoken';
 import { SIGNIN_MESSAGES } from '@/utils/signin.msg';
 
+
 export const nextAuthOptions: NextAuthOptions = {
     providers: [
         Credentials({

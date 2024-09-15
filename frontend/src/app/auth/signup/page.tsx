@@ -46,7 +46,6 @@ export default function SignUp() {
             toast(`${newMensagens}`, { type: "warning" });
             return;
         }
-
         setLoading(true);
         const res = await api.createUser({
             nome,

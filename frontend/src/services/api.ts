@@ -31,6 +31,7 @@ export default class Api {
     return await this.api.get("/anel");
   }
 
+
   async createUser(userData: CreateUser) {
     const res = await this.api.post("/signup", userData);
     return res;
