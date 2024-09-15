@@ -16,15 +16,21 @@ Este é o frontend do projeto **Sistema de Gestão de Anéis**, desenvolvido uti
     </tr>
     <tr>
       <td><img src="/media/DashBoardPage.png" alt="Dashboard" width="350"/></td>
-      <td>https://github.com/user-attachments/assets/c74d24d5-d090-4df3-a9a6-2c9d018f20de</td>
+      <td><video width="350" controls>
+          <source src="https://github.com/user-attachments/assets/c74d24d5-d090-4df3-a9a6-2c9d018f20de" type="video/mp4">
+        </video></td>
     </tr>
     <tr>
       <td><strong>Dashboard</strong></td>
       <td><strong>Evento de Criação</strong></td>
     </tr>
     <tr>
-    <td>https://github.com/user-attachments/assets/30320a38-72d7-458d-a0b0-8d7c15f00440</td>
-    <td>https://github.com/user-attachments/assets/f1a46b27-fd2e-41a1-946c-a6a1dcee1908</td>
+     <video width="350" controls>
+          <source src="https://github.com/user-attachments/assets/30320a38-72d7-458d-a0b0-8d7c15f00440" type="video/mp4">
+        </video>
+    <td><video width="350" controls>
+          <source src="https://github.com/user-attachments/assets/f1a46b27-fd2e-41a1-946c-a6a1dcee1908" type="video/mp4">
+        </video></td>
     </tr>
     <tr>
       <td><strong>Eventode Editar com Listagem de Ex-Donos do Anel</strong></td>
