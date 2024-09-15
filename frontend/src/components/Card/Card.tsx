@@ -44,10 +44,10 @@ export const Card: FC<CardProps> = ({
         </div>
 
         <div className="flex justify-between items-center gap-4">
-          <Button variant="edit" className="w-full" onClick={onEdit}>
+          <Button variant="ghost" className="w-full" onClick={onEdit}>
             <IconEdit /> Editar
           </Button>
-          <Button variant="delete" className="w-full" onClick={onDelete}>
+          <Button variant="ghost" className="w-full" onClick={onDelete}>
             <IconEraser /> Excluir
           </Button>
         </div>
