@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 
 export type ButtonProps = {
   icon?: React.ReactNode;
-  variant?: "primary" | "edit" | "delete";
+  variant?: "primary" | "ghost";
   disabled?: boolean;
   className?: string;
   onClick?: () => void;
@@ -19,8 +19,8 @@ export const Button: FC<ButtonProps> = ({
 }) => {
   const variantStyles = {
     primary: "bg-blue-500 text-white hover:bg-blue-600 active:bg-blue-700",
-    edit: "bg-yellow-500 text-white hover:bg-yellow-600 active:bg-yellow-700",
-    delete: "bg-red-500 text-white hover:bg-red-600 active:bg-red-700",
+    ghost:
+      "text-gray-400 border border-gray-600 hover:bg-gray-700 active:bg-gray-800",
   };
 
   const handleClick = () => {
