@@ -76,9 +76,7 @@ bash
 O servidor será iniciado em http://localhost:3000
 
 ### Estrutura de Pastas
-
-   
-bash
+   ```bash
    src/
    ├── app/                            # Componentes reutilizáveis
         ├── api/auth/[...nextauth]     # Autenticacao
@@ -91,6 +89,7 @@ bash
    ├── services/                       # Comunicação com a API (Axios)
    ├── types/                          # Tipos TypeScript utilizados no projeto
    └── utils/                          # Funções utilitárias
+   ```
 
 
 ### Rotas Das Paginas:
