@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-enum ForgedBy {
+export enum ForgedBy {
   Elves = "Elves",
   Dwarves = "Dwarves",
   Men = "Men",
@@ -10,7 +10,7 @@ enum ForgedBy {
 export interface IRing extends Document {
   name: string;
   power: string;
-  holder: number;
+  holder: string;
   forgedBy: ForgedBy;
   image: string;
 }

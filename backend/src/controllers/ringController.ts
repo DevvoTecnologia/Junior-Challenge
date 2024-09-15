@@ -38,14 +38,6 @@ export const getRings = async (req: Request, res: Response) => {
 // update a ring
 export const UpdateRing = async (req: Request, res: Response) => {
   try {
-    const { name, power, holder, forgedBy, image } = req.body;
-
-    if (!name || !power || !holder || !forgedBy || !image) {
-      return res
-        .status(400)
-        .json({ message: "All fields are required to update the ring." });
-    }
-
     const updatedRing = await ringService.updateRing(req.params.id, req.body);
 
     if (!updatedRing) {
@@ -64,6 +56,10 @@ export const UpdateRing = async (req: Request, res: Response) => {
 export const deleteRing = async (req: Request, res: Response) => {
   try {
     const deletedRing = await ringService.deleteRing(req.params.id);
+
+    if (!deletedRing) {
+      return res.status(404).json({ message: "Ring not found." });
+    }
 
     res.status(200).json(deletedRing);
   } catch (error) {
