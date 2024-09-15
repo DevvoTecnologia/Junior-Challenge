@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { Button, Card, Form, Modal } from "./components";
 import { useModal, useRings } from "./hooks";
 
@@ -72,12 +73,21 @@ function App() {
         <div className="w-full min-h-[75vh]">
           <div className="grid grid-cols-1 md:grid-cols-2 px-4 lg:grid-cols-3 gap-4 max-w-7xl mx-auto">
             {data.map((ring) => (
-              <Card
+              <motion.div
                 key={ring._id}
-                {...ring}
-                onEdit={() => openModalForEdit(ring)}
-                onDelete={() => deleteRing(ring._id)}
-              />
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Card
+                  {...ring}
+                  onEdit={() => openModalForEdit(ring)}
+                  onDelete={() => deleteRing(ring._id)}
+                />
+              </motion.div>
             ))}
           </div>
         </div>
