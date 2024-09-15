@@ -7,3 +7,4 @@ docker-compose up
 dentro da basta do backend.
 
 Qualquer dúvida, estou a disposição. Obrigado pela oportunidade!
+
