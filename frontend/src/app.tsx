@@ -10,7 +10,9 @@ export function App() {
   return (
     <HelmetProvider>
       <Helmet titleTemplate="%s | desafio.ghm" />
+      
       <RouterProvider router={router} />
+
       <Toaster richColors />
     </HelmetProvider>
   )

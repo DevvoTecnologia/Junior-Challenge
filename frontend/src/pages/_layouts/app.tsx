@@ -1,13 +1,9 @@
-import { isAxiosError } from 'axios'
 import { Outlet } from 'react-router-dom'
-
-import { Header } from '@/components/header'
 
 export function AppLayout() {
   return (
-    <div className="flex min-h-screen flex-col antialiased">
-      <Header />
-      <div className="flex flex-1 flex-col gap-4 p-8 pt-6">
+    <div className="bg-gray-100 flex min-h-screen flex-col antialiased py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
         <Outlet />
       </div>
     </div>
