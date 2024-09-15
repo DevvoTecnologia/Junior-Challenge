@@ -15,7 +15,9 @@ const SelectMock = {
 
 describe("<SelectField />", () => {
   it("should render label correctly", () => {
-    render(<SelectField {...SelectMock} />);
+    const onChange = vi.fn();
+
+    render(<SelectField {...SelectMock} onChange={onChange} />);
 
     const optionsElements = screen.getAllByRole("option");
 
