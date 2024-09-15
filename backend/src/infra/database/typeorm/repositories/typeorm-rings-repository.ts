@@ -1,6 +1,6 @@
 import { RingsRepository } from "@/application/protocols/database"
-import { Ring } from "@/infra/typeorm/models"
-import { typeOrm } from "@/infra/typeorm"
+import { Ring } from "@/infra/database/typeorm/models"
+import { typeOrm } from "@/infra/database/typeorm"
 
 export class RingTypeORMRepository implements RingsRepository {
   private ringRepository = typeOrm.getRepository(Ring)
@@ -10,6 +10,7 @@ export class RingTypeORMRepository implements RingsRepository {
       name: input.name,
       image: input.image,
       power: input.power,
+      proprietor: input.proprietor,
       forger: {
         id: input.forgerId
       }
@@ -38,7 +39,11 @@ export class RingTypeORMRepository implements RingsRepository {
   }
 
   async fetch(): RingsRepository.Fetch.Output {  
-    const rings = await this.ringRepository.find()
+    const rings = await this.ringRepository.find({
+      relations: {
+        forger: true
+      }
+    })
 
     const ringsCorrectReturnFormat = rings.map(item => ({
       ringId: item.id,
@@ -55,11 +60,35 @@ export class RingTypeORMRepository implements RingsRepository {
   }
 
   async update(input: RingsRepository.Update.Input): RingsRepository.Update.Output {
-    const ring = await this.ringRepository.findOneBy({ id: input.ringId }) as Ring
+    const ringProperties: Record<string, any> = {}
 
-    Object.assign(ring, input)
+    if (input.name) ringProperties.name = input.name
 
-    await this.ringRepository.save(ring)
+    if (input.name) ringProperties.name = input.name
+
+    if (input.power) ringProperties.power = input.power
+
+    if (input.proprietor) ringProperties.proprietor = input.proprietor
+
+    if (input.image) ringProperties.image = input.image
+
+    if (input.forgerId) ringProperties.forgerId = input.forgerId
+
+    const prevRing = await this.ringRepository.findOne({
+      where: {
+        id: input.ringId
+      },
+      relations: {
+        forger: true
+      }
+    })
+
+    const updatedRing = await this.ringRepository.save({
+      id: input.ringId,
+      updatedAt: new Date(),
+      ...ringProperties
+    })
+    const ring = Object.assign(prevRing || {}, updatedRing)
 
     const ringCorrectReturnFormat = {
       ringId: ring.id,
@@ -76,7 +105,14 @@ export class RingTypeORMRepository implements RingsRepository {
   }
 
   async findById(input: RingsRepository.FindById.Input): RingsRepository.FindById.Output {
-    const ring = await this.ringRepository.findOneBy({ id: input.ringId })
+    const ring = await this.ringRepository.findOne({
+      where: {
+        id: input.ringId,
+      },
+      relations: {
+        forger: true
+      }
+    })
 
     return ring ? {
       ringId: ring.id,

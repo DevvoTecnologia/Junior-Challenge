@@ -1,19 +1,20 @@
 import { ForgersRepository } from "@/application/protocols/database";
-import { typeOrm } from "@/infra/typeorm";
-import { Forger } from "@/infra/typeorm/models";
+import { typeOrm } from "@/infra/database/typeorm";
+import { Forger } from "@/infra/database/typeorm/models";
 
 export class ForgersTypeOrmRepository implements ForgersRepository {
-  private forgerRepository = typeOrm.getRepository(Forger)
+  private forgerRepository = typeOrm.getRepository<Forger>(Forger)
 
   async create(input: ForgersRepository.Create.Input): ForgersRepository.Create.Output {
     const forger = this.forgerRepository.create({
       name: input.name,
       maxRings: input.maxRings,
+      rings: []
     })
 
     await this.forgerRepository.save(forger)
 
-    const ringCorrectReturnFormat = forger.rings.map(item => ({
+    const ringCorrectReturnFormat = forger.rings?.map(item => ({
       ringId: item.id,
       name: item.name,
       power: item.power,
@@ -28,7 +29,7 @@ export class ForgersTypeOrmRepository implements ForgersRepository {
       forgerId: forger.id,
       name: forger.name,
       maxRings: forger.maxRings,
-      rings: ringCorrectReturnFormat,
+      rings: ringCorrectReturnFormat || [],
       createdAt: forger.createdAt,
       updatedAt: forger.updatedAt
     }
@@ -37,15 +38,24 @@ export class ForgersTypeOrmRepository implements ForgersRepository {
   }
 
   async findById(input: ForgersRepository.FindById.Input): ForgersRepository.FindById.Output {
-      const forger = await this.forgerRepository.findOneBy({ id: input.forgerId }) as Forger
+      const forger = await this.forgerRepository.findOne({
+        where: {
+          id: input.forgerId
+        },
+        relations: {
+          rings: true
+        }
+      }) as Forger
 
-      const ringCorrectReturnFormat = forger.rings.map(item => ({
+      if (!forger) return null
+
+      const ringCorrectReturnFormat = forger.rings?.map(item => ({
         ringId: item.id,
         name: item.name,
         power: item.power,
         proprietor: item.proprietor,
         image: item.image,
-        forgerId: item.forger.id,
+        forgerId: forger.id,
         createdAt: item.createdAt,
         updatedAt: item.updatedAt
       }))
@@ -54,7 +64,7 @@ export class ForgersTypeOrmRepository implements ForgersRepository {
         forgerId: forger.id,
         name: forger.name,
         maxRings: forger.maxRings,
-        rings: ringCorrectReturnFormat,
+        rings: ringCorrectReturnFormat || [],
         createdAt: forger.createdAt,
         updatedAt: forger.updatedAt
       }
