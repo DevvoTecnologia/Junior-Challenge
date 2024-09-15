@@ -1,5 +1,8 @@
-import { Entity, PrimaryColumn, Column, BeforeInsert } from 'typeorm'
+// src/entities/Artifact.ts
+import { Entity, PrimaryColumn, Column, BeforeInsert, ManyToOne } from 'typeorm'
 import { nanoid } from 'nanoid'
+import { Character } from './Character'
+import { Smith } from './Smith'
 
 @Entity('artifacts')
 export class Artifact {
@@ -13,13 +16,21 @@ export class Artifact {
   power!: string
 
   @Column({ type: 'varchar', length: 255, nullable: true })
-  bearer?: string
+  imageUrl!: string
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ type: 'varchar', length: 21, nullable: true })
+  bearerId?: string
+
+  @ManyToOne(() => Character, (character) => character.artifacts, {
+    nullable: true,
+  })
+  bearer?: Character
+
+  @Column({ type: 'varchar', length: 21, nullable: true })
   forgedById?: string
 
-  @Column({ type: 'varchar', length: 255 })
-  imageUrl!: string
+  @ManyToOne(() => Smith, (smith) => smith.artifacts, { nullable: true })
+  forgedBy?: Smith
 
   @BeforeInsert()
   generateId() {

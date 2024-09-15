@@ -3,6 +3,6 @@ export interface ArtifactDTO {
   name: string
   power: string
   bearer?: string
-  forgedById?: string
+  forgedBy?: string
   imageUrl: string
 }
