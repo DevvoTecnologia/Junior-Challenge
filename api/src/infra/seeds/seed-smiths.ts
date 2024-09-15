@@ -1,7 +1,7 @@
-import { AppDataSource } from './data-source'
+import { AppDataSource } from '../data-source'
 import { nanoid } from 'nanoid'
 
-async function seed() {
+export async function seedSmiths() {
   const dataSource = AppDataSource
   await dataSource.initialize()
 
@@ -45,18 +45,12 @@ async function seed() {
     }
 
     await queryRunner.commitTransaction()
-    console.log('Smiths seed data inserted successfully!')
-  } catch (error) {
+    console.log('Dados dos Smiths inseridos com sucesso!')
+  } catch {
     await queryRunner.rollbackTransaction()
-    console.error('Error seeding data:', error)
+    console.error('Erro ao inserir dados dos Smiths')
   } finally {
     await queryRunner.release()
+    await dataSource.destroy()
   }
-
-  await dataSource.destroy()
 }
-
-seed().catch((error) => {
-  console.error('Error inserting data', error)
-  process.exit(1)
-})

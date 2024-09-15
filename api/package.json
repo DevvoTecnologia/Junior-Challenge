@@ -6,7 +6,7 @@
     "dev": "tsx watch src/main/server.ts",
     "migration:generate": "tsx src/utils/generate-migration.ts",
     "migration:run": "tsx ./node_modules/typeorm/cli -d ./src/infra/data-source.ts migration:run",
-    "seed": "tsx ./src/infra/seed.ts"
+    "seed": "tsx ./src/infra/seeds/seed.ts"
   },
   "dependencies": {
     "express": "^4.21.0",
