@@ -13,10 +13,10 @@ describe("<Button />", () => {
   });
 
   it("should render button with variant", () => {
-    render(<Button variant="edit">test</Button>);
+    render(<Button variant="ghost">test</Button>);
 
     expect(screen.getByRole("button", { name: "test" })).toHaveClass(
-      "bg-yellow-500 text-white hover:bg-yellow-600 active:bg-yellow-700"
+      "text-gray-400 border border-gray-600 hover:bg-gray-700 active:bg-gray-800"
     );
   });
 
