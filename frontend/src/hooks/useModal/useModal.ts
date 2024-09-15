@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Ring } from "../App";
+import { Ring } from "../../App";
 
 export const useModal = () => {
   const [showModal, setShowModal] = useState(false);
