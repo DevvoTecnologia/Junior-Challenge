@@ -6,4 +6,5 @@ export interface ArtifactRepository {
   findAll(): Promise<ArtifactDTO[]>
   update(artifact: ArtifactDTO): Promise<void>
   delete(id: string): Promise<void>
+  countBySmithId(smithId: string): Promise<number>
 }

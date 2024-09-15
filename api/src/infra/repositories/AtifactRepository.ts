@@ -5,8 +5,9 @@ import { ArtifactDTO } from '@/application/dto/ArtifactDTO'
 import { Character } from '../entities/Character'
 import { Smith } from '../entities/Smith'
 import { NotFoundError } from '@/application/errors/NotFoundError'
+import { ArtifactRepository } from '@/application/contracts/artifactRepository'
 
-export class ArtifactTypeORMRepository {
+export class ArtifactTypeORMRepository implements ArtifactRepository {
   private ormRepository: Repository<Artifact>
   private characterRepository: Repository<Character>
   private smithRepository: Repository<Smith>
@@ -118,5 +119,14 @@ export class ArtifactTypeORMRepository {
     }
 
     await this.ormRepository.remove(artifact)
+  }
+
+  async countBySmithId(smithId: string): Promise<number> {
+    const count = await this.ormRepository
+      .createQueryBuilder('artifact')
+      .where('artifact.forgedById = :smithId', { smithId })
+      .getCount()
+
+    return count
   }
 }

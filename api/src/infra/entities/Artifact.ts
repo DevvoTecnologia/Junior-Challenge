@@ -1,4 +1,3 @@
-// src/entities/Artifact.ts
 import { Entity, PrimaryColumn, Column, BeforeInsert, ManyToOne } from 'typeorm'
 import { nanoid } from 'nanoid'
 import { Character } from './Character'

@@ -16,7 +16,7 @@ export class Smith {
   @Column({ type: 'int' })
   itemLimit!: number
 
-  @OneToMany(() => Artifact, (artifact) => artifact.forgedById)
+  @OneToMany(() => Artifact, (artifact) => artifact.forgedBy)
   artifacts!: Artifact[]
 
   @BeforeInsert()

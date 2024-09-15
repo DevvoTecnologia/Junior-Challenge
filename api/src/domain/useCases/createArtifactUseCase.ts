@@ -3,7 +3,7 @@ import { ArtifactDTO } from '@/application/dto/ArtifactDTO'
 export type CreateArtifactInput = {
   name: string
   power: string
-  forgedBy?: string
+  forgedBy: string
   bearer?: string
   imageUrl: string
 }
