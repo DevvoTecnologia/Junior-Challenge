@@ -32,6 +32,18 @@ describe("delete ring use case", () => {
         })).toBeDefined()
     })
 
+    it("should be able to call findById with the correct values", async () => {
+      const ringsRepositorySpy = vitest.spyOn(ringsRepository, 'findById')
+
+      await sut.execute({
+        ringId: 'ring-id',
+      })
+
+      expect(ringsRepositorySpy).toHaveBeenCalledWith({
+        ringId: 'ring-id',
+      })
+    })
+
     it("should be able to throw error if ring not exists", async () => {
       expect(() => sut.execute({
         ringId: 'ring-id-not-exists',

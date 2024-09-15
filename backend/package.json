@@ -9,7 +9,7 @@
       "test": "vitest",
       "test:coverage": "vitest run --coverage",
       "typeorm": "typeorm-ts-node-esm",
-      "migration:dev": "typeorm-ts-node-esm migration:run -- -d ./src/infra/typeorm/data-source.ts"
+      "migration:run": "typeorm-ts-node-esm migration:run -- -d ./src/infra/typeorm/data-source.ts"
    },
    "keywords": [],
    "author": "",
