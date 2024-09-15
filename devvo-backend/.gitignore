@@ -1,0 +1,18 @@
+# Ignorar arquivos de ambiente
+.env
+
+# Ignorar diretórios do Node.js
+node_modules/
+
+# Ignorar arquivos de build
+dist/
+
+# Ignorar logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignorar arquivos de sistema (Mac/Linux)
+.DS_Store
