@@ -17,7 +17,8 @@
     "@tabler/icons-react": "^3.16.0",
     "framer-motion": "^11.5.4",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-hot-toast": "^2.4.1"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.9.0",
