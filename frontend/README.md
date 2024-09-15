@@ -16,18 +16,18 @@ Este é o frontend do projeto **Sistema de Gestão de Anéis**, desenvolvido uti
     </tr>
     <tr>
       <td><img src="/media/DashBoardPage.png" alt="Dashboard" width="350"/></td>
-      video
+      <td>https://github.com/user-attachments/assets/c74d24d5-d090-4df3-a9a6-2c9d018f20de</td>
     </tr>
     <tr>
       <td><strong>Dashboard</strong></td>
       <td><strong>Evento de Criação</strong></td>
     </tr>
     <tr>
-    video  <td><img src="/media/update.gif" alt="Update" width="350"/></td>
-    video  <td><img src="/media/delete.gif" alt="Delete" width="350"/></td>
+    <td>https://github.com/user-attachments/assets/30320a38-72d7-458d-a0b0-8d7c15f00440</td>
+    <td>https://github.com/user-attachments/assets/f1a46b27-fd2e-41a1-946c-a6a1dcee1908</td>
     </tr>
     <tr>
-      <td><strong>Evento de Editar com Listagem de Ex-Donos do Anel</strong></td>
+      <td><strong>Eventode Editar com Listagem de Ex-Donos do Anel</strong></td>
       <td><strong>Evento de Deletar Anel</strong></td>
     </tr>
   </table>
@@ -41,6 +41,9 @@ Este é o frontend do projeto **Sistema de Gestão de Anéis**, desenvolvido uti
 - Criação de anéis por meio de modal
 - Atualização de anéis por meio de modal e deleção por botão
 - Atribuição de portadores aos anéis
+- Visualização da lista de ex-portadores.
+- Limite de Forjadores.
+- Tratamento de erros por meio de um toast
 - Interface amigável para interação com a API do backend
 
 ## Tecnologias Utilizadas
