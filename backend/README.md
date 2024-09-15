@@ -23,8 +23,8 @@ Este projeto é uma API para gerenciar anéis no universo da Terra Média. Ele f
 1. **Clone o repositório**
 
    ```bash
-   git clone https://github.com/seu-usuario/seu-repositorio.git
-   cd seu-repositorio
+   git clone https://github.com/EvandroCalado/Junior-Challenge/tree/desafio-evandro-calado
+   cd Junior-Challenge
    ```
 
 2. **Instale as dependências**
@@ -47,7 +47,7 @@ Este projeto é uma API para gerenciar anéis no universo da Terra Média. Ele f
 
    ```bash
    PORT=5000
-   MONGODB_URI=mongodb+srv://<seu-usuario>:<sua-senha>@cluster0.mongodb.net/rings?retryWrites=true&w=majority
+   MONGODB_URI=mongodb+srv://evandrocaladodasilva:RP3wiex3QMaaoh5Z@cluster0.ijv2o.mongodb.net/rings?retryWrites=true&w=majority&appName=Cluster0
    ```
 
    obs:  já deixei no projeto a MONGODB_URI, por se tratar de um projeto de challeger.
