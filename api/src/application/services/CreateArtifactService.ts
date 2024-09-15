@@ -7,14 +7,16 @@ import { ArtifactRepository } from '../contracts/artifactRepository'
 import { SmithRepository } from '../contracts/smithRepository'
 import { NotFoundError } from '../errors/NotFoundError'
 import { BusinessRuleViolationError } from '../errors/BusinessRuleViolationError'
+import { ImageGeneratorRepository } from '../contracts/imageGeneratorRepository'
+import { ImageCloudRepository } from '../contracts/imageCloudRepository'
 
 export class CreateArtifactService implements CreateArtifactUseCase {
   constructor(
     private readonly artifactRepository: ArtifactRepository,
     private readonly smithRepository: SmithRepository,
-  ) {
-    this.smithRepository = smithRepository
-  }
+    private readonly imageGeneratorRepository: ImageGeneratorRepository,
+    private readonly imageCloudRepository: ImageCloudRepository,
+  ) {}
 
   async execute(input: CreateArtifactInput) {
     const smith = await this.smithRepository.findById(input.forgedBy)
@@ -33,10 +35,17 @@ export class CreateArtifactService implements CreateArtifactUseCase {
       )
     }
 
+    const generatedImagePath = await this.imageGeneratorRepository.generate(
+      `A ring named ${input.name} with a power ${input.power}`,
+    )
+
+    const imageUrl =
+      await this.imageCloudRepository.uploadImage(generatedImagePath)
+
     const artifact = new Artifact(
       input.name,
       input.power,
-      input.imageUrl,
+      imageUrl,
       input.bearer,
       input.forgedBy,
     )

@@ -11,6 +11,10 @@ const envSchema = z.object({
   DB_USERNAME: z.string().default('gustavo'),
   DB_PASSWORD: z.string().default('1234'),
   DB_NAME: z.string().default('artifact-hub'),
+  CLOUD_NAME: z.string(),
+  CLOUD_API_KEY: z.string(),
+  CLOUD_API_SECRET: z.string(),
+  HUGGING_FACE_TOKEN: z.string(),
 })
 
 export const env = envSchema.parse(process.env)
