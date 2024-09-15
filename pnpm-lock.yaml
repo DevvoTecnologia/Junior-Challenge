@@ -45,6 +45,9 @@ importers:
       express:
         specifier: ^4.21.0
         version: 4.21.0
+      express-async-errors:
+        specifier: ^3.1.1
+        version: 3.1.1(express@4.21.0)
       nanoid:
         specifier: ^5.0.7
         version: 5.0.7
@@ -1909,6 +1912,11 @@ packages:
   execa@8.0.1:
     resolution: {integrity: sha512-VyhnebXciFV2DESc+p6B+y0LjSm0krU4OgJN44qFAhBY0TJ+1V61tYD2+wHusZ6F9n5K+vl8k0sTy7PEfV4qpg==}
     engines: {node: '>=16.17'}
+
+  express-async-errors@3.1.1:
+    resolution: {integrity: sha512-h6aK1da4tpqWSbyCa3FxB/V6Ehd4EEB15zyQq9qe75OZBp0krinNKuH4rAY+S/U/2I36vdLAUFSjQJ+TFmODng==}
+    peerDependencies:
+      express: ^4.16.2
 
   express@4.21.0:
     resolution: {integrity: sha512-VqcNGcj/Id5ZT1LZ/cfihi3ttTn+NJmkli2eZADigjq29qTlWi/hAQ43t/VLPq8+UX06FCEx3ByOYet6ZFblng==}
@@ -5272,6 +5280,10 @@ snapshots:
       onetime: 6.0.0
       signal-exit: 4.1.0
       strip-final-newline: 3.0.0
+
+  express-async-errors@3.1.1(express@4.21.0):
+    dependencies:
+      express: 4.21.0
 
   express@4.21.0:
     dependencies:

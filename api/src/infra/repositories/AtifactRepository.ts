@@ -4,6 +4,7 @@ import { Artifact } from '../entities/Artifact'
 import { ArtifactDTO } from '@/application/dto/ArtifactDTO'
 import { Character } from '../entities/Character'
 import { Smith } from '../entities/Smith'
+import { NotFoundError } from '@/application/errors/NotFoundError'
 
 export class ArtifactTypeORMRepository {
   private ormRepository: Repository<Artifact>
@@ -113,7 +114,7 @@ export class ArtifactTypeORMRepository {
     })
 
     if (!artifact) {
-      throw new Error(`Artefato com id ${id} não encontrado`)
+      throw new NotFoundError('Artefato', id)
     }
 
     await this.ormRepository.remove(artifact)
