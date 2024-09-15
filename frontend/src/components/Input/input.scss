@@ -1,0 +1,27 @@
+input {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Para ocupar toda a largura disponível */
+
+  &::placeholder {
+    color: #888;
+  }
+
+  &:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  }
+
+  &:disabled {
+    background-color: #f5f5f5;
+    border-color: #e0e0e0;
+    color: #a0a0a0;
+    cursor: not-allowed;
+  }
+}

@@ -1,0 +1,53 @@
+@import '../../../styles/variables.scss';
+.home {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 20px;
+      h1 {
+        font-size: 2rem;
+        margin: 0;
+        text-align: center;
+      }
+    
+      .button-container {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+  
+      li {
+        margin-bottom: 10px;
+  
+        a {
+          text-decoration: none;
+          color: #007bff;
+          font-size: 1.2rem;
+          transition: color 0.3s;
+  
+          &:hover {
+            color: #0056b3;
+          }
+        }
+      }
+    }
+  
+    .placeholder {
+      text-align: center;
+      font-size: 1.2rem;
+      color: #666;
+    }
+  }
+  

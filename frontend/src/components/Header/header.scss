@@ -1,0 +1,38 @@
+@import '../../../styles/variables.scss';
+
+.header {
+    background-color: $header-background;
+    color: $header-text-color;
+    padding: 15px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+  
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+  
+      .header-icon {
+        font-size: 24px;
+        color: $primary-color;
+      }
+  
+      .title {
+        font-family: $font-family-heading;
+        font-size: 24px;
+        margin: 0;
+      }
+    }
+  }
+  
