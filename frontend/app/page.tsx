@@ -6,7 +6,7 @@ export default async function Home() {
   const rings = await getRings();
   return (
     <>
-      <div className={styles.container + ' container-fluid'}>
+      <div className={styles.container + ' container'}>
         <h1 className={styles.title}>Anéis no mundo</h1>
         <hr />
         {rings && rings.length > 0 && <RingsCarousel rings={rings} />}
