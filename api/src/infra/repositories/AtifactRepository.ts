@@ -2,12 +2,18 @@ import { Repository } from 'typeorm'
 import { AppDataSource } from '../data-source'
 import { Artifact } from '../entities/Artifact'
 import { ArtifactDTO } from '@/application/dto/ArtifactDTO'
+import { Character } from '../entities/Character'
+import { Smith } from '../entities/Smith'
 
 export class ArtifactTypeORMRepository {
   private ormRepository: Repository<Artifact>
+  private characterRepository: Repository<Character>
+  private smithRepository: Repository<Smith>
 
   constructor() {
     this.ormRepository = AppDataSource.getRepository(Artifact)
+    this.characterRepository = AppDataSource.getRepository(Character)
+    this.smithRepository = AppDataSource.getRepository(Smith)
   }
 
   async create(artifactDTO: ArtifactDTO): Promise<ArtifactDTO> {
@@ -64,5 +70,52 @@ export class ArtifactTypeORMRepository {
       bearer: artifact.bearer?.id || undefined,
       forgedBy: artifact.forgedBy?.id || undefined,
     }))
+  }
+
+  async update(artifactDTO: ArtifactDTO): Promise<void> {
+    const artifact = await this.ormRepository.findOne({
+      where: { id: artifactDTO.id },
+      relations: ['bearer', 'forgedBy'],
+    })
+
+    if (!artifact) {
+      throw new Error(`Artefato com id ${artifactDTO.id} não encontrado`)
+    }
+
+    if (artifactDTO.bearer) {
+      const bearer = await this.characterRepository.findOne({
+        where: { id: artifactDTO.bearer },
+      })
+      artifact.bearer = bearer || undefined
+    } else {
+      artifact.bearer = undefined
+    }
+
+    if (artifactDTO.forgedBy) {
+      const smith = await this.smithRepository.findOne({
+        where: { id: artifactDTO.forgedBy },
+      })
+      artifact.forgedBy = smith || undefined
+    } else {
+      artifact.forgedBy = undefined
+    }
+
+    artifact.name = artifactDTO.name
+    artifact.power = artifactDTO.power
+    artifact.imageUrl = artifactDTO.imageUrl
+
+    await this.ormRepository.save(artifact)
+  }
+
+  async delete(id: string): Promise<void> {
+    const artifact = await this.ormRepository.findOne({
+      where: { id },
+    })
+
+    if (!artifact) {
+      throw new Error(`Artefato com id ${id} não encontrado`)
+    }
+
+    await this.ormRepository.remove(artifact)
   }
 }
