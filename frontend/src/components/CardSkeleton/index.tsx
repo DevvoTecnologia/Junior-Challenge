@@ -1,7 +1,6 @@
-import { Skeleton } from "./ui/skeleton";
+import { Skeleton } from "../ui/skeleton";
 
 export function CardSkeleton() {
-
   return (
     <div className="relative bg-gray-400 rounded-3xl flex flex-col gap-6 justify-center items-center py-6 px-14 z-10 h-[355px]  text-center">
       <div className="absolute top-3 right-3">

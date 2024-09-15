@@ -2,21 +2,21 @@ import { deleteRing } from "@/api/delete-ring";
 import { queryClient } from "@/lib/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import { Button } from "./ui/button";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { Button } from "../ui/button";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 
 export const DeleteDialog = ({id}: {id: number}) => {
   const [open, setOpen] = useState(false)
 
   function updateRingsOnCache(id: number){
-    const listCache = queryClient.getQueriesData<GetOrdersResponse>({
+    const listCache = queryClient.getQueriesData<CompleteRing[]>({
       queryKey: ['rings'],
     })
     listCache.forEach(([cacheKey, cacheData]) => {
       if(!cacheData){
         return
       }
-        queryClient.setQueryData<GetOrdersResponse>(cacheKey, [
+        queryClient.setQueryData<CompleteRing[]>(cacheKey, [
           ...cacheData.filter(ring => {
             if(ring.ring_id !== id){
               return ring;
@@ -36,7 +36,7 @@ export const DeleteDialog = ({id}: {id: number}) => {
   return(
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-red-500 rounded-xl py-5 px-3 hover:bg-red-700 transition-colors duration-300">
+        <Button className="bg-red-500 rounded-xl py-5 px-3 hover:bg-red-700 transition-colors duration-300" data-testid="trashButton">
           <img src="/assets/trash.svg" alt="" className="w-4 h-4" />
         </Button>
       </DialogTrigger>

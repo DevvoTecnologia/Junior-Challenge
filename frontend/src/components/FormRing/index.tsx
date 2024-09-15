@@ -16,7 +16,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from "sonner";
 import { z } from 'zod';
-import { Form } from './ui/form';
+import { Form } from '../ui/form';
 
 const FormSchema = z.object({
   ring_name: z.string({
@@ -68,7 +68,7 @@ const FormRing = ({ring}: {ring?: CompleteRing}) => {
         carrier_id: String(ring?.carrier?.carrier_id),
       })
     }
-  },[ring, carriers, forgers])
+  },[ring, carriers, forgers, reset])
 
   const { mutateAsync: updateRingFn} = useMutation({
     mutationFn: updateRing,
@@ -115,72 +115,86 @@ const FormRing = ({ring}: {ring?: CompleteRing}) => {
     }
   }
 
+  const inputs = [
+    {
+      controled: false,
+      inputId: "ring_name",
+      label: "Nome",
+      placeholder: "Narya, o anel do fogo"
+    },
+    {
+      controled: false,
+      inputId: "ring_image",
+      label: "Imagem",
+      placeholder: "https://some-image.url.com"
+    },
+    {
+      controled: false,
+      inputId: "ring_power",
+      label: "Poder",
+      placeholder: "Seu portador ganha resistência ao fogo"
+    },
+    {
+      controled: true,
+      inputId: "forger_id",
+      label: "Forjador",
+      placeholder: "Selecione um forjador",
+      content: forgers?.map(forger => {
+        return <SelectItem key={forger.forger_id} value={String(forger.forger_id)} className='bg-white'>{forger.forger_name}</SelectItem>
+      })
+    },
+    {
+      controled: true,
+      inputId: "carrier_id",
+      label: "Portador",
+      placeholder: "Selectione um portador",
+      content: carriers?.map(carrier => {
+        return <SelectItem key={carrier.carrier_id} value={String(carrier?.carrier_id)} className='bg-white'>{carrier?.carrier_name}</SelectItem>
+      })
+    }
+  ]
+
   return (
     <Form {...form}>
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-10">
       <div className="flex gap-10">
         <div className="flex-col flex gap-3">
-          <FormItem>
-            <Label htmlFor="ring_name">Nome</Label>
-            <Input type="text" placeholder="Narya, o anel do fogo" id="ring_name" {...register("ring_name")} />
-            <FormMessage className="text-gray-700">{errors.ring_name && errors.ring_name?.message}</FormMessage>
-          </FormItem>
-          <FormItem>
-            <Label htmlFor="ring_image">Imagem</Label>
-            <Input type="text" placeholder="https://some-image.url.com" id="ring_image" {...register("ring_image")} />
-            <FormMessage className="text-gray-700">{errors.ring_image && errors.ring_image?.message}</FormMessage>
-          </FormItem>
-          <FormItem>
-            <Label htmlFor="ring_power">Poder</Label>
-            <Input type="text" placeholder="Seu portador ganha resistência ao fogo" id="ring_power" {...register("ring_power")} />
-            <FormMessage className="text-gray-700">{errors.ring_power && errors.ring_power?.message}</FormMessage>
-          </FormItem>
+          {inputs.filter(input => !input.controled).map(input => {
+            return (
+              <FormItem key={input.inputId}>
+                <Label htmlFor={input.inputId}>{input.label}</Label>
+                <Input type="text" placeholder={input.placeholder} id={input.inputId} {...register(input.inputId)} />
+                <FormMessage className="text-gray-700">{errors[input.inputId] && errors[input.inputId]?.message}</FormMessage>
+              </FormItem>
+            )
+          })}
         </div>
         <div className="flex-col flex gap-3">
-          <FormField
-            control={form.control}
-            name="forger_id"
-            render={({ field }) => (
-              <FormItem key={field.value}>
-                <FormLabel>Forjador</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione um forjador" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {forgers?.map(forger => {
-                      return <SelectItem key={forger.forger_id} value={String(forger.forger_id)} className='bg-white'>{forger.forger_name}</SelectItem>
-                    })}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-           <FormField
-            control={form.control}
-            name="carrier_id"
-            render={({ field }) => (
-              <FormItem key={field.value}>
-                <FormLabel>Portador</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selectione um portador" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                  {carriers?.map(carrier => {
-                      return <SelectItem key={carrier.carrier_id} value={String(carrier?.carrier_id)} className='bg-white'>{carrier?.carrier_name}</SelectItem>
-                    })}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {inputs.filter(input => input.controled).map(input => {
+            return (
+              <FormField
+              key={input.inputId}
+              control={form.control}
+              name={input.inputId}
+              render={({ field }) => (
+                <FormItem key={field.value}>
+                  <FormLabel>{input.label}</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder={input.placeholder} />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {input.content}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            )
+          })}
         </div>
       </div>
         <Button 

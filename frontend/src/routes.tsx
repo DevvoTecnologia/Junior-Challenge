@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+import { NotFound } from "./pages/404";
 import CreateRing from "./pages/app/CreateRing";
 import EditRing from "./pages/app/EditRing";
 import ListRings from "./pages/app/ListRings";
@@ -11,11 +12,11 @@ export const router = createBrowserRouter([
     children: [
       { path: "", element: <ListRings /> },
       { path: "/create", element: <CreateRing /> },
-      { path: ":id", element: <EditRing /> },
+      { path: "/edit/:id", element: <EditRing /> },
     ],
   },
-  // {
-  //   path: "*",
-  //   element: <NotFound/>
-  // }
+  {
+    path: "*",
+    element: <NotFound />
+  }
 ]);
