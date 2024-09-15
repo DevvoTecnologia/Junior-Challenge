@@ -1,7 +1,15 @@
 import { FC, useEffect, useState } from "react";
 import { Ring } from "../../App";
 import { Button } from "../Button";
+import { SelectField } from "../SelectField";
 import { TextField } from "../TextField";
+
+const options = [
+  { value: "Elves", label: "Elves" },
+  { value: "Dwarves", label: "Dwarves" },
+  { value: "Men", label: "Men" },
+  { value: "Sauron", label: "Sauron" },
+];
 
 export type FormProps = {
   initialValues?: Ring | null;
@@ -76,13 +84,12 @@ export const Form: FC<FormProps> = ({
         value={data.holder}
         onChange={(e) => setData({ ...data, holder: e.target.value })}
       />
-      <TextField
-        type="text"
+      <SelectField
         name="forgedBy"
-        placeholder="Forjado por"
         label="Forjado por"
         value={data.forgedBy}
         onChange={(e) => setData({ ...data, forgedBy: e.target.value })}
+        options={options}
       />
       <TextField
         type="text"
