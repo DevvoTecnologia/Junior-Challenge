@@ -1,0 +1,133 @@
+.Overlay {
+  background-color: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  inset: 0;
+  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.Content {
+  background-color: #2E2E2E;
+  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 10px 38px -10px, rgba(0, 0, 0, 0.1) 0px 10px 20px -15px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  max-width: 450px;
+  max-height: 85vh;
+  padding: 25px;
+  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  
+  &:focus {
+    outline: none;
+  }
+}
+
+.Button {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  padding: 0 15px;
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 500;
+  height: 35px;
+  cursor: pointer;
+
+  &:global(.green) {
+    background-color: #f5a623;
+    color: white;
+    
+    &:hover {
+      background-color: #059669;
+    }
+    
+    &:focus {
+      box-shadow: 0 0 0 2px #10b981;
+    }
+  }
+}
+
+.IconButton {
+  font-family: inherit;
+  height: 25px;
+  width: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #f5a623;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: #2E2E2E;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.Fieldset {
+  all: unset;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.Label {
+  font-size: 15px;
+  color: #f5a623;
+  font-weight: 600;
+}
+
+.Input {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  padding-left: 10px;
+  font-size: 15px;
+  line-height: 1;
+  color: #f5a623;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+  height: 35px;
+  
+  &:focus {
+    box-shadow: 0 0 0 2px #f5a623;
+  }
+}
+
+@keyframes overlayShow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.ContainerForm {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  margin-top: 50px;
+}

@@ -1,0 +1,19 @@
+meta {
+  name: UPDATE RING
+  type: http
+  seq: 4
+}
+
+put {
+  url: http://localhost:3000/rings/07b65534-d4f9-44fc-80df-632daa25d49e
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "power": "Testando",
+    "bearer": "Mestre dos Magos"
+  }
+  
+}

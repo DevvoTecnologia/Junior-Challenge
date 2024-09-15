@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "DESAFIO DEVVO",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

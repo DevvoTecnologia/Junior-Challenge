@@ -1,0 +1,15 @@
+services:
+  db-devvo:
+    image: postgres:16.3-alpine3.20
+    container_name: db-devvo
+    environment:
+      POSTGRES_DB: db-devvo
+      POSTGRES_USER: db-devvo
+      POSTGRES_PASSWORD: db-devvo
+    ports:
+      - 5432:5432
+    volumes:
+      - db-data-db-devvo:/var/lib/postgresql/data
+
+volumes:
+  db-data-db-devvo:

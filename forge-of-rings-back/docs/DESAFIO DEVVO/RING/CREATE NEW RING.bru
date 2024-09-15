@@ -1,0 +1,22 @@
+meta {
+  name: CREATE NEW RING
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3000/rings
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Teste",
+    "power": "Dominar todos os outros anéis de poder",
+    "bearer": "Sauron",
+    "forgedBy": "MEN",
+    "image": "https://example.com/images/anel-unico.png"
+  }
+  
+}

@@ -1,0 +1,139 @@
+.Container {
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.ContainerSlider {
+  margin: 10px;
+}
+
+.ContainerCard {
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  height: 420px;
+  background-color: #2E2E2E;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transform-origin: center;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.ContainerCardImage {
+  overflow: hidden;
+  border-radius: 4px 4px 0px 0px;
+
+  & img {
+    width: 100%;
+    height: 150px;
+    object-fit: fill;
+  }
+}
+
+.ContainerCardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Times New Roman', serif;
+  text-align: center;
+
+  & div:first-child {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 10px;
+  };
+
+  & div h3 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  };
+
+  & div span {
+    font-size: 1.2rem;
+    color: #C0C0C0;
+    font-style: italic;
+    font-weight: bold;
+  };
+
+  & div p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #DCDCDC;
+    word-break: break-all;
+  };
+
+  & input {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    padding-left: 10px;
+    font-size: 15px;
+    line-height: 1;
+    color: #FFF;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+    height: 35px;
+    width: 250px;
+
+    &:focus {
+      box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+.ContainerActions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+
+  & button {
+    width: 100px;
+    height: 40px;
+    border-radius: 4px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.3s ease;
+  }
+}
+
+.EditButton {
+  background-color: #4CAF50;
+
+  &:hover {
+    background-color: #45A049;
+  };
+
+  &:focus {
+    outline: 2px solid #2E7D32;
+  }
+}
+
+.RemoveButton {
+  background-color: #F44336;
+
+  &:hover {
+    background-color: #E53935;
+  };
+
+  &:focus {
+    outline: 2px solid #B71C1C;
+  }
+}
