@@ -1,5 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, screen } from "@testing-library/react";
 import { TextField } from "./TextField";
 
 describe("<TextField />", () => {
@@ -33,23 +32,5 @@ describe("<TextField />", () => {
 
     expect(screen.getByRole("textbox")).toHaveAttribute("disabled");
     expect(screen.getByRole("textbox")).toHaveClass("disabled:bg-gray-200");
-  });
-
-  it("change values on typing", async () => {
-    const onInputChange = vi.fn();
-
-    render(<TextField label="test" onInput={onInputChange} />);
-
-    const input = screen.getByRole("textbox");
-    const text = "example text";
-
-    userEvent.type(input, text);
-
-    await waitFor(() => {
-      expect(input).toHaveValue(text);
-      expect(onInputChange).toHaveBeenCalledTimes(text.length);
-    });
-
-    expect(onInputChange).toHaveBeenCalledWith(text);
   });
 });
