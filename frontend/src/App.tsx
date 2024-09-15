@@ -67,7 +67,7 @@ function App() {
           loading={loading}
         />
       </Modal>
-      <h1 className="text-5xl text-center px-4 py-8">Os Anéis de Poder</h1>
+      <h1 className="text-5xl text-center px-4 py-8">Os Anéis do Poder</h1>
 
       {data.length > 0 ? (
         <div className="w-full min-h-[75vh]">
