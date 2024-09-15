@@ -1,3 +1,3 @@
 export interface ImageGeneratorRepository {
-  generate(prompt: string): Promise<string>
+  generate(itemName: string, itemPower: string): Promise<string>
 }

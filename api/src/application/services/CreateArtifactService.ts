@@ -36,7 +36,8 @@ export class CreateArtifactService implements CreateArtifactUseCase {
     }
 
     const generatedImagePath = await this.imageGeneratorRepository.generate(
-      `A ring named ${input.name} with a power ${input.power}`,
+      input.name,
+      input.power,
     )
 
     const imageUrl =

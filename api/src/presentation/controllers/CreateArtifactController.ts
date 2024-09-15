@@ -6,7 +6,7 @@ export class CreateArtifactController implements Controller {
   constructor(private readonly createArtifact: CreateArtifactUseCase) {}
 
   async handle(req: HttpRequest): Promise<HttpResponse> {
-    await this.createArtifact.execute({
+    const artifact = await this.createArtifact.execute({
       name: req.body.name,
       imageUrl: req.body.imageUrl,
       power: req.body.power,
@@ -14,6 +14,6 @@ export class CreateArtifactController implements Controller {
       forgedBy: req.body.forgedBy,
     })
 
-    return ok()
+    return ok(artifact)
   }
 }
