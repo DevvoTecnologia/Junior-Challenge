@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne } from "typeorm"
+import { Forger } from "./forger"
 
 @Entity("rings")
 export class Ring {
@@ -14,20 +15,11 @@ export class Ring {
     @Column({ name: "proprietor", type: "text", nullable: false })
     proprietor: string
 
-    @Column({
-        name: "forgedBy",
-        type: "enum",
-        enum: [
-            "elf",
-            "dwarf",
-            "Man",
-            "sauron"
-        ]
-    })
-    forgedBy: string
-
     @Column({ name: "image", type: "text", nullable: false })
     image: string
+
+    @ManyToOne(() => Forger, (forger) => forger.rings)
+    forger: Forger
 
     @CreateDateColumn({
         name: "created_at",
