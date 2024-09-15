@@ -5,24 +5,25 @@ import request from 'supertest';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import fastify from 'fastify';
 import sequelize from '../../models';
+import { ringRoutes } from '../../routes/ringRoutes';
 
 let app: FastifyInstance;
 let id: string;
 
 beforeEach(async () => {
   app = fastify();
-  await Promise.all([
-    app.register(userRoutes),
-    app.setValidatorCompiler(validatorCompiler),
-    app.setSerializerCompiler(serializerCompiler),
-  ]);
+  app.setValidatorCompiler(validatorCompiler);
+  app.setSerializerCompiler(serializerCompiler);
+  app.register(userRoutes);
+  await app.register(ringRoutes, { prefix: '/rings' });
   await sequelize.authenticate();
-  await sequelize.sync();
+  await sequelize.sync({ force: true });
   await app.ready();
 });
 
 afterEach(async () => {
   vi.resetAllMocks();
+
   await app.close();
 });
 
@@ -31,14 +32,16 @@ const mockUser = {
   password: 'password123dasa',
   email: 'testRoutees@examplee.com',
   id: 'mock-id',
+  class: 'warrior',
 };
 
 describe('user routes', () => {
-  test('POST /register deve registrar um novo usuário', async () => {
+  test('POST /register deve registrar um novo usuário com classe', async () => {
     const newUser = {
       username: mockUser.username,
       email: mockUser.email,
       password: mockUser.password,
+      class: mockUser.class,
     };
     const userResponse = await request(app.server).post('/register').send(newUser);
 
@@ -47,6 +50,7 @@ describe('user routes', () => {
     expect(userResponse.body).toEqual({
       username: mockUser.username,
       email: mockUser.email,
+      class: mockUser.class,
       id: expect.any(String),
     });
     expect(userResponse.status).toBe(201);
@@ -57,12 +61,20 @@ describe('user routes', () => {
       username: 'testeuser',
       email: 'invalid-email',
       password: mockUser.password,
+      class: 'warrior',
     });
 
     expect(response.status).toBe(400);
   });
 
   test('POST /login deve logar um usuário', async () => {
+    await request(app.server).post('/register').send({
+      username: mockUser.username,
+      email: mockUser.email,
+      password: mockUser.password,
+      class: mockUser.class,
+    });
+
     const response = await request(app.server).post('/login').send({
       email: mockUser.email,
       password: mockUser.password,
@@ -75,15 +87,25 @@ describe('user routes', () => {
         id: expect.any(String),
         username: mockUser.username,
         email: mockUser.email,
+        class: mockUser.class,
       },
     });
   });
 
   test('DELETE /delete/:id deve deletar um usuário', async () => {
-    const response = await request(app.server).delete(`/delete/${id}`);
+    const userResponse = await request(app.server).post('/register').send({
+      username: mockUser.username,
+      email: mockUser.email,
+      password: mockUser.password,
+      class: mockUser.class,
+    });
 
+    const userId = userResponse.body.id;
+
+    const response = await request(app.server).delete(`/delete/${userId}`);
+
+    expect(response.status).toBe(204);
     expect(response.body).toEqual({});
-    expect(response.status).toBe(200);
   });
 
   test('DELETE /delete/:id deve retornar erro 404 para usuário inexistente', async () => {

@@ -15,10 +15,7 @@ export async function userRoutes(app: FastifyInstance) {
           username: z.string().min(3, 'Username must be at least 3 characters long'),
           email: z.string().email('Invalid email address'),
           password: z.string().min(6, 'Password must be at least 6 characters long'),
-          class: z
-            .string()
-            .min(3, 'Username must be at least 3 characters long')
-            .optional(),
+          class: z.string().min(3, 'Username must be at least 3 characters long'),
         }),
         response: {
           201: z.object({
@@ -47,7 +44,7 @@ export async function userRoutes(app: FastifyInstance) {
         description: 'This endpoint allows an existing user to login.',
         tags: ['Users'],
         body: z.object({
-          email: z.string().email('Invalid email address').optional(),
+          email: z.string().email('Invalid email address'),
           password: z.string().min(6, 'Password must be at least 6 characters long'),
         }),
         response: {
@@ -57,6 +54,7 @@ export async function userRoutes(app: FastifyInstance) {
               id: z.string().uuid(),
               username: z.string(),
               email: z.string(),
+              class: z.string(),
             }),
           }),
           400: z.object({

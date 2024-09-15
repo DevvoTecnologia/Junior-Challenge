@@ -26,6 +26,7 @@ describe('UserController', async () => {
     password: 'teste123',
     email: 'testController@example.com',
     id: 'mock-id',
+    class: 'mock-class',
   };
 
   describe('registerUser', () => {
@@ -38,30 +39,32 @@ describe('UserController', async () => {
           username: mockUser.username,
           email: mockUser.email,
           password: mockUser.password,
+          class: mockUser.class,
         },
       } as FastifyRequest<{
         Body: {
           username: string;
           password: string;
           email: string;
+          class: string;
         };
       }>;
 
       await registerUser(mockRequest, mockReply);
-
-      const hashedPassword = await hashPassword(mockUser.password);
 
       expect(getByUsername).toHaveBeenCalledWith(mockUser.username);
       expect(createUserService).toHaveBeenCalledWith({
         email: mockUser.email,
         password: mockUser.password,
         username: mockUser.username,
+        class: mockUser.class,
       });
       expect(mockReply.status).toHaveBeenCalledWith(201);
       expect(mockReply.send).toHaveBeenCalledWith({
         email: mockUser.email,
         id: mockUser.id,
         username: mockUser.username,
+        class: mockUser.class,
       });
     });
 
@@ -125,7 +128,7 @@ describe('UserController', async () => {
 
   describe('deleteUser', () => {
     it('should delete a user successfully', async () => {
-      const id = 'mock-id'; // Defina um ID de mock
+      const id = 'mock-id';
       (deleteUserService as Mock).mockResolvedValue(undefined);
 
       const mockRequest = {
@@ -137,12 +140,12 @@ describe('UserController', async () => {
       await deleteUser(mockRequest, mockReply);
 
       expect(deleteUserService).toHaveBeenCalledWith(id);
-      expect(mockReply.status).toHaveBeenCalledWith(200);
+      expect(mockReply.status).toHaveBeenCalledWith(204);
       expect(mockReply.send).toHaveBeenCalledWith();
     });
 
     it('should return 404 if user is not found', async () => {
-      const id = mockUser.id; // Defina um ID de mock
+      const id = mockUser.id;
       (deleteUserService as Mock).mockRejectedValue(new Error('User not found'));
 
       const mockRequest = {

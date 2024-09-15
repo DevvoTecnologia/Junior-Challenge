@@ -29,6 +29,7 @@ describe('User Service', () => {
     username: 'testuserService',
     email: 'test@example.com',
     password: 'password123',
+    class: 'class-mock',
   };
 
   beforeEach(() => {
@@ -48,6 +49,7 @@ describe('User Service', () => {
         username: mockUser.username,
         email: mockUser.email,
         password: hashedPassword,
+        class: mockUser.class,
       });
 
       const result = await createUserService(mockUser);
@@ -56,6 +58,7 @@ describe('User Service', () => {
         id: 'mock-id',
         username: mockUser.username,
         email: mockUser.email,
+        class: mockUser.class,
       });
     });
 
@@ -74,6 +77,7 @@ describe('User Service', () => {
         username: mockUser.username,
         email: mockUser.email,
         password: 'hashedpassword',
+        class: mockUser.class,
       });
       (comparePassword as Mock).mockResolvedValue(true);
 
@@ -87,6 +91,7 @@ describe('User Service', () => {
           email: mockUser.email,
           id: 'mock-id',
           username: mockUser.username,
+          class: mockUser.class,
         },
         token: undefined,
       });

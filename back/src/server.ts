@@ -13,6 +13,7 @@ import { env } from 'process';
 import sequelize from './models';
 import { getAllRings } from './controllers/ringController';
 import { getAllRingsService } from './services/ringService';
+import { errorHandler } from './error-handler';
 
 const port = env.PORT || 3000;
 
@@ -43,25 +44,13 @@ app.setSerializerCompiler(serializerCompiler);
 app.register(userRoutes);
 app.register(ringRoutes, { prefix: '/rings' });
 
-// app.register(sequelizeFastify, {
-//   instance: 'db',
-//   sequelizeOptions: {
-//     dialect: 'postgres',
-//     database: 'DB_NAME',
-//     username: 'DB_USER_NAME',
-//     password: 'DB_USER_PASSWORD',
-//     host: 'DB_HOST_OR_SERVER',
-//     port: 3000,
-//   },
-// });
+app.setErrorHandler(errorHandler);
 
 app.listen({ host: '0.0.0.0', port: Number(port) }, async (error: any) => {
   if (error) {
     console.error('Error starting server:', error);
     process.exit(1);
   }
-  // const rings = await getAllRingsService();
-  // console.log('rings:', rings);
 
   try {
     await sequelize.authenticate();

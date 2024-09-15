@@ -6,7 +6,8 @@ import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod
 import { generateToken } from '../../utils/authUtils';
 import sequelize from '../../models';
 import User from '../../models/user';
-import Ring from '../../models/ring'; // Certifique-se de que o modelo Ring está importado corretamente
+import Ring from '../../models/ring';
+import { userRoutes } from '../../routes/userRoutes';
 
 vi.mock('../services/ringService');
 
@@ -18,11 +19,15 @@ let userId: string;
 describe('Ring Routes', () => {
   beforeEach(async () => {
     app = fastify();
+
     app.setValidatorCompiler(validatorCompiler);
     app.setSerializerCompiler(serializerCompiler);
+
+    app.register(userRoutes);
+    await app.register(ringRoutes, { prefix: '/rings' });
+
     await sequelize.authenticate();
     await sequelize.sync({ force: true });
-    await app.register(ringRoutes, { prefix: '/rings' });
 
     await app.ready();
 
@@ -31,10 +36,11 @@ describe('Ring Routes', () => {
       username: 'testRingRoutes',
       password: 'password123',
       email: 'testRingRoutes@example.com',
+      class: 'someClass',
     };
-
     const user = await User.create(mockUser);
     userId = user.id;
+
     TOKEN = generateToken(userId);
 
     const mockRing = {
@@ -43,12 +49,13 @@ describe('Ring Routes', () => {
       bearer: userId,
       forgedBy: userId,
     };
-    const ring = await Ring.create(mockRing); // Cria o anel inicial no banco de dados
-    ringId = ring.id; // Atualiza ringId com o ID gerado
+    const ring = await Ring.create(mockRing);
+    ringId = ring.id;
   });
 
   afterEach(async () => {
     vi.resetAllMocks();
+
     await app.close();
   });
 
@@ -83,7 +90,7 @@ describe('Ring Routes', () => {
 
     it('should return 400 for invalid data', async () => {
       const invalidRing = {
-        name: '', // Nome inválido
+        name: '',
         power: 'Some power',
       };
 
@@ -142,6 +149,26 @@ describe('Ring Routes', () => {
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ error: 'Ring not found' });
     });
+
+    it('should return 403 if user is not authorized', async () => {
+      const mockRing = {
+        name: 'Other Ring',
+        power: 'Some Power',
+        bearer: userId,
+        forgedBy: 'other-user-id',
+      };
+      await Ring.create(mockRing);
+
+      const response = await request(app.server)
+        .put(`/rings/${ringId}`)
+        .set({ Authorization: `Bearer ${TOKEN}` })
+        .send({ name: 'Updated Ring', power: 'New Power' });
+
+      expect(response.status).toBe(403);
+      expect(response.body).toEqual({
+        error: 'Not authorized',
+      });
+    });
   });
 
   describe('GET /rings/:id', () => {
@@ -157,7 +184,7 @@ describe('Ring Routes', () => {
         power: 'Invisibility',
         bearer: userId,
         forgedBy: userId,
-        image: null, // Verifique se o valor padrão é nulo
+        image: null,
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
       });
@@ -169,7 +196,9 @@ describe('Ring Routes', () => {
         .set({ Authorization: `Bearer ${TOKEN}` });
 
       expect(response.status).toBe(404);
-      expect(response.body).toEqual({ error: 'Ring not found' });
+      expect(response.body).toEqual({
+        error: 'Ring not found',
+      });
     });
   });
 
@@ -188,7 +217,7 @@ describe('Ring Routes', () => {
             power: 'Invisibility',
             bearer: userId,
             forgedBy: userId,
-            image: null, // Verifique se o valor padrão é nulo
+            image: null,
           }),
         ])
       );

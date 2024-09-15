@@ -14,7 +14,7 @@ import {
   updateRingService,
   deleteRingService,
 } from '../../services/ringService';
-import { authenticate } from '../../middleware/authMiddleware';
+import { getById } from '../../services/userService';
 
 vi.mock('../../services/ringService', () => ({
   getRingService: vi.fn(),
@@ -22,21 +22,27 @@ vi.mock('../../services/ringService', () => ({
   createRingService: vi.fn(),
   updateRingService: vi.fn(),
   deleteRingService: vi.fn(),
+  getAllRingsByBearerId: vi.fn(),
 }));
 
 vi.mock('../../middleware/authMiddleware', () => ({
   authenticate: vi.fn(),
 }));
 
+vi.mock('../../services/userService', () => ({
+  getById: vi.fn(),
+}));
+
 interface RingParams {
-  ringId: string;
+  ringId: number;
 }
 
 interface CreateRingBody {
   name: string;
   power: string;
   bearer: string;
-  image?: string;
+  forgedBy: string;
+  image: string;
 }
 
 interface UpdateRingBody {
@@ -48,10 +54,19 @@ interface UpdateRingBody {
 describe('Ring Controller', () => {
   let reply: FastifyReply;
 
+  beforeEach(() => {
+    reply = {
+      status: vi.fn().mockReturnThis(),
+      send: vi.fn(),
+    } as FastifyReply;
+
+    vi.clearAllMocks();
+  });
+
   const createRequest = (
     params: RingParams,
     body: CreateRingBody | UpdateRingBody = {} as CreateRingBody | UpdateRingBody,
-    user?: { userId: string }
+    user: { userId: string; class: string }
   ): FastifyRequest<{
     Params: RingParams;
     Body: CreateRingBody | UpdateRingBody;
@@ -59,25 +74,20 @@ describe('Ring Controller', () => {
     ({
       params,
       body,
-      user: user || { userId: '550e8400-e29b-41d4-a716-446655440000' },
+      user,
+      query: {},
+      headers: {},
+      raw: {} as any,
     }) as FastifyRequest<{
-      Params: { ringId: string };
-      Body: { name: string; power: string; bearer: string; image?: string | undefined };
+      Params: RingParams;
+      Body: CreateRingBody | UpdateRingBody;
     }>;
-
-  beforeEach(() => {
-    reply = {
-      status: vi.fn().mockReturnThis(),
-      send: vi.fn(),
-    } as unknown as FastifyReply;
-
-    vi.clearAllMocks();
-  });
 
   describe('getRing', () => {
     it('should return a ring by ID', async () => {
-      const request = createRequest({ ringId: '1' });
-      const mockRing = { id: '1', name: 'Test Ring' };
+      const testUser = { userId: '550e8400-e29b-41d4-a716-446655440000', class: 'Elfo' };
+      const request = createRequest({ ringId: 1 }, {}, testUser);
+      const mockRing = { id: 1, name: 'Test Ring' };
       (getRingService as Mock).mockResolvedValue(mockRing);
 
       await getRing(request, reply);
@@ -87,7 +97,11 @@ describe('Ring Controller', () => {
     });
 
     it('should return 404 if ring not found', async () => {
-      const request = createRequest({ ringId: '1' });
+      const testUser = {
+        userId: '550e8400-e29b-41d4-a716-446655440001',
+        class: 'Humano',
+      };
+      const request = createRequest({ ringId: 1 }, {}, testUser);
       (getRingService as Mock).mockResolvedValue(null);
 
       await getRing(request, reply);
@@ -99,14 +113,12 @@ describe('Ring Controller', () => {
 
   describe('getAllRings', () => {
     it('should return all rings for authenticated user', async () => {
-      const request = createRequest(
-        { ringId: '1' },
-        {},
-        { userId: '550e8400-e29b-41d4-a716-446655440000' }
-      );
+      const testUser = { userId: '550e8400-e29b-41d4-a716-446655440002', class: 'Anão' };
+      const request = createRequest({ ringId: 1 }, {}, testUser);
+
       const mockRings = [
-        { id: '1', name: 'Ring 1', userId: '550e8400-e29b-41d4-a716-446655440000' },
-        { id: '2', name: 'Ring 2', userId: '550e8400-e29b-41d4-a716-446655440000' },
+        { id: 1, name: 'Ring 1', userId: testUser.userId },
+        { id: '2', name: 'Ring 2', userId: testUser.userId },
       ];
 
       (getAllRingsService as Mock).mockResolvedValue(mockRings);
@@ -118,8 +130,8 @@ describe('Ring Controller', () => {
     });
 
     it('should return 401 if user is not authenticated', async () => {
-      const request = createRequest({ ringId: '1' });
-      request.user = undefined;
+      const request = createRequest({ ringId: 1 }, {}, { userId: '', class: '' });
+      (request as any).user = undefined;
 
       await getAllRings(request, reply);
 
@@ -128,7 +140,9 @@ describe('Ring Controller', () => {
     });
 
     it('should return 500 on error', async () => {
-      const request = createRequest({ ringId: '1' });
+      const testUser = { userId: '550e8400-e29b-41d4-a716-446655440003', class: 'Orc' };
+      const request = createRequest({ ringId: 1 }, {}, testUser);
+
       (getAllRingsService as Mock).mockRejectedValue(new Error('Error'));
 
       await getAllRings(request, reply);
@@ -140,20 +154,29 @@ describe('Ring Controller', () => {
 
   describe('createRing', () => {
     it('should create a new ring', async () => {
+      const testUser = { userId: '550e8400-e29b-41d4-a716-446655440004', class: 'Elfo' };
       const request = createRequest(
-        { ringId: '1' },
+        { ringId: 1 },
         {
           name: 'Test Ring',
           power: 'Invisibility',
-          bearer: '550e8400-e29b-41d4-a716-446655440000',
-        }
+          bearer: testUser.userId,
+          forgedBy: testUser.userId,
+        },
+        testUser
       ) as FastifyRequest<{
-        Params: { ringId: string };
-        Body: { name: string; power: string; bearer: string; image?: string | undefined };
+        Body: {
+          name: string;
+          power: string;
+          bearer: string;
+          forgedBy: string;
+          image: string;
+        };
       }>;
 
-      const mockRing = { id: '1', name: 'Test Ring' };
+      const mockRing = { id: 1, name: 'Test Ring', class: 'Elfo' };
       (createRingService as Mock).mockResolvedValue(mockRing);
+      (getById as Mock).mockResolvedValue(testUser);
 
       await createRing(request, reply);
 
@@ -161,36 +184,34 @@ describe('Ring Controller', () => {
       expect(reply.send).toHaveBeenCalledWith(mockRing);
     });
 
-    it('should return 400 if token error', async () => {
-      const request = createRequest({ ringId: '1' }) as FastifyRequest<{
-        Params: { ringId: string };
-        Body: { name: string; power: string; bearer: string; image?: string | undefined };
-      }>;
-      request.user = undefined;
+    it('should return 401 if user is not authenticated', async () => {
+      const request = createRequest({ ringId: 1 }, {}, { userId: '', class: '' });
+      (request as any).user = undefined;
 
       await createRing(request, reply);
 
-      expect(reply.status).toHaveBeenCalledWith(400);
-      expect(reply.send).toHaveBeenCalledWith({ error: 'Token error' });
+      expect(reply.status).toHaveBeenCalledWith(401);
+      expect(reply.send).toHaveBeenCalledWith({ error: 'User not authenticated' });
     });
   });
 
   describe('updateRing', () => {
     it('should update a ring', async () => {
+      const testUser = {
+        userId: '550e8400-e29b-41d4-a716-446655440005',
+        class: 'Humano',
+      };
       const request = createRequest(
-        { ringId: '1' },
+        { ringId: 1 },
         {
           name: 'Updated Ring',
           power: 'Updated Power',
-          bearer: '550e8400-e29b-41d4-a716-446655440000',
+          bearer: testUser.userId,
         },
-        { userId: '550e8400-e29b-41d4-a716-446655440000' }
-      ) as FastifyRequest<{
-        Params: { ringId: string };
-        Body: { name: string; power: string; bearer: string; image?: string | undefined };
-      }>;
+        testUser
+      );
 
-      const mockRing = { id: '1', bearer: '550e8400-e29b-41d4-a716-446655440000' };
+      const mockRing = { id: 1, bearer: testUser.userId };
       (getRingService as Mock).mockResolvedValue(mockRing);
       (updateRingService as Mock).mockResolvedValue(mockRing);
 
@@ -201,10 +222,8 @@ describe('Ring Controller', () => {
     });
 
     it('should return 404 if ring not found', async () => {
-      const request = createRequest({ ringId: '1' }) as FastifyRequest<{
-        Params: { ringId: string };
-        Body: { name: string; power: string; bearer: string; image?: string | undefined };
-      }>;
+      const testUser = { userId: '550e8400-e29b-41d4-a716-446655440006', class: 'Anão' };
+      const request = createRequest({ ringId: 1 }, {}, testUser);
       (getRingService as Mock).mockResolvedValue(null);
 
       await updateRing(request, reply);
@@ -213,25 +232,29 @@ describe('Ring Controller', () => {
       expect(reply.send).toHaveBeenCalledWith({ error: 'Ring not found' });
     });
 
-    it('should return 401 if user is not authorized', async () => {
-      const request = createRequest({ ringId: '1' }) as FastifyRequest<{
-        Params: { ringId: string };
-        Body: { name: string; power: string; bearer: string; image?: string | undefined };
-      }>;
-      const mockRing = { id: '1', bearer: 'other-user' };
+    it('should return 403 if user is not authorized', async () => {
+      const testUser = { userId: '550e8400-e29b-41d4-a716-446655440007', class: 'Elfo' };
+      const request = createRequest({ ringId: 1 }, {}, testUser);
+      const mockRing = { id: 1, bearer: 'other-user' };
       (getRingService as Mock).mockResolvedValue(mockRing);
 
       await updateRing(request, reply);
 
-      expect(reply.status).toHaveBeenCalledWith(401);
-      expect(reply.send).toHaveBeenCalledWith({ error: 'Unauthorized' });
+      expect(reply.status).toHaveBeenCalledWith(403);
+      expect(reply.send).toHaveBeenCalledWith({
+        error: 'Forbidden: Unauthorized to perform this action',
+      });
     });
   });
 
   describe('deleteRing', () => {
     it('should delete a ring', async () => {
-      const request = createRequest({ ringId: '1' });
-      const mockRing = { id: '1', bearer: '550e8400-e29b-41d4-a716-446655440000' };
+      const testUser = {
+        userId: '550e8400-e29b-41d4-a716-446655440008',
+        class: 'Humano',
+      };
+      const request = createRequest({ ringId: 1 }, {}, testUser);
+      const mockRing = { id: 1, bearer: testUser.userId };
 
       (getRingService as Mock).mockResolvedValue(mockRing);
       (deleteRingService as Mock).mockResolvedValue(undefined);
@@ -243,7 +266,8 @@ describe('Ring Controller', () => {
     });
 
     it('should return 404 if ring not found', async () => {
-      const request = createRequest({ ringId: '1' });
+      const testUser = { userId: '550e8400-e29b-41d4-a716-446655440009', class: 'Anão' };
+      const request = createRequest({ ringId: 1 }, {}, testUser);
       (getRingService as Mock).mockResolvedValue(null);
 
       await deleteRing(request, reply);
@@ -252,16 +276,19 @@ describe('Ring Controller', () => {
       expect(reply.send).toHaveBeenCalledWith({ error: 'Ring not found' });
     });
 
-    it('should return 401 if user is not authorized', async () => {
-      const request = createRequest({ ringId: '1' });
-      const mockRing = { id: '1', bearer: 'other-user' };
+    it('should return 403 if user is not authorized', async () => {
+      const testUser = { userId: '550e8400-e29b-41d4-a716-446655440010', class: 'Elfo' };
+      const request = createRequest({ ringId: 1 }, {}, testUser);
+      const mockRing = { id: 1, bearer: 'other-user' };
 
       (getRingService as Mock).mockResolvedValue(mockRing);
 
       await deleteRing(request, reply);
 
-      expect(reply.status).toHaveBeenCalledWith(401);
-      expect(reply.send).toHaveBeenCalledWith({ error: 'Unauthorized' });
+      expect(reply.status).toHaveBeenCalledWith(403);
+      expect(reply.send).toHaveBeenCalledWith({
+        error: 'Forbidden: Unauthorized to perform this action',
+      });
     });
   });
 });

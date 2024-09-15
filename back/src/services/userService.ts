@@ -7,13 +7,15 @@ export const createUserService = async (newUser: {
   username: string;
   password: string;
   email: string;
-}): Promise<{ id: string; username: string; email: string }> => {
+  class: string;
+}): Promise<{ id: string; username: string; email: string; class?: string }> => {
   try {
     const hashedPassword = await hashPassword(newUser.password);
     const result = await User.create({
       username: newUser.username,
       email: newUser.email,
       password: hashedPassword,
+      class: newUser.class,
     });
 
     if (!result) {
@@ -23,6 +25,7 @@ export const createUserService = async (newUser: {
       id: result.id,
       username: result.username,
       email: result.email,
+      class: result.class,
     };
     return data;
   } catch (error) {
@@ -41,24 +44,12 @@ export const loginUserService = async (loginData: {
   const user = await getByEmail(loginData.email);
 
   if (!user) {
-    const error: FastifyError = {
-      statusCode: 404,
-      message: 'User not found',
-      name: 'NotFoundError',
-      code: 'USER_NOT_FOUND',
-    };
-    throw error;
+    throw new Error('User not found');
   }
 
   const isPasswordValid = await comparePassword(loginData.password, user.password);
   if (!isPasswordValid) {
-    const error: FastifyError = {
-      statusCode: 401,
-      message: 'Invalid password',
-      name: 'UnauthorizedError',
-      code: 'INVALID_PASSWORD',
-    };
-    throw error;
+    throw new Error('Invalid password');
   }
 
   const token = generateToken(user.id);
@@ -67,6 +58,7 @@ export const loginUserService = async (loginData: {
       email: user.email,
       username: user.username,
       id: user.id,
+      class: user.class,
     },
     token,
   };
@@ -93,15 +85,5 @@ export const getById = async (id: string) => {
 };
 
 export const deleteUserService = async (id: string) => {
-  const user = await User.findOne({ where: { id } });
-  if (!user) {
-    const error: FastifyError = {
-      statusCode: 404,
-      message: 'User not found',
-      name: 'NotFoundError',
-      code: 'NOT_FOUND',
-    };
-    throw error;
-  }
   return await User.destroy({ where: { id } });
 };

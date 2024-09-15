@@ -6,6 +6,7 @@ class User extends Model {
   declare username: string;
   declare email: string;
   declare password: string;
+  declare class: string;
   declare ringsWorn: string[];
 }
 
@@ -28,7 +29,7 @@ User.init(
     },
     class: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     password: {
       type: DataTypes.STRING,

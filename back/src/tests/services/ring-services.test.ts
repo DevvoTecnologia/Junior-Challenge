@@ -129,7 +129,7 @@ describe('Ring Service', () => {
       bearer: '6e6a460b-dd38-4cb5-b93d-103a7239149c',
     };
     (Ring.findOne as Mock).mockResolvedValue(mockRing);
-    (Ring.destroy as Mock).mockResolvedValue(1); // Sequelize returns the number of deleted rows
+    (Ring.destroy as Mock).mockResolvedValue(1);
 
     await deleteRingService(1, '6e6a460b-dd38-4cb5-b93d-103a7239149c');
 
@@ -171,7 +171,7 @@ describe('Ring Service', () => {
   it('should throw an error when getting a ring fails', async () => {
     (Ring.findOne as Mock).mockRejectedValue(new Error('Database error'));
 
-    await expect(getRingService(1)).rejects.toThrow('Database error occurred');
+    await expect(getRingService(1)).rejects.toThrow('Database error');
   });
 
   it('should get all rings', async () => {

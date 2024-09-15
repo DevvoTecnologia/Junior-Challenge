@@ -56,17 +56,25 @@ export const deleteRingService = async (id: number, bearerId: string) => {
 };
 
 export const getRingService = async (id: number) => {
-  try {
-    const ring = await Ring.findOne({ where: { id } });
-    if (!ring) {
-      throw new Error('Ring not found');
-    }
-    return ring;
-  } catch (error) {
-    throw new Error('Database error occurred');
+  const ring = await Ring.findOne({ where: { id } });
+
+  if (!ring) {
+    throw new Error('Ring not found');
   }
+
+  return ring;
 };
 
 export const getAllRingsService = async () => {
   return await Ring.findAll();
+};
+
+export const getAllRingsByBearerId = async (bearerId: string) => {
+  const rings = await Ring.findAll({
+    where: {
+      bearer: bearerId,
+    },
+  });
+
+  return rings;
 };

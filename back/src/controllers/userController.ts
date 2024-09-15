@@ -1,16 +1,14 @@
-// src/controllers/userController.ts
 import { FastifyRequest, FastifyReply } from 'fastify';
 import {
   createUserService,
   deleteUserService,
-  getById,
   getByUsername,
   loginUserService,
 } from '../services/userService';
 
 export const registerUser = async (
   request: FastifyRequest<{
-    Body: { username: string; password: string; email: string };
+    Body: { username: string; password: string; email: string; class: string };
   }>,
   reply: FastifyReply
 ) => {
@@ -21,7 +19,12 @@ export const registerUser = async (
       throw new Error('User already exists');
     }
     const user = await createUserService(data);
-    reply.status(201).send({ id: user.id, email: user.email, username: user.username });
+    reply.status(201).send({
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      class: user.class,
+    });
   } catch (error) {
     reply.status(500).send(error);
   }
@@ -56,7 +59,7 @@ export const deleteUser = async (
   }
   try {
     await deleteUserService(idUser);
-    reply.status(200).send();
+    reply.status(204).send();
   } catch (error) {
     reply.status(404).send(error);
   }
