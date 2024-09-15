@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: teste-devvo
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: teste-devvo
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - service-net
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=teste-devvo
+      - POSTGRES_HOST=postgres
+    depends_on:
+      - postgres
+    ports:
+      - "5000:5000"
+    networks:
+      - service-net
+
+volumes:
+  postgres_data:
+
+networks:
+  service-net:

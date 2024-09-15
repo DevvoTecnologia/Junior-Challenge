@@ -1,0 +1,167 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Sofadi+One&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  /* light mode */
+  /* :root {
+    --background: 0 0% 100%;
+    --foreground: 224 71.4% 4.1%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+    --primary: 220.9 39.3% 11%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 37, 59%, 27%;
+    --input: 37, 59%, 27%;
+    --ring: 224 71.4% 4.1%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+  } */
+
+  /* dark mode */
+  :root {
+    --background: 224 71.4% 4.1%;
+    --foreground: 210 20% 98%;
+    --card: 224 71.4% 4.1%;
+    --card-foreground: 210 20% 98%;
+    --popover: 224 71.4% 4.1%;
+    --popover-foreground: 210 20% 98%;
+    --primary: 210 20% 98%;
+    --primary-foreground: 220.9 39.3% 11%;
+    --secondary: 215 27.9% 16.9%;
+    --secondary-foreground: 210 20% 98%;
+    --muted: 215 27.9% 16.9%;
+    --muted-foreground: 217.9 10.6% 64.9%;
+    --accent: 215 27.9% 16.9%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+    --border: 42, 63%, 52%;
+    --input: 42, 63%, 52%;
+    --ring: 216 12.2% 83.9%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    font-family: "Poppins", sans-serif;
+    font-style: normal;
+
+    @apply bg-background text-foreground;
+  }
+}
+
+.bg-forest {
+  background: fixed url("/images/backgrounds/login-bg.png")
+    hsl(var(--background));
+
+  @apply bg-contain bg-center bg-no-repeat;
+}
+
+.bg-battle {
+  @apply bg-cover bg-fixed bg-[url(/images/backgrounds/bg.png)];
+}
+
+.gold-text {
+  color: transparent;
+  font-weight: bold;
+  background-clip: text;
+  background-image: radial-gradient(circle, #e2ab49 40%, #f5d769 80%);
+}
+
+.sofadi-font {
+  font-family: "Sofadi One", system-ui;
+  font-style: normal;
+}
+
+.cards-shadow {
+  box-shadow: rgba(210, 163, 55, 0.4) 0px 0px 0px 2px,
+    rgba(71, 71, 71, 0.65) 0px 4px 6px -1px;
+}
+
+.input {
+  @apply bg-background text-foreground text-base border-2 rounded-md border-white/40 p-1 focus:border-border outline-none placeholder:text-foreground/60;
+}
+
+.checkboxtoggler {
+  width: 3em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+  cursor: pointer;
+}
+
+.line-1 {
+  background: radial-gradient(circle, #e2ab49 40%, #f5d769 80%);
+  height: 0.3em;
+  border-radius: 10em;
+  transition-duration: 500ms;
+}
+
+.line-2 {
+  background: radial-gradient(circle, #e2ab49 40%, #f5d769 80%);
+  height: 0.3em;
+  border-radius: 10em;
+  transition-duration: 500ms;
+}
+
+.line-3 {
+  background: radial-gradient(circle, #e2ab49 40%, #f5d769 80%);
+  height: 0.3em;
+  border-radius: 10em;
+  transition-duration: 500ms;
+}
+
+#toggleChecker {
+  height: 3em;
+  width: 100%;
+  display: none;
+}
+
+#toggleChecker:checked + #togglerLable .checkboxtoggler .line-1 {
+  -webkit-transform: rotate(45deg) translateY(0.7em) translateX(0.7em);
+  -ms-transform: rotate(45deg) translateY(0.7em) translateX(0.7em);
+  transform: rotate(45deg) translateY(0.7em) translateX(0.7em);
+}
+
+#toggleChecker:checked + #togglerLable .checkboxtoggler .line-2 {
+  -webkit-transform: rotate(-45deg) translateY(0em) translateX(0.1em);
+  -ms-transform: rotate(-45deg) translateY(0em) translateX(0.1em);
+  transform: rotate(-45deg) translateY(0em) translateX(0.1em);
+}
+
+#toggleChecker:checked + #togglerLable .checkboxtoggler .line-3 {
+  transform: scaleX(0);
+  transform-origin: left;
+}

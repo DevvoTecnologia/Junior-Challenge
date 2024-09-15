@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Ring {
+  id        String        @id @default(uuid())
+  name      String
+  power     String
+  carrier   Carrier?      @relation(fields: [carrierId], references: [id])
+  carrierId String?
+  forgedBy  Forger
+  image     String        @default("url_da_imagem_padrao.jpg")
+  history   RingHistory[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@map("rings")
+}
+
+model Carrier {
+  id        String        @id @default(uuid())
+  name      String
+  rings     Ring[]
+  history   RingHistory[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@map("carriers")
+}
+
+model RingHistory {
+  id        String   @id @default(uuid())
+  carrier   Carrier  @relation(fields: [carrierId], references: [id])
+  carrierId String
+  ring      Ring     @relation(fields: [ringId], references: [id])
+  ringId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("ring_history")
+}
+
+enum Forger {
+  ELFO
+  ANAO
+  HOMEM
+  SAURON
+}
