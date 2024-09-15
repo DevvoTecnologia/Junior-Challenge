@@ -7,12 +7,14 @@ export type FormProps = {
   initialValues?: Ring | null;
   handleSubmit?: (e: React.FormEvent) => void;
   onDataChange?: (data: Ring) => void;
+  loading?: boolean;
 };
 
 export const Form: FC<FormProps> = ({
   initialValues,
   handleSubmit,
   onDataChange,
+  loading,
 }) => {
   const [data, setData] = useState<Ring>(
     initialValues || {
@@ -91,8 +93,8 @@ export const Form: FC<FormProps> = ({
         onChange={(e) => setData({ ...data, image: e.target.value })}
       />
 
-      <Button className="w-full" type="submit">
-        Eviar
+      <Button className="w-full" type="submit" disabled={loading}>
+        {loading ? "Salvando..." : "Salvar"}
       </Button>
     </form>
   );
