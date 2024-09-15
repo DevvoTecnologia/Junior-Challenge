@@ -2,6 +2,7 @@ import { deleteRing } from "@/api/delete-ring";
 import { queryClient } from "@/lib/react-query";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 
@@ -29,7 +30,11 @@ export const DeleteDialog = ({id}: {id: number}) => {
   const { mutateAsync: deleteRingFn} = useMutation({
     mutationFn: deleteRing,
     async onSuccess(_,id) {
+      toast.success("Anel deletado com sucesso!")
       updateRingsOnCache(id);
+    },
+    async onError(){
+      toast.error("Falha ao deletar anel!")
     }
   })
 
