@@ -35,6 +35,24 @@ A validação de formulários é realizada usando Zod, e conduzi uma abstração
 
 A integração com a API é feita através de funções específicas localizadas em `app/api/`, utilizando fetch para as requisições HTTP.
 
+## 🚀 Como inicializar o Projeto
+
+Siga estes passos para executar o projeto localmente:
+
+1. Instale as dependências:
+   ```
+   pnpm install
+   ```
+2. Execute o projeto em modo de desenvolvimento:
+
+   ```
+   pnpm run dev
+   ```
+
+3. Atualize a URL da API com o o endereço local do backend no arquivo `app/api/shared.ts`
+
+4. Acesse o projeto no navegador
+
 ## 🏁 Conclusão
 
 Este projeto demonstra uma implementação moderna de front-end, aproveitando as mais recentes tecnologias e práticas de desenvolvimento para criar uma aplicação performática, acessível e fácil de manter.
