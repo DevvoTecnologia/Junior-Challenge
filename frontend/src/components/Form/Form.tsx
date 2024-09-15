@@ -94,7 +94,7 @@ export const Form: FC<FormProps> = ({
       <TextField
         type="text"
         name="image"
-        placeholder="Imagem"
+        placeholder="Link da imagem"
         label="Imagem"
         value={data.image}
         onChange={(e) => setData({ ...data, image: e.target.value })}
