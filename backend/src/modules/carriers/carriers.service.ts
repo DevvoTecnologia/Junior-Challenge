@@ -23,7 +23,7 @@ export class CarriersService {
       throw new CustomException({
         errorCode: 'CARRIER NOT FOUND',
         errorDescription: 'carrier not found',
-        statusCode: 400,
+        statusCode: 404,
       });
     }
     return carrier;
@@ -36,31 +36,33 @@ export class CarriersService {
       throw new CustomException({
         errorCode: 'CARRIER NOT FOUND',
         errorDescription: 'carrier not found',
-        statusCode: 400,
+        statusCode: 404,
       });
     }
     return carrier;
   }
 
-  
-  async showACarrier(id: number): Promise<Carrier>{
+  async showACarrier(id: number): Promise<Carrier> {
     const carrier = await this.repository.showACarrier(id);
 
     if (!carrier) {
       throw new CustomException({
         errorCode: 'CARRIER NOT FOUND',
         errorDescription: 'CARRIER not found',
-        statusCode: 400,
+        statusCode: 404,
       });
     }
     return carrier;
   }
 
-  async listCarriers(): Promise<Carrier[]>{
+  async listCarriers(): Promise<Carrier[]> {
     return await this.repository.listCarriers();
   }
 
-  async updateACarrier(id: number, data: createCarrierDTO): Promise<{message: string}>{
+  async updateACarrier(
+    id: number,
+    data: createCarrierDTO,
+  ): Promise<{ message: string }> {
     const { carrier_name } = data;
 
     const carrier = await this.showACarrier(id);
@@ -82,7 +84,7 @@ export class CarriersService {
     }
   }
 
-  async deleteACarrier(id: number): Promise<{message: string}> {
+  async deleteACarrier(id: number): Promise<{ message: string }> {
     const carrier = await this.showACarrier(id);
 
     try {

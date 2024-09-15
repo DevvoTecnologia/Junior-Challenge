@@ -14,6 +14,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { toast } from "sonner";
 import { z } from 'zod';
 import { Form } from './ui/form';
 
@@ -53,9 +54,9 @@ const FormRing = ({ring}: {ring?: CompleteRing}) => {
       ring_name: ring.ring_name,
       ring_image: ring.ring_image,
       ring_power: ring.ring_power,
-    } : undefined,
+    } : {ring_image: "https://img.freepik.com/premium-vector/gold-wedding-ring-vector-illustration-flat-style_501907-1014.jpg?w=360"},
   })
-  const {handleSubmit, register, reset, formState: { errors, isSubmitting }} = form;
+  const {handleSubmit, register, reset, formState: { errors }} = form;
 
   useEffect(() => {
     if(ring){
@@ -72,35 +73,45 @@ const FormRing = ({ring}: {ring?: CompleteRing}) => {
   const { mutateAsync: updateRingFn} = useMutation({
     mutationFn: updateRing,
     async onSuccess() {
-      navigate('/');
+      toast.success("Anel atualizado com sucesso!")
+      await navigate('/');
     }
   })
 
   const { mutateAsync: createRingFn} = useMutation({
     mutationFn: createRing,
     async onSuccess() {
-      navigate('/');
+      toast.success("Anel criado com sucesso!")
+      await navigate('/');
     }
   })
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     if(ring){
-      updateRingFn({
-        id: ring.ring_id,
-        data: {
-          ...data,
-          forger_id: Number(data.forger_id),
-          carrier_id: data.carrier_id == "undefined" ? null : Number(data.carrier_id),
-        }
-      })
+      try{
+        updateRingFn({
+          id: ring.ring_id,
+          data: {
+            ...data,
+            forger_id: Number(data.forger_id),
+            carrier_id: data.carrier_id == "undefined" ? null : Number(data.carrier_id),
+          }
+        })
+      } catch (error) {
+        toast.error("Falha ao atualizar anel!")
+      }
     } else {
-      createRingFn({
-        data: {
-          ...data,
-          forger_id: Number(data.forger_id),
-          carrier_id: data.carrier_id == "undefined" ? null : Number(data.carrier_id),
-        }
-      })
+      try{
+        createRingFn({
+          data: {
+            ...data,
+            forger_id: Number(data.forger_id),
+            carrier_id: data.carrier_id == "undefined" ? null : Number(data.carrier_id),
+          }
+        })
+      } catch (error) {
+        toast.error("Falha ao criar anel!")
+      }
     }
   }
 
@@ -110,18 +121,18 @@ const FormRing = ({ring}: {ring?: CompleteRing}) => {
       <div className="flex gap-10">
         <div className="flex-col flex gap-3">
           <FormItem>
-            <Label htmlFor="ring_name">Ring Name</Label>
-            <Input type="text" placeholder="Ring Name" id="ring_name" {...register("ring_name")} />
+            <Label htmlFor="ring_name">Nome</Label>
+            <Input type="text" placeholder="Narya, o anel do fogo" id="ring_name" {...register("ring_name")} />
             <FormMessage className="text-gray-700">{errors.ring_name && errors.ring_name?.message}</FormMessage>
           </FormItem>
           <FormItem>
-            <Label htmlFor="ring_image">Ring Image</Label>
+            <Label htmlFor="ring_image">Imagem</Label>
             <Input type="text" placeholder="https://some-image.url.com" id="ring_image" {...register("ring_image")} />
             <FormMessage className="text-gray-700">{errors.ring_image && errors.ring_image?.message}</FormMessage>
           </FormItem>
           <FormItem>
-            <Label htmlFor="ring_power">Ring Power</Label>
-            <Input type="text" placeholder="This ring permit you teleport" id="ring_power" {...register("ring_power")} />
+            <Label htmlFor="ring_power">Poder</Label>
+            <Input type="text" placeholder="Seu portador ganha resistência ao fogo" id="ring_power" {...register("ring_power")} />
             <FormMessage className="text-gray-700">{errors.ring_power && errors.ring_power?.message}</FormMessage>
           </FormItem>
         </div>
@@ -131,16 +142,16 @@ const FormRing = ({ring}: {ring?: CompleteRing}) => {
             name="forger_id"
             render={({ field }) => (
               <FormItem key={field.value}>
-                <FormLabel>Forger</FormLabel>
+                <FormLabel>Forjador</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a Forger" />
+                      <SelectValue placeholder="Selecione um forjador" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                     {forgers?.map(forger => {
-                      return <SelectItem value={String(forger.forger_id)} className='bg-white'>{forger.forger_name}</SelectItem>
+                      return <SelectItem key={forger.forger_id} value={String(forger.forger_id)} className='bg-white'>{forger.forger_name}</SelectItem>
                     })}
                   </SelectContent>
                 </Select>
@@ -153,16 +164,16 @@ const FormRing = ({ring}: {ring?: CompleteRing}) => {
             name="carrier_id"
             render={({ field }) => (
               <FormItem key={field.value}>
-                <FormLabel>Carrier</FormLabel>
+                <FormLabel>Portador</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a Carrier" />
+                      <SelectValue placeholder="Selectione um portador" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
                   {carriers?.map(carrier => {
-                      return <SelectItem value={String(carrier?.carrier_id)} className='bg-white'>{carrier?.carrier_name}</SelectItem>
+                      return <SelectItem key={carrier.carrier_id} value={String(carrier?.carrier_id)} className='bg-white'>{carrier?.carrier_name}</SelectItem>
                     })}
                   </SelectContent>
                 </Select>
@@ -172,7 +183,12 @@ const FormRing = ({ring}: {ring?: CompleteRing}) => {
           />
         </div>
       </div>
-      <Button type="submit" disabled={isSubmitting} className="px-16 py-5 rounded-xl bg-gray-700 text-white hover:bg-gray-900 transition-colors duration-300">{ring ? 'ATUALIZAR' : 'CRIAR'}</Button>
+        <Button 
+          type="submit" 
+          className="px-16 py-5 rounded-xl bg-gray-700 text-white hover:bg-gray-900 transition-colors duration-300"
+        >
+          {ring ? 'SALVAR' : 'CRIAR'}
+        </Button>
     </form>
   </Form>
   )

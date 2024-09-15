@@ -1,4 +1,5 @@
 import { getRings } from "@/api/get-rings"
+import { CardSkeleton } from "@/components/cardSkeleton"
 import { PageTitle } from "@/components/pageTitle"
 import { Button } from "@/components/ui/button"
 import { useQuery } from "@tanstack/react-query"
@@ -12,8 +13,6 @@ function ListRings() {
     queryFn: getRings,
     queryKey: ['rings', 'list-rings']
   })
-
-  console.log('list: ', rings)
 
   return (
     <div className="h-screen w-full">
@@ -30,11 +29,11 @@ function ListRings() {
       <div className="w-full flex justify-center">
         <Carousel className="w-[270px] max-h-[200px] z-10" opts={{loop: false}}>
           <CarouselContent className="-ml-[50px]">
-            {rings?.map(ring => {
+            {rings ? rings?.map(ring => {
               return (
-                <CarouselItem className="pl-[50px]" ><RingCard ring={ring}/></CarouselItem>
+                <CarouselItem className="pl-[50px]" key={ring.ring_id}><RingCard ring={ring}/></CarouselItem>
               )
-            })}
+            }): <CarouselItem className="pl-[50px]"><CardSkeleton/></CarouselItem>}
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />

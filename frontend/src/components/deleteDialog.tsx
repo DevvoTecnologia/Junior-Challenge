@@ -30,13 +30,12 @@ export const DeleteDialog = ({id}: {id: number}) => {
     mutationFn: deleteRing,
     async onSuccess(_,id) {
       updateRingsOnCache(id);
-      // setOpen(false);
     }
   })
 
   return(
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Button className="bg-red-500 rounded-xl py-5 px-3 hover:bg-red-700 transition-colors duration-300">
           <img src="/assets/trash.svg" alt="" className="w-4 h-4" />
         </Button>

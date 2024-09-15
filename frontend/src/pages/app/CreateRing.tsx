@@ -20,7 +20,7 @@ function CreateRing() {
           >
             <img src="/assets/back_arrow.svg" alt="" className="w-4 h-4" />
           </Button>
-          <h1 className="text-2xl font-bold mb-6">Create a Ring</h1>
+          <h1 className="text-2xl font-bold mb-6">Criar anel</h1>
           <FormRing />
       </div>
       </div>

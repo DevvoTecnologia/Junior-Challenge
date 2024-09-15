@@ -31,7 +31,7 @@ export class RingsService {
       throw new CustomException({
         errorCode: 'MAX FORGE',
         errorDescription: 'This forger has already achieved his limit',
-        statusCode: 400,
+        statusCode: 409,
       });
     }
   }
@@ -55,7 +55,10 @@ export class RingsService {
     return await this.repository.createARing(dbRing);
   }
 
-  async updateARing(id: number, data: createRingDTO): Promise<{message: string}> {
+  async updateARing(
+    id: number,
+    data: createRingDTO,
+  ): Promise<{ message: string }> {
     const { forger_id, carrier_id, ring_image, ring_name, ring_power } = data;
 
     const ring = await this.showARing(id);
@@ -64,9 +67,10 @@ export class RingsService {
       carrier_id,
     });
 
+    console.log(forger, ring.forger);
     await this.checkMaxForge({
       forger,
-      condition: forger !== ring.forger,
+      condition: forger.forger_id !== ring.forger.forger_id,
     });
 
     ring.ring_image = ring_image;
@@ -101,13 +105,13 @@ export class RingsService {
       throw new CustomException({
         errorCode: 'RING NOT FOUND',
         errorDescription: 'Ring not found',
-        statusCode: 400,
+        statusCode: 404,
       });
     }
     return ring;
   }
 
-  async deleteARing(id: number): Promise<{message: string}> {
+  async deleteARing(id: number): Promise<{ message: string }> {
     const ring = await this.showARing(id);
 
     try {

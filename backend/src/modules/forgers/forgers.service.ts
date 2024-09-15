@@ -27,7 +27,7 @@ export class ForgersService {
       throw new CustomException({
         errorCode: 'FORGER NOT FOUND',
         errorDescription: 'forger not found',
-        statusCode: 400,
+        statusCode: 404,
       });
     }
     return forger;
@@ -40,30 +40,33 @@ export class ForgersService {
       throw new CustomException({
         errorCode: 'FORGER NOT FOUND',
         errorDescription: 'forger not found',
-        statusCode: 400,
+        statusCode: 404,
       });
     }
     return forger;
   }
 
-  async showAForger(id: number): Promise<Forger>{
+  async showAForger(id: number): Promise<Forger> {
     const forger = await this.repository.showAForger(id);
 
     if (!forger) {
       throw new CustomException({
         errorCode: 'FORGER NOT FOUND',
         errorDescription: 'FORGER not found',
-        statusCode: 400,
+        statusCode: 404,
       });
     }
     return forger;
   }
 
-  async listForgers(): Promise<Forger[]>{
+  async listForgers(): Promise<Forger[]> {
     return await this.repository.listForgers();
   }
 
-  async updateAForger(id: number, data: createForgerDTO): Promise<{message: string}>{
+  async updateAForger(
+    id: number,
+    data: createForgerDTO,
+  ): Promise<{ message: string }> {
     const { forger_max_forge, forger_name } = data;
 
     const forger = await this.showAForger(id);
@@ -86,7 +89,7 @@ export class ForgersService {
     }
   }
 
-  async deleteAForger(id: number): Promise<{message: string}>{
+  async deleteAForger(id: number): Promise<{ message: string }> {
     const forger = await this.showAForger(id);
 
     try {
