@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import { Button, Card, Form, Modal } from "./components";
+import { useModal, useRings } from "./hooks";
 
 export type Ring = {
   _id: string;
@@ -11,151 +11,29 @@ export type Ring = {
 };
 
 function App() {
-  const [data, setData] = useState<Ring[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [showModal, setShowModal] = useState(false);
-  const [initialValues, setInitialValues] = useState<Ring | null>(null);
-  const [currentValue, setCurrentValue] = useState<Ring | null>(null);
+  const { data, loading, error, createRing, updateRing, deleteRing } =
+    useRings();
+  const {
+    showModal,
+    initialValues,
+    currentValue,
+    setCurrentValue,
+    openModalForCreate,
+    openModalForEdit,
+    closeModal,
+  } = useModal();
 
-  const handleOnEdit = (ring: Ring) => {
-    setShowModal(true);
-    setInitialValues(ring);
-  };
-
-  const handleOnDelete = async (id: string) => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/rings/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to Delete data");
-      }
-
-      const DeletedRing = await response.json();
-
-      setData((prevData) =>
-        prevData.filter((ring) => ring._id !== DeletedRing._id)
-      );
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      }
-    } finally {
-      setLoading(false);
-      setShowModal(false);
-    }
-  };
-
-  const handleOnCreate = () => {
-    setInitialValues(null);
-    setShowModal(true);
-  };
-
-  const handleEditSubmit = async () => {
-    if (!currentValue) return;
-
-    try {
-      const response = await fetch(
-        `http://localhost:5000/api/rings/${currentValue?._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(currentValue),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to update data");
-      }
-
-      const updatedRing = await response.json();
-
-      setData((prevData) =>
-        prevData.map((ring) =>
-          ring._id === updatedRing._id ? updatedRing : ring
-        )
-      );
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      }
-    } finally {
-      setLoading(false);
-      setShowModal(false);
-    }
-  };
-
-  const handleCreateSubmit = async () => {
-    if (!currentValue) return;
-
-    try {
-      const response = await fetch("http://localhost:5000/api/rings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(currentValue),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        return setError(result.message);
-      }
-
-      setData((prevData) => [...prevData, result]);
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message);
-      }
-    } finally {
-      setLoading(false);
-      setShowModal(false);
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (initialValues) {
-      handleEditSubmit();
+      await updateRing(currentValue!);
+    } else {
+      await createRing(currentValue!);
     }
 
-    if (!initialValues) {
-      handleCreateSubmit();
-    }
+    closeModal();
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/api/rings");
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-
-        const result = await response.json();
-
-        setData(result);
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(error.message);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   if (loading) {
     return (
@@ -179,12 +57,13 @@ function App() {
       <Modal
         title={initialValues ? "Editar Anel" : "Criar Anel"}
         showModal={showModal}
-        setShowModal={setShowModal}
+        setShowModal={closeModal}
       >
         <Form
           initialValues={initialValues}
           handleSubmit={handleSubmit}
           onDataChange={setCurrentValue}
+          loading={loading}
         />
       </Modal>
       <h1 className="text-5xl text-center px-4 py-8">Os Anéis de Poder</h1>
@@ -196,8 +75,8 @@ function App() {
               <Card
                 key={ring._id}
                 {...ring}
-                onEdit={() => handleOnEdit(ring)}
-                onDelete={() => handleOnDelete(ring._id)}
+                onEdit={() => openModalForEdit(ring)}
+                onDelete={() => deleteRing(ring._id)}
               />
             ))}
           </div>
@@ -208,7 +87,7 @@ function App() {
         </div>
       )}
 
-      <Button className="mx-auto my-8" onClick={handleOnCreate}>
+      <Button className="mx-auto my-8" onClick={openModalForCreate}>
         Adicionar Anel
       </Button>
     </>
