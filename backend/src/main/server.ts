@@ -1,6 +1,7 @@
 import express from 'express'
+
 import { routes } from './routes'
-import { typeOrm } from './database/typeorm/data-source'
+import { typeOrm } from '@/infra/typeorm'
 
 const app = express()
 
@@ -21,6 +22,7 @@ typeOrm
     process.exit(1)
   })
 
+
 app.listen(3333, () => {
-  console.log("Server is running!")
+    console.log('Server is running!!!')
 })
