@@ -35,6 +35,7 @@ export class CreateRingController {
                 return response.status(422).json({ message })
             }
 
+            console.error(message)
             return response.status(500).send()
         }
     }

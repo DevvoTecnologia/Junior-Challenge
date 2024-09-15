@@ -1,5 +1,3 @@
-import { Forger } from "./forger"
-
 export interface Ring {
     ringId: string
     name: string

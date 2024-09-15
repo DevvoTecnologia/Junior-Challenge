@@ -52,6 +52,13 @@ describe("update ring use case", () => {
         expect(ring.updatedAt).toBeDefined()
     })
 
+    it("should be able to throw error if ring not exists", async () => {
+        expect(() => sut.execute({
+            ringId: "ring-id-not-exist",
+            power: "power"
+        })).rejects.toThrow("Ring does not exist")
+    })
+
     it("should be able to call forgers repository with the correct values", async () => {
         const forgersRepositorySpy = vitest.spyOn(forgersRepository, 'findById')
 
@@ -136,4 +143,5 @@ describe("update ring use case", () => {
             proprietor: 'proprietor'
         })
     })
+
 })
