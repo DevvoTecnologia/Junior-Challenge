@@ -25,7 +25,7 @@ export const Modal: FC<ModalProps> = ({
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="absolute z-10 inset-0 flex items-center justify-center bg-gray-800/80"
+          className="absolute z-10 inset-0 flex items-center justify-center bg-gray-800/80 px-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
