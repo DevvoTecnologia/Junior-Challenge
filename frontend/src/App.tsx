@@ -12,8 +12,7 @@ export type Ring = {
 };
 
 function App() {
-  const { data, loading, error, createRing, updateRing, deleteRing } =
-    useRings();
+  const { data, loading, createRing, updateRing, deleteRing } = useRings();
   const {
     showModal,
     initialValues,
@@ -45,14 +44,6 @@ function App() {
     );
   }
 
-  if (error) {
-    return (
-      <div className="text-3xl absolute inset-0 flex items-center justify-center">
-        Error: {error}
-      </div>
-    );
-  }
-
   return (
     <>
       <Modal
@@ -67,7 +58,17 @@ function App() {
           loading={loading}
         />
       </Modal>
-      <h1 className="text-5xl text-center px-4 py-8">Os Anéis do Poder</h1>
+      <div className="flex items-center justify-start md:justify-center relative max-w-7xl mx-auto">
+        <h1 className="text-xl sm:text-4xl md:text-5xl px-4 py-8">
+          Os Anéis do Poder
+        </h1>
+        <Button
+          className="absolute right-4 max-md:text-xs"
+          onClick={openModalForCreate}
+        >
+          Adicionar Anel
+        </Button>
+      </div>
 
       {data.length > 0 ? (
         <div className="w-full min-h-[75vh]">
@@ -96,10 +97,6 @@ function App() {
           Nenhum anel encontrado
         </div>
       )}
-
-      <Button className="mx-auto my-8" onClick={openModalForCreate}>
-        Adicionar Anel
-      </Button>
     </>
   );
 }
