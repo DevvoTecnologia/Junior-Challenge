@@ -30,29 +30,9 @@ No desenvolvimento do sistema de artefatos mágicos, segui uma abordagem centrad
 
 - [Node.js](https://nodejs.org/en)
 
-## :gear: Rodando localmente
+## :computer: Acesse em produção
 
-Bifurque e clone este repositório
-
-```
-git clone https://github.com/Gustavohps10/Junior-Challenge
-```
-
-### Com um comando Docker
-
-```
-docker-compose up
-```
-
-### Database
-
-❗ Não se preocupe, a aplicação utilizará valores padrão se variaveis de ambiente não forem setadas
-
-Inicie o banco de dados PostgreSQL
-
-```
-docker-compose up -d db
-```
+> https://artifact-hub.vercel.app/
 
 
 #### Frontend
