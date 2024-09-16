@@ -37,23 +37,13 @@ export class UserAuthenticationController implements Controller {
     })
 
     const viewModel = {
+      token,
       user: {
         id: user.id,
         username: user.username,
       },
     }
 
-    return ok(viewModel, 200, [
-      {
-        name: 'token',
-        value: token,
-        options: {
-          httpOnly: false,
-          secure: true,
-          sameSite: 'strict',
-          maxAge: 2 * 60 * 60 * 1000,
-        },
-      },
-    ])
+    return ok(viewModel)
   }
 }

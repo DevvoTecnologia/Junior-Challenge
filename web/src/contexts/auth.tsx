@@ -8,9 +8,10 @@ import React, {
 } from 'react'
 
 import { setAuthToken } from '@/lib/axios'
+
 export interface AuthContextType {
   isAuthenticated: boolean
-  login: () => void
+  login: (token: string) => void
   logout: () => void
 }
 
@@ -28,19 +29,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (token) {
       setAuthToken(token)
       setIsAuthenticated(true)
+    } else {
+      setIsAuthenticated(false)
     }
   }, [])
 
-  const login = useCallback(() => {
-    const token = Cookies.get('token')
-    if (token) {
-      setAuthToken(token)
-    }
+  const login = useCallback((token: string) => {
+    Cookies.set('token', token, {
+      expires: 2 / 24,
+      path: '/',
+      sameSite: 'lax',
+    })
+
+    setAuthToken(token)
     setIsAuthenticated(true)
   }, [])
 
   const logout = useCallback(() => {
-    Cookies.remove('token')
+    Cookies.remove('token', { path: '/' })
     setAuthToken('')
     setIsAuthenticated(false)
   }, [])

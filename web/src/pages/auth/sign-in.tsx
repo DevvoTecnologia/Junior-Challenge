@@ -42,12 +42,12 @@ export function SignIn() {
 
   const mutation = useMutation({
     mutationFn: (data: FormValues) => UserSignIn(data),
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast({
         title: 'Login bem-sucedido!',
         description: 'Você foi logado com sucesso.',
       })
-      login()
+      login(data.token)
     },
     onError: () => {
       toast({
