@@ -1,50 +1,83 @@
-# React + TypeScript + Vite
+## Junior Challenge - Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este repositório contém o frontend do projeto Junior Challenge, desenvolvido utilizando Vite, React, e TypeScript. Este documento descreve o processo de instalação, os principais scripts, a estrutura do projeto, e as dependências usadas.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Instalação
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+Para instalar e configurar o projeto localmente, siga os seguintes passo
 
-- Configure the top-level `parserOptions` property like this:
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 1. Clone o repositório:
+
+```bash
+git clone https://github.com/andersona16/Junior-Challenge.git
+cd Junior-Challenge/frontend
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## 2. Instale as dependências necessárias com o comando:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+```bash
+npm install
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+ou 
+
+yarn install
 ```
+
+## Scripts
+
+Os seguintes scripts estão disponíveis no arquivo package.json para facilitar o desenvolvimento e o build do projeto:
+
+```bash
+npm run dev: Inicia o servidor de desenvolvimento com o Vite.
+
+npm run build: Constrói o projeto para produção.
+
+npm run preview
+
+npm run lint
+```
+
+## Estrutura do Projeto
+
+
+A estrutura do diretório frontend é organizada da seguinte forma:
+
+
+```bash
+frontend/
+├── src/
+│   ├── App.tsx            # Componente principal da aplicação React
+│   ├── assets/            # Recursos como imagens, fontes, etc.
+│   ├── components/        # Componentes reutilizáveis da aplicação
+│   ├── context/           # Definição de Context API para gerenciamento de estado global
+│   ├── interface/         # Definição de interfaces TypeScript usadas no projeto
+│   ├── main.tsx           # Arquivo de entrada principal que inicializa a aplicação React
+│   ├── pages/             # Páginas principais da aplicação
+│   ├── routes/            # Definição de rotas do React Router
+│   ├── services/          # Serviços para chamadas de API e outras funcionalidades
+│   ├── styles/            # Arquivos de estilização global e componentes estilizados
+│   ├── utils/             # Funções utilitárias e helpers do projeto
+│   └── vite-env.d.ts      # Arquivo de definição de tipos para o Vite e TypeScript
+```
+
+## Principais Dependências
+
+- React: Biblioteca para construção da interface do usuário.
+- React Router Dom: Gerenciamento de rotas.
+- Axios: Utilizado para chamadas HTTP.
+- Styled Components: Estilização de componentes com CSS-in-JS.
+- Yup: Validação de formulários.
+- React Toastify: Exibição de notificações de forma fácil.
+- React Slick: Criação de carrosséis de imagens.
+- React Icons: Conjunto de ícones para uso em componentes.
+
+
+## Ferramentas de Desenvolvimento
+
+- TypeScript: Suporte a tipos estáticos.
+- ESLint: Ferramenta de linting para garantir qualidade e consistência do código.
+- Vite: Ferramenta de construção rápida e moderna.
+- Definições de Tipos: Utilizadas para fornecer suporte de tipos ao trabalhar com bibliotecas - JavaScript em TypeScript.
