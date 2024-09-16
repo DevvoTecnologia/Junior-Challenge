@@ -1,6 +1,11 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { getArtifacts } from '@/api/getArtifacts'
+import { createArtifact, CreateArtifactRequest } from '@/api/create-artifact'
+import { getArtifacts } from '@/api/get-artifacts'
+import { getCharacters } from '@/api/get-characters'
+import { getSmiths } from '@/api/get-smiths'
+import { CreateArtifactForm } from '@/components/form-create-artifact'
+import { Button } from '@/components/ui/button'
 import {
   Carousel,
   CarouselContent,
@@ -9,26 +14,91 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel'
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card'
 import { Skeleton } from '@/components/ui/skeleton'
+import { toast } from '@/hooks/use-toast'
 
 export function Home() {
+  const queryClient = useQueryClient()
   const { data: artifacts, isPending: artifactsIsPending } = useQuery({
     queryKey: ['artifacts'],
     queryFn: getArtifacts,
   })
+  const { data: smiths, isPending: smithsIsPending } = useQuery({
+    queryKey: ['smiths'],
+    queryFn: getSmiths,
+  })
+  const { data: characters, isPending: charactersIsPending } = useQuery({
+    queryKey: ['characters'],
+    queryFn: getCharacters,
+  })
+
+  const { mutateAsync: createArtifactFn, isPending: isCreating } = useMutation({
+    mutationFn: createArtifact,
+    onSuccess: (artifact) => {
+      toast({
+        title: 'Sucesso!',
+        description: `${artifact.name} forjado com sucesso`,
+      })
+      queryClient.invalidateQueries({ queryKey: ['artifacts'] })
+    },
+    onError: () => {
+      toast({
+        title: 'Algo deu errado',
+        description: 'Falha ao criar artefato',
+      })
+    },
+  })
+
+  const handleCreateArtifact = async (values: CreateArtifactRequest) => {
+    await createArtifactFn({
+      name: values.name,
+      power: values.power,
+      bearer: values.bearer,
+      forgedBy: values.forgedBy,
+    })
+  }
 
   return (
     <div className="mx-auto max-w-[90rem]">
-      <main className="h-[65vh]">a</main>
-      <section className="py-4">
+      <main className="h-[65vh]">main</main>
+      <section className="py-4 max-w-[90rem]">
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>Adicionar</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Adicionar Artefato</DialogTitle>
+              {(smithsIsPending || charactersIsPending) && (
+                <Skeleton className="w-full" />
+              )}
+              {smiths && characters && (
+                <CreateArtifactForm
+                  onSubmit={handleCreateArtifact}
+                  smiths={smiths}
+                  characters={characters}
+                  isCreating={isCreating}
+                />
+              )}
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+
         <h1 className="scroll-m-20 my-4 text-3xl font-extrabold tracking-tight lg:text-5xl text-center dark:text-gray-400">
           Anéis do poder
         </h1>
-        <h2 className="mt-6 text-lg pl-6  text-center text font-semibold text-gray-600">
+        <h2 className="mt-6 text-lg pl-6 text-center text font-semibold text-gray-600">
           O grande mago J.R.R. Tolkien disse:{' '}
           <span className="italic text-gray-700">
             {
@@ -45,7 +115,7 @@ export function Home() {
                   className="pl-2 md:basis-1/3 lg:basis-1/5"
                 >
                   <div className="p-1">
-                    <Skeleton className="w-full  rounded-lg aspect-square" />
+                    <Skeleton className="w-full rounded-lg aspect-square" />
                   </div>
                 </CarouselItem>
               ))}

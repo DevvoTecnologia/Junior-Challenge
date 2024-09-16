@@ -1,7 +1,7 @@
 import { api } from '@/lib/axios'
 
 export type GetArtifactsResponse = {
-  id: number
+  id: string
   name: string
   power: string
   imageUrl: string
