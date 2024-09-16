@@ -144,7 +144,7 @@ export function Home() {
       <main className="bg-gray-900 text-gray-300 mt-4 rounded-lg overflow-hidden">
         <div className="max-w-[90rem] mx-auto">
           <div className="flex items-center flex-wrap">
-            <div className="md:w-full lg:w-[55%] text-center lg:text-left p-8">
+            <div className="md:w-full lg:w-[55%] text-center lg:text-left p-8 min-h-[300px]">
               <h1 className="text-4xl lg:text-5xl font-extrabold mb-4">
                 Mergulhe na Magia dos Artefatos Ancestrais
               </h1>
@@ -227,29 +227,6 @@ export function Home() {
           Artefatos Mágicos
         </h1>
 
-        {/* Diálogo para Adicionar Artefato */}
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>Adicionar</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Adicionar Artefato</DialogTitle>
-              {(smithsIsPending || charactersIsPending) && (
-                <Skeleton className="w-full" />
-              )}
-              {smiths && characters && (
-                <CreateArtifactForm
-                  onSubmit={handleCreateArtifact}
-                  smiths={smiths}
-                  characters={characters}
-                  isCreating={isCreating}
-                />
-              )}
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
-
         <h2 className="mt-6 text-lg pl-6 text-center text font-semibold text-gray-600">
           O grande mago J.R.R. Tolkien disse:{' '}
           <span className="italic text-gray-700 dark:text-gray-500">
@@ -329,6 +306,30 @@ export function Home() {
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
+        {/* Diálogo para Adicionar Artefato */}
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="relative left-1/2 -translate-x-1/2" size="lg">
+              Adicionar
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Adicionar Artefato</DialogTitle>
+              {(smithsIsPending || charactersIsPending) && (
+                <Skeleton className="w-full" />
+              )}
+              {smiths && characters && (
+                <CreateArtifactForm
+                  onSubmit={handleCreateArtifact}
+                  smiths={smiths}
+                  characters={characters}
+                  isCreating={isCreating}
+                />
+              )}
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
       </section>
     </div>
   )
