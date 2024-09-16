@@ -5,8 +5,9 @@
    "main": "src/main/server.ts",
    "type": "module",
    "scripts": {
-      "dev": "tsx watch src/main/server.ts",
+      "start": "tsx watch src/main/server.ts",
       "test": "vitest",
+      "seed": "tsx src/script.ts",
       "test:coverage": "vitest run --coverage",
       "typeorm": "typeorm-ts-node-esm",
       "migration:run": "typeorm-ts-node-esm migration:run -- -d ./src/infra/typeorm/data-source.ts"
