@@ -1,9 +1,7 @@
 import { z } from 'zod'
 
 const envSchema = z.object({
-  NODE_ENV: z
-    .enum(['development', 'production', 'test'])
-    .default('development'),
+  NODE_ENV: z.enum(['development', 'production', 'test']),
   APP_NAME: z.string().default('ArtifactHub'),
   SERVER_PORT: z.coerce.number().default(5000),
   DB_HOST: z.string().default('localhost'),

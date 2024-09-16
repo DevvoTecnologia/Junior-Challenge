@@ -6,7 +6,9 @@
     "dev": "tsx watch --env-file=.env src/main/server.ts",
     "migration:generate": "tsx --env-file=.env src/utils/generate-migration.ts",
     "migration:run": "tsx --env-file=.env ./node_modules/typeorm/cli -d ./src/infra/data-source.ts migration:run",
-    "seed": "tsx --env-file=.env ./src/infra/seeds/seed.ts"
+    "seed": "tsx --env-file=.env ./src/infra/seeds/seed.ts",
+    "build": "tsup src --format esm ",
+    "start": "node --env-file=.env dist/main/server"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -35,6 +37,7 @@
     "eslint-plugin-import": "^2.30.0",
     "eslint-plugin-prettier": "^5.2.1",
     "prettier": "^3.3.3",
+    "tsup": "^8.2.4",
     "tsx": "^4.19.1"
   }
 }

@@ -2,6 +2,10 @@ import 'reflect-metadata'
 import { DataSource } from 'typeorm'
 import path from 'path'
 import { env } from '@/env'
+import { User } from './entities/User'
+import { Artifact } from './entities/Artifact'
+import { Smith } from './entities/Smith'
+import { Character } from './entities/Character'
 
 const __dirname = path.resolve()
 
@@ -14,7 +18,10 @@ export const AppDataSource = new DataSource({
   database: env.DB_NAME || 'artifact-hub',
   synchronize: false,
   logging: false,
-  entities: [path.join(__dirname, 'src/infra/entities/**/*.ts')],
-  migrations: [path.join(__dirname, 'src/infra/migrations/**/*.ts')],
+  entities: [User, Artifact, Smith, Character],
+  migrations:
+    process.env.NODE_ENV === 'development'
+      ? [path.join(__dirname, 'src/infra/migrations/**/*.ts')]
+      : [path.join(__dirname, 'dist/infra/migrations/**/*.js')],
   subscribers: [],
 })
