@@ -1,140 +1,247 @@
-# Desafio Fullstack: Os Anéis de Poder
-_One Challenge to rule them all, One Challenge to find them, One Challenge to bring them all, and in the darkness bind them_
+## Documentação da API
 
-## 💍 Contexto do Desafio
+## Variáveis de Ambiente
 
-O grande mago J.R.R. Tolkien nos deixou a famosa frase:
+Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de ambiente no seu .env
 
-> **Three Rings for the Elven-kings under the sky,  
-> Seven for the Dwarf-lords in their halls of stone,  
-> Nine for Mortal Men doomed to die,  
-> One for the Dark Lord on his dark throne  
-> In the Land of Mordor where the Shadows lie.  
-> One Ring to rule them all, One Ring to find them,  
-> One Ring to bring them all, and in the darkness bind them  
-> In the Land of Mordor where the Shadows lie.**
+- DB_TYPE= # O tipo do banco de dados (ex: postgres, mysql)
+- DB_HOST= # O host do banco de dados (ex: localhost)
+- DB_PORT= # A porta do banco de dados (ex: 5432)
+- DB_USERNAME= # O nome de usuário do banco de dados
+- DB_PASSWORD= # A senha do banco de dados
+- DB_DATABASE= # O nome do banco de dados
 
-Sua missão será criar um CRUD (Create, Read, Update, Delete) para gerenciar os anéis e desenvolver um frontend para visualizar e manipular essas informações.
+Como rodar as migrações
 
-## 🎯 Objetivo
+Instalar as dependências:
 
-### Backend
-Criar uma API em **Node.js** com **TypeScript** para realizar as seguintes operações:
+Certifique-se de que todas as dependências estão instaladas executando:
 
-- **Criar** (POST) um novo anel.
-- **Listar** (GET) todos os anéis.
-- **Atualizar** (PUT) as informações de um anel.
-- **Deletar** (DELETE) um anel existente.
+```bash
+yarn install
+```
 
-### Frontend
-Desenvolver uma interface simples em **React** com as seguintes telas:
+```bash
+Criar uma nova migração:
 
-- **Tela de Criação/Atualização**: Formulário para criar um novo anel ou atualizar um anel existente.
-- **Tela de Visualização**: Exibição dos anéis criados em um **carrossel**, mostrando as informações de cada anel (nome, poder, portador, forjadoPor e imagem).
+Caso você precise criar uma nova migração, use o comando abaixo, substituindo NomeDaMigration pelo nome da sua migração:
 
-## ⚔️ Requisitos Funcionais
+yarn typeorm migration:create ./src/database/migrations/NomeDaMigration
+```
 
-### Backend
+```bash
+Rodar as migrações:
 
-1. **Criar um Anel**  
-   O anel deverá ter as seguintes propriedades:
-   - `nome`: Nome do anel (ex: "Narya, o anel do fogo").
-   - `poder`: Uma breve descrição do poder do anel (ex: "Seu portador ganha resistência ao fogo").
-   - `portador`: O nome do portador atual (Ex: Gandalf).
-   - `forjadoPor`: Quem forjou o anel (ex: Elfos).
-   - `imagem`: URL de uma imagem genérica do anel.
+Após criar ou baixar as migrações, você pode executá-las com o seguinte comando:
 
-2. **Regras de Negócio para Criação de Anéis**  
-   A API deverá garantir que a quantidade máxima de anéis criados respeite as seguintes regras:
-   
-   - **Elfos**: No máximo 3 anéis.
-   - **Anões**: No máximo 7 anéis.
-   - **Homens**: No máximo 9 anéis.
-   - **Sauron**: Apenas 1 anel.
+yarn typeorm -- -d ./src/database/connection migration:run
+```
 
-   Caso o limite seja excedido, a criação deve ser rejeitada com uma mensagem de erro adequada.
+#### Criar um Anel
 
-3. **Listar os Anéis**  
-   A API deverá retornar uma lista com todos os anéis e suas propriedades.
+```http
+POST /api/rings
+```
 
-4. **Atualizar um Anel**  
-   Deve ser possível atualizar as informações de um anel específico (ex: alterar o portador ou a descrição do poder).
+| Parâmetro   | Tipo     | Descrição                              |
+| :---------- | :------- | :------------------------------------- |
+| `name`      | `string` | **Obrigatório**. Nome do anel          |
+| `power`     | `string` | **Obrigatório**. Poder do anel         |
+| `carrier`   | `string` | **Obrigatório**. Transportador do anel |
+| `forgedBy`  | `string` | **Obrigatório**. Forjador do anel      |
+| `image_url` | `file`   | **Obrigatório**. Imagem do anel        |
 
-5. **Deletar um Anel**  
-   Deve ser possível remover um anel do banco de dados.
+Respostas:
 
-### Frontend
+- 201 Created: Anel criado com sucesso.
+- 400 Bad Request: Campos obrigatórios faltando ou forjador inválido.
+- 500 Internal Server Error: Erro ao adicionar um novo anel.
 
-1. **Tela de Criação/Atualização de Anel**  
-   - Um formulário com os seguintes campos:
-     - `nome`: Campo de texto para o nome do anel.
-     - `poder`: Campo de texto para a descrição do poder do anel.
-     - `portador`: Campo de texto para o nome do portador.
-     - `forjadoPor`: Campo de texto para indicar quem forjou o anel.
-     - `imagem`: Como a imagem vai ser genérica você pode tanto deixar o uauário escolher entre as imagens que o próprio sistema fornece ou remover esse campo e deixar uma imagem default.
-   - Botões para:
-     - **Criar**: Submeter o formulário para criar um novo anel.
-     - **Atualizar**: Alterar as informações de um anel existente.
+```json
+[
+  {
+    "id": "string",
+    "name": "string",
+    "power": "string",
+    "carrier": "string",
+    "forgedBy": "string",
+    "image_url": "http://example.com/uploads/image.jpg"
+  }
+]
+```
 
-2. **Tela de Visualização dos Anéis**
-   - Exibir todos os anéis em um **carrossel** (ou grid), mostrando:
-     - Nome, poder, portador, forjadoPor, e a imagem do anel.
-   - O carrossel deve ser responsivo e permitir rolar entre os anéis cadastrados.
-   - Adicionar a possibilidade de **excluir** ou **editar** um anel diretamente dessa tela.
+#### Retornar Todos os Anéis
 
-## 🚀 Tecnologias
+```http
+GET /api/rings
+```
 
-- **Backend**:
-  - **Node.js** com **TypeScript**
-  - **Express** (ou outro framework para criar a API)
-  - **Banco de Dados**: MySQL, PostgreSQL, MongoDB, etc.
-  - **ORM/ODM**: Sequelize, TypeORM ou Mongoose.
+Respostas:
 
-- **Frontend**:
-  - **React**
-  - **Biblioteca para Carrossel**: Você pode utilizar bibliotecas como `react-slick` ou outra para implementar o carrossel.
+- 200 OK: Lista de todos os anéis.
+- 500 Internal Server Error: Erro ao buscar anéis.
 
-## 🛠️ Instruções
+```json
+[
+  {
+    "id": "string",
+    "name": "string",
+    "power": "string",
+    "carrier": "string",
+    "forgedBy": "string",
+    "image_url": "http://example.com/uploads/image.jpg"
+  }
+]
+```
 
-1. Faça o **fork** deste repositório.
-2. Crie uma nova branch com o nome do seu desafio: `git checkout -b desafio-seu-nome`.
-3. Implemente sua solução backend e frontend conforme os requisitos descritos.
-4. Faça o **commit** das suas alterações: `git commit -m 'Desafio finalizado'`.
-5. Faça o **push** para a branch criada: `git push origin desafio-seu-nome`.
-6. Crie um **Pull Request** para o repositório principal.
-7. Envie um email para "contato@devvo.com.br" falando que finalizou seu desafio e encaminhando o link do Pull Request
+#### Retornar um Anel
 
-## 📝 Regras e Critérios de Avaliação
+```http
+GET /api/rings/${id}
+```
 
-1. **Organização do código**: Estrutura clara e modularidade do código.
-2. **Boas práticas**: Uso de boas práticas de desenvolvimento, como SOLID e DRY.
-3. **Frontend**: Interface limpa, funcional e interativa (carrossel funcionando corretamente).
-4. **Validação da Regra de Negócio**: Implementação correta da validação do limite de anéis por portador.
-5. **Testes**: Testes unitários e/ou de integração serão um diferencial.
-6. **Documentação**: Adicione uma breve documentação da API e do frontend (pode ser no próprio README ou em uma ferramenta como Swagger).
+| Parâmetro | Tipo     | Descrição                                   |
+| :-------- | :------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. ID do anel que você deseja |
 
-## 🔥 Desafios Extras (Opcional)
+Respostas:
 
-Se quiser ir além, aqui estão algumas sugestões de funcionalidades extras:
+- 200 OK: Anel encontrado.
+- 400 Bad Request: ID inválido.
+- 404 Not Found: Anel não encontrado.
+- 500 Internal Server Error: Erro ao buscar o anel.
 
-- **Autenticação**: Implemente um sistema de autenticação (JWT, OAuth, etc.).
-- **Relacionamentos entre entidades**: Adicione relacionamentos entre os anéis e seus portadores (Ex: um portador pode ter mais de um anel, ou um anel pode ter sido passado por diferentes portadores ao longo do tempo).
-- **Animações no Frontend**: Adicione animações ao carrossel ou à interface de criação de anéis.
-- **Responsividade Avançada**: Certifique-se de que o carrossel e todas as funcionalidades são totalmente responsivas em diferentes dispositivos.
+#### Atualizar um Anel
 
-## 🧙‍♂️ Dicas
+```http
+PUT /api/rings/${id}
+```
 
-- Divida a lógica do backend em camadas (Controllers, Services, Models).
-- Utilize hooks e componentes funcionais no frontend para um código mais limpo.
-- Utilize **TypeScript** tanto no backend quanto no frontend para garantir tipagem estática.
-- Planeje a interface para ser intuitiva e simples de usar.
+| Parâmetro   | Tipo     | Descrição                              |
+| :---------- | :------- | :------------------------------------- |
+| `name`      | `string` | **Obrigatório**. Nome do anel          |
+| `power`     | `string` | **Obrigatório**. Poder do anel         |
+| `carrier`   | `string` | **Obrigatório**. Transportador do anel |
+| `forgedBy`  | `string` | **Obrigatório**. Forjador do anel      |
+| `image_url` | `file`   | **Obrigatório**. Imagem do anel        |
 
-## 🧭 Referências
+Respostas:
 
-- [Documentação do Node.js](https://nodejs.org/en/docs/)
-- [Documentação do TypeScript](https://www.typescriptlang.org/docs/)
-- [Documentação do React](https://reactjs.org/docs/getting-started.html)
+- 200 OK: Anel atualizado com sucesso.
+- 400 Bad Request: ID inválido ou forjador inválido.
+- 404 Not Found: Anel não encontrado.
+- 500 Internal Server Error: Erro ao atualizar o anel.
 
----
+```json
+[
+  {
+    "id": "string",
+    "name": "string",
+    "power": "string",
+    "carrier": "string",
+    "forgedBy": "string",
+    "image_url": "http://example.com/uploads/image.jpg"
+  }
+]
+```
 
-_May the Light of Eärendil guide you in this challenge!_
+#### Deletar um Anel
+
+```http
+DELETE /api/rings/${id}
+```
+
+| Parâmetro | Tipo     | Descrição                                   |
+| :-------- | :------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. ID do anel que você deseja |
+
+Respostas:
+
+- 200 OK: Anel deletado com sucesso.
+- 400 Bad Request: ID inválido.
+- 404 Not Found: Anel não encontrado.
+- 500 Internal Server Error: Erro ao deletar o anel.
+
+## Junior Challenge - Frontend
+
+Este repositório contém o frontend do projeto Junior Challenge, desenvolvido utilizando Vite, React, e TypeScript. Este documento descreve o processo de instalação, os principais scripts, a estrutura do projeto, e as dependências usadas.
+
+
+## Instalação
+
+
+Para instalar e configurar o projeto localmente, siga os seguintes passo
+
+
+## 1. Clone o repositório:
+
+```bash
+git clone https://github.com/andersona16/Junior-Challenge.git
+cd Junior-Challenge/frontend
+```
+
+## 2. Instale as dependências necessárias com o comando:
+
+```bash
+npm install
+
+ou 
+
+yarn install
+```
+
+## Scripts
+
+Os seguintes scripts estão disponíveis no arquivo package.json para facilitar o desenvolvimento e o build do projeto:
+
+```bash
+npm run dev: Inicia o servidor de desenvolvimento com o Vite.
+
+npm run build: Constrói o projeto para produção.
+
+npm run preview
+
+npm run lint
+```
+
+## Estrutura do Projeto
+
+
+A estrutura do diretório frontend é organizada da seguinte forma:
+
+
+```bash
+frontend/
+├── src/
+│   ├── App.tsx            # Componente principal da aplicação React
+│   ├── assets/            # Recursos como imagens, fontes, etc.
+│   ├── components/        # Componentes reutilizáveis da aplicação
+│   ├── context/           # Definição de Context API para gerenciamento de estado global
+│   ├── interface/         # Definição de interfaces TypeScript usadas no projeto
+│   ├── main.tsx           # Arquivo de entrada principal que inicializa a aplicação React
+│   ├── pages/             # Páginas principais da aplicação
+│   ├── routes/            # Definição de rotas do React Router
+│   ├── services/          # Serviços para chamadas de API e outras funcionalidades
+│   ├── styles/            # Arquivos de estilização global e componentes estilizados
+│   ├── utils/             # Funções utilitárias e helpers do projeto
+│   └── vite-env.d.ts      # Arquivo de definição de tipos para o Vite e TypeScript
+```
+
+## Principais Dependências
+
+- React: Biblioteca para construção da interface do usuário.
+- React Router Dom: Gerenciamento de rotas.
+- Axios: Utilizado para chamadas HTTP.
+- Styled Components: Estilização de componentes com CSS-in-JS.
+- Yup: Validação de formulários.
+- React Toastify: Exibição de notificações de forma fácil.
+- React Slick: Criação de carrosséis de imagens.
+- React Icons: Conjunto de ícones para uso em componentes.
+
+
+## Ferramentas de Desenvolvimento
+
+- TypeScript: Suporte a tipos estáticos.
+- ESLint: Ferramenta de linting para garantir qualidade e consistência do código.
+- Vite: Ferramenta de construção rápida e moderna.
+- Definições de Tipos: Utilizadas para fornecer suporte de tipos ao trabalhar com bibliotecas - JavaScript em TypeScript.
