@@ -11,11 +11,32 @@ export class FluxImageGeneratorRepository implements ImageGeneratorRepository {
 
   async generate(itemName: string, itemPower: string): Promise<string> {
     const prompt = await this.generatePrompt(
-      `Um anel mágico detalhado, elegante e com poderes de 
-      ${itemPower}, chamado "${itemName}". O anel deve ter designs intrincados e artísticos, 
-      pode ter ou não uma pedra preciosa brilhante, pode ser sem pedra as vezes, com material e formato representando seu poder. Foco na beleza e na aura mística do anel. 
-      O fundo deve refletir o tema do poder "${itemPower}", mas de forma a não distrair do anel. 
-      Use uma iluminação suave para destacar o formato e os detalhes do anel.`,
+      `Crie uma descrição detalhada para um artefato mágico chamado "${itemName}". O tipo de artefato deve ser determinado pelo nome e pode incluir, mas não se limita a: anel, espada, escudo, arco e flecha, cajado, ou amuleto. A descrição deve incluir:
+    
+      - **Aspecto Geral**: Detalhes sobre o formato, material e design do artefato, refletindo a aura mágica e a beleza do item. O artefato deve ser descrito com uma estética que capture a essência de um item de fantasia épico.
+    
+      - **Detalhes Específicos**:
+        - **Anel**: Descreva a pedra preciosa (se houver), o design da bandagem e os símbolos mágicos gravados. A bandagem pode ter intrincados detalhes e padrões que refletem a magia do anel.
+        - **Espada**: Detalhe a lâmina, o cabo e as inscrições ou runas mágicas. A lâmina deve ter um brilho encantado e o cabo pode ter detalhes decorativos mágicos.
+        - **Escudo**: Descreva o emblema, a forma, o material e qualquer detalhe decorativo. O escudo pode ter símbolos protetores e uma estrutura que irradia poder.
+        - **Arco e Flecha**:
+          - **Arco**:
+            - **Formato e Material**: Descreva o formato do arco (reto, curvado, duplo) e o material usado (madeira, metal, cristal). Inclua detalhes sobre as texturas e acabamentos, como entalhes ou gemas embutidas.
+            - **Cordas e Detalhes Ornamentais**: Informe sobre as cordas do arco (feitas de que material? têm algum detalhe mágico?). Adicione ornamentos, como inscrições, símbolos ou elementos decorativos que evidenciem a aura mágica do arco.
+          - **Flechas**:
+            - **Design e Material**: Descreva o design das flechas (simples, adornadas) e o material de que são feitas. Inclua detalhes sobre as pontas e penas das flechas, e qualquer característica mágica.
+            - **Efeitos Mágicos**: Se o arco possui efeitos mágicos, descreva como esses efeitos se manifestam nas flechas. Por exemplo, flechas que se acendem em chamas ou que têm a capacidade de controlar o vento.
+        - **Cajado**: Descreva o formato e o material do cajado (madeira antiga, cristal, metal). Inclua detalhes sobre as inscrições mágicas ou gemas no topo do cajado, e como eles amplificam os poderes do usuário.
+        - **Amuleto**: Detalhe o design do amuleto (forma, material, símbolos). Descreva qualquer gema ou encantamento que o amuleto contenha e como ele protege ou confere poderes ao portador.
+    
+      - **Poderes e Efeitos**: Descreva os poderes mágicos e efeitos associados ao artefato, enfatizando como o poder de "${itemPower}" se manifesta no artefato. Por exemplo, se o poder é "domínio das chamas", explique como isso se reflete na aparência e nas habilidades do artefato.
+    
+      - **Tema e Ambiente**: O fundo deve refletir o tema do poder "${itemPower}" e o tipo de artefato, sem desviar a atenção do item principal. Utilize uma iluminação suave para destacar o formato e os detalhes do artefato.
+    
+      - **Atmosfera**: Crie uma atmosfera que remeta aos mundos de fantasia e misticismo, inspirada em obras como Senhor dos Anéis. A descrição deve capturar a essência mágica e a grandiosidade do artefato.
+    
+      Exemplo: Se o nome for "Cajado dos Ventos Sussurrantes" e o poder for "controle do vento", a descrição deve detalhar um cajado feito de cristal claro, com inscrições que giram em torno do topo e uma aura que parece se mover como uma brisa suave. O cajado pode emanar uma leve brisa quando em uso, e os poderes podem permitir manipular correntes de ar e criar tempestades.
+      `,
     )
     try {
       const response = await fetch(this.apiEndpoint, {
