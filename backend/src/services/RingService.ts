@@ -39,7 +39,7 @@ export default class RingService {
     } catch (error) {
       return new ApiResponse({
         success: false,
-        message: "Internal server error getting ring",
+        message: "Internal Server Error getting ring",
       });
     }
   }
@@ -164,10 +164,9 @@ export default class RingService {
     } finally {
       await session.endSession();
     }
-  
   }
 
-  static async DeleteRing(id: string){
+  static async DeleteRing(id: string) {
     const session = await startSession();
     session.startTransaction();
 
@@ -194,7 +193,7 @@ export default class RingService {
         success: false,
         message: "Internal server error deleting ring",
       });
-  } finally {
+    } finally {
       await session.endSession();
     }
   }

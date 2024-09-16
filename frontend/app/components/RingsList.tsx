@@ -21,16 +21,17 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Separator } from "@/components/ui/separator";
 import Tooltip from "@/components/tooltip/Tooltip";
 import { Button } from "@/components/ui/button";
-import { Ban, Pencil } from "lucide-react";
+import { Ban, Pencil, SearchX } from "lucide-react";
 import useMutationDelete from "@/hooks/rings/mutations/useMutationDelete";
 
 export default function RingsList() {
-  const { data: rings, isLoading } = useQueryGetAll();
-  const { mutateAsync: deleteRing } = useMutationDelete();
+  const { data: rings, isLoading, refetch } = useQueryGetAll();
+  const { mutateAsync: deleteRing, isPending: isDeleting } =
+    useMutationDelete();
 
-  if (isLoading) {
+  if (isLoading || isDeleting) {
     return (
-      <div className="flex items-center gap-4 mt-32">
+      <div className="flex items-center gap-4 mt-20">
         <Skeleton className="rounded-full h-9 w-9" />
         <Skeleton className="h-80 w-80 rounded-xl aspect-square" />
         <Skeleton className="rounded-full h-9 w-9" />
@@ -41,7 +42,7 @@ export default function RingsList() {
   return (
     <>
       {rings && rings.length > 0 ? (
-        <div className="mt-32 w-full max-w-6xl">
+        <div className="mt-20 w-full max-w-6xl">
           <Carousel className="w-full max-w-6xl">
             <CarouselContent>
               {rings.map((ring, index) => (
@@ -77,10 +78,11 @@ export default function RingsList() {
                         <Tooltip text="Banir anel">
                           <Button
                             variant="outline"
-                            onClick={(e) => {
+                            onClick={async (e) => {
                               e.preventDefault();
-                              // deleteRing(ring._id);
-                              deleteRing("asd");
+                              await deleteRing(ring._id);
+                              await refetch();
+                              // deleteRing("asd");
                             }}
                           >
                             <Ban className="h-4" />
@@ -102,11 +104,15 @@ export default function RingsList() {
           </p>{" "}
         </div>
       ) : (
-        <Card className="mt-32 bg-muted-foreground border-none">
-          <CardContent className="flex h-80 aspect-square items-center justify-center p-6">
-            <p className="font-bold">No rings found</p>
-          </CardContent>
-        </Card>
+        <div className="mt-8 text-center text-muted-foreground">
+          <SearchX className="h-20 w-20 mx-auto text-muted-foreground" />
+          <p className="font-bold">
+            Os olhos de Sauron vasculharam, mas nenhum Anel foi encontrado.
+          </p>
+          <p className="font-bold">
+            O destino de todos permanece seguro... por agora.
+          </p>
+        </div>
       )}{" "}
       {/* <pre>ppp{JSON.stringify(rings, null, 2)}</pre> */}
     </>

@@ -12,6 +12,7 @@ async function deleteRing(id: string) {
   if (!response.success) {
     toast.error("Erro ao banir o anel", {
       duration: 5000,
+      description: response.message,
       closeButton: true,
     });
     return false;

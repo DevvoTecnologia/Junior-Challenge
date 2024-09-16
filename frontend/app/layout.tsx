@@ -34,7 +34,9 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <ReactQueryProvider>
-        <body className={`${poppins.variable} antialiased `}>{children}</body>
+        <body className={`${poppins.variable} antialiased overflow-hidden`}>
+          {children}
+        </body>
         <Toaster richColors />
       </ReactQueryProvider>
     </html>
