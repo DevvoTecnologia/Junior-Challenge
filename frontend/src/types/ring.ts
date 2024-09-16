@@ -1,5 +1,5 @@
 export type Ring = {
-  id: number
+  ringId: string
   name: string
   power: string
   proprietor: string

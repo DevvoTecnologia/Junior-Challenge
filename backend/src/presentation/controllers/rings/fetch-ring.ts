@@ -7,7 +7,7 @@ export class FetchRingController {
 
     async handle(request: Request, response: Response) {
         try {
-            const rings = this.fetchRingUseCase.execute()
+            const rings = await this.fetchRingUseCase.execute()
 
             return response.status(200).json(rings)
         } catch (error: any) {

@@ -2,14 +2,18 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Ring } from "../../../types"
+import { updateRing } from "../../../api"
+import { toast } from "sonner"
+import { AxiosError } from "axios"
+import { getForgerByName } from "../../../utils/get-forger-by-name"
 
 const schemaFormUpdate = z.object({
   name: z.string(),
   power: z.string(),
   proprietor: z.string(),
-  forgerId: z.string(),
+  forgerName: z.string(),
 })
 
 type FormUpdateData = z.infer<typeof schemaFormUpdate>
@@ -19,12 +23,43 @@ type FormUpdateProps = {
 }
 
 export function FormUpdate({ ring }: FormUpdateProps) {
+  const navigate = useNavigate()
+
   const { register, handleSubmit } = useForm<FormUpdateData>({
     resolver: zodResolver(schemaFormUpdate)
   })
 
-  function onSubmit(data: FormUpdateData) {
-    console.log(data)
+  async function onSubmit(data: FormUpdateData) {
+    try {
+      const forgerId = await getForgerByName({ name: data.forgerName })
+      console.log({
+        ringId: ring.ringId,
+          forgerId,
+          ...data
+      })
+
+      await updateRing({ 
+        ring: {
+          ringId: ring.ringId,
+          forgerId,
+          ...data
+        }
+      })
+
+      toast.success('Anel atualizado com sucesso.')
+      navigate('/')
+    } catch (err: any) {
+      if (err instanceof AxiosError) {
+        if (err.response) {
+          toast.error(err.response.data.message)
+
+          return
+        }
+      }
+
+      console.log(err.message)
+      toast.error('Ocorreu um erro inesperado. Tente novamente mais tarde.')
+    }
   }
 
   return (
@@ -74,12 +109,12 @@ export function FormUpdate({ ring }: FormUpdateProps) {
             id="forgedBy"
             required
             className="px-4 p-2  mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-            {...register("forgerId")}
+            {...register("forgerName")}
           >
-            <option value="1">Elfos</option>
-            <option value="2">Anões</option>
-            <option value="3">Homens</option>
-            <option value="4">Sauron</option>
+            <option value="Elfos">Elfos</option>
+            <option value="Anões">Anões</option>
+            <option value="Homens">Homens</option>
+            <option value="Sauron">Sauron</option>
           </select>
         </div>
 
@@ -88,7 +123,7 @@ export function FormUpdate({ ring }: FormUpdateProps) {
             to="/"  
             className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
           >
-              Cancelar
+              Voltar
           </Link>
 
           <button

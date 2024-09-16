@@ -1,23 +1,26 @@
-import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-
-import { NotFoundPage } from './404'
+import { Helmet } from 'react-helmet-async'
 
 import { FormUpdate } from '../components/pages/update'
-import { initialRings } from '../constants/initial-rings'
-
-import { Ring } from '../types/ring'
-import { Helmet } from 'react-helmet-async'
+import { useQuery } from '@tanstack/react-query'
+import { fetchRing } from '../api'
+import { NotFoundPage } from './404'
 
 export function UpdateRingPage() {
   const { ringId } = useParams()
-  const [ring, setRing] = useState<Ring | null>(null)
 
-  useEffect(() => {
-    const ringPerIndex = initialRings.find(item => item.id === Number(ringId))
+  if (!ringId) {
+    return <NotFoundPage />
+  }
 
-    setRing(ringPerIndex || null)
-  }, [ringId])
+  const {
+    data,
+  } = useQuery({
+    queryKey: ['rings', 'get'],
+    queryFn: fetchRing,
+  })
+
+  const ring = data?.find(item => item.ringId === ringId)
 
   if (!ring) {
     return <NotFoundPage />
