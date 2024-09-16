@@ -1,6 +1,8 @@
+import { Column, Entity, PrimaryColumn } from "typeorm"
 import { Result } from "../../../shared/Result";
 
 export interface IRing {
+  id?: string
   nome: string;
   poder: string;
   portador: string;
@@ -8,13 +10,25 @@ export interface IRing {
   imagem: string;
 }
 
+@Entity("rings")
 export class Ring {
-  id;
-  nome;
-  poder;
-  portador;
-  forjadoPor;
-  imagem;
+  @PrimaryColumn({ type: "string" })
+  id: string;
+
+  @Column({ type: "string" })
+  nome: string;
+
+  @Column({ type: "string" })
+  poder: string;
+
+  @Column({ type: "string" })
+  portador: string;
+
+  @Column({ type: "string" })
+  forjadoPor: string;
+
+  @Column({ type: "string" })
+  imagem: string;
 
   constructor(ring: IRing) {
     this.id = crypto.randomUUID();

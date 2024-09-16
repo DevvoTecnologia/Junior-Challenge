@@ -1,10 +1,9 @@
 import { Request, Response, Router } from "express";
-import { RingsRepositoryInMemory } from "../../../../../../modules/rings/repository/InMemory/RingsRepositoryInMemory";
 import { RingsService } from "../../../../../../modules/rings/services/RingsService";
+import { RingsRepository } from "../../../../../../modules/rings/repository/RingsRepository";
 
 export const ringsRoute = Router();
-
-const ringsRepository = new RingsRepositoryInMemory([])
+const ringsRepository = new RingsRepository()
 export const ringsService = new RingsService(ringsRepository)
 
 ringsRoute.post("/", async (request: Request, response: Response) => {
