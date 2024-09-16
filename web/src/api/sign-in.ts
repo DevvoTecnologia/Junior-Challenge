@@ -6,7 +6,6 @@ export type SignInRequest = {
 }
 
 export type SignInResponse = {
-  token: string
   user: {
     id: string
     username: string
