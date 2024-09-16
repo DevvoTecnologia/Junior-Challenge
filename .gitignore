@@ -1,0 +1,9 @@
+# Ignorar arquivos de variáveis de ambiente
+.env
+backend/.env
+frontend/.env
+
+# Outros padrões para ignorar arquivos temporários e de compilação
+node_modules/
+dist/
+*.log
