@@ -8,6 +8,8 @@ import { SignUp } from '@/pages/auth/sign-up'
 import { Error } from '@/pages/error'
 import { NotFound } from '@/pages/not-found'
 
+import { ProtectedRoute } from './utils/protected-route'
+
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -16,7 +18,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Home />,
+        element: <ProtectedRoute element={<Home />} />,
       },
     ],
   },
