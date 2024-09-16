@@ -72,6 +72,12 @@ importers:
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2
+      tsup:
+        specifier: ^8.2.4
+        version: 8.2.4(@swc/core@1.7.26)(jiti@1.21.6)(postcss@8.4.45)(tsx@4.19.1)(typescript@5.6.2)(yaml@2.5.1)
+      tsx:
+        specifier: ^4.19.1
+        version: 4.19.1
       typeorm:
         specifier: ^0.3.20
         version: 0.3.20(pg@8.12.0)(ts-node@10.9.2(@swc/core@1.7.26)(@types/node@22.5.5)(typescript@5.6.2))
@@ -115,12 +121,6 @@ importers:
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
-      tsup:
-        specifier: ^8.2.4
-        version: 8.2.4(@swc/core@1.7.26)(jiti@1.21.6)(postcss@8.4.45)(tsx@4.19.1)(typescript@5.6.2)(yaml@2.5.1)
-      tsx:
-        specifier: ^4.19.1
-        version: 4.19.1
 
   web:
     dependencies:
