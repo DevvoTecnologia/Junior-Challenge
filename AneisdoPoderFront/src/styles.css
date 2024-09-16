@@ -1,0 +1,26 @@
+.prevent-select {
+    -webkit-user-select: none;
+    /* Safari */
+    -ms-user-select: none;
+    /* IE 10 and IE 11 */
+    user-select: none;
+    /* Standard syntax */
+}
+
+#root {
+    height: 100%
+}
+
+html,
+body {
+    /* position: relative; */
+    height: 100vh;
+}
+
+body {
+    background: url("./assets/background.webp");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: bottom;
+
+}
