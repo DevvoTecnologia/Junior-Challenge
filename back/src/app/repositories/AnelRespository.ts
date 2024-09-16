@@ -66,4 +66,20 @@ const atualizarAnel = async (anel: IAnel): Promise<IAnel | null> => {
   }
 };
 
-export default { getAneis, createAnel, atualizarAnel };
+const deletarAnel = async (id: number): Promise<void> => {
+  try {
+    const anelExistente = await anelRepository.findOne({
+      where: { id: id },
+    });
+
+    if (!anelExistente) {
+      throw new Error(`Anel com ID ${id} não encontrado.`);
+    }
+
+    anelRepository.delete(id);
+  } catch (error) {
+    throw new Error(`Erro ao deletar o anel`);
+  }
+};
+
+export default { getAneis, createAnel, atualizarAnel, deletarAnel };

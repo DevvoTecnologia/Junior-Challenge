@@ -1,5 +1,5 @@
 import { Router } from "express";
-import anelRouter from "../controllers/ListarAnelController";
+import anelRouter from "../controllers/AnelController";
 
 const routers = Router();
 

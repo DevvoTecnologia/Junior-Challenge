@@ -30,8 +30,10 @@ anelRouter.post("/", async (req: Request, res: Response): Promise<Response> => {
     return res.status(400).json({ error: "Forjador não permitido" });
   }
 
-  if(await validarQuantidade(forger)){
-    return res.status(400).json({ error: `${forger} já possui o número máximo de anéis permitidos.` });
+  if (await validarQuantidade(forger)) {
+    return res.status(400).json({
+      error: `${forger} já possui o número máximo de anéis permitidos.`,
+    });
   }
 
   try {
@@ -77,7 +79,23 @@ anelRouter.put(
         forger,
       });
       return res.status(201).json(atualizadoAnel);
-    } catch (error) {}
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
+    }
+  }
+);
+
+anelRouter.delete(
+  "/:id",
+  async (req: Request, res: Response): Promise<Response> => {
+    const id = Number(req.params.id) as number;
+    try {
+      const deletarAnel = await AnelRespository.deletarAnel(id);
+      return res.status(201).json(deletarAnel);
+
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
+    }
   }
 );
 

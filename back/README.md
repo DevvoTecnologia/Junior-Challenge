@@ -81,6 +81,9 @@ Este projeto é uma API para gerenciamento de anéis, desenvolvida com Node.js e
   }
   ```
 
+### DELETE `/aneis/:id`
+  - Deleta o anel.
+
 
 ## Contribuições
 
