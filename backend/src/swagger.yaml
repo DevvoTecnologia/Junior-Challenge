@@ -1,0 +1,234 @@
+openapi: 3.1.0
+info:
+  title: API de Anéis
+  description: API para gerenciar anéis mágicos
+  version: 1.0.0
+servers:
+  - url: https://api.exemplo.com/v1
+paths:
+  /rings:
+    post:
+      summary: Criar um novo anel
+      tags:
+        - Rings
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Nome do anel
+                power:
+                  type: string
+                  description: Poder do anel
+                carrier:
+                  type: string
+                  description: Transportador do anel
+                forgedBy:
+                  type: string
+                  description: Forjador do anel
+                image:
+                  type: string
+                  format: binary
+                  description: Imagem do anel
+      responses:
+        '201':
+          description: Anel criado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID do anel
+                  name:
+                    type: string
+                    description: Nome do anel
+                  power:
+                    type: string
+                    description: Poder do anel
+                  carrier:
+                    type: string
+                    description: Transportador do anel
+                  forgedBy:
+                    type: string
+                    description: Forjador do anel
+                  image_url:
+                    type: string
+                    description: URL da imagem do anel
+        '400':
+          description: Solicitação inválida (campos ausentes ou forjador inválido)
+        '500':
+          description: Erro interno do servidor
+
+    get:
+      summary: Obter todos os anéis
+      tags:
+        - Rings
+      responses:
+        '200':
+          description: Lista de anéis
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: ID do anel
+                    name:
+                      type: string
+                      description: Nome do anel
+                    power:
+                      type: string
+                      description: Poder do anel
+                    carrier:
+                      type: string
+                      description: Transportador do anel
+                    forgedBy:
+                      type: string
+                      description: Forjador do anel
+                    image_url:
+                      type: string
+                      description: URL da imagem do anel
+        '500':
+          description: Erro interno do servidor
+
+  /rings/{id}:
+    put:
+      summary: Atualizar um anel por ID
+      tags:
+        - Rings
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do anel
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Nome do anel
+                power:
+                  type: string
+                  description: Poder do anel
+                carrier:
+                  type: string
+                  description: Transportador do anel
+                forgedBy:
+                  type: string
+                  description: Forjador do anel
+                image:
+                  type: string
+                  format: binary
+                  description: Nova imagem do anel
+      responses:
+        '200':
+          description: Anel atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID do anel
+                  name:
+                    type: string
+                    description: Nome do anel
+                  power:
+                    type: string
+                    description: Poder do anel
+                  carrier:
+                    type: string
+                    description: Transportador do anel
+                  forgedBy:
+                    type: string
+                    description: Forjador do anel
+                  image_url:
+                    type: string
+                    description: URL da imagem do anel
+        '400':
+          description: Solicitação inválida (ID inválido ou forjador)
+        '404':
+          description: Anel não encontrado
+        '500':
+          description: Erro interno do servidor
+
+    delete:
+      summary: Deletar um anel por ID
+      tags:
+        - Rings
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do anel
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Anel deletado com sucesso
+        '400':
+          description: Solicitação inválida (ID inválido)
+        '404':
+          description: Anel não encontrado
+        '500':
+          description: Erro interno do servidor
+
+    get:
+      summary: Obter um anel por ID
+      tags:
+        - Rings
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do anel
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Anel solicitado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID do anel
+                  name:
+                    type: string
+                    description: Nome do anel
+                  power:
+                    type: string
+                    description: Poder do anel
+                  carrier:
+                    type: string
+                    description: Transportador do anel
+                  forgedBy:
+                    type: string
+                    description: Forjador do anel
+                  image_url:
+                    type: string
+                    description: URL da imagem do anel
+        '400':
+          description: Solicitação inválida (ID inválido)
+        '404':
+          description: Anel não encontrado
+        '500':
+          description: Erro interno do servidor
