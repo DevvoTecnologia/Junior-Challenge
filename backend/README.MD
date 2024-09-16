@@ -1,5 +1,44 @@
 ## Documentação da API
 
+
+
+## Variáveis de Ambiente
+
+Para rodar esse projeto, você vai precisar adicionar as seguintes variáveis de ambiente no seu .env
+
+- DB_TYPE= # O tipo do banco de dados (ex: postgres, mysql)
+- DB_HOST= # O host do banco de dados (ex: localhost)
+- DB_PORT= # A porta do banco de dados (ex: 5432)
+- DB_USERNAME= # O nome de usuário do banco de dados
+- DB_PASSWORD= # A senha do banco de dados
+- DB_DATABASE= # O nome do banco de dados
+
+Como rodar as migrações
+
+Instalar as dependências:
+
+Certifique-se de que todas as dependências estão instaladas executando:
+
+```bash
+yarn install
+```
+
+```bash
+Criar uma nova migração:
+
+Caso você precise criar uma nova migração, use o comando abaixo, substituindo NomeDaMigration pelo nome da sua migração:
+
+yarn typeorm migration:create ./src/database/migrations/NomeDaMigration
+```
+
+```bash
+Rodar as migrações:
+
+Após criar ou baixar as migrações, você pode executá-las com o seguinte comando:
+
+yarn typeorm -- -d ./src/database/connection migration:run
+```
+
 #### Criar um Anel
 
 ```http
