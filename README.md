@@ -52,8 +52,8 @@ Adotei o modelo MSC (Model-Service-Controller) para uma clara separação de res
 - [x] Boas práticas de desenvolvimento
 - [x] Frontend interativo e responsivo
 - [x] Implementação correta da validação do limite de anéis por portador
-- [ ] Testes unitários e/ou de integração (a ser implementado)
-- [x] Documentação da API e do frontend (em progresso)
+- [x ] Testes unitários e/ou de integração
+- [x] Documentação da API e do frontend
 
 ## 📚 Documentação
 
