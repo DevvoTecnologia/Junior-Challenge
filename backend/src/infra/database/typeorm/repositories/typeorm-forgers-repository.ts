@@ -71,4 +71,32 @@ export class ForgersTypeOrmRepository implements ForgersRepository {
   
       return forger ? forgerCorrectReturnFormat : null 
   }
+
+  async fetch(): ForgersRepository.Fetch.Output {
+    const forgers = await this.forgerRepository.find()
+
+    const forgersCorrectFormat = forgers.map(item =>  { 
+      const ringsCorrectReturnFormat = item.rings?.map(item => ({
+        ringId: item.id,
+        name: item.name,
+        power: item.power,
+        proprietor: item.proprietor,
+        image: item.image,
+        forgerId: item.forger.id,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt
+      }))
+
+      return {
+        forgerId: item.id,
+        name: item.name,
+        maxRings: item.maxRings,
+        rings: ringsCorrectReturnFormat,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt
+      }}
+    )
+    
+    return forgersCorrectFormat
+  }
 }

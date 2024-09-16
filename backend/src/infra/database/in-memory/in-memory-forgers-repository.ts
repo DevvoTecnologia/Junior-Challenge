@@ -25,4 +25,10 @@ export class InMemoryForgersRepository implements ForgersRepository {
 
         return forger || null
     }
+
+    async fetch(): ForgersRepository.Fetch.Output {
+        const forgers = this.database
+        
+        return forgers
+    }
 }

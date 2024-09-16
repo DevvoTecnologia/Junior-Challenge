@@ -1,5 +1,5 @@
 import { DeleteRingUseCase } from "@/application/use-cases/rings"
-import { RingTypeORMRepository } from "@/infra/database/typeorm"
+import { RingTypeORMRepository } from "@/infra/database/typeorm/repositories"
 import { DeleteRingController } from "@/presentation/controllers/rings"
 
 export function makeDeleteRingController() {

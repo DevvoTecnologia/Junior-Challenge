@@ -1,5 +1,5 @@
 import { UpdateRingUseCase } from "@/application/use-cases/rings"
-import { ForgersTypeOrmRepository, RingTypeORMRepository } from "@/infra/database/typeorm"
+import { ForgersTypeOrmRepository, RingTypeORMRepository } from "@/infra/database/typeorm/repositories"
 import { UpdateRingController } from "@/presentation/controllers/rings"
 
 export function makeUpdateRingController() {

@@ -1,5 +1,5 @@
 import { FetchRingUseCase } from "@/application/use-cases/rings"
-import { RingTypeORMRepository } from "@/infra/database/typeorm"
+import { RingTypeORMRepository } from "@/infra/database/typeorm/repositories"
 import { FetchRingController } from "@/presentation/controllers/rings"
 
 export function makeFetchRingController() {
