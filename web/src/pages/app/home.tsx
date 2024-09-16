@@ -23,10 +23,19 @@ export function Home() {
 
   return (
     <div className="mx-auto max-w-[90rem]">
+      <main className="h-[65vh]">a</main>
       <section className="py-4">
         <h1 className="scroll-m-20 my-4 text-3xl font-extrabold tracking-tight lg:text-5xl text-center dark:text-gray-400">
           Anéis do poder
         </h1>
+        <h2 className="mt-6 text-lg pl-6  text-center text font-semibold text-gray-600">
+          O grande mago J.R.R. Tolkien disse:{' '}
+          <span className="italic text-gray-700">
+            {
+              '"Ao passar o mouse sobre o artefato, os segredos escondidos nas sombras serão revelados apenas aos dignos."'
+            }
+          </span>
+        </h2>
         <Carousel className="w-[80%] mx-auto my-4">
           <CarouselContent className="-ml-2">
             {artifactsIsPending &&
@@ -56,8 +65,20 @@ export function Home() {
                       />
                     </div>
                   </HoverCardTrigger>
-                  <HoverCardContent className="h-11 w-32">
-                    The React Framework – created and maintained by @vercel.
+                  <HoverCardContent className="bg-gradient-to-r from-sky-600 to-gray-800 rounded-lg shadow-lg">
+                    <div className="flex justify-between space-x-4 p-4 transition-transform transform hover:scale-105">
+                      <div className="space-y-1 text-white">
+                        <h4 className="text-lg font-bold text-shadow-md">
+                          {artifact.name}
+                        </h4>
+                        <p className="text-sm font-medium">{artifact.power}</p>
+                        <div className="flex items-center pt-2">
+                          <span className="text-xs italic text-gray-200">
+                            Forjado por: {artifact.forgedBy}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   </HoverCardContent>
                 </HoverCard>
               </CarouselItem>
