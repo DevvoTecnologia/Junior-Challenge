@@ -23,7 +23,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>
 
 export function SignIn() {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, login } = useAuth()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -47,6 +47,7 @@ export function SignIn() {
         title: 'Login bem-sucedido!',
         description: 'Você foi logado com sucesso.',
       })
+      login()
     },
     onError: () => {
       toast({

@@ -1,13 +1,30 @@
+export type CookieOptions = {
+  name: string
+  value: string
+  options?: {
+    httpOnly?: boolean
+    secure?: boolean
+    sameSite?: 'strict' | 'lax' | 'none'
+    maxAge?: number
+  }
+}
+
 export type HttpResponse<T = any> = {
   statusCode: number
   data: T
+  cookies?: CookieOptions[]
 }
 
 export type HttpRequest = any
 
-export const ok = (data: any = {}, httpCode = 200): HttpResponse => ({
+export const ok = (
+  data: any = {},
+  httpCode = 200,
+  cookies?: CookieOptions[],
+): HttpResponse => ({
   statusCode: httpCode,
   data,
+  cookies,
 })
 
 export enum ErrorCode {

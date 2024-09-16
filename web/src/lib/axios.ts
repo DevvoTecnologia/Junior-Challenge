@@ -1,5 +1,4 @@
 import axios from 'axios'
-import Cookies from 'js-cookie'
 
 import { env } from '@/env'
 
@@ -8,4 +7,6 @@ export const api = axios.create({
   withCredentials: true,
 })
 
-api.defaults.headers.common.Authorization = `Bearer ${Cookies.get('token')}`
+export const setAuthToken = (token: string) => {
+  api.defaults.headers.common.Authorization = `Bearer ${token}`
+}
