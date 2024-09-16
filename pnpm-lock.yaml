@@ -63,9 +63,6 @@ importers:
       jsonwebtoken:
         specifier: ^9.0.2
         version: 9.0.2
-      module-alias:
-        specifier: ^2.2.3
-        version: 2.2.3
       nanoid:
         specifier: ^5.0.7
         version: 5.0.7
@@ -118,9 +115,6 @@ importers:
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
-      tsconfig-paths:
-        specifier: ^4.2.0
-        version: 4.2.0
       tsup:
         specifier: ^8.2.4
         version: 8.2.4(@swc/core@1.7.26)(jiti@1.21.6)(postcss@8.4.45)(tsx@4.19.1)(typescript@5.6.2)(yaml@2.5.1)
@@ -2930,9 +2924,6 @@ packages:
     resolution: {integrity: sha512-+hEnITedc8LAtIP9u3HJDFIdcLV2vXP33sqLLIzkv1Db1zO/1OxbvYf0Y1OC/S/Qo5dxHXepofhmxL02PsKe+A==}
     engines: {node: '>=10'}
     hasBin: true
-
-  module-alias@2.2.3:
-    resolution: {integrity: sha512-23g5BFj4zdQL/b6tor7Ji+QY4pEfNH784BMslY9Qb0UnJWRAt+lQGLYmRaM0KDBwIG23ffEBELhZDP2rhi9f/Q==}
 
   ms@2.0.0:
     resolution: {integrity: sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A==}
@@ -6808,8 +6799,6 @@ snapshots:
   mkdirp@1.0.4: {}
 
   mkdirp@2.1.6: {}
-
-  module-alias@2.2.3: {}
 
   ms@2.0.0: {}
 
