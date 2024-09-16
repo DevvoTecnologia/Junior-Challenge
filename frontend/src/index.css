@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    background-color: #1b1b1b; /* Um fundo escuro e misterioso */
+    color: #f5f5f5; /* Cor clara para contraste no texto */
+    font-family: 'Cinzel', serif; /* Fonte com estilo medieval */
+    background-image: url('/path/to/your/middle-earth-background.jpg'); /* Adicione uma imagem de fundo temática */
+    background-size: cover;
+    background-position: center;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cinzel Decorative', serif;
+    color: #d4af37; /* Cor dourada para títulos */
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+  }
+
+  a {
+    color: #d4af37;
+    text-decoration: underline;
+  }
+
+  a:hover {
+    color: #f1c40f;
+  }
+
+  button {
+    background-color: #d4af37; /* Botões com cor dourada */
+    color: #1b1b1b;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #f1c40f; /* Um dourado mais claro ao hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  input, select, textarea {
+    background-color: #2b2b2b;
+    color: #f5f5f5;
+    border: 2px solid #d4af37;
+    border-radius: 5px;
+    padding: 10px;
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: #a8a8a8;
+  }
+
+  @media (max-width: 1024px) {
+    body {
+      background-position: top;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    button {
+      padding: 8px 12px;
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    button {
+      padding: 6px 10px;
+      font-size: 0.8rem;
+    }
+  }
+}
