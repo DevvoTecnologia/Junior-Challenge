@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.slick-next {
+	right: 15px;
+	z-index: 99;
+}
+
+.slick-prev {
+	left: 15px;
+	z-index: 99;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background-color: rgb(241, 237, 237);
+}
+
+.btn {
+	@apply px-4 py-2 rounded-md font-semibold text-white shadow-sm;
+}
+
+.btn-primary {
+	@apply bg-blue-500 hover:bg-blue-700;
+}
+
+.btn-secondary {
+	@apply bg-gray-500 hover:bg-gray-700;
+}
+
+.btn-danger {
+	@apply bg-red-500 hover:bg-red-700;
+}
+
+.btn-warning {
+	@apply bg-yellow-500 hover:bg-yellow-700;
+}
+
+.btn-success {
+	@apply bg-green-500 hover:bg-green-700;
+}
+
+.btn-info {
+	@apply bg-orange-200 hover:bg-orange-300 text-black;
+}
+
+input,
+select {
+	padding: 0.5em;
+	border-radius: 5px;
+	box-shadow: 0 0 1px 1px black;
+}
+
+.row {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5em;
+}
