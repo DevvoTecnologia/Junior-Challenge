@@ -8,7 +8,10 @@
     "migration:run": "tsx --env-file=.env ./node_modules/typeorm/cli -d ./src/infra/data-source.ts migration:run",
     "seed": "tsx --env-file=.env ./src/infra/seeds/seed.ts",
     "build": "tsup src --format esm ",
-    "start": "node --env-file=.env dist/main/server"
+    "start": "node --env-file=.env dist/main/server",
+    "start:prod": "node dist/main/server.js",
+    "migrate:prod": "tsx ./node_modules/typeorm/cli -d dist/infra/data-source.js migration:run",
+    "seed:prod": "tsx dist/infra/seeds/seed.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

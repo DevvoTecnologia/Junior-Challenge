@@ -9,6 +9,8 @@ import { Character } from './entities/Character'
 
 const __dirname = path.resolve()
 
+console.log(env.DB_SSL)
+
 export const AppDataSource = new DataSource({
   type: 'postgres',
   host: env.DB_HOST || 'localhost',
@@ -16,7 +18,8 @@ export const AppDataSource = new DataSource({
   username: env.DB_USERNAME || 'gustavo',
   password: env.DB_PASSWORD || '1234',
   database: env.DB_NAME || 'artifact-hub',
-  synchronize: false,
+  ssl: false,
+  synchronize: env.DB_SYNCHRONIZE,
   logging: false,
   entities: [User, Artifact, Smith, Character],
   migrations:
