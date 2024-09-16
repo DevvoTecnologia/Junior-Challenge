@@ -1,10 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
+import { MdModeEdit } from 'react-icons/md'
 
+import { Artifact } from '@/@types/artifact'
 import { createArtifact, CreateArtifactRequest } from '@/api/create-artifact'
 import { getArtifacts } from '@/api/get-artifacts'
 import { getCharacters } from '@/api/get-characters'
 import { getSmiths } from '@/api/get-smiths'
+import { updateArtifact, UpdateArtifactRequest } from '@/api/update-artifact'
 import { CreateArtifactForm } from '@/components/form-create-artifact'
+import { UpdateArtifactForm } from '@/components/form-update-artifact'
 import { Button } from '@/components/ui/button'
 import {
   Carousel,
@@ -30,6 +35,10 @@ import { toast } from '@/hooks/use-toast'
 
 export function Home() {
   const queryClient = useQueryClient()
+  const [selectedArtifact, setSelectedArtifact] = useState<Artifact | null>(
+    null,
+  )
+
   const { data: artifacts, isPending: artifactsIsPending } = useQuery({
     queryKey: ['artifacts'],
     queryFn: getArtifacts,
@@ -60,6 +69,24 @@ export function Home() {
     },
   })
 
+  const { mutateAsync: updateArtifactFn, isPending: isUpdating } = useMutation({
+    mutationFn: (data: { id: string; values: UpdateArtifactRequest }) =>
+      updateArtifact(data.id, data.values),
+    onSuccess: () => {
+      toast({
+        title: 'Atualizado com sucesso!',
+        description: 'O artefato foi atualizado com sucesso.',
+      })
+      queryClient.invalidateQueries({ queryKey: ['artifacts'] })
+    },
+    onError: () => {
+      toast({
+        title: 'Erro ao atualizar',
+        description: 'Falha ao atualizar artefato',
+      })
+    },
+  })
+
   const handleCreateArtifact = async (values: CreateArtifactRequest) => {
     await createArtifactFn({
       name: values.name,
@@ -67,6 +94,20 @@ export function Home() {
       bearer: values.bearer,
       forgedBy: values.forgedBy,
     })
+  }
+
+  const handleUpdateArtifact = async (values: UpdateArtifactRequest) => {
+    if (selectedArtifact) {
+      await updateArtifactFn({
+        id: selectedArtifact.id,
+        values: {
+          name: values.name,
+          power: values.power,
+          bearer: values.bearer,
+        },
+      })
+      setSelectedArtifact(null)
+    }
   }
 
   return (
@@ -89,6 +130,32 @@ export function Home() {
                   smiths={smiths}
                   characters={characters}
                   isCreating={isCreating}
+                />
+              )}
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog
+          open={!!selectedArtifact}
+          onOpenChange={(open) => !open && setSelectedArtifact(null)}
+        >
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Atualizar Artefato</DialogTitle>
+              {(smithsIsPending || charactersIsPending) && (
+                <Skeleton className="w-full" />
+              )}
+              {selectedArtifact && smiths && characters && (
+                <UpdateArtifactForm
+                  initialValues={{
+                    name: selectedArtifact.name,
+                    power: selectedArtifact.power,
+                    bearer: selectedArtifact.bearer,
+                  }}
+                  characters={characters}
+                  isUpdating={isUpdating}
+                  onSubmit={handleUpdateArtifact}
                 />
               )}
             </DialogHeader>
@@ -138,15 +205,23 @@ export function Home() {
                   <HoverCardContent className="bg-gradient-to-r from-sky-600 to-gray-800 rounded-lg shadow-lg">
                     <div className="flex justify-between space-x-4 p-4 transition-transform transform hover:scale-105">
                       <div className="space-y-1 text-white">
-                        <h4 className="text-lg font-bold text-shadow-md">
+                        <h4 className="text-lg font-bold text-shadow-md tracking-tight">
                           {artifact.name}
                         </h4>
                         <p className="text-sm font-medium">{artifact.power}</p>
-                        <div className="flex items-center pt-2">
+                        <div className="pt-2">
                           <span className="text-xs italic text-gray-200">
                             Forjado por: {artifact.forgedBy}
                           </span>
                         </div>
+                        <Button
+                          onClick={() => setSelectedArtifact(artifact)}
+                          className="mt-4"
+                          size="icon"
+                          variant="secondary"
+                        >
+                          <MdModeEdit className="w-5 h-5" />
+                        </Button>
                       </div>
                     </div>
                   </HoverCardContent>
