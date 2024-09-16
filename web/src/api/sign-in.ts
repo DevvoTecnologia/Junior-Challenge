@@ -13,7 +13,7 @@ export type SignInResponse = {
 }
 
 export async function SignIn({ username, password }: SignInRequest) {
-  const { data } = await api.post<SignInResponse>(`/users`, {
+  const { data } = await api.post<SignInResponse>(`/login`, {
     username,
     password,
   })

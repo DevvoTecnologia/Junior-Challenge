@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 
 import { SignUp as UserSignUp, SignUpRequest } from '@/api/sign-up' // Atualize o import
@@ -11,6 +12,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Loader } from '@/components/ui/loader'
 import { toast } from '@/hooks/use-toast'
+import { useAuth } from '@/hooks/useAuth'
 
 const schema = z.object({
   username: z.string().min(1, { message: 'Username is required.' }),
@@ -22,6 +24,15 @@ const schema = z.object({
 type SignUpFormValues = z.infer<typeof schema>
 
 export function SignUp() {
+  const { isAuthenticated } = useAuth()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/')
+    }
+  }, [isAuthenticated, navigate])
+
   const { mutate, isPending } = useMutation({
     mutationFn: (data: SignUpRequest) => UserSignUp(data),
     onSuccess: () => {

@@ -1,17 +1,11 @@
-import Cookies from 'js-cookie'
-import { useEffect, useState } from 'react'
+import { useContext } from 'react'
 
-export function useAuth() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+import { AuthContext, AuthContextType } from '@/contexts/auth'
 
-  useEffect(() => {
-    const token = Cookies.get('token')
-    if (token) {
-      setIsAuthenticated(true)
-    } else {
-      setIsAuthenticated(false)
-    }
-  }, [])
-
-  return { isAuthenticated }
+export const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext)
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider')
+  }
+  return context
 }
