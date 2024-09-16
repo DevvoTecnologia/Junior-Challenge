@@ -20,6 +20,13 @@ export class DeleteRingController implements IDeleteRingController {
 
             const rings = await this.deleteRingRepository.deleteRing(id)
 
+            if (!rings) {
+                return {
+                    statusCode: 404,
+                    body: "Ring not found"
+                };
+            }
+
             return {
                 statusCode: 200,
                 body: rings

@@ -63,18 +63,18 @@ export default function App() {
       setRings((allRings) => [...allRings, response.data]);
     }
   } catch (error) {
-    if (error.response) {
+    if (error) {
       // Erro com resposta do servidor
-      console.error("Erro de resposta do servidor:", error.response.data);
-      alert(`Erro: ${JSON.stringify(error.response.data)}`); // Exibe a mensagem de erro
-    } else if (error.request) {
+      console.error("Erro de resposta do servidor:", error);
+      alert(`Erro: ${JSON.stringify(error)}`); // Exibe a mensagem de erro
+    } else if (error) {
       // Erro na solicitação
-      console.error("Erro na solicitação:", error.request);
+      console.error("Erro na solicitação:", error);
       alert("Erro na solicitação. Verifique sua conexão com o servidor.");
     } else {
       // Erro desconhecido
-      console.error("Erro desconhecido:", error.message);
-      alert(`Erro desconhecido: ${error.message}`);
+      console.error("Erro desconhecido:", error);
+      alert(`Erro desconhecido: ${error}`);
     }
   }
 

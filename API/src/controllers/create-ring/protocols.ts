@@ -8,7 +8,6 @@ export interface ICreateRingController {
 }
 
 export interface CreateRingParams {
-  id: string;
   ringName: string;
   powerName: string;
   ownerName: string;

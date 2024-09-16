@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors'
 import { config } from 'dotenv';
-import { connectToDatabase } from './database/mongo'; // Corrigido
+import { connectToDatabase } from './database/mongo'; 
 import { RingService } from './services/ring-service';
 import { MongoCreateRingRepository } from './repositories/create-ring/mongo-create-ring';
 import { MongoUpdateRingRepository } from './repositories/update-ring/mongo-update-ring';
