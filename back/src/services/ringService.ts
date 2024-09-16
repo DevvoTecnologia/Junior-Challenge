@@ -24,7 +24,7 @@ export const updateRingService = async (updatedRing: {
 }) => {
   const ring = await getRingService(updatedRing.id);
 
-  if (ring.bearer !== updatedRing.bearer) {
+  if (ring && ring.bearer !== updatedRing.bearer) {
     throw new Error('Not authorized');
   }
 
@@ -58,11 +58,7 @@ export const deleteRingService = async (id: number, bearerId: string) => {
 export const getRingService = async (id: number) => {
   const ring = await Ring.findOne({ where: { id } });
 
-  if (!ring) {
-    throw new Error('Ring not found');
-  }
-
-  return ring;
+  return ring ? ring : null;
 };
 
 export const getAllRingsService = async () => {

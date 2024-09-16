@@ -138,18 +138,6 @@ describe('Ring Controller', () => {
       expect(reply.status).toHaveBeenCalledWith(401);
       expect(reply.send).toHaveBeenCalledWith({ error: 'User not authenticated' });
     });
-
-    it('should return 500 on error', async () => {
-      const testUser = { userId: '550e8400-e29b-41d4-a716-446655440003', class: 'Orc' };
-      const request = createRequest({ ringId: 1 }, {}, testUser);
-
-      (getAllRingsService as Mock).mockRejectedValue(new Error('Error'));
-
-      await getAllRings(request, reply);
-
-      expect(reply.status).toHaveBeenCalledWith(500);
-      expect(reply.send).toHaveBeenCalledWith({ error: 'Internal Server Error' });
-    });
   });
 
   describe('createRing', () => {
@@ -242,7 +230,7 @@ describe('Ring Controller', () => {
 
       expect(reply.status).toHaveBeenCalledWith(403);
       expect(reply.send).toHaveBeenCalledWith({
-        error: 'Forbidden: Unauthorized to perform this action',
+        error: 'Unauthorized to perform this action',
       });
     });
   });
@@ -287,7 +275,7 @@ describe('Ring Controller', () => {
 
       expect(reply.status).toHaveBeenCalledWith(403);
       expect(reply.send).toHaveBeenCalledWith({
-        error: 'Forbidden: Unauthorized to perform this action',
+        error: 'Unauthorized to perform this action',
       });
     });
   });

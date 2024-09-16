@@ -110,11 +110,11 @@ describe('user routes', () => {
 
   test('DELETE /delete/:id deve retornar erro 404 para usuário inexistente', async () => {
     const response = await request(app.server).delete(
-      '/delete/00000000-0000-0000-0000-000000003000'
+      '/delete/00000000-0000-0000-0000-000300003000'
     );
     expect(response.status).toBe(404);
     expect(response.body).toEqual({
-      error: 'Not Found',
+      error: 'User not found',
     });
   });
 });

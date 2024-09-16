@@ -27,7 +27,6 @@ const checkAuthentication = async (request: FastifyRequest, reply: FastifyReply)
 const checkRingExists = async (ringId: number, reply: FastifyReply) => {
   const ring = await getRingService(ringId);
   if (!ring) {
-    reply.status(404).send({ error: 'Ring not found' });
     return null;
   }
   return ring;
@@ -35,7 +34,6 @@ const checkRingExists = async (ringId: number, reply: FastifyReply) => {
 
 const checkPermission = (ring: any, reqUser: any, reply: FastifyReply) => {
   if (ring.bearer !== reqUser.userId) {
-    reply.status(403).send({ error: 'Forbidden: Unauthorized to perform this action' });
     return false;
   }
   return true;
@@ -82,23 +80,23 @@ export const getRing = async (
 
   try {
     const ring = await checkRingExists(ringId, reply);
-    if (!ring) return;
+    if (!ring) return reply.status(404).send({ error: 'Ring not found' });
 
     return reply.status(200).send(ring);
   } catch (error: any) {
-    return reply.status(500).send({ error: 'Internal Server Error' });
+    return reply.status(500).send(error);
   }
 };
 
 export const getAllRings = async (request: FastifyRequest, reply: FastifyReply) => {
   const reqUser = await checkAuthentication(request, reply);
-  if (!reqUser) return;
+  if (!reqUser) return reply.status(403).send({ error: 'Not Authorized' });
 
   try {
     const rings = await getAllRingsService();
     return reply.status(200).send(rings);
   } catch (error: any) {
-    return reply.status(500).send({ error: 'Internal Server Error' });
+    return reply.status(500).send(error);
   }
 };
 
@@ -116,7 +114,7 @@ export const createRing = async (
 ) => {
   try {
     const reqUser = await checkAuthentication(request, reply);
-    if (!reqUser) return;
+    if (!reqUser) return reply.status(403).send({ error: 'Not Authorized' });
 
     await checkPortedRings(reqUser.userId);
 
@@ -133,22 +131,21 @@ export const createRing = async (
 
 export const updateRing = async (
   request: FastifyRequest<{
-    Params: { ringId: string };
+    Params: { ringId: number };
     Body: { name: string; power: string; bearer: string; image?: string };
   }>,
   reply: FastifyReply
 ) => {
   const { ringId } = request.params;
-
   try {
-    const ring = await checkRingExists(Number(ringId), reply);
-    if (!ring) return;
+    const ring = await checkRingExists(ringId, reply);
+    if (!ring) return reply.status(404).send({ error: 'Ring not found' });
 
     const reqUser = await checkAuthentication(request, reply);
-    if (!reqUser) return;
+    if (!reqUser) return reply.status(403).send({ error: 'Not Authorized' });
 
-    if (!checkPermission(ring, reqUser, reply)) return;
-
+    if (!checkPermission(ring, reqUser, reply))
+      return reply.status(403).send({ error: 'Unauthorized to perform this action' });
     const updatedRing = await updateRingService({
       ...request.body,
       id: Number(ringId),
@@ -156,7 +153,7 @@ export const updateRing = async (
 
     return reply.status(200).send(updatedRing);
   } catch (error: any) {
-    return reply.status(500).send({ error: 'Internal Server Error' });
+    return reply.status(500).send(error);
   }
 };
 
@@ -168,16 +165,17 @@ export const deleteRing = async (
 
   try {
     const ring = await checkRingExists(ringId, reply);
-    if (!ring) return;
+    if (!ring) return reply.status(404).send({ error: 'Ring not found' });
 
     const reqUser = await checkAuthentication(request, reply);
-    if (!reqUser) return;
+    if (!reqUser) return reply.status(403).send({ error: 'Not Authorized' });
 
-    if (!checkPermission(ring, reqUser, reply)) return;
+    if (!checkPermission(ring, reqUser, reply))
+      return reply.status(403).send({ error: 'Unauthorized to perform this action' });
 
     await deleteRingService(ring.id, reqUser.userId);
     return reply.status(204).send({});
   } catch (error: any) {
-    return reply.status(500).send({ error: 'Internal Server Error' });
+    return reply.status(500).send(error);
   }
 };

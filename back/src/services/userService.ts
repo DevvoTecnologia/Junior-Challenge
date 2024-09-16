@@ -29,7 +29,6 @@ export const createUserService = async (newUser: {
     };
     return data;
   } catch (error) {
-    console.error(error);
     throw new Error('Error creating user');
   }
 };
@@ -79,9 +78,7 @@ export const getByEmail = async (email: string) => {
 };
 
 export const getById = async (id: string) => {
-  const user = await User.findOne({ where: { id } });
-
-  return user;
+  return await User.findOne({ where: { id } });
 };
 
 export const deleteUserService = async (id: string) => {

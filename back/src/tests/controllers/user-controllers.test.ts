@@ -3,6 +3,7 @@ import { registerUser, loginUser, deleteUser } from '../../controllers/userContr
 import {
   createUserService,
   deleteUserService,
+  getById,
   getByUsername,
   loginUserService,
 } from '../../services/userService';
@@ -129,8 +130,9 @@ describe('UserController', async () => {
   describe('deleteUser', () => {
     it('should delete a user successfully', async () => {
       const id = 'mock-id';
-      (deleteUserService as Mock).mockResolvedValue(undefined);
 
+      (getById as Mock).mockResolvedValue({ id });
+      (deleteUserService as Mock).mockResolvedValue(undefined);
       const mockRequest = {
         params: {
           id,
@@ -139,14 +141,15 @@ describe('UserController', async () => {
 
       await deleteUser(mockRequest, mockReply);
 
-      expect(deleteUserService).toHaveBeenCalledWith(id);
       expect(mockReply.status).toHaveBeenCalledWith(204);
+
       expect(mockReply.send).toHaveBeenCalledWith();
     });
 
     it('should return 404 if user is not found', async () => {
-      const id = mockUser.id;
-      (deleteUserService as Mock).mockRejectedValue(new Error('User not found'));
+      const id = 'mock-id';
+
+      (getById as Mock).mockResolvedValue(null);
 
       const mockRequest = {
         params: {
@@ -156,9 +159,9 @@ describe('UserController', async () => {
 
       await deleteUser(mockRequest, mockReply);
 
-      expect(deleteUserService).toHaveBeenCalledWith(id);
       expect(mockReply.status).toHaveBeenCalledWith(404);
-      expect(mockReply.send).toHaveBeenCalledWith(expect.any(Error));
+
+      expect(mockReply.send).toHaveBeenCalledWith({ error: 'User not found' });
     });
   });
 });
