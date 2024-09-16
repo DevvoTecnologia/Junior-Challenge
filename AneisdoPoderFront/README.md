@@ -1,50 +1,48 @@
-# React + TypeScript + Vite
+# Projeto Frontend - React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este projeto é uma aplicação frontend desenvolvida com React e TypeScript, utilizando o Vite como build tool para um desenvolvimento mais rápido e otimizado.
 
-Currently, two official plugins are available:
+## Tecnologias Utilizadas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React**: Biblioteca JavaScript para construir interfaces de usuário.
+- **TypeScript**: Superset de JavaScript que adiciona tipagem estática.
+- **Vite**: Ferramenta de build rápida e leve para desenvolvimento frontend.
 
-## Expanding the ESLint configuration
+## Funcionalidades
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- Estrutura de projeto escalável com componentes React.
+- Suporte completo a TypeScript.
+- Performance otimizada utilizando Vite.
 
-- Configure the top-level `parserOptions` property like this:
+## Instalação e Configuração
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+### Pré-requisitos
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- [Node.js](https://nodejs.org/)
+- [npm](https://www.npmjs.com/) ou [yarn](https://yarnpkg.com/)
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+### Passos para Instalação
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+1. Clone o repositório:
+
+   ```bash
+   git clone https://github.com/usuario/projeto-frontend.git
+   
+2. Rode o projeto
+    ```bash
+      cd projeto-frontend/AneisdoPoder
+      npm run dev
+      ```
+
+### Telas
+#### Card
+<img src="../screenshots/01.png" alt="image" width="30%" height="auto"/>
+
+
+#### Edição
+<img src="../screenshots/02_tela_edicao.png" alt="image" width="30%" height="auto"/>
+<img src="../screenshots/criar.gif" alt="image" width="100%" height="auto"/>
+
+#### Erro
+<img src="../screenshots/03.png" alt="image" width="30%" height="auto"/>
+<img src="../screenshots/verificar.gif" alt="image" width="100%" height="auto"/>

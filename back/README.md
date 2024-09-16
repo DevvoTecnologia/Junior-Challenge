@@ -51,11 +51,11 @@ Este projeto é uma API para gerenciamento de anéis, desenvolvida com Node.js e
 
 ## Rotas da API
 
-### GET `/api/rings`
+### GET `/aneis`
 
 - Retorna todos os anéis cadastrados no banco de dados.
 
-### POST `/api/rings`
+### POST `/aneis`
 
 - Cria um novo anel.
 - O corpo da requisição deve conter os seguintes campos:
@@ -68,7 +68,7 @@ Este projeto é uma API para gerenciamento de anéis, desenvolvida com Node.js e
   }
   ```
 
-### PUT `/api/rings/:id`
+### PUT `/aneis/:id`
 
 - Atualiza as informações de um anel existente com base no ID.
 - - O corpo da requisição deve conter os seguintes campos:
