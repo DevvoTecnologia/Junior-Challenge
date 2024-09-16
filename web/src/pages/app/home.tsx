@@ -9,6 +9,7 @@ import { getArtifacts } from '@/api/get-artifacts'
 import { getCharacters } from '@/api/get-characters'
 import { getSmiths } from '@/api/get-smiths'
 import { updateArtifact, UpdateArtifactRequest } from '@/api/update-artifact'
+import home from '@/assets/images/home.png'
 import { CreateArtifactForm } from '@/components/form-create-artifact'
 import { UpdateArtifactForm } from '@/components/form-update-artifact'
 import { Button } from '@/components/ui/button'
@@ -140,31 +141,30 @@ export function Home() {
 
   return (
     <div className="mx-auto max-w-[90rem]">
-      <main className="h-[65vh]">main</main>
-      <section className="py-4 max-w-[90rem]">
-        {/* Diálogo para Adicionar Artefato */}
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>Adicionar</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Adicionar Artefato</DialogTitle>
-              {(smithsIsPending || charactersIsPending) && (
-                <Skeleton className="w-full" />
-              )}
-              {smiths && characters && (
-                <CreateArtifactForm
-                  onSubmit={handleCreateArtifact}
-                  smiths={smiths}
-                  characters={characters}
-                  isCreating={isCreating}
-                />
-              )}
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
+      <main className="bg-gray-900 text-gray-300 mt-4 rounded-lg overflow-hidden">
+        <div className="max-w-[90rem] mx-auto">
+          <div className="flex items-center flex-wrap">
+            <div className="md:w-full lg:w-[55%] text-center lg:text-left p-8">
+              <h1 className="text-4xl lg:text-5xl font-extrabold mb-4">
+                Mergulhe na Magia dos Artefatos Ancestrais
+              </h1>
+              <p className="text-md lg:text-lg mb-6">
+                Descubra os mistérios de artefatos poderosos forjados no coração
+                de reinos lendários. De anéis encantados a espadas míticas,
+                explore as maravilhas e segredos da magia ancestral.
+              </p>
+              <Button variant="secondary">Explorar</Button>
+            </div>
+            <img
+              src={home}
+              alt="Magia Escura"
+              className="h-full md:w-full lg:w-[45%] object-cover"
+            />
+          </div>
+        </div>
+      </main>
 
+      <section className="py-4 max-w-[90rem]">
         {/* Diálogo para Atualizar Artefato */}
         <Dialog
           open={!!artifactToEdit}
@@ -224,11 +224,35 @@ export function Home() {
         </Dialog>
 
         <h1 className="scroll-m-20 my-4 text-3xl font-extrabold tracking-tight lg:text-5xl text-center dark:text-gray-400">
-          Anéis do poder
+          Artefatos Mágicos
         </h1>
+
+        {/* Diálogo para Adicionar Artefato */}
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button>Adicionar</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Adicionar Artefato</DialogTitle>
+              {(smithsIsPending || charactersIsPending) && (
+                <Skeleton className="w-full" />
+              )}
+              {smiths && characters && (
+                <CreateArtifactForm
+                  onSubmit={handleCreateArtifact}
+                  smiths={smiths}
+                  characters={characters}
+                  isCreating={isCreating}
+                />
+              )}
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+
         <h2 className="mt-6 text-lg pl-6 text-center text font-semibold text-gray-600">
           O grande mago J.R.R. Tolkien disse:{' '}
-          <span className="italic text-gray-700">
+          <span className="italic text-gray-700 dark:text-gray-500">
             {
               '"Ao passar o mouse sobre o artefato, os segredos escondidos nas sombras serão revelados apenas aos dignos."'
             }
@@ -263,13 +287,15 @@ export function Home() {
                       />
                     </div>
                   </HoverCardTrigger>
-                  <HoverCardContent className="bg-gradient-to-r from-sky-600 to-gray-800 rounded-lg shadow-lg">
+                  <HoverCardContent className="bg-gradient-to-r from-sky-600 to-gray-800 rounded-lg shadow-lg border-none">
                     <div className="flex justify-between space-x-4 p-4 transition-transform transform hover:scale-105">
                       <div className="space-y-1 text-white">
                         <h4 className="text-lg font-bold text-shadow-md tracking-tight">
                           {artifact.name}
                         </h4>
-                        <p className="text-sm font-medium">{artifact.power}</p>
+                        <p className="text-sm font-medium text-gray-300">
+                          {artifact.power}
+                        </p>
                         <div className="pt-2">
                           <span className="text-xs italic text-gray-200">
                             Forjado por: {artifact.forgedBy}
