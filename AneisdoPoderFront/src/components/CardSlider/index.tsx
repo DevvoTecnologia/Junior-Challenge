@@ -132,7 +132,7 @@ export const CardSlider = () => {
           </ButtonStyled>
         )}
         {modalMessage && (
-          <OverlayStyled>
+          <OverlayStyled  onClick={()=>setModalMessage(!modalMessage)}>
             <dialog open={modalMessage}>
               <h1>{errorMessage}</h1>
               <ContainerIconStyled onClick={()=>setModalMessage(!modalMessage)}>
