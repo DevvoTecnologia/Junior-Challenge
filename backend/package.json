@@ -5,6 +5,8 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
     "typeorm": "typeorm-ts-node-commonjs"
   },
   "dependencies": {

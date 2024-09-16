@@ -111,7 +111,7 @@ Respostas:
 #### Deletar um Anel
 
 ```http
-  DELETE /api/rings/${id}
+DELETE /api/rings/${id}
 ```
 
 | Parâmetro | Tipo     | Descrição                                   |
