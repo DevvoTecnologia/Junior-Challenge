@@ -1,0 +1,172 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "DevvoRing API",
+    "description": "Playground for DevvoRing Api..."
+  },
+  "host": "localhost:3000",
+  "servers": [
+    {
+      "url": "http://localhost:4000"
+    }
+  ],
+  "basePath": "/",
+  "schemes": ["http"],
+  "paths": {
+    "/get": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/create": {
+      "post": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "example": "Nome do anel"
+                },
+                "forjadoPor": {
+                  "example": "Humanos"
+                },
+                "poder": {
+                  "example": "Poder"
+                },
+                "portador": {
+                  "example": "João"
+                },
+                "imagem": {
+                  "example": "url"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/update/{id}": {
+      "patch": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nome": {
+                  "example": "any"
+                },
+                "poder": {
+                  "example": "any"
+                },
+                "portador": {
+                  "example": "any"
+                },
+                "imagem": {
+                  "example": "any"
+                },
+                "forjadoPor": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/delete/{id}": {
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "someBody": {
+        "$name": "Jhon Doe",
+        "$age": 29,
+        "about": ""
+      },
+      "someResponse": {
+        "name": "Jhon Doe",
+        "age": 29,
+        "diplomas": [
+          {
+            "school": "XYZ University",
+            "year": 2020,
+            "completed": true,
+            "internship": {
+              "hours": 290,
+              "location": "XYZ Company"
+            }
+          }
+        ]
+      },
+      "forjadoPor": {
+        "@enum": ["Humanos", "Anões", "Sauron", "Elfos"]
+      }
+    }
+  }
+}
