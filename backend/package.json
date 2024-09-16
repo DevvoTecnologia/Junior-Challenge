@@ -8,7 +8,8 @@
     "start": "node dist/server.js",
     "dev": "tsx --env-file=.env --watch src/server.ts",
     "build": "pnpm install && npx tsc",
-    "seed": "tsx --env-file=.env src/runSeed.ts"
+    "seed": "tsx --env-file=.env src/runSeed.ts",
+    "test": "jest"
   },
   "keywords": [],
   "author": "João Vítor Ferraz",
@@ -22,6 +23,9 @@
     "typeorm": "^0.3.20"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.13",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
     "tsx": "^4.19.1"
   }
 }

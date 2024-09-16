@@ -1,5 +1,4 @@
 import { Repository } from 'typeorm';
-import dbClient from '../config/database';
 import { Owner } from '../models/Owner';
 import { Ring } from '../models/Ring';
 import { ConflictError, NotFoundError } from '../utils/errors';
@@ -13,9 +12,7 @@ const RING_LIMITS = {
 };
 
 export class RingService {
-  private ringRepository: Repository<Ring> = dbClient.getRepository(Ring);
-
-  constructor(private ownerService: OwnerService) {}
+  constructor(private ringRepository: Repository<Ring>, private ownerService: OwnerService) {}
 
   private async validateRingLimit(forgedBy: Ring['forgedBy']): Promise<boolean> {
     const count = await this.ringRepository.count({ where: { forgedBy } });
@@ -70,12 +67,12 @@ export class RingService {
       relations: ['currentOwner'],
     });
 
-    if (ring.forgedBy !== forgedBy) {
-      await this.checkLimit(forgedBy);
-    }
-
     if (!ring) {
       throw new NotFoundError(`Anel não encontrado`);
+    }
+
+    if (ring.forgedBy !== forgedBy) {
+      await this.checkLimit(forgedBy);
     }
 
     const currentOwnerName = ring.currentOwner.name;

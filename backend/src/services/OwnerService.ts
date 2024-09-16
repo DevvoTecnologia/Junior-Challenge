@@ -1,9 +1,8 @@
 import { Repository } from 'typeorm';
-import dbClient from '../config/database';
 import { Owner } from '../models/Owner';
 
 export class OwnerService {
-  private ownerRepository: Repository<Owner> = dbClient.getRepository(Owner);
+  constructor(private ownerRepository: Repository<Owner>) {}
 
   async findOrCreateOwner(ownerData: Omit<Owner, 'id' | 'rings'>): Promise<Owner> {
     const existingOwner = await this.ownerRepository.findOne({

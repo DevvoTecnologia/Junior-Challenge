@@ -1,8 +1,11 @@
 import cors from 'cors';
 import express from 'express';
+import dbClient from './config/database';
 import { RingController } from './controllers/RingController';
 import { checkJSONReq } from './middleware/checkJSONReq';
 import { errorHandler } from './middleware/errorHandler';
+import { Owner } from './models/Owner';
+import { Ring } from './models/Ring';
 import ringsRouter from './routes/rings';
 import { OwnerService } from './services/OwnerService';
 import { RingService } from './services/RingService';
@@ -19,8 +22,11 @@ app.use(express.json());
 
 app.use(checkJSONReq);
 
-const ownerService = new OwnerService();
-const ringService = new RingService(ownerService);
+const ownerRepository = dbClient.getRepository(Owner);
+const ringRepository = dbClient.getRepository(Ring);
+
+const ownerService = new OwnerService(ownerRepository);
+const ringService = new RingService(ringRepository, ownerService);
 const ringController = new RingController(ringService);
 
 app.use('/rings', ringsRouter(ringController));
