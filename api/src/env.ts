@@ -15,6 +15,7 @@ const envSchema = z.object({
   CLOUD_API_KEY: z.string(),
   CLOUD_API_SECRET: z.string(),
   HUGGING_FACE_TOKEN: z.string(),
+  CORS_ORIGIN: z.string(),
 })
 
 export const env = envSchema.parse(process.env)
