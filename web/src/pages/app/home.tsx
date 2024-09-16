@@ -1,9 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
-import { MdModeEdit } from 'react-icons/md'
+import { MdDelete, MdModeEdit } from 'react-icons/md'
 
 import { Artifact } from '@/@types/artifact'
 import { createArtifact, CreateArtifactRequest } from '@/api/create-artifact'
+import { deleteArtifact } from '@/api/delete-artifact'
 import { getArtifacts } from '@/api/get-artifacts'
 import { getCharacters } from '@/api/get-characters'
 import { getSmiths } from '@/api/get-smiths'
@@ -21,6 +22,7 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -30,12 +32,14 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card'
+import { Loader } from '@/components/ui/loader'
 import { Skeleton } from '@/components/ui/skeleton'
 import { toast } from '@/hooks/use-toast'
 
 export function Home() {
   const queryClient = useQueryClient()
-  const [selectedArtifact, setSelectedArtifact] = useState<Artifact | null>(
+  const [artifactToEdit, setArtifactToEdit] = useState<Artifact | null>(null)
+  const [artifactToDelete, setArtifactToDelete] = useState<Artifact | null>(
     null,
   )
 
@@ -87,6 +91,24 @@ export function Home() {
     },
   })
 
+  const { mutateAsync: deleteArtifactFn, isPending: isDeleting } = useMutation({
+    mutationFn: deleteArtifact,
+    onSuccess: () => {
+      toast({
+        title: 'Excluído com sucesso!',
+        description: 'O artefato foi excluído com sucesso.',
+      })
+      queryClient.invalidateQueries({ queryKey: ['artifacts'] })
+      setArtifactToDelete(null)
+    },
+    onError: () => {
+      toast({
+        title: 'Erro ao excluir',
+        description: 'Falha ao excluir artefato',
+      })
+    },
+  })
+
   const handleCreateArtifact = async (values: CreateArtifactRequest) => {
     await createArtifactFn({
       name: values.name,
@@ -97,16 +119,22 @@ export function Home() {
   }
 
   const handleUpdateArtifact = async (values: UpdateArtifactRequest) => {
-    if (selectedArtifact) {
+    if (artifactToEdit) {
       await updateArtifactFn({
-        id: selectedArtifact.id,
+        id: artifactToEdit.id,
         values: {
           name: values.name,
           power: values.power,
           bearer: values.bearer,
         },
       })
-      setSelectedArtifact(null)
+      setArtifactToEdit(null)
+    }
+  }
+
+  const handleDeleteArtifact = async () => {
+    if (artifactToDelete) {
+      await deleteArtifactFn(artifactToDelete.id)
     }
   }
 
@@ -114,6 +142,7 @@ export function Home() {
     <div className="mx-auto max-w-[90rem]">
       <main className="h-[65vh]">main</main>
       <section className="py-4 max-w-[90rem]">
+        {/* Diálogo para Adicionar Artefato */}
         <Dialog>
           <DialogTrigger asChild>
             <Button>Adicionar</Button>
@@ -136,9 +165,10 @@ export function Home() {
           </DialogContent>
         </Dialog>
 
+        {/* Diálogo para Atualizar Artefato */}
         <Dialog
-          open={!!selectedArtifact}
-          onOpenChange={(open) => !open && setSelectedArtifact(null)}
+          open={!!artifactToEdit}
+          onOpenChange={(open) => !open && setArtifactToEdit(null)}
         >
           <DialogContent>
             <DialogHeader>
@@ -146,12 +176,12 @@ export function Home() {
               {(smithsIsPending || charactersIsPending) && (
                 <Skeleton className="w-full" />
               )}
-              {selectedArtifact && smiths && characters && (
+              {artifactToEdit && smiths && characters && (
                 <UpdateArtifactForm
                   initialValues={{
-                    name: selectedArtifact.name,
-                    power: selectedArtifact.power,
-                    bearer: selectedArtifact.bearer,
+                    name: artifactToEdit.name,
+                    power: artifactToEdit.power,
+                    bearer: artifactToEdit.bearer,
                   }}
                   characters={characters}
                   isUpdating={isUpdating}
@@ -159,6 +189,37 @@ export function Home() {
                 />
               )}
             </DialogHeader>
+          </DialogContent>
+        </Dialog>
+
+        {/* Diálogo para Confirmar Exclusão */}
+        <Dialog
+          open={!!artifactToDelete}
+          onOpenChange={(open) => !open && setArtifactToDelete(null)}
+        >
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Confirmar Exclusão</DialogTitle>
+              <p>Tem certeza de que deseja excluir o artefato?</p>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                type="button"
+                onClick={() => setArtifactToDelete(null)}
+                variant="outline"
+                className="mr-2"
+              >
+                Cancelar
+              </Button>
+              <Button
+                type="button"
+                onClick={handleDeleteArtifact}
+                disabled={isDeleting}
+                variant="destructive"
+              >
+                {isDeleting ? <Loader /> : 'Excluir'}
+              </Button>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
 
@@ -214,14 +275,24 @@ export function Home() {
                             Forjado por: {artifact.forgedBy}
                           </span>
                         </div>
-                        <Button
-                          onClick={() => setSelectedArtifact(artifact)}
-                          className="mt-4"
-                          size="icon"
-                          variant="secondary"
-                        >
-                          <MdModeEdit className="w-5 h-5" />
-                        </Button>
+                        <div className="mt-4 flex space-x-2">
+                          <Button
+                            onClick={() => setArtifactToEdit(artifact)}
+                            className="mt-4"
+                            size="icon"
+                            variant="secondary"
+                          >
+                            <MdModeEdit className="w-5 h-5" />
+                          </Button>
+                          <Button
+                            onClick={() => setArtifactToDelete(artifact)}
+                            className="mt-4"
+                            size="icon"
+                            variant="destructive"
+                          >
+                            <MdDelete className="w-5 h-5" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </HoverCardContent>
