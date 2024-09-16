@@ -83,7 +83,7 @@ export function CreateArtifactForm({
           name="power"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Instruções</FormLabel>
+              <FormLabel>Instruções do poder</FormLabel>
               <FormControl>
                 <Textarea
                   id="power"
@@ -151,11 +151,18 @@ export function CreateArtifactForm({
         <Button
           type="submit"
           disabled={isCreating}
-          className="flex items-center"
+          className="flex items-center mb-4"
         >
           {isCreating ? <Loader /> : 'Criar Artefato'}
         </Button>
       </form>
+      {isCreating && (
+        <span className="text-center py-4 font-semibold text-muted-foreground">
+          ❗ Isso pode demorar cerca de{' '}
+          <b className="text-foreground">1 minuto</b> pois a imagem é gerada por
+          IA
+        </span>
+      )}
     </Form>
   )
 }
