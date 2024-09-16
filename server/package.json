@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "nodemon ./src/shared/infra/http/express/server.ts",
     "test": "vitest",
-    "coverage": "vitest run --coverage",
     "build": "rm -rf ./build && tsc",
     "start": "node build/shared/infra/http/express/server.js"
   },
@@ -16,9 +15,14 @@
   "devDependencies": {
     "@types/express": "^4.17.21",
     "express": "^4.21.0",
+    "mock-typeorm": "^1.0.1",
     "nodemon": "^3.1.4",
+    "pg": "^8.12.0",
     "prettier": "^3.3.3",
+    "reflect-metadata": "^0.2.2",
     "ts-node": "^10.9.2",
+    "tsyringe": "^4.8.0",
+    "typeorm": "^0.3.20",
     "typescript": "^5.6.2",
     "vitest": "^2.1.0"
   }
