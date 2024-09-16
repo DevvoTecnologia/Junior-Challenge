@@ -1,50 +1,65 @@
-# React + TypeScript + Vite
+# Documentação do Projeto - Front-end
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Sumário
+1. [Introdução](#1-introdução)
+2. [Tecnologias Utilizadas](#2-tecnologias-utilizadas)
+3. [Como Executar o Projeto](#3-como-executar-o-projeto)
+   - [Pré-requisitos](#31-pré-requisitos)
+   - [Instalação](#32-instalação)
+   - [Execução](#33-execução)
+4. [Considerações Finais](#4-considerações-finais)
 
-Currently, two official plugins are available:
+## 1. Introdução
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Este projeto foi desenvolvido para a criação de uma interface front-end utilizando as tecnologias modernas para garantir uma experiência de usuário rica e responsiva. A seguir, detalharemos as tecnologias utilizadas e o processo para executar o projeto localmente.
 
-## Expanding the ESLint configuration
+## 2. Tecnologias Utilizadas
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+O front-end do projeto foi desenvolvido utilizando as seguintes tecnologias:
 
-- Configure the top-level `parserOptions` property like this:
+- **React**: Biblioteca JavaScript para construção de interfaces de usuário, utilizada para criar componentes reutilizáveis e gerenciar o estado da aplicação.
+- **TypeScript**: Superset de JavaScript que adiciona tipagem estática ao código, facilitando a detecção de erros e melhorando a manutenção do código.
+- **Tailwind CSS**: Framework de CSS utilitário que permite uma estilização rápida e consistente através de classes pré-definidas.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## 3. Como Executar o Projeto
+
+### 3.1 Pré-requisitos
+
+Certifique-se de ter os seguintes itens instalados:
+
+- [Node.js](https://nodejs.org/) (inclui o npm)
+- [Git](https://git-scm.com/) (para clonar o repositório)
+
+### 3.2 Instalação
+
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/devgmarques/Junior-Challenge
+   cd Junior-Challenge
+   ```
+
+2. Altere para a branch do desafio:
+   ```bash
+   git checkout desafio-guilherme-marques
+   cd frontend
+   ```
+
+3. Instale as dependências do projeto:
+   ```bash
+   npm install
+   ```
+
+### 3.3 Execução
+
+Para iniciar o servidor de desenvolvimento e visualizar a aplicação, execute:
+```bash
+npm run start
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+Isso iniciará o projeto em modo de desenvolvimento e você poderá acessá-lo em `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## 4. Considerações Finais
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+O front-end do projeto foi projetado para oferecer uma experiência de usuário fluida e responsiva, utilizando as melhores práticas e tecnologias atuais. A combinação de React, TypeScript e Tailwind CSS garante um desenvolvimento rápido e uma interface de usuário intuitiva e elegante.
+
+Feito por Guilherme Henrique Marques.
