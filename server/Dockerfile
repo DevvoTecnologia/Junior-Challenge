@@ -19,5 +19,6 @@ RUN npm run build
 # Make port 3333 available to the world outside this container
 EXPOSE 3333
 
-# Run the app when the container launches
-CMD ["npm", "start"]
+# 1. Runs migrations with the data source
+# 2. Run the app when the container launches
+CMD npx typeorm migration:run -d build/shared/infra/typeorm/dataSource.js && npm start

@@ -12,11 +12,13 @@ services:
       PG_DB: devvo
       PG_PORT: 5432
       PG_HOST: database_rings
+    links:
+      - database_rings
     depends_on: 
       - database_rings
 
   database_rings:
-    image: postgres
+    image: postgres:alpine
     container_name: database_rings
     restart: always
     ports:
