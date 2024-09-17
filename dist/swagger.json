@@ -1,0 +1,1172 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"Usuario": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"nome": {
+						"type": "string",
+						"default": ""
+					},
+					"email": {
+						"type": "string",
+						"default": ""
+					},
+					"senha": {
+						"type": "string",
+						"default": ""
+					},
+					"race": {
+						"type": "string",
+						"default": ""
+					},
+					"portadorAneis": {
+						"items": {
+							"$ref": "#/components/schemas/Anel"
+						},
+						"type": "array"
+					},
+					"forjadoPorAneis": {
+						"items": {
+							"$ref": "#/components/schemas/Anel"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Anel": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"nome": {
+						"type": "string",
+						"default": ""
+					},
+					"poder": {
+						"type": "string",
+						"default": ""
+					},
+					"imagem": {
+						"type": "string",
+						"default": ""
+					},
+					"descricao": {
+						"type": "string",
+						"default": ""
+					},
+					"portador": {
+						"$ref": "#/components/schemas/Usuario"
+					},
+					"forjadoPor": {
+						"$ref": "#/components/schemas/Usuario"
+					}
+				},
+				"required": [
+					"id",
+					"portador",
+					"forjadoPor"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GeneralResponse_Usuario-Array_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"status": {
+						"type": "string"
+					},
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/Usuario"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"success",
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GeneralResponse_Usuario-or-_message-string__": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"status": {
+						"type": "string"
+					},
+					"data": {
+						"anyOf": [
+							{
+								"$ref": "#/components/schemas/Usuario"
+							},
+							{
+								"properties": {
+									"message": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"message"
+								],
+								"type": "object"
+							}
+						]
+					}
+				},
+				"required": [
+					"success",
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GeneralResponse_Usuario_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"status": {
+						"type": "string"
+					},
+					"data": {
+						"$ref": "#/components/schemas/Usuario"
+					}
+				},
+				"required": [
+					"success",
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GeneralResponse__message-string__": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"status": {
+						"type": "string"
+					},
+					"data": {
+						"properties": {
+							"message": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"message"
+						],
+						"type": "object"
+					}
+				},
+				"required": [
+					"success",
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Partial_Usuario_": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"nome": {
+						"type": "string",
+						"default": ""
+					},
+					"email": {
+						"type": "string",
+						"default": ""
+					},
+					"senha": {
+						"type": "string",
+						"default": ""
+					},
+					"race": {
+						"type": "string",
+						"default": ""
+					},
+					"portadorAneis": {
+						"items": {
+							"$ref": "#/components/schemas/Anel"
+						},
+						"type": "array"
+					},
+					"forjadoPorAneis": {
+						"items": {
+							"$ref": "#/components/schemas/Anel"
+						},
+						"type": "array"
+					}
+				},
+				"type": "object",
+				"description": "Make all properties in T optional"
+			},
+			"GeneralResponse__token_63_-string--user_63_-Partial_Usuario_--message_63_-string__": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"status": {
+						"type": "string"
+					},
+					"data": {
+						"properties": {
+							"message": {
+								"type": "string"
+							},
+							"user": {
+								"$ref": "#/components/schemas/Partial_Usuario_"
+							},
+							"token": {
+								"type": "string"
+							}
+						},
+						"type": "object"
+					}
+				},
+				"required": [
+					"success",
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GeneralResponse__token-string--user-Partial_Usuario___": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"status": {
+						"type": "string"
+					},
+					"data": {
+						"properties": {
+							"user": {
+								"$ref": "#/components/schemas/Partial_Usuario_"
+							},
+							"token": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"user",
+							"token"
+						],
+						"type": "object"
+					}
+				},
+				"required": [
+					"success",
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GeneralResponse_Anel-Array-or-_message-string__": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"status": {
+						"type": "string"
+					},
+					"data": {
+						"anyOf": [
+							{
+								"items": {
+									"$ref": "#/components/schemas/Anel"
+								},
+								"type": "array"
+							},
+							{
+								"properties": {
+									"message": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"message"
+								],
+								"type": "object"
+							}
+						]
+					}
+				},
+				"required": [
+					"success",
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GeneralResponse_Anel-Array_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"status": {
+						"type": "string"
+					},
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/Anel"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"success",
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GeneralResponse_Anel-or-_message-string__": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"status": {
+						"type": "string"
+					},
+					"data": {
+						"anyOf": [
+							{
+								"$ref": "#/components/schemas/Anel"
+							},
+							{
+								"properties": {
+									"message": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"message"
+								],
+								"type": "object"
+							}
+						]
+					}
+				},
+				"required": [
+					"success",
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GeneralResponse_Anel_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"status": {
+						"type": "string"
+					},
+					"data": {
+						"$ref": "#/components/schemas/Anel"
+					}
+				},
+				"required": [
+					"success",
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GeneralResponse_number-or-_message-string__": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"status": {
+						"type": "string"
+					},
+					"data": {
+						"anyOf": [
+							{
+								"type": "number",
+								"format": "double"
+							},
+							{
+								"properties": {
+									"message": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"message"
+								],
+								"type": "object"
+							}
+						]
+					}
+				},
+				"required": [
+					"success",
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GeneralResponse_null-or-_message-string__": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"status": {
+						"type": "string"
+					},
+					"data": {
+						"properties": {
+							"message": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"message"
+						],
+						"type": "object",
+						"nullable": true
+					}
+				},
+				"required": [
+					"success",
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"GeneralResponse_null_": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"status": {
+						"type": "string"
+					},
+					"data": {
+						"type": "number",
+						"enum": [
+							null
+						],
+						"nullable": true
+					}
+				},
+				"required": [
+					"success",
+					"status"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {
+			"BearerAuth": {
+				"type": "http",
+				"scheme": "bearer"
+			}
+		}
+	},
+	"info": {
+		"title": "challengedevvo",
+		"version": "1.0.0",
+		"description": "_One Challenge to rule them all, One Challenge to find them, One Challenge to bring them all, and in the darkness bind them_",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {}
+	},
+	"paths": {
+		"/api/usuarios": {
+			"get": {
+				"operationId": "ListarUsuarios",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse_Usuario-Array_"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Usuarios"
+				],
+				"security": [
+					{
+						"BearerAuth": []
+					}
+				],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CriarUsuario",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse_Usuario-or-_message-string__"
+								}
+							}
+						}
+					},
+					"201": {
+						"description": "User created successfully",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse_Usuario_"
+								},
+								"examples": {
+									"Example 1": {}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Error creating user",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse__message-string__"
+								},
+								"examples": {
+									"Example 1": {}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Usuarios"
+				],
+				"security": [
+					{
+						"BearerAuth": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"senha": {
+										"type": "string"
+									},
+									"email": {
+										"type": "string"
+									},
+									"nome": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"senha",
+									"email",
+									"nome"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/usuarios/{id}": {
+			"get": {
+				"operationId": "ObterUsuarioPorId",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse_Usuario-or-_message-string__"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "User not found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse__message-string__"
+								},
+								"examples": {
+									"Example 1": {}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Usuarios"
+				],
+				"security": [
+					{
+						"BearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/auth/login": {
+			"post": {
+				"operationId": "Login",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse__token_63_-string--user_63_-Partial_Usuario_--message_63_-string__"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Invalid email or password",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse__message-string__"
+								},
+								"examples": {
+									"Example 1": {}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse__message-string__"
+								},
+								"examples": {
+									"Example 1": {}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"senha": {
+										"type": "string"
+									},
+									"email": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"senha",
+									"email"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/aneis": {
+			"get": {
+				"operationId": "ListarAneis",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse_Anel-Array-or-_message-string__"
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse__message-string__"
+								},
+								"examples": {
+									"Example 1": {}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Anéis"
+				],
+				"security": [
+					{
+						"BearerAuth": []
+					}
+				],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "CriarAnel",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse_Anel-or-_message-string__"
+								}
+							}
+						}
+					},
+					"201": {
+						"description": "Ring created successfully",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse_Anel_"
+								},
+								"examples": {
+									"Example 1": {}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse__message-string__"
+								},
+								"examples": {
+									"Example 1": {}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse__message-string__"
+								},
+								"examples": {
+									"Example 1": {}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Anéis"
+				],
+				"security": [
+					{
+						"BearerAuth": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"imagem": {
+										"type": "string"
+									},
+									"forjadoPorId": {
+										"type": "number",
+										"format": "double"
+									},
+									"portadorId": {
+										"type": "number",
+										"format": "double"
+									},
+									"descricao": {
+										"type": "string"
+									},
+									"poder": {
+										"type": "string"
+									},
+									"nome": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"imagem",
+									"forjadoPorId",
+									"portadorId",
+									"descricao",
+									"poder",
+									"nome"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/aneis/{id}": {
+			"get": {
+				"operationId": "ObterAnelPorId",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse_Anel-or-_message-string__"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Ring not found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse__message-string__"
+								},
+								"examples": {
+									"Example 1": {}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse__message-string__"
+								},
+								"examples": {
+									"Example 1": {}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Anéis"
+				],
+				"security": [
+					{
+						"BearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"put": {
+				"operationId": "AtualizarAnel",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse_Anel-or-_message-string__"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse__message-string__"
+								},
+								"examples": {
+									"Example 1": {}
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Ring not found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse__message-string__"
+								},
+								"examples": {
+									"Example 1": {}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse__message-string__"
+								},
+								"examples": {
+									"Example 1": {}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Anéis"
+				],
+				"security": [
+					{
+						"BearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"imagem": {
+										"type": "string"
+									},
+									"forjadoPorId": {
+										"type": "number",
+										"format": "double"
+									},
+									"portadorId": {
+										"type": "number",
+										"format": "double"
+									},
+									"descricao": {
+										"type": "string"
+									},
+									"poder": {
+										"type": "string"
+									},
+									"nome": {
+										"type": "string"
+									}
+								},
+								"type": "object"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeletarAnel",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse_null-or-_message-string__"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Ring not found",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse__message-string__"
+								},
+								"examples": {
+									"Example 1": {}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse__message-string__"
+								},
+								"examples": {
+									"Example 1": {}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Anéis"
+				],
+				"security": [
+					{
+						"BearerAuth": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/api/aneis/upload-image": {
+			"post": {
+				"operationId": "UploadImage",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse_number-or-_message-string__"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse__message-string__"
+								},
+								"examples": {
+									"Example 1": {}
+								}
+							}
+						}
+					},
+					"500": {
+						"description": "Internal Server Error",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/GeneralResponse__message-string__"
+								},
+								"examples": {
+									"Example 1": {}
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Anéis"
+				],
+				"security": [
+					{
+						"BearerAuth": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"file": {
+										"type": "string",
+										"format": "binary"
+									}
+								},
+								"required": [
+									"file"
+								]
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}

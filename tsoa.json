@@ -1,0 +1,29 @@
+{
+    "entryFile": "src/index.ts",
+    "noImplicitAdditionalProperties": "throw-on-extras",
+    "controllerPathGlobs": ["src/controllers/**/*Controller.ts"],
+    "spec": {
+      "outputDirectory": "dist",
+      "specVersion": 3,
+      "title": "API Documentation",
+      "version": "1.0.0",
+     "securityDefinitions": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+    },
+    "routes": {
+      "authentication": {
+        "authenticationModule":"./src/middleware/authMiddleware.ts",
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      },
+      "routesDir": "src/routes"
+    }
+   
+  }
