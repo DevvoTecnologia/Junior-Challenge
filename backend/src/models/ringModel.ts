@@ -27,7 +27,7 @@ const RingSchema = new mongoose.Schema({
     },
     image: { 
         type: String, 
-        default: 'default-image-url.jpg' 
+        default: 'https://t4.ftcdn.net/jpg/02/08/98/45/360_F_208984513_uX8pSJNW2pw1fQ7Bge1FI1NDp8rirSSc.jpg' 
     }
 },
     {
