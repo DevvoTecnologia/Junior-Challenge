@@ -12,22 +12,22 @@ export interface IRing {
 
 @Entity("rings")
 export class Ring {
-  @PrimaryColumn({ type: "string" })
+  @PrimaryColumn({ type: "varchar" })
   id: string;
 
-  @Column({ type: "string" })
+  @Column({ type: "varchar" })
   nome: string;
 
-  @Column({ type: "string" })
+  @Column({ type: "varchar" })
   poder: string;
 
-  @Column({ type: "string" })
+  @Column({ type: "varchar" })
   portador: string;
 
-  @Column({ type: "string" })
+  @Column({ type: "varchar" })
   forjadoPor: string;
 
-  @Column({ type: "string" })
+  @Column({ type: "varchar" })
   imagem: string;
 
   constructor(ring: IRing) {
