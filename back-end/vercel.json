@@ -1,18 +1,12 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "package.json",
-        "use": "@vercel/node",
-        "config": {
-          "runtime": "nodejs18.x"
-        }
-      }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/src/server.ts"
-      }
-    ]
+  "version": 2,
+  "builds": [
+    { "src": "/src/server.ts", "use": "@vercel/node" }
+  ],
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/src/server.ts" }
+  ],
+  "env": {
+    "DATABASE_URL": "mongodb+srv://gabrielrochapimenteldev:gQ7Z3cmeRP95lLfC@power-rings.g2rmi.mongodb.net/power-rings?retryWrites=true&w=majority&appName=power-rings"
   }
+}
