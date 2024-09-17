@@ -2,10 +2,14 @@
   "name": "back-end",
   "version": "1.0.0",
   "description": "api for creation of rings whith powers",
-  "main": "server.ts",
+  "main": "src/server.ts",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "vercel-build": "npx prisma generate"
+  },
+  "engines": {
+    "node": "20.x"
   },
   "author": "Gabriel Rocha Pimentel",
   "license": "ISC",
