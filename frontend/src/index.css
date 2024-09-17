@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+.carousel-container .slick-slide {
+  padding: 0 10px; 
+}
+
+.slick-slide {
+  justify-content: center; 
+  align-items: center; 
+}
+
+.slick-slide img {
+  
+  object-fit: cover; 
+}
+
