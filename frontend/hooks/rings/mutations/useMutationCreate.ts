@@ -1,19 +1,21 @@
-﻿import { iRing } from "@/app/home/forgeRing/schemas/ring-schema";
+﻿import { CreateRing, iRing } from "@/app/home/forgeRing/schemas/ring-schema";
 import request, { iResponse } from "@/services/api";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-async function deleteRing(id: string) {
+async function createRing(data: CreateRing) {
   const response: iResponse<iRing> = await request({
-    path: `rings/delete/${id}`,
-    method: "DELETE",
+    path: "rings/create",
+    method: "POST",
+    body: JSON.stringify(data),
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   });
 
   if (!response.success) {
-    toast.error("Erro ao banir o anel", {
+    toast.error("Erro ao forjar o anel", {
       duration: 5000,
       description: response.message,
       closeButton: true,
@@ -24,27 +26,17 @@ async function deleteRing(id: string) {
   return response.data;
 }
 
-export default function useMutationDelete() {
+export function useMutationCreateRing() {
   return useMutation({
-    mutationKey: ["deleteRing"],
-    mutationFn: (id: string) => deleteRing(id),
+    mutationKey: ["createRing"],
+    mutationFn: (data: CreateRing) => createRing(data),
     onSuccess: (data) => {
       if (data) {
-        toast.success("Anel banido com sucesso", {
+        toast.success("Anel forjado com sucesso", {
           duration: 5000,
           closeButton: true,
         });
-
-        return data;
       }
-    },
-    onError: () => {
-      toast.error("Erro ao banir o anel", {
-        duration: 5000,
-        closeButton: true,
-      });
-
-      return false;
     },
   });
 }

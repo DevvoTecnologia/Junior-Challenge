@@ -29,7 +29,6 @@ const ringSchema = new Schema<Ring>(
     },
     imagem: {
       type: String,
-      required: true,
     },
   },
   { timestamps: true, optimisticConcurrency: true }

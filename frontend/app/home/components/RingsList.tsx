@@ -23,6 +23,8 @@ import Tooltip from "@/components/tooltip/Tooltip";
 import { Button } from "@/components/ui/button";
 import { Ban, Pencil, SearchX } from "lucide-react";
 import useMutationDelete from "@/hooks/rings/mutations/useMutationDelete";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
 
 export default function RingsList() {
   const { data: rings, isLoading, refetch } = useQueryGetAll();
@@ -31,7 +33,7 @@ export default function RingsList() {
 
   if (isLoading || isDeleting) {
     return (
-      <div className="flex items-center gap-4 mt-20">
+      <div className="flex items-center gap-4 mt-16">
         <Skeleton className="rounded-full h-9 w-9" />
         <Skeleton className="h-80 w-80 rounded-xl aspect-square" />
         <Skeleton className="rounded-full h-9 w-9" />
@@ -42,16 +44,20 @@ export default function RingsList() {
   return (
     <>
       {rings && rings.length > 0 ? (
-        <div className="mt-20 w-full max-w-6xl">
+        <div className="mt-16 w-full max-w-6-xl overflow-y-scroll">
           <Carousel className="w-full max-w-6xl">
             <CarouselContent>
               {rings.map((ring, index) => (
                 <CarouselItem className="md:basis-1/2 lg:basis-1/3" key={index}>
                   <div className="p-1">
                     <Card>
-                      <CardHeader>
+                      <CardHeader className="text-center">
                         <CardTitle>{ring.nome}</CardTitle>
                         <CardDescription>{ring.poder}</CardDescription>
+                        <Avatar className="mx-auto w-32 h-32 border-4">
+                          <AvatarImage src={ring.imagem} alt={ring.nome} />
+                          <AvatarFallback>RN</AvatarFallback>
+                        </Avatar>
                       </CardHeader>
                       <Separator className="mb-4" />
                       <CardContent className="flex flex-col space-y-4">
@@ -71,9 +77,11 @@ export default function RingsList() {
                       <Separator className="mb-4" />
                       <CardFooter className="flex space-x-2">
                         <Tooltip text="Editar anel">
-                          <Button variant="outline">
-                            <Pencil className="h-4" />
-                          </Button>
+                          <Link href={`/home/forgeRing/${ring._id}`}>
+                            <Button variant="outline">
+                              <Pencil className="h-4" />
+                            </Button>
+                          </Link>
                         </Tooltip>
                         <Tooltip text="Banir anel">
                           <Button
@@ -106,10 +114,10 @@ export default function RingsList() {
       ) : (
         <div className="mt-8 text-center text-muted-foreground">
           <SearchX className="h-20 w-20 mx-auto text-muted-foreground" />
-          <p className="font-bold">
+          <p className="italic">
             Os olhos de Sauron vasculharam, mas nenhum Anel foi encontrado.
           </p>
-          <p className="font-bold">
+          <p className="italic">
             O destino de todos permanece seguro... por agora.
           </p>
         </div>

@@ -1,4 +1,4 @@
-﻿import { iRing } from "@/app/home/forgeRing/schemas/ring-schema";
+﻿import { CreateRing, iRing } from "@/app/home/forgeRing/schemas/ring-schema";
 import request, { iResponse } from "@/services/api";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -7,9 +7,9 @@ export interface iRingWithId extends iRing {
   _id: string;
 }
 
-async function getAll() {
-  const response: iResponse<iRingWithId[]> = await request({
-    path: "rings/get",
+async function getById(id: string) {
+  const response: iResponse<CreateRing> = await request({
+    path: `rings/getById/${id}`,
     method: "GET",
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -30,9 +30,9 @@ async function getAll() {
   return response.data;
 }
 
-export default function useQueryGetAll() {
+export default function useQueryGetById(id: string) {
   return useQuery({
-    queryKey: ["getAllRings"],
-    queryFn: () => getAll(),
+    queryKey: ["getRingById", id],
+    queryFn: () => getById(id),
   });
 }

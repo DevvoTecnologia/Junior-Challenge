@@ -26,6 +26,38 @@ export default class RingController {
     );
   }
 
+  static async GetRingById(req: Request, res: Response) {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json(
+        new ApiResponse({
+          success: false,
+          message: "Invalid ring id",
+        })
+      );
+    }
+
+    const ring = await RingService.GetRingById(id);
+
+    if (!ring.success || !ring.data) {
+      return res.status(500).json(
+        new ApiResponse({
+          success: false,
+          message: "Internal server error getting ring",
+        })
+      );
+    }
+
+    return res.status(200).json(
+      new ApiResponse<Ring>({
+        success: true,
+        message: "Ring retrieved successfully",
+        data: ring.data,
+      })
+    );
+  }
+
   static async CreateRing(req: Request, res: Response) {
     const body: Ring = req.body;
 
@@ -42,7 +74,7 @@ export default class RingController {
       return res.status(400).json(
         new ApiResponse({
           success: false,
-          message: "Please, provide all the required fields",
+          message: "Por favor, preencha todos os campos obrigatórios",
         })
       );
     }
