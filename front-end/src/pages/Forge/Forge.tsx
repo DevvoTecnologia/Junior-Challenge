@@ -34,7 +34,7 @@ const ForgeForm: React.FC<RingFormProps> = ({ ring }) => {
     const anelData = { imageURL: imageURL || '/default-image.png', name, power, carrier, forger, info };
 
     try {
-      const response = await fetch(ring?.id ? `http://localhost:3333/updaterings/${ring.id}` : 'http://localhost:3333/createrings', {
+      const response = await fetch(ring?.id ? `https://junior-challenge-seven.vercel.app/updaterings/${ring.id}` : 'https://junior-challenge-seven.vercel.app/createrings', {
         method: ring?.id ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',

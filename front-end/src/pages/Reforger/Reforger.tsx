@@ -21,7 +21,7 @@ const Reforger: React.FC = () => {
 
     // Primeiro, busque o anel pelo nome
     try {
-      const searchResponse = await fetch(`http://localhost:3333/createrings/search?name=${encodeURIComponent(name)}`);
+      const searchResponse = await fetch(`https://junior-challenge-seven.vercel.app/createrings/search?name=${encodeURIComponent(name)}`);
       if (!searchResponse.ok) {
         throw new Error('Não foi possível encontrar o anel.');
       }
@@ -43,7 +43,7 @@ const Reforger: React.FC = () => {
         info 
       };
 
-      const updateResponse = await fetch(`http://localhost:3333/updaterings/${ringData.id}`, {
+      const updateResponse = await fetch(`https://junior-challenge-seven.vercel.app/updaterings/${ringData.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

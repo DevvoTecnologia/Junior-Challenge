@@ -16,7 +16,7 @@ interface Ring {
 // Função para buscar os dados da API
 const fetchRings = async (): Promise<Ring[]> => {
     try {
-        const response = await fetch('http://localhost:3333/allrings');
+        const response = await fetch('https://junior-challenge-seven.vercel.app/allrings');
         if (!response.ok) {
             throw new Error('Erro ao buscar os dados');
         }
@@ -30,7 +30,7 @@ const fetchRings = async (): Promise<Ring[]> => {
 // Função para deletar um anel
 const deleteRing = async (id: string): Promise<void> => {
     try {
-        const response = await fetch(`http://localhost:3333/deleterings/${id}`, {
+        const response = await fetch(`https://junior-challenge-seven.vercel.app/deleterings/${id}`, {
             method: 'DELETE',
         });
         if (!response.ok) {
