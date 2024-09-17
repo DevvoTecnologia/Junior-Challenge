@@ -1,6 +1,7 @@
 import { Request, Response, Router } from "express";
 import { RingsService } from "../../../../../../modules/rings/services/RingsService";
 import { RingsRepository } from "../../../../../../modules/rings/repository/RingsRepository";
+import { container } from "tsyringe";
 
 export const ringsRoute = Router();
 const ringsRepository = new RingsRepository()
@@ -10,7 +11,9 @@ ringsRoute.post("/", async (request: Request, response: Response) => {
   const { nome, poder, portador, forjadoPor, imagem } =
     await request.body;
 
-  const successOrFailure = await ringsService.create({
+  const service = container.resolve(RingsService)
+
+  const successOrFailure = await service.create({
     nome,
     poder,
     portador,
@@ -26,7 +29,9 @@ ringsRoute.post("/", async (request: Request, response: Response) => {
 });
 
 ringsRoute.get("/", async (request: Request, response: Response) => {
-  const rings = await ringsService.getAll()
+  const service = container.resolve(RingsService)
+  
+  const rings = await service.getAll()
 
   return response.status(200).send({ rings });
 });
@@ -50,7 +55,9 @@ ringsRoute.put("/", async (request: Request, response: Response) => {
 ringsRoute.delete("/", async (request: Request, response: Response) => {
   const { nome } = await request.body;
 
-  const successOrFailure = await ringsService.getByName({ nome })
+  const service = container.resolve(RingsService)
+
+  const successOrFailure = await service.getByName({ nome })
 
   if (!successOrFailure || successOrFailure.isFailure) {
     return response.status(400).send({ error: successOrFailure.error });

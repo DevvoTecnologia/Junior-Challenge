@@ -2,11 +2,16 @@ import { Result } from "../../../shared/Result";
 import { Ring } from "../domain/Rings";
 import { CreateRingDTO } from "../dtos/CreateRingDTO";
 import { IRingsRepository } from "../repository/IRingsRepository";
+import { injectable, inject } from "tsyringe"
 
+@injectable()
 export class RingsService {
   private ringsRepository;
 
-  constructor(ringsRepository: IRingsRepository) {
+  constructor(
+    @inject("RingsRepository")
+    ringsRepository: IRingsRepository
+  ) {
     this.ringsRepository = ringsRepository;
   }
 
@@ -55,7 +60,7 @@ export class RingsService {
     if (!ring) {
       return Result.fail<Ring>(`O anel [${nome}] não foi encontrado!`)
     }
-    
+
     return Result.ok<Ring>(ring)
   }
 
