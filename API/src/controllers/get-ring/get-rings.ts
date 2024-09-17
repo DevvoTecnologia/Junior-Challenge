@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import {RingService} from '../../services/ring-service'
+import { RingService } from '../../services/ring-service';
 
 class GetRingsController {
   private ringService: RingService;

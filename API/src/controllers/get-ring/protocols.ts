@@ -6,9 +6,6 @@ export interface IGetRingsController {
 }
 
 
-// src/get-ring/protocols.ts
-
-
 export interface IGetRingsRepository {
   getRingById(id: string): Promise<Rings | null>;
   getRings(): Promise<Rings[]>;

@@ -41,10 +41,17 @@ export class UpdateRingController implements IUpdateRingController {
 
       const rings = await this.updateRingRepository.updateRing(id, body);
 
+      if (!rings) {
+        return {
+          statusCode: 404,
+          body: "Ring not found"
+        };
+      }
+
       return {
         statusCode: 200,
         body: rings
-      }
+      };
     } catch (error) {
       return {
         statusCode: 500,

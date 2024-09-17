@@ -68,22 +68,32 @@ app.put('/rings/:id', async (req, res) => {
       res.status(404).send({ error: 'Ring not found' });
     }
   } catch (error) {
-    res.status(400).send({ error});
+    if (error === 'Invalid ID format') {
+      res.status(400).send({ error: 'Invalid ID format' });
+    } else {
+      res.status(400).send({ error: error });
+    }
   }
 });
 
 app.delete('/rings/:id', async (req, res) => {
   try {
-    const ring = await ringService.deleteRing(req.params.id);
+    const id = req.params.id;
+    if (!id) {
+      res.status(400).send({ error: 'ID is missing' });
+      return;
+    }
+    const ring = await ringService.deleteRing(id);
     if (ring) {
       res.status(200).send({ message: 'Ring deleted successfully' });
     } else {
       res.status(404).send({ error: 'Ring not found' });
     }
   } catch (error) {
-    res.status(500).send({ error});
+    res.status(500).send({ error: 'Error deleting ring' });
   }
 });
+
 
 
 const port = process.env.PORT || 8000;

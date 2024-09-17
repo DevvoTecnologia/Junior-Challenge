@@ -1,5 +1,13 @@
 import { Rings } from "../../models/rings";
-import { HttpResponse, HttpRequest } from "../protocols";
+import { HttpRequest, HttpResponse } from "../protocols";
+
+export interface CreateRingParams {
+  ringName: string;
+  powerName: string;
+  ownerName: string;
+  builtBy: string;
+  imageUrl?: string;
+}
 
 export interface ICreateRingController {
   handle(
@@ -7,14 +15,6 @@ export interface ICreateRingController {
   ): Promise<HttpResponse<Rings>>;
 }
 
-export interface CreateRingParams {
-  ringName: string;
-  powerName: string;
-  ownerName: string;
-  builtBy: string;
-  imageUrl: string;
-
-}
 export interface ICreateRingRepository {
   createRing(params: CreateRingParams): Promise<Rings>;
 }

@@ -4,25 +4,26 @@ import { useEffect, useState, useRef, FormEvent } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
+import { AxiosResponse } from "axios";
+
 
 interface RingsProps {
-  id: string;
+  _id: string;
   ringName: string;
   powerName: string;
   ownerName: string;
   builtBy: string;
-  imageUrl?: string; // Campo para URL da imagem
+  imageUrl?: string;
 }
 
 export default function App() {
-
   const [rings, setRings] = useState<RingsProps[]>([]);
-  const [editingRing, setEditingRing] = useState<RingsProps | null>(null); // Estado para edição
+  const [editingRing, setEditingRing] = useState<RingsProps | null>(null);
   const ringRef = useRef<HTMLInputElement | null>(null);
   const powerRef = useRef<HTMLInputElement | null>(null);
   const ownerRef = useRef<HTMLInputElement | null>(null);
   const builtRef = useRef<HTMLInputElement | null>(null);
-  const imageUrlRef = useRef<HTMLInputElement | null>(null); // Referência para o campo da imagem
+  const imageUrlRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     loadRings();
@@ -37,65 +38,66 @@ export default function App() {
     }
   }
 
+
   async function handleSubmit(event: FormEvent) {
-  event.preventDefault();
+    event.preventDefault();
+  
+    const payload = {
+      ringName: ringRef.current?.value.trim() || "",
+      powerName: powerRef.current?.value.trim() || "",
+      ownerName: ownerRef.current?.value.trim() || "",
+      builtBy: builtRef.current?.value.trim() || "",
+      imageUrl: imageUrlRef.current?.value || "" 
+    };
+  
 
-  if (!builtRef.current?.value) return;
-
-  const payload = {
-    ringName: ringRef.current?.value || "",
-    powerName: powerRef.current?.value || "",
-    ownerName: ownerRef.current?.value || "",
-    builtBy: builtRef.current?.value || "",
-    imageUrl: imageUrlRef.current?.value || ""
-  };
-
-  try {
-    if (editingRing) {
-      const response = await api.patch(`/rings/${editingRing.id}`, payload);
-      const updatedRings = rings.map((ring) =>
-        ring.id === editingRing.id ? response.data : ring
-      );
-      setRings(updatedRings);
-      setEditingRing(null);
-    } else {
-      const response = await api.post("/rings", payload);
-      setRings((allRings) => [...allRings, response.data]);
+    if (!payload.ringName || !payload.powerName || !payload.ownerName || !payload.builtBy) {
+      alert("Todos os campos obrigatórios devem ser preenchidos.");
+      return;
     }
-  } catch (error) {
-    if (error) {
-      // Erro com resposta do servidor
-      console.error("Erro de resposta do servidor:", error);
-      alert(`Erro: ${JSON.stringify(error)}`); // Exibe a mensagem de erro
-    } else if (error) {
-      // Erro na solicitação
-      console.error("Erro na solicitação:", error);
-      alert("Erro na solicitação. Verifique sua conexão com o servidor.");
-    } else {
-      // Erro desconhecido
-      console.error("Erro desconhecido:", error);
-      alert(`Erro desconhecido: ${error}`);
-    }
-  }
-
-  // Limpar os campos após o submit
-  ringRef.current!.value = "";
-  powerRef.current!.value = "";
-  ownerRef.current!.value = "";
-  builtRef.current!.value = "";
-  imageUrlRef.current!.value = "";
-}
-
-
-  async function handleDelete(id: string) {
+  
     try {
-      await api.delete(`/rings/${id}`);
-      const allRings = rings.filter((ring) => ring.id !== id);
-      setRings(allRings);
-    } catch (err) {
-      console.log(err);
+      let response: AxiosResponse<any, any>;
+      if (editingRing) {
+        response = await api.put(`/rings/${editingRing._id}`, payload);
+        const updatedRings = rings.map((ring) =>
+          ring._id === editingRing._id ? response.data : ring
+        );
+        setRings(updatedRings);
+        setEditingRing(null);
+      } else {
+        response = await api.post("/rings", payload);
+        setRings((allRings) => [...allRings, response.data]);
+      }
+      console.log('Resposta recebida:', response);
+    } catch (error) {
+      if (error.response) {
+        console.error("Erro ao salvar anel:", error.response.data);
+        alert(`O limite de anéis por ${payload.builtBy} foi atingido`);
+      } else {
+        // Outros erros
+        console.error("Erro desconhecido:", error);
+        alert(`Erro desconhecido: ${error.message}`);
+      }
     }
+  
+    if (ringRef.current) ringRef.current.value = "";
+    if (powerRef.current) powerRef.current.value = "";
+    if (ownerRef.current) ownerRef.current.value = "";
+    if (builtRef.current) builtRef.current.value = "";
+    if (imageUrlRef.current) imageUrlRef.current.value = "";
   }
+  
+
+  const handleDelete = async (id: string) => {
+    try {
+      const response = await api.delete(`/rings/${id}`);
+      console.log('Ring deleted:', response.data);
+      setRings(rings.filter((ring) => ring._id !== id));
+    } catch (error) {
+      console.error('Error in deleteRing:', error);
+    }
+  };
 
   function handleEdit(ring: RingsProps) {
     setEditingRing(ring);
@@ -103,14 +105,13 @@ export default function App() {
     powerRef.current!.value = ring.powerName;
     ownerRef.current!.value = ring.ownerName;
     builtRef.current!.value = ring.builtBy;
-    imageUrlRef.current!.value = ring.imageUrl || ""; // Adiciona valor da URL da imagem
   }
 
   const sliderSettings = {
     dots: true,
     infinite: rings.length > 1,
     speed: 500,
-    slidesToShow: 2, // Exibir dois slides
+    slidesToShow: 2,
     slidesToScroll: 1,
     arrows: false,
     autoplay: true,
@@ -119,7 +120,7 @@ export default function App() {
   return (
     <div className="w-full min-h-screen bg-gray-900 flex justify-center px-4">
       <main className="my-10 w-full md:max-w-2xl">
-        <h1 className="text-4xl font-medium text-white">Aneis</h1>
+        <h1 className="text-4xl font-medium text-white">Anéis</h1>
 
         <form className="flex flex-col my-6" onSubmit={handleSubmit}>
           <label className="font-medium text-white">Nome do anel:</label>
@@ -154,14 +155,6 @@ export default function App() {
             ref={builtRef}
           />
 
-          <label className="font-medium text-white">URL da imagem:</label>
-          <input
-            type="text"
-            placeholder="URL da imagem"
-            className="w-full mb-5 p-2 rounded"
-            ref={imageUrlRef}
-          />
-
           <input
             type="submit"
             value={editingRing ? "Atualizar Anel" : "Forjar Anel"}
@@ -173,11 +166,11 @@ export default function App() {
           <Slider {...sliderSettings} className="carousel-container">
             {rings.map((item) => (
               <div
-                key={item.id}
+                key={item._id}
                 className="p-4 bg-white rounded-lg shadow-lg"
               >
                 <img
-                  src={item.imageUrl}
+                  src={item.imageUrl} 
                   alt={item.ringName}
                   className="w-full h-32 object-cover rounded mb-3"
                 />
@@ -200,7 +193,7 @@ export default function App() {
                 <div className="flex justify-between mt-4">
                   <button
                     className="bg-red-500 w-8 h-8 flex items-center justify-center rounded-full text-white"
-                    onClick={() => handleDelete(item.id)}
+                    onClick={() => handleDelete(item._id)}
                   >
                     <FiTrash size={18} />
                   </button>

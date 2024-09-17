@@ -1,5 +1,6 @@
 // src/controllers/repositories.ts
-import { CreateRingParams, UpdateRingParams } from '../controllers/create-ring/protocols';
+import { CreateRingParams,  } from '../controllers/create-ring/protocols';
+import { UpdateRingParams } from '../controllers/update-ring/protocols';
 import { Rings } from '../models/rings';
 
 export interface ICreateRingRepository {

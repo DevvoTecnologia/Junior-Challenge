@@ -1,14 +1,12 @@
 import { Rings } from "../../models/rings";
-import { HttpRequest, HttpResponse } from "../protocols";
+import { HttpResponse, HttpRequest } from "../protocols";
 
 export interface IDeleteRingController {
-    handle(httpRequest: HttpRequest<any>): 
-    Promise<HttpResponse<Rings>>
+  handle(
+    httpRequest: HttpRequest<{ id: string }>
+  ): Promise<HttpResponse<Rings>>;
 }
 
-
 export interface IDeleteRingRepository {
-    deleteRing(id: string): Promise<Rings | null>;
-  }
-  
- 
+  deleteRing(id: string): Promise<Rings | null>;
+}

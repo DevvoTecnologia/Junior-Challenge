@@ -1,16 +1,22 @@
-import { MongoCreateRingRepository } from '../../repositories/create-ring/mongo-create-ring';
-import { Rings } from '../../models/rings';
+import { Request, Response } from 'express';
+import { RingService } from '../../services/ring-service';
 
-export class CreateRingController {
-  constructor(private ringRepository: MongoCreateRingRepository) {}
+class CreateRingController {
+  private ringService: RingService;
 
-  public async handle(req: { body: Rings }) {
+  constructor(ringService: RingService) {
+    this.ringService = ringService;
+  }
+
+  public async handle(req: Request, res: Response): Promise<void> {
     try {
-      const { body } = req;
-      const ring = await this.ringRepository.createRing(body);
-      return { body: ring, statusCode: 201 };
+      const ring = await this.ringService.createRing(req.body);
+      res.status(201).json(ring);
     } catch (error) {
-      return { body: { error}, statusCode: 400 };
+      console.error("Error handling POST /rings:", error);
+      res.status(400).json({ error});
     }
   }
 }
+
+export { CreateRingController };

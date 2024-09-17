@@ -1,8 +1,7 @@
-import { Document, Schema, model, ObjectId } from 'mongoose';
-
+import { Document, Schema, model, Types } from 'mongoose';
 
 export interface Rings extends Document {
-  _id: ObjectId; 
+  _id: Types.ObjectId;
   ringName: string;
   powerName: string;
   ownerName: string;
@@ -10,14 +9,12 @@ export interface Rings extends Document {
   imageUrl: string;
 }
 
-// schema do Mongoose
 const RingSchema: Schema<Rings> = new Schema({
   ringName: { type: String, required: true },
   powerName: { type: String, required: true },
   ownerName: { type: String, required: true },
   builtBy: { type: String, required: true },
-  imageUrl: { type: String, required: true },
+  imageUrl: { type: String, },
 });
 
-// Cria o modelo do Mongoose
 export const RingModel = model<Rings>('Rings', RingSchema);
