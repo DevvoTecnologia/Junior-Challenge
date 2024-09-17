@@ -1,0 +1,46 @@
+.container-form {
+    width: 50%;
+    height: auto;
+    color: #FFF;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5em;
+}
+
+.title {
+    font-size: 2em;
+    font-weight: bold;
+    color: #FFF;
+    letter-spacing: 1px;
+}
+
+.form-box {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    color: #FFF;
+    margin-bottom: 1em;
+    font-size: 1em;
+}
+
+.input-value {
+    margin-left: 25px;
+    border-radius: 6px;
+    padding: 0.5em;
+    height: 40px;
+    width: 100%;
+    border: none;
+    font-size: 0.8em;
+}
+
+label {
+    width: 25%;
+    height: auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}

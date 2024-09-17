@@ -1,0 +1,48 @@
+.box-cards {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.card {
+    width: 20%;
+    height: auto;
+    margin: 1em;
+    background: #fff;
+    border-radius: 10px;
+    display: flex;
+    color: #000;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-img {
+    width: 100%;
+    height: 275px;
+    object-fit: fill;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.card-tags {
+    padding: 1em;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+.tag span {
+    margin-right: 10px;
+}
+
+.card-info {
+    width: 100%;
+    height: auto;
+    padding: 1em;
+}

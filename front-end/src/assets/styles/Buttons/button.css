@@ -1,0 +1,31 @@
+.btn-primary {
+    border: 1px solid #FFF;
+    text-align: center;
+    padding: 1em;
+    border-radius: 8px;
+    width: 175px;
+    background-color: #000;
+    color: #FFF;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all ease-in 1s;
+    margin: 0 10px;
+}
+
+.btn-primary:hover {
+    color: #000;
+    background-color: #FFF;
+}
+
+.btn-delete {
+    border: none;
+    background-color: #F00;
+    border-radius: 0 0 8px 8px;
+    padding: 1em;
+    width: 100%;
+    font-weight: bold;
+    font-size: 1em;
+    color: #FFF;
+    cursor: pointer;
+}
