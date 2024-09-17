@@ -1,6 +1,6 @@
 import Slider from "react-slick";
-import NextImage from "next/image"
-import styles from "./CardSlider.module.css"
+import NextImage from "next/image";
+import styles from "./Card-slider.module.css";
 import { AnelModel } from "@/models/ring";
 import RingCard from "@/components/ringCard";
 

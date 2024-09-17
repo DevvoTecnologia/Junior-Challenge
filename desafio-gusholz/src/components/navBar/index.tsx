@@ -1,5 +1,5 @@
 import Link from "next/link";
-import styles from "./navBar.module.css";
+import styles from "./nav-bar.module.css";
 
 enum Pages {
   homepage,

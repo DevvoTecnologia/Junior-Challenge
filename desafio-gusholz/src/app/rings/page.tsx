@@ -1,7 +1,7 @@
 "use client";
 import Footer from "@/components/footer";
 import NavBar from "@/components/navBar";
-import styles from "./ringsPage.module.css";
+import styles from "./rings-page.module.css";
 import CardsSlider from "@/components/cardSlider";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";

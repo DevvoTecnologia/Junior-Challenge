@@ -1,5 +1,5 @@
 import MadeBy from "@/models/madeBy"
-import styles from "./formSection.module.css"
+import styles from "./form-section.module.css"
 
 export default function FormSection(props: {
   name: string,

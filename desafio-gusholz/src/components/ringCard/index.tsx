@@ -1,6 +1,6 @@
 "use client";
 import NextImage from "next/image";
-import styles from "./ringCard.module.css";
+import styles from "./ring-card.module.css";
 import { useState } from "react";
 import Modal from "../modal";
 
