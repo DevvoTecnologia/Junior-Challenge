@@ -1,0 +1,39 @@
+
+form {
+    max-width: 50rem;
+    margin: 2rem auto;
+}
+
+form label {
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+
+.label_wrapper{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    gap: 0.5rem;
+}
+
+form input, select {
+    height: fit-content;
+    border: none;
+    background-color: #383838;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+}
+
+.submit_btn {
+    border: none;
+    text-align: center;
+    border-radius: 1rem;
+    font-weight: 500;
+    background-color: rgba(56, 56, 56, 0.371);
+    border: solid white 2px;
+    color: #ffffff;
+    font-size: 1.8rem;
+    padding: 1rem;
+    cursor: pointer;
+}

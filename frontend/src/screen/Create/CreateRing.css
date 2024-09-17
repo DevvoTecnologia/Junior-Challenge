@@ -1,0 +1,52 @@
+.bg {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(53, 52, 52, 0.2);
+    overflow: hidden;
+}
+
+.overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 60vw;
+    width: 90%;
+    height: fit-content;
+    padding: 4rem;
+    border-radius: 2rem;
+    background-color: #191818;
+    background-image: url('../../assets/forge.png');
+    background-repeat: no-repeat;
+    background-position:top ;
+    background-size: cover;
+}
+
+@media (max-width:900px){
+    .overlay{
+        max-width: none;
+    }
+}
+
+.overlay h2 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.close_btn{
+    background: none;
+    border: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 2rem;
+    font-size: 3rem;
+    cursor: pointer;
+}
+
+
+.close_icon:hover {
+    fill: #f74235;}

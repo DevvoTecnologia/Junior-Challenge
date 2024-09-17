@@ -1,0 +1,19 @@
+.slider{
+    max-width: 70vw;
+    margin: auto;
+}
+
+@media (max-width:1250px){
+    .slider{
+        max-width: 85vw;
+    }
+}
+@media (max-width:850px){
+    .slider{
+        max-width: none;
+    }
+}
+
+.slick-prev:before, .slick-next:before, .slick-dots li button::before {
+    color: white !important;
+  }

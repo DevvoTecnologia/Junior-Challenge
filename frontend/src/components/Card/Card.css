@@ -1,0 +1,70 @@
+.ring_card {
+    max-width: 38rem;
+    min-width: 28rem;
+    margin: 0 1rem;
+    height: 26rem;
+    border-radius: 2rem;
+    background-image: url('../../assets/ring.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom;
+    position: relative;
+}
+
+@media (max-width:680px) {
+    .ring_card {
+        max-width: 100%;
+    }
+}
+
+.details {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 10rem;
+    border-bottom-left-radius: 2rem;
+    border-bottom-right-radius: 2rem;
+    padding: 1rem 2rem;
+    background-color: hsla(240, 5%, 8%, 0.88);
+    text-align: left;
+  text-transform: capitalize;
+
+}
+
+.details h4 {
+    font-size: 2rem;
+}
+
+.details p {
+    font-size: 1.2rem;
+}
+
+.text_wrapper {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.btn_wrapper {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 2rem;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.ring_card button {
+    font-size: 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.edit_icon:hover {
+    fill: #5d4bcf;
+}
+
+.delete_icon:hover {
+    fill: #cf4b4b;
+}

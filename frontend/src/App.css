@@ -1,0 +1,59 @@
+main {
+  margin: auto;
+  padding: 6rem 2rem;
+  max-width: 90vw;
+  min-height: 100vh;
+  text-align: center;
+}
+
+
+h1 {
+  font-size: 7rem;
+}
+
+h2 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  color: #ed7d47;
+}
+
+h3 {
+  font-size: 1.8rem;
+  font-weight: 400;
+}
+
+section {
+  text-align: left;
+  position: relative;
+}
+
+section h3 {
+  margin: 4rem 1rem;
+}
+
+section .add_btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 2.6rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+
+.add_icon:hover {
+  fill: #3da83f;
+}
+
+@media (max-width:450px) {
+  main {
+    padding: 6rem 0.5rem;
+  }
+
+  h1 {
+    font-size: 5rem;
+  }
+  
+}
