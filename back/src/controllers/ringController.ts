@@ -9,7 +9,6 @@ import {
 } from '../services/ringService';
 import { authenticate } from '../middleware/authMiddleware';
 import { getById } from '../services/userService';
-import { error } from 'console';
 
 interface RingParams {
   ringId: number;

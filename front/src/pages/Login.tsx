@@ -133,7 +133,6 @@ export default function Login() {
   const onRegisterSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    console.log(registerFormData);
     try {
       const result = await register(registerFormData);
       if (!result) {

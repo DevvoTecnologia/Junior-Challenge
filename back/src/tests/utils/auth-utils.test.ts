@@ -8,40 +8,48 @@ import {
 } from '../../utils/authUtils';
 
 describe('Auth Service', () => {
-  it('deve hash a senha corretamente', async () => {
-    const password = 'mySecret123';
-    const hashedPassword = await hashPassword(password);
+  describe('Password Hashing', () => {
+    it('should hash the password correctly', async () => {
+      const password = 'mySecret123';
+      const hashedPassword = await hashPassword(password);
 
-    expect(hashedPassword).not.toBe(password);
-  });
-
-  it('deve comparar a senha corretamente', async () => {
-    const password = 'mySecret123';
-    const hashedPassword = await hashPassword(password);
-
-    const isMatch = await comparePassword(password, hashedPassword);
-    expect(isMatch).toBe(true);
-  });
-
-  it('deve gerar um token corretamente', () => {
-    const userId = 'user-123';
-    const token = generateToken(userId);
-
-    expect(token).toBeDefined();
-  });
-
-  it('deve verificar um token corretamente', () => {
-    const userId = 'user-123';
-    const token = generateToken(userId);
-    const decoded = verifyToken(token);
-    expect(decoded).toStrictEqual({
-      userId,
-      iat: expect.any(Number),
-      exp: expect.any(Number),
+      expect(hashedPassword).not.toBe(password);
     });
   });
 
-  it('deve lançar um erro ao verificar um token inválido', () => {
-    expect(() => verifyToken('invalid-token')).toThrow();
+  describe('Password Comparison', () => {
+    it('should compare the password correctly', async () => {
+      const password = 'mySecret123';
+      const hashedPassword = await hashPassword(password);
+
+      const isMatch = await comparePassword(password, hashedPassword);
+      expect(isMatch).toBe(true);
+    });
+  });
+
+  describe('Token Generation', () => {
+    it('should generate a token correctly', () => {
+      const userId = 'user-123';
+      const token = generateToken(userId);
+
+      expect(token).toBeDefined();
+    });
+  });
+
+  describe('Token Verification', () => {
+    it('should verify a token correctly', () => {
+      const userId = 'user-123';
+      const token = generateToken(userId);
+      const decoded = verifyToken(token);
+      expect(decoded).toStrictEqual({
+        userId,
+        iat: expect.any(Number),
+        exp: expect.any(Number),
+      });
+    });
+
+    it('should throw an error when verifying an invalid token', () => {
+      expect(() => verifyToken('invalid-token')).toThrow();
+    });
   });
 });

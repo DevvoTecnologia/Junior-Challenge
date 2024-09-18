@@ -5,6 +5,7 @@ import { generateToken } from '../../utils/authUtils';
 import User from '../../models/user';
 import Ring from '../../models/ring';
 import { createApp } from '../setup';
+import { getRingService } from '../../services/ringService';
 
 vi.mock('../services/ringService');
 
@@ -34,6 +35,8 @@ describe('Ring Routes', () => {
       power: 'Invisibility',
       bearer: userId,
       forgedBy: userId,
+      image:
+        'https://r2.padrepauloricardo.org/uploads/aula/frame/1618/5-os-aneis-do-poder-slide-frame.jpg',
     };
     const ring = await Ring.create(mockRing);
     ringId = ring.id;
@@ -52,7 +55,8 @@ describe('Ring Routes', () => {
         power: 'Invisibility',
         bearer: userId,
         forgedBy: userId,
-        image: 'http://example.com/ring.png',
+        image:
+          'https://r2.padrepauloricardo.org/uploads/aula/frame/1618/5-os-aneis-do-poder-slide-frame.jpg',
       };
 
       const response = await request(app.server)
@@ -105,7 +109,8 @@ describe('Ring Routes', () => {
         name: 'Updated Ring',
         power: 'Teleportation',
         bearer: userId,
-        image: 'http://example.com/updated_ring.png',
+        image:
+          'https://r2.padrepauloricardo.org/uploads/aula/frame/1618/5-os-aneis-do-poder-slide-frame.jpg',
       };
 
       const response = await request(app.server)
@@ -150,7 +155,8 @@ describe('Ring Routes', () => {
         power: 'Invisibility',
         bearer: userId,
         forgedBy: userId,
-        image: null,
+        image:
+          'https://r2.padrepauloricardo.org/uploads/aula/frame/1618/5-os-aneis-do-poder-slide-frame.jpg',
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
       });
@@ -183,7 +189,10 @@ describe('Ring Routes', () => {
             power: 'Invisibility',
             bearer: userId,
             forgedBy: userId,
-            image: null,
+            createdAt: expect.any(String),
+            updatedAt: expect.any(String),
+            image:
+              'https://r2.padrepauloricardo.org/uploads/aula/frame/1618/5-os-aneis-do-poder-slide-frame.jpg',
           }),
         ])
       );

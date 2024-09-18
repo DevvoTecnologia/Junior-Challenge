@@ -12,7 +12,6 @@ beforeEach(async () => {
 
 afterEach(async () => {
   vi.resetAllMocks();
-
   await app.close();
 });
 
@@ -24,8 +23,8 @@ const mockUser = {
   class: 'warrior',
 };
 
-describe('user routes', () => {
-  test('POST /register deve registrar um novo usuário com classe', async () => {
+describe('User Routes', () => {
+  test('POST /register should register a new user with class', async () => {
     const newUser = {
       username: mockUser.username,
       email: mockUser.email,
@@ -45,7 +44,7 @@ describe('user routes', () => {
     expect(userResponse.status).toBe(201);
   });
 
-  test('POST /register deve retornar erro 400 para dados inválidos', async () => {
+  test('POST /register should return 400 error for invalid data', async () => {
     const response = await request(app.server).post('/register').send({
       username: 'testeuser',
       email: 'invalid-email',
@@ -56,7 +55,7 @@ describe('user routes', () => {
     expect(response.status).toBe(400);
   });
 
-  test('POST /login deve logar um usuário', async () => {
+  test('POST /login should log in a user', async () => {
     await request(app.server).post('/register').send({
       username: mockUser.username,
       email: mockUser.email,
@@ -81,7 +80,7 @@ describe('user routes', () => {
     });
   });
 
-  test('DELETE /delete/:id deve deletar um usuário', async () => {
+  test('DELETE /delete/:id should delete a user', async () => {
     const userResponse = await request(app.server).post('/register').send({
       username: mockUser.username,
       email: mockUser.email,
@@ -97,7 +96,7 @@ describe('user routes', () => {
     expect(response.body).toEqual({});
   });
 
-  test('DELETE /delete/:id deve retornar erro 404 para usuário inexistente', async () => {
+  test('DELETE /delete/:id should return 404 error for non-existent user', async () => {
     const response = await request(app.server).delete(
       '/delete/00000000-0000-0000-0000-000300003000'
     );

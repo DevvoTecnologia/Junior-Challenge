@@ -58,8 +58,6 @@ export const useUser = create<UserProps>((set) => ({
 
       const result = set({ user: response.data });
 
-      console.log('Saved: ', result);
-
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -97,7 +95,7 @@ export const useUser = create<UserProps>((set) => ({
 
     try {
       const response = await axios.post(`${baseUrl}/register`, registerData);
-      console.log(response);
+
       if (!response || !response.data) {
         throw new Error('Erro ao receber resposta do servidor');
       }

@@ -184,7 +184,7 @@ describe('Ring Service', () => {
         forgedBy: 'user-uuid',
       },
       {
-        id: '2',
+        id: 2,
         name: 'Ring 2',
         power: 'Power 2',
         bearer: 'user-uuid',
