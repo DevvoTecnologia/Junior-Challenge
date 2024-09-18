@@ -84,3 +84,14 @@ export const getById = async (id: string) => {
 export const deleteUserService = async (id: string) => {
   return await User.destroy({ where: { id } });
 };
+
+export const getUserService = async (id: string) => {
+  const data = await getById(id);
+
+  return {
+    email: data?.email,
+    username: data?.username,
+    class: data?.class,
+    id: data?.id,
+  };
+};

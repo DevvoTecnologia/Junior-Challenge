@@ -1,24 +1,13 @@
 import { test, expect, beforeEach, afterEach, describe, vi } from 'vitest';
 import { FastifyInstance } from 'fastify';
-import { userRoutes } from '../../routes/userRoutes';
 import request from 'supertest';
-import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
-import fastify from 'fastify';
-import sequelize from '../../models';
-import { ringRoutes } from '../../routes/ringRoutes';
+import { createApp } from '../setup';
 
 let app: FastifyInstance;
 let id: string;
 
 beforeEach(async () => {
-  app = fastify();
-  app.setValidatorCompiler(validatorCompiler);
-  app.setSerializerCompiler(serializerCompiler);
-  app.register(userRoutes);
-  await app.register(ringRoutes, { prefix: '/rings' });
-  await sequelize.authenticate();
-  await sequelize.sync({ force: true });
-  await app.ready();
+  app = await createApp();
 });
 
 afterEach(async () => {

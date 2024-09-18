@@ -1,13 +1,10 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import fastify, { FastifyInstance } from 'fastify';
+import { FastifyInstance } from 'fastify';
 import request from 'supertest';
-import { ringRoutes } from '../../routes/ringRoutes';
-import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import { generateToken } from '../../utils/authUtils';
-import sequelize from '../../models';
 import User from '../../models/user';
 import Ring from '../../models/ring';
-import { userRoutes } from '../../routes/userRoutes';
+import { createApp } from '../setup';
 
 vi.mock('../services/ringService');
 
@@ -18,18 +15,7 @@ let userId: string;
 
 describe('Ring Routes', () => {
   beforeEach(async () => {
-    app = fastify();
-
-    app.setValidatorCompiler(validatorCompiler);
-    app.setSerializerCompiler(serializerCompiler);
-
-    app.register(userRoutes);
-    await app.register(ringRoutes, { prefix: '/rings' });
-
-    await sequelize.authenticate();
-    await sequelize.sync({ force: true });
-
-    await app.ready();
+    app = await createApp();
 
     const mockUser = {
       id: 'd590641f-9976-4928-ba25-e1e0e2f66da8',
@@ -228,7 +214,7 @@ describe('Ring Routes', () => {
         .delete('/rings/99999999')
         .set({ Authorization: `Bearer ${TOKEN}` });
 
-      // expect(response.status).toBe(404);
+      expect(response.status).toBe(404);
       expect(response.body).toEqual({ error: 'Ring not found' });
     });
 

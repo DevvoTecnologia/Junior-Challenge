@@ -3,6 +3,7 @@ import React from 'react';
 import Login from './pages/Login.tsx';
 import Home from './pages/Home.tsx';
 import { ToastContainer } from 'react-toastify';
+import Profile from './pages/Profile.tsx';
 function App() {
   return (
     <div className="font-poppins">
@@ -11,6 +12,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} caseSensitive={false} />
           <Route path="/login" element={<Login />} caseSensitive={false} />
+          <Route path="/:id" element={<Profile />} caseSensitive={false} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -4,6 +4,7 @@ import {
   deleteUserService,
   getById,
   getByUsername,
+  getUserService,
   loginUserService,
 } from '../services/userService';
 
@@ -66,6 +67,29 @@ export const deleteUser = async (
   try {
     await deleteUserService(idUser);
     reply.status(204).send();
+  } catch (error) {
+    reply.status(500).send(error);
+  }
+};
+
+export const getUser = async (
+  request: FastifyRequest<{ Params: { id: string } }>,
+  reply: FastifyReply
+) => {
+  try {
+    const idUser = request.params.id;
+    if (!idUser) {
+      return reply.status(400).send({ error: 'Id not provided' });
+    }
+
+    const user = await getById(idUser);
+    if (!user) {
+      return reply.status(404).send({ error: 'User not found' });
+    }
+
+    const result = await getUserService(idUser);
+
+    reply.status(200).send(result);
   } catch (error) {
     reply.status(500).send(error);
   }

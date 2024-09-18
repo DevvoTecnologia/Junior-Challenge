@@ -50,7 +50,10 @@ interface UpdateRingBody {
   power?: string;
   bearer?: string;
 }
-
+interface MockFastifyReply extends FastifyReply {
+  status: (code: number) => this;
+  send: (body?: any) => this;
+}
 describe('Ring Controller', () => {
   let reply: FastifyReply;
 
@@ -58,7 +61,10 @@ describe('Ring Controller', () => {
     reply = {
       status: vi.fn().mockReturnThis(),
       send: vi.fn(),
-    } as FastifyReply;
+      raw: {} as unknown,
+      context: {},
+      log: {} as unknown,
+    } as unknown as MockFastifyReply;
 
     vi.clearAllMocks();
   });
@@ -70,18 +76,25 @@ describe('Ring Controller', () => {
   ): FastifyRequest<{
     Params: RingParams;
     Body: CreateRingBody | UpdateRingBody;
-  }> =>
-    ({
+  }> => {
+    const request = {
       params,
       body,
       user,
       query: {},
       headers: {},
       raw: {} as any,
-    }) as FastifyRequest<{
+      id: '',
+      log: {} as any,
+      server: {} as any,
+      context: {},
+    };
+
+    return request as unknown as FastifyRequest<{
       Params: RingParams;
       Body: CreateRingBody | UpdateRingBody;
     }>;
+  };
 
   describe('getRing', () => {
     it('should return a ring by ID', async () => {
@@ -173,7 +186,20 @@ describe('Ring Controller', () => {
     });
 
     it('should return 401 if user is not authenticated', async () => {
-      const request = createRequest({ ringId: 1 }, {}, { userId: '', class: '' });
+      const request = createRequest(
+        { ringId: 1 },
+        {},
+        { userId: '', class: '' }
+      ) as FastifyRequest<{
+        Params: { ringId: number };
+        Body: {
+          name: string;
+          forgedBy: string;
+          power: string;
+          bearer: string;
+          image: string;
+        };
+      }>;
       (request as any).user = undefined;
 
       await createRing(request, reply);
@@ -197,7 +223,10 @@ describe('Ring Controller', () => {
           bearer: testUser.userId,
         },
         testUser
-      );
+      ) as FastifyRequest<{
+        Params: { ringId: number };
+        Body: { name: string; power: string; bearer: string; image?: string | undefined };
+      }>;
 
       const mockRing = { id: 1, bearer: testUser.userId };
       (getRingService as Mock).mockResolvedValue(mockRing);
@@ -211,7 +240,10 @@ describe('Ring Controller', () => {
 
     it('should return 404 if ring not found', async () => {
       const testUser = { userId: '550e8400-e29b-41d4-a716-446655440006', class: 'Anão' };
-      const request = createRequest({ ringId: 1 }, {}, testUser);
+      const request = createRequest({ ringId: 1 }, {}, testUser) as FastifyRequest<{
+        Params: { ringId: number };
+        Body: { name: string; power: string; bearer: string; image?: string | undefined };
+      }>;
       (getRingService as Mock).mockResolvedValue(null);
 
       await updateRing(request, reply);
@@ -222,7 +254,10 @@ describe('Ring Controller', () => {
 
     it('should return 403 if user is not authorized', async () => {
       const testUser = { userId: '550e8400-e29b-41d4-a716-446655440007', class: 'Elfo' };
-      const request = createRequest({ ringId: 1 }, {}, testUser);
+      const request = createRequest({ ringId: 1 }, {}, testUser) as FastifyRequest<{
+        Params: { ringId: number };
+        Body: { name: string; power: string; bearer: string; image?: string | undefined };
+      }>;
       const mockRing = { id: 1, bearer: 'other-user' };
       (getRingService as Mock).mockResolvedValue(mockRing);
 

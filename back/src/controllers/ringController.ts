@@ -9,6 +9,7 @@ import {
 } from '../services/ringService';
 import { authenticate } from '../middleware/authMiddleware';
 import { getById } from '../services/userService';
+import { error } from 'console';
 
 interface RingParams {
   ringId: number;
@@ -66,9 +67,7 @@ const checkPortedRings = async (bearerId: string) => {
   }
 
   if (rings.length >= limit) {
-    throw new Error(
-      `${user.class} pode ter no máximo ${limit} anéis. Você possui ${rings.length}.`
-    );
+    return `Você atingiu o limite de anéis permitidos pela classe.`;
   }
 };
 
@@ -116,7 +115,9 @@ export const createRing = async (
     const reqUser = await checkAuthentication(request, reply);
     if (!reqUser) return reply.status(403).send({ error: 'Not Authorized' });
 
-    await checkPortedRings(reqUser.userId);
+    const portedResult = await checkPortedRings(reqUser.userId);
+    if (portedResult === 'Você atingiu o limite de anéis permitidos pela classe.')
+      return reply.status(405).send({ error: portedResult });
 
     const newRing = await createRingService({
       ...request.body,

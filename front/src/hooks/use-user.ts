@@ -16,7 +16,9 @@ type UserProps = {
     email: string;
     password: string;
     username: string;
+    class: string;
   }) => Promise<User | null>;
+  getUser: (id: string) => Promise<User | null>;
 };
 const storedUser = localStorage.getItem('user');
 const initialUser = storedUser ? JSON.parse(storedUser) : null;
@@ -80,6 +82,7 @@ export const useUser = create<UserProps>((set) => ({
     email: string;
     password: string;
     username: string;
+    class: string;
   }) => {
     try {
       registerSchema.parse(registerData);
@@ -105,6 +108,30 @@ export const useUser = create<UserProps>((set) => ({
         if (error.response) {
           throw new Error(
             `Erro ao registrar: ${error.response.data.message || 'Erro desconhecido'}`
+          );
+        } else if (error.request) {
+          throw new Error('Erro de conexão: O servidor não respondeu');
+        } else {
+          throw new Error(`Erro inesperado: ${error.message}`);
+        }
+      } else {
+        throw new Error(`Erro inesperado: ${error}`);
+      }
+    }
+  },
+  getUser: async (id: string) => {
+    try {
+      const response = await axios.get(`${baseUrl}/${id}`);
+
+      if (!response || !response.data) {
+        throw new Error('Erro ao receber resposta do servidor');
+      }
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          throw new Error(
+            `Erro ao buscar dados do usuário: ${error.response.data.message || 'Erro desconhecido'}`
           );
         } else if (error.request) {
           throw new Error('Erro de conexão: O servidor não respondeu');

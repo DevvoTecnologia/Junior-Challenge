@@ -19,10 +19,12 @@ export default function Header() {
   const user = useUser((state) => state.user);
   const { clearUser } = useUser();
   return (
-    <div className="min-w-[50%] flex justify-between px-16 items-center h-28 border-b-2 border-gray bg-blue-500 p-5 text-left text-mainTextColor">
-      <p className="font-saira-stencil text-5xl">
-        Anéis de <span className="text-white">PODER</span>
-      </p>
+    <div className="min-w-[50%] flex justify-between px-16 items-center h-28 border-b-2 border-gray bg-mainColor p-5 text-left text-mainTextColor">
+      <button className="font-saira-stencil text-4xl">
+        <Link to="/">
+          Anéis de <span className="text-white">Poder</span>
+        </Link>
+      </button>
       {user && (
         <div className="flex justify-center">
           <DropdownMenu>
@@ -43,10 +45,10 @@ export default function Header() {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem>
-                  <Link to="/settings" className="flex items-center">
+                  <button disabled className="flex items-center">
                     <FaGear className="mr-2 h-4 w-4" />
                     <span>Configurações</span>
-                  </Link>
+                  </button>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />

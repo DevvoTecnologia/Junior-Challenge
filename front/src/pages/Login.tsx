@@ -3,21 +3,58 @@ import Header from '../components/Header.tsx';
 import Container from '../components/Container.tsx';
 import { useUser } from '../hooks/use-user.ts';
 import { Bounce, toast } from 'react-toastify';
-import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Para o ícone da senha
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { Check, ChevronsUpDown } from 'lucide-react';
+
+import { cn } from '@/lib/utils.ts';
+import { Button } from '@/components/ui/button.tsx';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command.tsx';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover.tsx';
 
 export default function Login() {
   const [active, setActive] = useState('login');
-  const [formData, setFormData] = useState({
+  const [registerFormData, setRegisterFormData] = useState({
+    email: '',
+    username: '',
+    password: '',
+    confirmPassword: '',
+    class: '',
+  });
+  const [loginFormData, setLoginFormData] = useState({
     email: '',
     password: '',
-    username: '',
   });
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [showPassword, setShowPassword] = useState(false); // Para mostrar/esconder a senha
+  const [showPassword, setShowPassword] = useState(false);
+  const [open, setOpen] = React.useState(false);
 
   const user = useUser((state) => state.user);
   const { login, register } = useUser();
-
+  const classOptions = [
+    {
+      value: 'Elfo',
+      label: 'Elfo',
+    },
+    {
+      value: 'Anão',
+      label: 'Anão',
+    },
+    {
+      value: 'Homem',
+      label: 'Homem',
+    },
+    {
+      value: 'Sauron',
+      label: 'Sauron',
+    },
+  ];
   useEffect(() => {
     if (user) {
       toast.success('Usuário logado com sucesso!', {
@@ -39,18 +76,27 @@ export default function Login() {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    setErrors((prev) => ({ ...prev, [name]: '' })); // Limpar erros ao digitar
+
+    if (active === 'cadastrar') {
+      setRegisterFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    } else {
+      setLoginFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+
+    setErrors((prev) => ({ ...prev, [name]: '' }));
   };
 
   const onLoginSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     try {
-      const result = await login({ email: formData.email, password: formData.password });
+      const result = await login(loginFormData);
 
       if (!result) {
         throw new Error('Usuário ou senha inválidos.');
@@ -87,13 +133,9 @@ export default function Login() {
   const onRegisterSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
+    console.log(registerFormData);
     try {
-      const result = await register({
-        email: formData.email,
-        password: formData.password,
-        username: formData.username,
-      });
-
+      const result = await register(registerFormData);
       if (!result) {
         throw new Error('Erro ao registrar.');
       }
@@ -143,7 +185,7 @@ export default function Login() {
     <div className="flex flex-col h-screen">
       <Header />
       {!user && (
-        <Container className="">
+        <Container>
           <div className="flex items-center justify-center h-full">
             <div className="bg-white rounded-lg shadow-lg border-[2px] border-gray overflow-hidden relative w-[768px] max-w-full min-h-[480px]">
               <div
@@ -155,20 +197,19 @@ export default function Login() {
                     onSubmit={onRegisterSubmit}
                   >
                     <h1 className="text-4xl font-bold">Criar conta</h1>
-                    <span className="text-sm">ou use seu email e senha</span>
                     <input
                       className="bg-gray border-none my-2 py-2 px-3 text-sm rounded-lg w-full outline-none"
                       type="text"
                       name="username"
                       placeholder="Nome de usuário"
-                      value={formData.username}
+                      value={registerFormData.username}
                       onChange={handleChange}
                     />
                     <input
                       className="bg-gray border-none my-2 py-2 px-3 text-sm rounded-lg w-full outline-none"
                       name="email"
                       placeholder="Email de cadastro"
-                      value={formData.email}
+                      value={registerFormData.email}
                       onChange={handleChange}
                     />
                     <div className="relative w-full">
@@ -176,8 +217,8 @@ export default function Login() {
                         className="bg-gray border-none my-2 py-2 px-3 text-sm rounded-lg w-full outline-none"
                         type={showPassword ? 'text' : 'password'}
                         name="password"
-                        placeholder="Senha de cadastro"
-                        value={formData.password}
+                        placeholder="Senha"
+                        value={registerFormData.password}
                         onChange={handleChange}
                       />
                       <div
@@ -187,6 +228,76 @@ export default function Login() {
                         {showPassword ? <FaEyeSlash /> : <FaEye />}
                       </div>
                     </div>
+                    <div className="relative w-full">
+                      <input
+                        className="bg-gray border-none my-2 py-2 px-3 text-sm rounded-lg w-full outline-none"
+                        type={showPassword ? 'text' : 'password'}
+                        name="confirmPassword"
+                        placeholder="Confirmar senha"
+                        value={registerFormData.confirmPassword}
+                        onChange={handleChange}
+                      />
+                      <div
+                        className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                      >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </div>
+                    </div>
+                    <Popover open={open} onOpenChange={setOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={open}
+                          className="bg-gray border-none my-2 py-2 px-3 text-sm rounded-lg w-full outline-none"
+                        >
+                          {registerFormData.class
+                            ? classOptions.find(
+                                (classOption) =>
+                                  classOption.value === registerFormData.class
+                              )?.label
+                            : 'Selecione a sua classe.'}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[200px] p-0">
+                        <Command>
+                          <CommandInput placeholder="Pesquisar classe" />
+                          <CommandList>
+                            <CommandEmpty>Classe não encontrada.</CommandEmpty>
+                            <CommandGroup>
+                              {classOptions.map((classOption) => (
+                                <CommandItem
+                                  key={classOption.value}
+                                  value={classOption.value}
+                                  onSelect={(currentValue) => {
+                                    setRegisterFormData({
+                                      ...registerFormData,
+                                      class:
+                                        currentValue === registerFormData.class
+                                          ? ''
+                                          : currentValue,
+                                    });
+                                    setOpen(false);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      'mr-2 h-4 w-4',
+                                      registerFormData.class === classOption.value
+                                        ? 'opacity-100'
+                                        : 'opacity-0'
+                                    )}
+                                  />
+                                  {classOption.label}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                     <button
                       data-testid="cadastro-submit"
                       type="submit"
@@ -208,12 +319,11 @@ export default function Login() {
                     onSubmit={onLoginSubmit}
                   >
                     <h1 className="text-4xl font-bold">Login</h1>
-                    <span className="text-sm">ou use email e senha</span>
                     <input
                       className="bg-gray border-none my-2 py-2 px-3 text-sm rounded-lg w-full outline-none"
                       name="email"
                       placeholder="Email de login"
-                      value={formData.email}
+                      value={loginFormData.email}
                       onChange={handleChange}
                     />
                     <div className="relative w-full">
@@ -222,7 +332,7 @@ export default function Login() {
                         type={showPassword ? 'text' : 'password'}
                         name="password"
                         placeholder="Senha de login"
-                        value={formData.password}
+                        value={loginFormData.password}
                         onChange={handleChange}
                       />
                       <div
@@ -258,7 +368,7 @@ export default function Login() {
               >
                 <div
                   className={`bg-gradient-to-r left-0 
-                  ${active === 'cadastrar' ? 'from-blue-700 to-blue-400' : 'from-blue-400 to-blue-700'}
+                  ${active === 'cadastrar' ? 'from-mainColor to-mainColor/70' : 'from-mainColor/70 to-mainColor '}
                       text-white relative right-0 w-full h-full transform transition-all duration-600 ease-in-out`}
                 >
                   <div

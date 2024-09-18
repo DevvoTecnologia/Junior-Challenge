@@ -1,116 +1,125 @@
-import axios from 'axios';
 import { create } from 'zustand';
+import axios from 'axios';
+import { Ring } from '@/types/Ring.ts';
 import { useUser } from './use-user.ts';
-import { CreateRingType, Ring } from '@/types/Ring.ts';
 
-const baseUrl = `${import.meta.env.VITE_BASE_URL}/rings`;
-
-type RingProps = {
+interface RingState {
   rings: Ring[];
   loading: boolean;
   error: string | null;
-  fetchRings: (order?: 'asc' | 'desc') => Promise<void>;
-  createRing: (ringData: CreateRingType) => Promise<Ring | { error: string }>; // Assinatura correta
-  updateRing: (ringId: number, ringData: Partial<Ring>) => Promise<void>;
-  deleteRing: (ringId: number) => Promise<void>;
-};
+  fetchRings: () => Promise<void>;
+  createRing: (ringData: Omit<Ring, 'id' | 'createdAt' | 'updatedAt'>) => Promise<Ring>;
+  updateRing: (
+    ringId: number,
+    ringData: Partial<Omit<Ring, 'id' | 'createdAt' | 'updatedAt'>>
+  ) => Promise<Ring>;
+  deleteRing: (ringId: number) => Promise<boolean>;
+}
 
-export const useRings = create<RingProps>((set, get) => ({
+const baseUrl = import.meta.env.VITE_BASE_URL;
+
+export const useRings = create<RingState>((set) => ({
   rings: [],
   loading: false,
   error: null,
 
-  fetchRings: async (order = 'desc') => {
-    const user = useUser.getState().user;
-
-    if (!user) {
-      set({ error: 'User is not authenticated' });
-      return;
-    }
-
+  fetchRings: async () => {
     set({ loading: true, error: null });
+    const { user } = useUser.getState();
+    if (!user) {
+      throw new Error('User must be logged in to create a ring.');
+    }
     try {
-      const response = await axios.get<Ring[]>(baseUrl, {
+      const response = await axios.get(`${baseUrl}/rings`, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
-        params: { order },
       });
       set({ rings: response.data });
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Error fetching rings';
-      set({ error: errorMessage });
+    } catch (error: any) {
+      set({ error: error.message || 'Error fetching rings' });
     } finally {
       set({ loading: false });
     }
   },
 
   createRing: async (ringData) => {
-    const user = useUser.getState().user;
+    set({ loading: true });
+    const { user } = useUser.getState();
 
     if (!user) {
-      set({ error: 'User is not authenticated' });
-      return { error: 'User is not authenticated' };
+      throw new Error('Você deve estar logado para criar um anel.');
     }
+
     try {
-      const response = await axios.post<Ring>(baseUrl, ringData, {
+      const data = {
+        ...ringData,
+        bearer: user.user.id,
+        forgedBy: user.user.id,
+      };
+
+      const response = await axios.post(`${baseUrl}/rings`, data, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
       });
+
       set((state) => ({ rings: [...state.rings, response.data] }));
-      console.log(response.data);
       return response.data;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Error creating ring';
-      set({ error: errorMessage });
-      return { error: errorMessage };
+    } catch (error: any) {
+      throw new Error(
+        error.response?.data?.error || error.message || 'Erro ao criar o anel'
+      );
+    } finally {
+      set({ loading: false });
     }
   },
 
   updateRing: async (ringId, ringData) => {
-    const user = useUser.getState().user;
-
+    const { user } = useUser.getState();
     if (!user) {
-      set({ error: 'User is not authenticated' });
-      return;
+      throw new Error('User must be logged in to update a ring.');
     }
 
+    set({ loading: true });
     try {
-      const response = await axios.put<Ring>(`${baseUrl}/${ringId}`, ringData, {
+      const response = await axios.put(`${baseUrl}/rings/${ringId}`, ringData, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
       });
       set((state) => ({
-        rings: state.rings.map((ring) =>
-          ring.id === response.data.id ? response.data : ring
-        ),
+        rings: state.rings.map((ring) => (ring.id === ringId ? response.data : ring)),
       }));
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Error updating ring';
-      set({ error: errorMessage });
+      return response.data;
+    } catch (error: any) {
+      set({ error: error.message || 'Error updating ring' });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
 
   deleteRing: async (ringId) => {
-    const user = useUser.getState().user;
-
+    const { user } = useUser.getState();
     if (!user) {
-      set({ error: 'User is not authenticated' });
-      return;
+      throw new Error('User must be logged in to delete a ring.');
     }
 
+    set({ loading: true });
     try {
-      await axios.delete(`${baseUrl}/${ringId}`, {
+      const result = await axios.delete(`${baseUrl}/rings/${ringId}`, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
       });
       set((state) => ({ rings: state.rings.filter((ring) => ring.id !== ringId) }));
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Error deleting ring';
-      set({ error: errorMessage });
+      return true;
+    } catch (error: any) {
+      set({ error: error.message || 'Error deleting ring' });
+      throw error;
+    } finally {
+      set({ loading: false });
     }
   },
 }));

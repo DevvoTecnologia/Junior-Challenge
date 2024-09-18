@@ -1,6 +1,11 @@
 import { FastifyInstance } from 'fastify';
 import z from 'zod';
-import { deleteUser, loginUser, registerUser } from '../controllers/userController';
+import {
+  deleteUser,
+  getUser,
+  loginUser,
+  registerUser,
+} from '../controllers/userController';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
 
 export async function userRoutes(app: FastifyInstance) {
@@ -100,5 +105,36 @@ export async function userRoutes(app: FastifyInstance) {
       },
     },
     deleteUser
+  );
+  app.withTypeProvider<ZodTypeProvider>().get(
+    '/:id',
+    {
+      schema: {
+        summary: 'get user',
+        description: 'Get User.',
+        tags: ['Users'],
+        params: z.object({
+          id: z.string(),
+        }),
+        response: {
+          200: z.object({
+            id: z.string(),
+            username: z.string(),
+            email: z.string(),
+            class: z.string(),
+          }),
+          400: z.object({
+            error: z.string(),
+          }),
+          404: z.object({
+            error: z.string(),
+          }),
+          500: z.object({
+            error: z.string(),
+          }),
+        },
+      },
+    },
+    getUser
   );
 }
