@@ -18,7 +18,7 @@ npm -v
 Clone o repositório:
 ```bash
 git clone https://github.com/azevedomarcelo/Junior-Challenge.git
-cd Junior-Challenge
+cd Junior-Challenge/frontend
 ```
 Instale as dependências:
 ```bash
