@@ -1,0 +1,39 @@
+.container_main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%;
+  height: 100vh;
+  margin-top: -2rem;
+  gap: 1rem;
+}
+
+.title {
+  font-size: 24px;
+}
+
+.input {
+  display: block;
+  width: 313px;
+  padding: 10px 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.button {
+  padding: 10px;
+  margin-top: 1rem;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background-color: #444;
+  color: #fff;
+  width: 313px;
+  height: 38px;
+
+  cursor: pointer;
+  
+  &:hover {
+    box-shadow: 0px 0px 3px #000;
+  }
+}
