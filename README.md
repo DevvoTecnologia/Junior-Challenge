@@ -30,6 +30,8 @@ $ npm run dev
 $ npm install
 $ npm run dev
 ```
+- Acesse a rota /docs para a documentação com Swagger.
+
 
 ## 💍 Contexto do Desafio
 
