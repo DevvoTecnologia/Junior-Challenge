@@ -15,10 +15,10 @@ import { toast } from '@/hooks/use-toast'
 import { useAuth } from '@/hooks/useAuth'
 
 const schema = z.object({
-  username: z.string().min(1, { message: 'Username is required.' }),
+  username: z.string().min(2, { message: 'Nome de usuário é obrigatório.' }),
   password: z
     .string()
-    .min(6, { message: 'Password must be at least 6 characters long.' }),
+    .min(6, { message: 'A senha deve ter pelo menos 6 caracteres.' }),
 })
 
 type SignUpFormValues = z.infer<typeof schema>
@@ -44,7 +44,7 @@ export function SignUp() {
     },
     onError: () => {
       toast({
-        title: 'Erro',
+        title: 'Ooops!',
         description: 'Falha ao criar conta, tente novamente',
         variant: 'destructive',
       })

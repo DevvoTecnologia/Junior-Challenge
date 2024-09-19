@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
@@ -10,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Loader } from '@/components/ui/loader'
 import { toast } from '@/hooks/use-toast'
 import { useAuth } from '@/hooks/useAuth'
 
@@ -40,7 +42,7 @@ export function SignIn() {
     resolver: zodResolver(formSchema),
   })
 
-  const mutation = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: (data: FormValues) => UserSignIn(data),
     onSuccess: (data) => {
       toast({
@@ -49,16 +51,24 @@ export function SignIn() {
       })
       login(data.token)
     },
-    onError: () => {
+    onError: (error: AxiosError) => {
+      const statusCode = error.response?.status
+
+      console.log(error)
+
+      const description =
+        statusCode === 404 ? 'Usuário não encontrado' : 'Falha no login'
+
       toast({
-        title: 'Falha no login',
-        description: 'Nome de usuário ou senha inválidos.',
+        title: 'Ooops!',
+        description,
+        variant: 'destructive',
       })
     },
   })
 
   const onSubmit = (data: FormValues) => {
-    mutation.mutate(data)
+    mutate(data)
   }
 
   return (
@@ -98,7 +108,7 @@ export function SignIn() {
               )}
             </div>
             <Button type="submit" className="w-full">
-              Entrar
+              {isPending ? <Loader /> : 'Entrar'}
             </Button>
           </form>
           <span className="mt-6 font-xs">

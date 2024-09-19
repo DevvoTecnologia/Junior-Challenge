@@ -1,8 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { AxiosError } from 'axios'
 import { useState } from 'react'
 import { MdDelete, MdModeEdit } from 'react-icons/md'
 
 import { Artifact } from '@/@types/artifact'
+import { ErrorResponse } from '@/@types/error'
 import { createArtifact, CreateArtifactRequest } from '@/api/create-artifact'
 import { deleteArtifact } from '@/api/delete-artifact'
 import { getArtifacts } from '@/api/get-artifacts'
@@ -66,10 +68,19 @@ export function Home() {
       })
       queryClient.invalidateQueries({ queryKey: ['artifacts'] })
     },
-    onError: () => {
+    onError: (error: AxiosError<ErrorResponse>) => {
+      const statusCode = error.response?.status
+      const errorData = error.response?.data
+
+      const description =
+        statusCode === 500
+          ? 'Falha ao criar artefato'
+          : errorData?.errors?.[0]?.message || 'Erro desconhecido'
+
       toast({
         title: 'Algo deu errado',
-        description: 'Falha ao criar artefato',
+        description,
+        variant: 'destructive',
       })
     },
   })
@@ -88,6 +99,7 @@ export function Home() {
       toast({
         title: 'Erro ao atualizar',
         description: 'Falha ao atualizar artefato',
+        variant: 'destructive',
       })
     },
   })
@@ -106,6 +118,7 @@ export function Home() {
       toast({
         title: 'Erro ao excluir',
         description: 'Falha ao excluir artefato',
+        variant: 'destructive',
       })
     },
   })
