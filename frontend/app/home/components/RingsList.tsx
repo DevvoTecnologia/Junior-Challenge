@@ -66,7 +66,13 @@ export default function RingsList() {
                           {ring.poder}
                         </CardDescription>
                         <Avatar className="mx-auto w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-32 lg:h-32 border-4">
-                          <AvatarImage src={ring.imagem} alt={ring.nome} />
+                          <AvatarImage
+                            src={
+                              ring.imagem ||
+                              "https://www.coxinhanerd.com.br/wp-content/uploads/2022/01/3wiSgRRKokK660O75vJAGmk7FWF-1.jpg"
+                            }
+                            alt={ring.nome}
+                          />
                           <AvatarFallback>RN</AvatarFallback>
                         </Avatar>
                       </CardHeader>
