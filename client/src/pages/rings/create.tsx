@@ -27,7 +27,7 @@ export default function CreateRing() {
       imagem: formData.get("imagem") as string,
     }
 
-    const response = await fetch("/callingTheServer", {
+    const response = await fetch("/rings", {
       method: "POST",
       body: JSON.stringify(ring)
     })
@@ -48,13 +48,20 @@ export default function CreateRing() {
       ); 
     }
 
-    router.push("/rings")
+    handleToast(
+      true,
+      `O anel [${ring.nome} foi criado com sucesso!]`
+    ); 
+
+    setTimeout(() => {
+      router.push("/rings")
+    }, 5000);
   }
 
   return (
     <>
       <Head>
-        <title>Tolkien's Rings | Criar novo anel</title>
+        <title>Tolkien&apos;s Rings | Criar novo anel</title>
       </Head>
 
       <Header hasPrevious />

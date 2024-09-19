@@ -6,6 +6,7 @@ const BASE_URL = "http://localhost:3333";
 
 describe("/rings", () => {
   let _server: Server;
+  
 
   beforeAll(async () => {
     await new Promise((resolve) => {

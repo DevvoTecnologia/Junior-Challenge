@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Tolkien's Rings</title>
+        <title>Tolkien&apos;s Rings</title>
       </Head>
 
       <Header />

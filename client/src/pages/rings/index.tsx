@@ -39,7 +39,7 @@ export default function Rings({ rings }: Props) {
     return (
         <>
             <Head>
-                <title>Tolkien's Rings | Aneis de LOTR</title>
+                <title>Tolkien&apos;s Rings | Aneis de LOTR</title>
             </Head>
 
             <Header hasPrevious />

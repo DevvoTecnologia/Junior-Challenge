@@ -1,5 +1,5 @@
 import { Repository } from "typeorm";
-import { dataSource } from "../../../shared/infra/typeorm"
+import { dataSource } from "../../../shared/infra/typeorm/dataSource"
 import { Ring } from "../domain/Rings";
 import { IRingsRepository } from "./IRingsRepository";
 

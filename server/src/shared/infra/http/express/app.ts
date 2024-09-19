@@ -1,10 +1,10 @@
 import express, { Request, Response } from "express";
 import { router } from "./routes";
-import { createConnection } from "../../typeorm/dataSource";
-import "reflect-metadata"
-import "./../../../container"
+// import { createConnection } from "../../typeorm/dataSource";
+// import "reflect-metadata"
+// import "./../../../container"
 
-createConnection()
+// createConnection()
 
 export const app = express();
 

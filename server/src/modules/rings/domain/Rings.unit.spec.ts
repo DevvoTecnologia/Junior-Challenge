@@ -4,11 +4,11 @@ import { IRing, Ring } from "./Rings";
 describe("Rings", () => {
   it("should create a ring given valid data", () => {
     const data = {
-        nome: "Narya, o anel do fogo",
-        poder: "Seu portador ganha resistência ao fogo",
-        portador: "Gandalf",
-        forjadoPor: "Elfos",
-        imagem: "",
+      nome: "Narya, o anel do fogo",
+      poder: "Seu portador ganha resistência ao fogo",
+      portador: "Gandalf",
+      forjadoPor: "Elfos",
+      imagem: "",
     } as IRing;
 
     const result = Ring.create(data);
@@ -29,7 +29,7 @@ describe("Rings", () => {
       portador: "Gandalf",
       forjadoPor: "Eelfos",
       imagem: "",
-  };
+    };
 
     // @ts-ignore
     const result = Ring.create(data);

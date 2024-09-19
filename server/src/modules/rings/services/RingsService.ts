@@ -4,12 +4,12 @@ import { CreateRingDTO } from "../dtos/CreateRingDTO";
 import { IRingsRepository } from "../repository/IRingsRepository";
 import { injectable, inject } from "tsyringe"
 
-@injectable()
+// @injectable()
 export class RingsService {
   private ringsRepository;
 
   constructor(
-    @inject("RingsRepository")
+    // @inject("RingsRepository")
     ringsRepository: IRingsRepository
   ) {
     this.ringsRepository = ringsRepository;

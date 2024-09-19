@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  client:
+    build: ./client
+    ports:
+      - "3000:3000"
+    environment:
+      FETCH_URL: http://localhost:3333
+    depends_on:
+      - rings-api
+
+  rings-api:
+    build: ./server
+    ports:
+      - "3333:3333"
+    environment:
+      DB_TYPE: postgres
+      PG_USER: docker
+      PG_PASSWORD: rings
+      PG_DB: devvo
+      PG_PORT: 5432
+      PG_HOST: database_rings
+    # links:
+    #   - database_rings
+    # depends_on: 
+    #   - database_rings
+
+  # database_rings:
+  #   image: postgres:alpine
+  #   container_name: database_rings
+  #   restart: always
+  #   ports:
+  #     - "5432:5432"
+  #   environment:
+  #     POSTGRES_USER: docker
+  #     POSTGRES_PASSWORD: rings
+  #     POSTGRES_DB: devvo
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+    driver: local

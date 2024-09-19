@@ -10,7 +10,7 @@ export default function Custom404Page() {
   return (
     <>
       <Head>
-        <title>Tolkien's Rings | Página não encontrada</title>
+        <title>Tolkien&apos;s Rings | Página não encontrada</title>
       </Head>
 
       <Header />

@@ -23,7 +23,7 @@ export function Header({ hasPrevious = false }: Props) {
           </svg>
         </button>
       )}
-      <p className="font-semibold">Tolkien's Rings</p>
+      <p className="font-semibold">Tolkien&apos;s Rings</p>
     </header>
   );
 }
