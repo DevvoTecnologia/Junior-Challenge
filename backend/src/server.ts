@@ -5,6 +5,7 @@ import authRoutes from "./routes/authRoutes";
 
 import swaggerUi from "swagger-ui-express";
 import swaggerFile from "./swagger-output.json";
+
 import cors from "cors";
 
 import { connectDb } from "./db";

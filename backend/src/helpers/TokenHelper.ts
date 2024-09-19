@@ -10,15 +10,18 @@ export default class TokenHelper {
     return jwt.sign(payload, this.secretKey, { expiresIn });
   }
 
-  static VerifyToken(token: string): object | string {
+  static VerifyToken(token: string) {
     try {
       const sanitizedToken = token.replace("Bearer ", "");
 
       console.log(sanitizedToken);
 
-      return jwt.verify(sanitizedToken, this.secretKey);
-    } catch (error) {
-      throw new Error("Invalid token");
+      const isValid = jwt.verify(sanitizedToken, this.secretKey);
+
+      return isValid;
+    } catch (e) {
+      console.log("Invalid token!!", e);
+      return null;
     }
   }
 }
