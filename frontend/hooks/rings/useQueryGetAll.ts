@@ -18,6 +18,7 @@ async function getAll() {
 
   if (!response.success) {
     toast.error("Erro ao buscar os anéis", {
+      description: response.message,
       duration: 5000,
       closeButton: true,
     });

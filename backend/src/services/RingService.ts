@@ -8,14 +8,16 @@ export default class RingService {
       const rings = await RingModel.find();
       return new ApiResponse<Ring[]>({
         success: true,
-        message: "Rings retrieved successfully",
+        message:
+          "Anéis recuperados com sucesso, viajante! Que eles lhe tragam sabedoria em sua jornada.",
         data: rings,
       });
     } catch (err) {
       console.log(err);
       return new ApiResponse({
         success: false,
-        message: "Internal server error getting rings",
+        message:
+          "Um erro inesperado surgiu das sombras. Ocorreu um problema interno. Tente novamente mais tarde, bravo viajante.",
       });
     }
   }
@@ -27,19 +29,22 @@ export default class RingService {
       if (!ring) {
         return new ApiResponse({
           success: false,
-          message: "Ring not found",
+          message:
+            "Anel não encontrado, viajante. Parece que ele se perdeu nas brumas do tempo.",
         });
       }
 
       return new ApiResponse<Ring>({
         success: true,
-        message: "Ring retrieved successfully",
+        message:
+          "Anel recuperado com sucesso, viajante! Que ele lhe traga sabedoria em sua jornada.",
         data: ring,
       });
     } catch (error) {
       return new ApiResponse({
         success: false,
-        message: "Internal Server Error getting ring",
+        message:
+          "Um erro inesperado surgiu das sombras. Ocorreu um problema interno. Tente novamente mais tarde, bravo viajante.",
       });
     }
   }
@@ -51,20 +56,23 @@ export default class RingService {
       if (!ring) {
         return new ApiResponse({
           success: false,
-          message: "Ring not found",
+          message:
+            "Anel não encontrado, viajante. Parece que ele se perdeu nas brumas do tempo",
         });
       }
 
       return new ApiResponse<Ring>({
         success: true,
-        message: "Ring retrieved successfully",
+        message:
+          "Anel recuperado com sucesso, viajante! Que ele lhe traga sabedoria em sua jornada",
         data: ring,
       });
     } catch (err) {
       console.log(err);
       return new ApiResponse({
         success: false,
-        message: "Internal server error getting ring",
+        message:
+          "Um erro inesperado surgiu das sombras. Ocorreu um problema interno. Tente novamente mais tarde, bravo viajante.",
       });
     }
   }
@@ -83,28 +91,28 @@ export default class RingService {
       if (race == "Sauron" && countRingsByRace === 1) {
         return new ApiResponse({
           success: false,
-          message: "There can only be one ring forged by Sauron",
+          message: "Somente um anel pode ser forjado por Sauron",
         });
       }
 
       if (race == "Anões" && countRingsByRace === 7) {
         return new ApiResponse({
           success: false,
-          message: "There can only be seven rings forged by the Dwarves",
+          message: "Somente sete anéis podem ser forjados por Anões",
         });
       }
 
       if (race == "Elfos" && countRingsByRace === 3) {
         return new ApiResponse({
           success: false,
-          message: "There can only be three rings forged by the Elves",
+          message: "Somente três anéis podem ser forjados por Elfos",
         });
       }
 
       if (race == "Homens" && countRingsByRace === 9) {
         return new ApiResponse({
           success: false,
-          message: "There can only be nine rings forged",
+          message: "Somente nove anéis podem ser forjados por Homens",
         });
       }
 
@@ -113,7 +121,7 @@ export default class RingService {
 
       return new ApiResponse<Ring>({
         success: true,
-        message: "Ring created successfully",
+        message: "Anel forjado com sucesso",
         data: response[0],
       });
     } catch (err) {
@@ -121,7 +129,8 @@ export default class RingService {
       console.log(err);
       return new ApiResponse({
         success: false,
-        message: "Internal server error creating ring",
+        message:
+          "Um erro inesperado surgiu das sombras. Ocorreu um problema interno. Tente novamente mais tarde, bravo viajante.",
       });
     } finally {
       await session.endSession();
@@ -150,7 +159,7 @@ export default class RingService {
 
       return new ApiResponse<Ring>({
         success: true,
-        message: "Ring updated successfully",
+        message: "Anel reforjado com sucesso",
         data: updatedRing.data as Ring,
       });
     } catch (error) {
@@ -159,7 +168,8 @@ export default class RingService {
 
       return new ApiResponse({
         success: false,
-        message: "Internal server error updating ring",
+        message:
+          "Um erro inesperado surgiu das sombras. Ocorreu um problema interno. Tente novamente mais tarde, bravo viajante.",
       });
     } finally {
       await session.endSession();
@@ -183,7 +193,7 @@ export default class RingService {
 
       return new ApiResponse({
         success: true,
-        message: "Ring deleted successfully",
+        message: "Anel banido com sucesso",
       });
     } catch (error) {
       await session.abortTransaction();
@@ -191,7 +201,8 @@ export default class RingService {
 
       return new ApiResponse({
         success: false,
-        message: "Internal server error deleting ring",
+        message:
+          "Um erro inesperado surgiu das sombras. Ocorreu um problema interno. Tente novamente mais tarde, bravo viajante.",
       });
     } finally {
       await session.endSession();

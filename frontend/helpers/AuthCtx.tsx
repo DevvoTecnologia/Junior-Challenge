@@ -1,6 +1,7 @@
 ﻿"use client";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { toast } from "sonner";
 
 interface iProps {
   children: React.ReactNode;
@@ -15,6 +16,10 @@ export default function AuthCtx({ children }: iProps) {
     console.log("token", token);
 
     if (!token) {
+      toast.error("Sessão expirada. Faça login novamente", {
+        duration: 5000,
+        closeButton: true,
+      });
       router.push("/auth");
     }
   }, []);

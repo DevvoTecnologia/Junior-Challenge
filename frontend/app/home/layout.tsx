@@ -1,4 +1,4 @@
-﻿import AuthCtx from "@/contexts/AuthCtx";
+﻿import AuthCtx from "@/helpers/AuthCtx";
 import Navbar from "./components/Navbar";
 
 interface iProps {
