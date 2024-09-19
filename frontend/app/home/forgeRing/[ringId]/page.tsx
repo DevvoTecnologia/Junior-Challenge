@@ -32,7 +32,9 @@ export default function Page({
   const { data: ring, isLoading } = useQueryGetById(ringId);
 
   const form = useForm<CreateRing>({
-    values: ring ? { ...ring, imagem: "" } : undefined,
+    values: ring
+      ? { ...ring, forjadoPor: ring.forjadoPor, imagem: "" }
+      : undefined,
     resolver: zodResolver(ringSchema),
   });
 
@@ -133,10 +135,11 @@ export default function Page({
                 <Label htmlFor="forjadoPor">Forjado por</Label>
                 <Select
                   {...field}
+                  value={form.watch("forjadoPor")}
                   onValueChange={(value) => form.setValue("forjadoPor", value)}
                 >
                   <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Ex: Humanos" />
+                    <SelectValue placeholder="Ex: Homens" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>

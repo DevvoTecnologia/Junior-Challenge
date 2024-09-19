@@ -32,7 +32,7 @@ async function getById(id: string) {
 
 export default function useQueryGetById(id: string) {
   return useQuery({
-    queryKey: ["getRingById", id],
+    queryKey: ["getRingById"],
     queryFn: () => getById(id),
   });
 }
