@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import RingsList from "./components/RingsList";
+import RingsList from "./components/RingsList/RingsList";
 import { Anvil } from "lucide-react";
 import Link from "next/link";
 

@@ -1,5 +1,5 @@
 ﻿import AuthCtx from "@/helpers/AuthCtx";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/Navbar/Navbar";
 
 interface iProps {
   children: React.ReactNode;
