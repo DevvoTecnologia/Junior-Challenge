@@ -44,7 +44,7 @@ export function ToastUI({
   return (
     <div
       className={`duration-200 ease-in-out ${
-        open ? "opacity-100 top-16" : "opacity-0 top-0 invisible"
+        open ? "opacity-100 top-16" : "opacity-0 top-0 scale-95 invisible"
       } fixed top-16 left-1/2 -right-1/2 z-99`}
     >
       <div className={`relative -left-1/2 flex justify-center mx-6`}>
