@@ -33,7 +33,7 @@ export default class RingController {
       return res.status(400).json(
         new ApiResponse({
           success: false,
-          message: "Invalid ring id",
+          message: "Invalid ring body",
         })
       );
     }

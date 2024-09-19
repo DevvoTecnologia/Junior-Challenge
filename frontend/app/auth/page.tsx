@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -43,7 +42,7 @@ export default function Page() {
   }
 
   return (
-    <div className="h-full flex justify-center mt-[20%]">
+    <div className="h-full flex justify-center items-center mt-20 md:mt-[10%] px-4">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">DevvoRings</CardTitle>

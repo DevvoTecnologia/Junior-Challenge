@@ -65,7 +65,9 @@ export default function Navbar() {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Dar adeus às terras médias</DropdownMenuItem>
+              <DropdownMenuItem>
+                <Link href={"/auth"}>Dar adeus às terras médias</Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           <Sheet>

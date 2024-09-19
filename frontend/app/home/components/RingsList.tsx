@@ -7,7 +7,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-
 import {
   Card,
   CardContent,
@@ -33,10 +32,10 @@ export default function RingsList() {
 
   if (isLoading || isDeleting) {
     return (
-      <div className="flex items-center gap-4 mt-16">
-        <Skeleton className="rounded-full h-9 w-9" />
-        <Skeleton className="h-80 w-80 rounded-xl aspect-square" />
-        <Skeleton className="rounded-full h-9 w-9" />
+      <div className="flex flex-col items-center gap-4 mt-8 sm:mt-12 md:mt-16">
+        <Skeleton className="rounded-full h-10 w-10 sm:h-12 sm:w-12 md:h-16 md:w-16" />
+        <Skeleton className="h-48 w-48 sm:h-56 sm:w-56 md:h-64 md:w-64 lg:h-80 lg:w-80 rounded-xl" />
+        <Skeleton className="rounded-full h-10 w-10 sm:h-12 sm:w-12 md:h-16 md:w-16" />
       </div>
     );
   }
@@ -44,23 +43,35 @@ export default function RingsList() {
   return (
     <>
       {rings && rings.length > 0 ? (
-        <div className="mt-16 w-full max-w-6-xl overflow-y-scroll">
-          <Carousel className="w-full max-w-6xl">
+        <div className="mt-8 sm:mt-12 md:mt-14 w-full max-w-full overflow-x-hidden">
+          <p className="text-muted-foreground italic text-center text-sm sm:text-base">
+            {rings.length === 1
+              ? `Existe apenas ${rings.length} anel`
+              : `${rings.length} anéis encontrados`}
+          </p>{" "}
+          <Carousel className="w-full">
             <CarouselContent>
               {rings.map((ring, index) => (
-                <CarouselItem className="md:basis-1/2 lg:basis-1/3" key={index}>
-                  <div className="p-1">
+                <CarouselItem
+                  className="flex-shrink-0 sm:basis-1/2 lg:basis-1/3 px-2"
+                  key={index}
+                >
+                  <div className="p-2">
                     <Card>
                       <CardHeader className="text-center">
-                        <CardTitle>{ring.nome}</CardTitle>
-                        <CardDescription>{ring.poder}</CardDescription>
-                        <Avatar className="mx-auto w-32 h-32 border-4">
+                        <CardTitle className="text-lg sm:text-xl md:text-2xl">
+                          {ring.nome}
+                        </CardTitle>
+                        <CardDescription className="text-sm sm:text-base">
+                          {ring.poder}
+                        </CardDescription>
+                        <Avatar className="mx-auto w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-32 lg:h-32 border-4">
                           <AvatarImage src={ring.imagem} alt={ring.nome} />
                           <AvatarFallback>RN</AvatarFallback>
                         </Avatar>
                       </CardHeader>
-                      <Separator className="mb-4" />
-                      <CardContent className="flex flex-col space-y-4">
+                      <Separator className="mb-2 sm:mb-4" />
+                      <CardContent className="flex flex-col space-y-2 text-sm sm:text-base">
                         <div>
                           <p className="text-muted-foreground">Portado por: </p>
                           <span className="text-primary font-bold">
@@ -74,29 +85,34 @@ export default function RingsList() {
                           </span>
                         </div>
                       </CardContent>
-                      <Separator className="mb-4" />
-                      <CardFooter className="flex space-x-2">
-                        <Tooltip text="Editar anel">
+                      <Separator className="mb-2 sm:mb-4" />
+                      <CardFooter className="flex justify-center space-x-2">
+                        <Tooltip text="Reforjar anel">
                           <Link href={`/home/forgeRing/${ring._id}`}>
-                            <Button variant="outline">
-                              <Pencil className="h-4" />
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="sm:h-10 sm:px-4 sm:py-2"
+                            >
+                              <Pencil className="h-3 w-3 sm:h-4 sm:w-4" />
                             </Button>
                           </Link>
                         </Tooltip>
                         <Tooltip text="Banir anel">
                           <Button
                             variant="outline"
+                            size="sm"
+                            className="sm:h-10 sm:px-4 sm:py-2"
                             onClick={async (e) => {
                               e.preventDefault();
                               await deleteRing(ring._id);
                               await refetch();
-                              // deleteRing("asd");
                             }}
                           >
-                            <Ban className="h-4" />
+                            <Ban className="h-3 w-3 sm:h-4 sm:w-4" />
                           </Button>
                         </Tooltip>
-                      </CardFooter>{" "}
+                      </CardFooter>
                     </Card>
                   </div>
                 </CarouselItem>
@@ -105,24 +121,18 @@ export default function RingsList() {
             <CarouselPrevious />
             <CarouselNext />
           </Carousel>
-          <p className="mt-2 text-muted-foreground italic text-center">
-            {rings.length === 1
-              ? `Existe apenas ${rings.length} anel`
-              : `${rings.length} anéis encontrados`}
-          </p>{" "}
         </div>
       ) : (
         <div className="mt-8 text-center text-muted-foreground">
-          <SearchX className="h-20 w-20 mx-auto text-muted-foreground" />
-          <p className="italic">
+          <SearchX className="h-16 w-16 sm:h-20 sm:w-20 mx-auto text-muted-foreground" />
+          <p className="italic text-sm sm:text-base">
             Os olhos de Sauron vasculharam, mas nenhum Anel foi encontrado.
           </p>
-          <p className="italic">
+          <p className="italic text-sm sm:text-base">
             O destino de todos permanece seguro... por agora.
           </p>
         </div>
-      )}{" "}
-      {/* <pre>ppp{JSON.stringify(rings, null, 2)}</pre> */}
+      )}
     </>
   );
 }

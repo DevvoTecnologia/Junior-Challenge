@@ -26,7 +26,11 @@ async function getAll() {
     return false;
   }
 
-  console.log(response.data);
+  toast.success("Anéis buscados com sucesso", {
+    description: response.message,
+    duration: 5000,
+    closeButton: true,
+  });
 
   return response.data;
 }

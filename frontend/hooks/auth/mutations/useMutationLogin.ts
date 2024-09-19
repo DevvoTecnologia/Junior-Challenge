@@ -37,7 +37,7 @@ export default function useMutationLogin() {
     mutationFn: (data: User) => login(data),
     onSuccess: (data) => {
       if (data) {
-        toast.success("Login efetuado com sucesso", {
+        toast.success("Seja bem vindo às terras médias, viajante", {
           duration: 5000,
           closeButton: true,
         });

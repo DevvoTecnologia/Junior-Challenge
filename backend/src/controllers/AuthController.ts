@@ -34,8 +34,7 @@ export default class AuthController {
     };
 
     return res.status(200).json({
-      success: true,
-      message: "User authenticated",
+      ...response,
       data,
     });
   }
