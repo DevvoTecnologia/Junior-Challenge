@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:13
+    container_name: artifact-hub-db
+    environment:
+      POSTGRES_USER: gustavo
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: artifact-hub
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+volumes:
+  pg_data:
