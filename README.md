@@ -9,9 +9,8 @@ Este projeto é uma API para gerenciar portadores de anéis (bearers) e anéis m
 
 ## Instalação
 
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/seu-repositorio.git
+1. Clone o repositório
+
 Instale as dependências:
 
 ```bash
