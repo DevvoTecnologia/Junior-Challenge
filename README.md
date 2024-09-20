@@ -1,140 +1,169 @@
-# Desafio Fullstack: Os Anéis de Poder
-_One Challenge to rule them all, One Challenge to find them, One Challenge to bring them all, and in the darkness bind them_
+# Anelaria API
 
-## 💍 Contexto do Desafio
+Este projeto é uma API para gerenciar portadores de anéis (bearers) e anéis mágicos (rings), além de associá-los através de registros históricos de portadores de anéis (ring bearers).
 
-O grande mago J.R.R. Tolkien nos deixou a famosa frase:
+## Requisitos
 
-> **Three Rings for the Elven-kings under the sky,  
-> Seven for the Dwarf-lords in their halls of stone,  
-> Nine for Mortal Men doomed to die,  
-> One for the Dark Lord on his dark throne  
-> In the Land of Mordor where the Shadows lie.  
-> One Ring to rule them all, One Ring to find them,  
-> One Ring to bring them all, and in the darkness bind them  
-> In the Land of Mordor where the Shadows lie.**
+- Node.js
+- React.js
+- TypeScript
 
-Sua missão será criar um CRUD (Create, Read, Update, Delete) para gerenciar os anéis e desenvolver um frontend para visualizar e manipular essas informações.
+## Instalação
 
-## 🎯 Objetivo
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/seu-repositorio.git
+Instale as dependências:
 
-### Backend
-Criar uma API em **Node.js** com **TypeScript** para realizar as seguintes operações:
+```bash
+Copiar código
+npm install
+Inicie o servidor de desenvolvimento:
 
-- **Criar** (POST) um novo anel.
-- **Listar** (GET) todos os anéis.
-- **Atualizar** (PUT) as informações de um anel.
-- **Deletar** (DELETE) um anel existente.
+```bash
+Copiar código
+npm run dev
+O servidor será iniciado em http://localhost:3333.
 
-### Frontend
-Desenvolver uma interface simples em **React** com as seguintes telas:
+Rotas da API
+Bearers (Portadores)
+Listar todos os portadores
 
-- **Tela de Criação/Atualização**: Formulário para criar um novo anel ou atualizar um anel existente.
-- **Tela de Visualização**: Exibição dos anéis criados em um **carrossel**, mostrando as informações de cada anel (nome, poder, portador, forjadoPor e imagem).
+GET: /bearers
+URL: http://localhost:3333/bearers
+Criar um portador
 
-## ⚔️ Requisitos Funcionais
+POST: /bearers
+URL: http://localhost:3333/bearers
+Exemplo de Body:
+json
+Copiar código
+{
+  "name": "Aragorn",
+  "species": "humano"
+}
+Atualizar um portador
 
-### Backend
+PUT: /bearers/:id
+URL: http://localhost:3333/bearers/:id
+Exemplo de Body:
+json
+Copiar código
+{
+  "name": "Raul",
+  "species": "mago"
+}
+Deletar um portador
 
-1. **Criar um Anel**  
-   O anel deverá ter as seguintes propriedades:
-   - `nome`: Nome do anel (ex: "Narya, o anel do fogo").
-   - `poder`: Uma breve descrição do poder do anel (ex: "Seu portador ganha resistência ao fogo").
-   - `portador`: O nome do portador atual (Ex: Gandalf).
-   - `forjadoPor`: Quem forjou o anel (ex: Elfos).
-   - `imagem`: URL de uma imagem genérica do anel.
+DELETE: /bearers/:id
+URL: http://localhost:3333/bearers/:id
+Rings (Anéis)
+Listar todos os anéis
 
-2. **Regras de Negócio para Criação de Anéis**  
-   A API deverá garantir que a quantidade máxima de anéis criados respeite as seguintes regras:
-   
-   - **Elfos**: No máximo 3 anéis.
-   - **Anões**: No máximo 7 anéis.
-   - **Homens**: No máximo 9 anéis.
-   - **Sauron**: Apenas 1 anel.
+GET: /rings
+URL: http://localhost:3333/rings
+Criar um anel
 
-   Caso o limite seja excedido, a criação deve ser rejeitada com uma mensagem de erro adequada.
+POST: /rings
+URL: http://localhost:3333/rings
+Exemplo de Body:
+json
+Copiar código
+{
+  "name": "Surf",
+  "power": "super força",
+  "forgedBy": "anões",
+  "imageUrl": "http://example.com/hiren.png",
+  "bearerId": 6,
+  "startDate": "2002-02-02"
+}
+Atualizar um anel
 
-3. **Listar os Anéis**  
-   A API deverá retornar uma lista com todos os anéis e suas propriedades.
+PUT: /rings/:id
+URL: http://localhost:3333/rings/:id
+Exemplo de Body:
+json
+Copiar código
+{
+  "name": "Vilya",
+  "power": "Anel do ar, cura e proteção pura",
+  "imageUrl": "http://example.com/hiren.png",
+  "forgedBy": "elfos"
+}
+Deletar um anel
 
-4. **Atualizar um Anel**  
-   Deve ser possível atualizar as informações de um anel específico (ex: alterar o portador ou a descrição do poder).
+DELETE: /rings/:id
+URL: http://localhost:3333/rings/:id
+Ring Bearers (Portadores de Anéis)
+Criar um portador de anel
 
-5. **Deletar um Anel**  
-   Deve ser possível remover um anel do banco de dados.
+POST: /ring-bearers
+URL: http://localhost:3333/ring-bearers
+Exemplo de Body:
+json
+Copiar código
+{
+  "ringId": 18,
+  "bearerId": 6,
+  "startDate": "2008-02-10",
+  "endDate": "2008-02-12"
+}
+Listar todos os portadores de anéis
 
-### Frontend
+GET: /ring-bearers
+URL: http://localhost:3333/ring-bearers
+Definir data de término para um portador de anel
 
-1. **Tela de Criação/Atualização de Anel**  
-   - Um formulário com os seguintes campos:
-     - `nome`: Campo de texto para o nome do anel.
-     - `poder`: Campo de texto para a descrição do poder do anel.
-     - `portador`: Campo de texto para o nome do portador.
-     - `forjadoPor`: Campo de texto para indicar quem forjou o anel.
-     - `imagem`: Como a imagem vai ser genérica você pode tanto deixar o uauário escolher entre as imagens que o próprio sistema fornece ou remover esse campo e deixar uma imagem default.
-   - Botões para:
-     - **Criar**: Submeter o formulário para criar um novo anel.
-     - **Atualizar**: Alterar as informações de um anel existente.
+PATCH: /ring-bearers/set-end-date
+URL: http://localhost:3333/ring-bearers/set-end-date
+Exemplo de Body:
+json
+Copiar código
+{
+  "ringId": 3,
+  "bearerId": 4,
+  "endDate": "2024-09-14T09:00:00Z"
+}
+Atualizar informações de um portador de anel
 
-2. **Tela de Visualização dos Anéis**
-   - Exibir todos os anéis em um **carrossel** (ou grid), mostrando:
-     - Nome, poder, portador, forjadoPor, e a imagem do anel.
-   - O carrossel deve ser responsivo e permitir rolar entre os anéis cadastrados.
-   - Adicionar a possibilidade de **excluir** ou **editar** um anel diretamente dessa tela.
+PUT: /ring-bearers
+URL: http://localhost:3333/ring-bearers
+Exemplo de Body:
+json
+Copiar código
+{
+  "ringId": 9,
+  "bearerId": 7,
+  "data": {
+    "startDate": "2018-02-09",
+    "endDate": ""
+  }
+}
+Deletar um portador de anel
 
-## 🚀 Tecnologias
+DELETE: /ring-bearers
+URL: http://localhost:3333/ring-bearers
+Exemplo de Body:
+json
+Copiar código
+{
+  "ringId": 3,
+  "bearerId": 4
+}
+Tecnologias Utilizadas
+Node.js
+TypeScript
+Vitest (para testes)
+In-memory repositories (Repositórios em memória)
+Testes
+Para rodar os testes do projeto, use o comando:
 
-- **Backend**:
-  - **Node.js** com **TypeScript**
-  - **Express** (ou outro framework para criar a API)
-  - **Banco de Dados**: MySQL, PostgreSQL, MongoDB, etc.
-  - **ORM/ODM**: Sequelize, TypeORM ou Mongoose.
-
-- **Frontend**:
-  - **React**
-  - **Biblioteca para Carrossel**: Você pode utilizar bibliotecas como `react-slick` ou outra para implementar o carrossel.
-
-## 🛠️ Instruções
-
-1. Faça o **fork** deste repositório.
-2. Crie uma nova branch com o nome do seu desafio: `git checkout -b desafio-seu-nome`.
-3. Implemente sua solução backend e frontend conforme os requisitos descritos.
-4. Faça o **commit** das suas alterações: `git commit -m 'Desafio finalizado'`.
-5. Faça o **push** para a branch criada: `git push origin desafio-seu-nome`.
-6. Crie um **Pull Request** para o repositório principal.
-7. Envie um email para "contato@devvo.com.br" falando que finalizou seu desafio e encaminhando o link do Pull Request
-
-## 📝 Regras e Critérios de Avaliação
-
-1. **Organização do código**: Estrutura clara e modularidade do código.
-2. **Boas práticas**: Uso de boas práticas de desenvolvimento, como SOLID e DRY.
-3. **Frontend**: Interface limpa, funcional e interativa (carrossel funcionando corretamente).
-4. **Validação da Regra de Negócio**: Implementação correta da validação do limite de anéis por portador.
-5. **Testes**: Testes unitários e/ou de integração serão um diferencial.
-6. **Documentação**: Adicione uma breve documentação da API e do frontend (pode ser no próprio README ou em uma ferramenta como Swagger).
-
-## 🔥 Desafios Extras (Opcional)
-
-Se quiser ir além, aqui estão algumas sugestões de funcionalidades extras:
-
-- **Autenticação**: Implemente um sistema de autenticação (JWT, OAuth, etc.).
-- **Relacionamentos entre entidades**: Adicione relacionamentos entre os anéis e seus portadores (Ex: um portador pode ter mais de um anel, ou um anel pode ter sido passado por diferentes portadores ao longo do tempo).
-- **Animações no Frontend**: Adicione animações ao carrossel ou à interface de criação de anéis.
-- **Responsividade Avançada**: Certifique-se de que o carrossel e todas as funcionalidades são totalmente responsivas em diferentes dispositivos.
-
-## 🧙‍♂️ Dicas
-
-- Divida a lógica do backend em camadas (Controllers, Services, Models).
-- Utilize hooks e componentes funcionais no frontend para um código mais limpo.
-- Utilize **TypeScript** tanto no backend quanto no frontend para garantir tipagem estática.
-- Planeje a interface para ser intuitiva e simples de usar.
-
-## 🧭 Referências
-
-- [Documentação do Node.js](https://nodejs.org/en/docs/)
-- [Documentação do TypeScript](https://www.typescriptlang.org/docs/)
-- [Documentação do React](https://reactjs.org/docs/getting-started.html)
-
----
-
-_May the Light of Eärendil guide you in this challenge!_
+bash
+Copiar código
+npm run test
+Contribuição
+Faça um fork do projeto
+Crie uma nova branch: git checkout -b minha-feature
+Faça suas alterações e commite: git commit -m 'Minha nova feature'
+Envie para o repositório remoto: git push origin minha-feature
+Abra um Pull Request
