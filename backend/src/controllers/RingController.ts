@@ -33,7 +33,7 @@ export default class RingController {
       return res.status(400).json(
         new ApiResponse({
           success: false,
-          message: "Invalid ring body",
+          message: "Dados do anel inválidos, viajante.",
         })
       );
     }
@@ -41,21 +41,10 @@ export default class RingController {
     const ring = await RingService.GetRingById(id);
 
     if (!ring.success || !ring.data) {
-      return res.status(500).json(
-        new ApiResponse({
-          success: false,
-          message: "Internal server error getting ring",
-        })
-      );
+      return res.status(500).json(ring);
     }
 
-    return res.status(200).json(
-      new ApiResponse<Ring>({
-        success: true,
-        message: "Ring retrieved successfully",
-        data: ring.data,
-      })
-    );
+    return res.status(200).json(ring);
   }
 
   static async CreateRing(req: Request, res: Response) {
@@ -65,7 +54,7 @@ export default class RingController {
       return res.status(400).json(
         new ApiResponse({
           success: false,
-          message: "Invalid ring body",
+          message: "Informações do anel inválidas, viajante.",
         })
       );
     }
@@ -91,13 +80,7 @@ export default class RingController {
       return response;
     }
 
-    return res.status(200).json(
-      new ApiResponse<Ring>({
-        success: true,
-        message: "Ring created successfully",
-        data: response.data,
-      })
-    );
+    return res.status(200).json(response);
   }
 
   static async EditRing(req: Request, res: Response) {
@@ -108,7 +91,7 @@ export default class RingController {
       return res.status(400).json(
         new ApiResponse({
           success: false,
-          message: "Invalid ring body or id",
+          message: "Dados do anel inválidos, viajante.",
         })
       );
     }
@@ -117,7 +100,8 @@ export default class RingController {
       return res.status(400).json(
         new ApiResponse({
           success: false,
-          message: "Please, provide the ring informations",
+          message:
+            "Por favor, preencha todos os campos obrigatórios, viajante.",
         })
       );
     }
@@ -134,13 +118,7 @@ export default class RingController {
       return response;
     }
 
-    return res.status(200).json(
-      new ApiResponse<Ring>({
-        success: true,
-        message: "Ring updated successfully",
-        data: response.data,
-      })
-    );
+    return res.status(200).json(response);
   }
 
   static async DeleteRing(req: Request, res: Response) {
@@ -151,7 +129,7 @@ export default class RingController {
       return res.status(400).json(
         new ApiResponse({
           success: false,
-          message: "Invalid ring id",
+          message: "Informações do anel inválidas, viajante.",
         })
       );
     }
@@ -167,11 +145,6 @@ export default class RingController {
       return res.status(500).json(response);
     }
 
-    return res.status(200).json(
-      new ApiResponse<Ring>({
-        success: true,
-        message: "Ring deleted successfully",
-      })
-    );
+    return res.status(200).json(response);
   }
 }

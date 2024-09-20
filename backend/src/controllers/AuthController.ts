@@ -45,7 +45,7 @@ export default class AuthController {
     if (!email || !password) {
       return res.status(401).json({
         success: false,
-        message: "Invalid email or password",
+        message: "Dados inválidos, viajante.",
       });
     }
 
