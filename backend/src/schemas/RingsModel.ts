@@ -4,8 +4,8 @@ export type Ring = {
   nome: string;
   poder: string;
   portador: string;
-  forjadoPor: "Sauron" | "Elfos" | "Anões" | "Homens";
-  imagem: string;
+  forjadoPor: "Elfos" | "Anões" | "Homens" | "Sauron";
+  imagem?: string;
 };
 
 const ringSchema = new Schema<Ring>(

@@ -9,9 +9,11 @@ export interface iRing {
 }
 
 const ringSchema = z.object({
-  forjadoPor: z.string({
-    required_error: "Campo obrigatório",
-  }),
+  forjadoPor: z
+    .string({
+      required_error: "Campo obrigatório",
+    })
+    .min(1, { message: "Campo obrigatório" }),
   nome: z
     .string({ required_error: "Campo obrigatório" })
     .min(3, { message: "Mínimo de 3 caracteres" }),

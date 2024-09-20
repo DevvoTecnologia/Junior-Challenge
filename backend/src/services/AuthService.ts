@@ -19,4 +19,24 @@ export default class AuthService {
       success: true,
     });
   }
+
+  static async CreateAccount({ email, password }: User) {
+    const userExists = await UserModel.exists({ email });
+
+    if (userExists) {
+      return new ApiResponse({
+        message:
+          "Este email já está sendo utilizado por outro viajante. Por favor, escolha outro.",
+        success: false,
+      });
+    }
+
+    await UserModel.create({ email, password });
+
+    return new ApiResponse({
+      message:
+        "Usuário criado com sucesso, viajante. As portas do reino estão agora abertas para você.",
+      success: true,
+    });
+  }
 }

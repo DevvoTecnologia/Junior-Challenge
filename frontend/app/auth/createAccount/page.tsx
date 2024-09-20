@@ -12,27 +12,38 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
-import userSchema, { User } from "./schemas/user-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import useMutationLogin from "@/hooks/auth/mutations/useMutationLogin";
 import { useRouter } from "next/navigation";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import createUserSchema, { CreateUser } from "../schemas/create-user-schema";
+import { useMutationCreateAccount } from "@/hooks/auth/mutations/useMutationCreateAccount";
 
 export default function Page() {
   const router = useRouter();
 
-  const form = useForm<User>({
-    resolver: zodResolver(userSchema),
+  const form = useForm<CreateUser>({
+    resolver: zodResolver(createUserSchema),
   });
 
   const { handleSubmit, control } = form;
 
-  const { mutateAsync: login, isPending } = useMutationLogin();
+  const { mutateAsync: login } = useMutationLogin();
+  const { mutateAsync: createAccount, isPending: isCreating } =
+    useMutationCreateAccount();
 
-  async function onSubmit(data: User) {
+  async function onSubmit(data: CreateUser) {
     console.log(data);
 
+    // CREATE ACC
+    const accountResponse = await createAccount(data);
+
+    if (!accountResponse) {
+      return;
+    }
+
+    // LOGIN AUTOMATIC
     const response = await login(data);
 
     console.log("resdadasdj", response);
@@ -47,8 +58,10 @@ export default function Page() {
     <div className="h-full flex justify-center items-center mt-20 md:mt-[10%] px-4">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">DevvoRings</CardTitle>
-          <CardDescription>Entre com sua conta</CardDescription>
+          <CardTitle className="text-2xl">Forje seu legado</CardTitle>
+          <CardDescription>
+            Forje seu legado para entrar nas terras médias
+          </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <Form {...form}>
@@ -92,20 +105,36 @@ export default function Page() {
                   </FormItem>
                 )}
               />
-              <Button disabled={isPending} type="submit">
-                {isPending && <ReloadIcon className="w-4 h-4 animate-spin" />}
-                Entrar
+              <FormField
+                control={control}
+                name="repeatPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <Label htmlFor="repeatPassword">Repita sua senha</Label>
+                    <Input
+                      {...field}
+                      id="password"
+                      type="password"
+                      placeholder="********"
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button disabled={isCreating} type="submit">
+                {isCreating && <ReloadIcon className="w-4 h-4 animate-spin" />}
+                Forjar legado
               </Button>
             </form>
           </Form>
         </CardContent>
         <CardFooter>
           <Button
-            onClick={() => router.push("/auth/createAccount/")}
+            onClick={() => router.push("/auth/")}
             variant="link"
             className="mx-auto"
           >
-            Criar conta
+            Entrar
           </Button>
         </CardFooter>
       </Card>

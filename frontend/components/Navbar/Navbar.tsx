@@ -7,7 +7,7 @@ export default function Navbar() {
   return (
     <nav className="border-b">
       <div className="flex h-16 items-center px-4">
-        <Link href="/" className="mr-6 flex items-center space-x-2">
+        <Link href="/home" className="mr-6 flex items-center space-x-2">
           <User className="h-6 w-6" />
           <span className="hidden font-bold sm:inline-block">DevvoRings</span>
         </Link>

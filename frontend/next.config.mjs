@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    domains: ["localhost", "www.coxinhanerd.com.br"],
+  },
   redirects: async () => {
     return [
       {

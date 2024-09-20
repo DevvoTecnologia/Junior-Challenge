@@ -38,4 +38,29 @@ export default class AuthController {
       data,
     });
   }
+
+  static async CreateAccount(req: Request, res: Response) {
+    const { email, password }: User = req.body;
+
+    if (!email || !password) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid email or password",
+      });
+    }
+
+    const response = await AuthService.CreateAccount({ email, password });
+
+    if (!response.success) {
+      return res.status(400).json(response);
+    }
+
+    const jwt = TokenHelper.GenerateToken({ email });
+    const data: iLoggedUser = {
+      email,
+      token: jwt,
+    };
+
+    return res.status(201).json({ ...response, data });
+  }
 }
