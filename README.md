@@ -1,5 +1,4 @@
-# Anelaria API
-
+# Anéis do poder
 Este projeto é uma API para gerenciar portadores de anéis (bearers) e anéis mágicos (rings), além de associá-los através de registros históricos de portadores de anéis (ring bearers).
 
 ## Requisitos
