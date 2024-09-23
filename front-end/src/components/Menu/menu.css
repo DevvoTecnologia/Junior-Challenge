@@ -1,0 +1,31 @@
+.container-menu {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-bottom: 5em;
+}
+
+.menu-links {
+    width: 55%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    list-style: none;
+}
+
+.links {
+    font-size: 1em;
+    font-weight: bold;
+    color: #FFF;
+}
+
+.links a {
+    color: #FFF;
+    text-decoration: none;
+}
+
