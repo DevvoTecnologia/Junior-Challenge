@@ -1,0 +1,158 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    padding: 20px;
+  }
+  
+  /* Centralizar o conteúdo da página */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .container h1, h2{
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px; 
+    margin-top: 10px; 
+  }
+  
+  /* Estilos de input */
+  input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  /* Botões primários */
+  button {
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Estilos do formulário */
+  .form-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    width: 100%;
+  }
+  
+  .form-container h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+  }
+  
+  /* Estilos para o carrossel */
+  .carousel-item {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .carousel-item img {
+    max-width: 100%;
+    border-radius: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .carousel-item h2 {
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #333;
+  }
+  
+  .carousel-item p {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #666;
+  }
+
+  .carousel-item button {
+    padding: 10px 15px;
+  }
+  
+  /* Estilo dos botões de excluir */
+  button.delete {
+    background-color: #ff4d4d;
+  }
+  
+  button.delete:hover {
+    background-color: #ff3333;
+  }
+
+  /* Estilo botão criar anel*/
+  .container-button-create{
+    align-items: center;
+    text-align: center;
+    margin-top: 3rem;
+  }
+
+  /* Estilo para mensagens*/
+  .message {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    max-width: 400px;
+    text-align: center;
+    margin: 10px auto;
+  }
+  
+  .error-message {
+    background-color: #fdd;
+    color: #d00;
+    border: 1px solid #d00;
+  }
+  
+  .success-message {
+    background-color: #dfd;
+    color: #070;
+    border: 1px solid #070;
+  }
+  
+  /* Configurações para responsividade do carrossel*/
+  .slick-slide {
+    padding: 10px;
+  }
+  
+  @media (max-width: 768px) {
+    .slick-slide {
+      padding: 5px;
+    }
+  }
+  
