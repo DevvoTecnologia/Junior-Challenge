@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e25ea823-dd3f-49bd-a6bd-2676bbe2eef8" name="Changes" comment="add: subindo back e o front separados em pastas">
+      <change afterPath="$PROJECT_DIR$/back/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/env.example" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/README.md" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Loyolazz&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Loyolazz/Junior-Challenge-Devvo.git&quot;,
+    &quot;accountId&quot;: &quot;413fd581-dc2e-4012-b62d-36f5220a0f42&quot;
+  }
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2lFxgrQvCMQ57Xy1NrIhx9JYxOJ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Docker.Dockerfile.executor": "Run",
+    "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "trabalhando-no-back",
+    "last_opened_file_path": "C:/Users/arthu/WebstormProjects/Junior-Challenge-Devvo-Front",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "npm.dev (1).executor": "Run",
+    "npm.dev.executor": "Run",
+    "npm.start.executor": "Run",
+    "ts.external.directory.path": "C:\\Users\\arthu\\WebstormProjects\\Junior-Challenge-Devvo\\frontend\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\arthu\WebstormProjects\Junior-Challenge-Devvo" />
+    </key>
+  </component>
+  <component name="RunManager" selected="npm.dev (1)">
+    <configuration name="Dockerfile" type="docker-deploy" factoryName="dockerfile" temporary="true" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="containerName" value="" />
+          <option name="sourceFilePath" value="Dockerfile" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
+      <deployment type="docker-compose.yml">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
+      <deployment type="dockerfile">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="dev (1)" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/frontend/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="start" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.dev (1)" />
+        <item itemvalue="npm.dev" />
+        <item itemvalue="npm.start" />
+        <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
+        <item itemvalue="Docker.Dockerfile" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-WS-242.21829.149" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e25ea823-dd3f-49bd-a6bd-2676bbe2eef8" name="Changes" comment="" />
+      <created>1724789740175</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1724789740175</updated>
+      <workItem from="1724789741223" duration="6936000" />
+      <workItem from="1724965032302" duration="3220000" />
+      <workItem from="1726089961508" duration="62000" />
+      <workItem from="1726108282401" duration="2349000" />
+      <workItem from="1726110837076" duration="436000" />
+      <workItem from="1726171432068" duration="22053000" />
+      <workItem from="1726245454946" duration="674000" />
+      <workItem from="1726248670629" duration="631000" />
+      <workItem from="1726249840968" duration="21567000" />
+      <workItem from="1726328905074" duration="4479000" />
+      <workItem from="1726334157411" duration="2640000" />
+    </task>
+    <task id="LOCAL-00001" summary="UPDATE">
+      <option name="closed" value="true" />
+      <created>1724793937073</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1724793937073</updated>
+    </task>
+    <task id="LOCAL-00002" summary="add: commit initial">
+      <option name="closed" value="true" />
+      <created>1726111017411</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1726111017411</updated>
+    </task>
+    <task id="LOCAL-00003" summary="add: commit initial">
+      <option name="closed" value="true" />
+      <created>1726111174140</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1726111174140</updated>
+    </task>
+    <task id="LOCAL-00004" summary="add: commit initial">
+      <option name="closed" value="true" />
+      <created>1726111195122</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1726111195122</updated>
+    </task>
+    <task id="LOCAL-00005" summary="add: back 70%">
+      <option name="closed" value="true" />
+      <created>1726203468246</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1726203468246</updated>
+    </task>
+    <task id="LOCAL-00006" summary="add: back completo">
+      <option name="closed" value="true" />
+      <created>1726304597052</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1726304597052</updated>
+    </task>
+    <task id="LOCAL-00007" summary="add: back completo">
+      <option name="closed" value="true" />
+      <created>1726304608694</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1726304608694</updated>
+    </task>
+    <task id="LOCAL-00008" summary="add: back completo/2">
+      <option name="closed" value="true" />
+      <created>1726333971491</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1726333971491</updated>
+    </task>
+    <task id="LOCAL-00009" summary="add: subindo back e o front separados em pastas">
+      <option name="closed" value="true" />
+      <created>1726334259049</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1726334259049</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="UPDATE" />
+    <MESSAGE value="add: commit initial" />
+    <MESSAGE value="add: back 70%" />
+    <MESSAGE value="add: back completo" />
+    <MESSAGE value="add: back completo/2" />
+    <MESSAGE value="add: subindo back e o front separados em pastas" />
+    <option name="LAST_COMMIT_MESSAGE" value="add: subindo back e o front separados em pastas" />
+  </component>
+</project>

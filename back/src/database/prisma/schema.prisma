@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String @id @default(uuid())
+  nome       String
+  email      String @unique
+  senha_hash String
+  Anel       Anel[]
+
+  @@map("user")
+}
+
+model Anel {
+  id         String @id @default(uuid())
+  nome       String
+  poder      String
+  portador   String
+  forjadoPor String
+  imagem     String
+
+  User              User?               @relation(fields: [userId], references: [id])
+  userId            String?
+  HistoricoPortador HistoricoPortador[]
+
+  @@map("anel")
+}
+
+model HistoricoPortador {
+  id       String   @id @default(uuid())
+  portador String
+  data     DateTime
+  anelId   String
+  Anel     Anel     @relation(fields: [anelId], references: [id], onDelete: Cascade)
+
+  @@map("historicoPortador")
+}
