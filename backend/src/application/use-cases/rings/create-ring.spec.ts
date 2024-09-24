@@ -1,0 +1,135 @@
+import { beforeEach, describe, expect, it, vitest } from "vitest"
+
+import { ForgersRepository, RingsRepository } from "@/application/protocols/database"
+
+import { InMemoryRingsRepository } from "@/infra/database/in-memory/in-memory-rings-repository"
+import { InMemoryForgersRepository } from "@/infra/database/in-memory"
+
+import { ICreateRingUseCase } from "@/domain/use-cases/rings"
+import { Ring } from "@/domain/entities"
+
+import { CreateRingUseCase } from "./create-ring"
+
+let forgersRepository: ForgersRepository
+let ringsRepository: RingsRepository
+let sut: ICreateRingUseCase
+
+describe("create ring use case", () => {
+    beforeEach(() => {
+        forgersRepository = new InMemoryForgersRepository()
+        ringsRepository = new InMemoryRingsRepository()
+
+        forgersRepository.create({
+            forgerId: 'forger-id',
+            name: 'name',
+            maxRings: 3
+        })
+
+        sut = new CreateRingUseCase(forgersRepository, ringsRepository)
+    })
+
+    it("should be able to create a ring", async () => {
+        const ring = await sut.execute({
+            ringId: 'ring-id',
+            forgerId: 'forger-id',
+            image: 'image',
+            name: 'name',
+            power: 'power',
+            proprietor: 'proprietor'
+        })
+
+        expect(ring.ringId).toBe('ring-id')
+        expect(ring.name).toBe('name')
+        expect(ring.power).toBe('power')
+        expect(ring.proprietor).toBe('proprietor')
+        expect(ring.image).toBe('image')
+        expect(ring.forgerId).toBe('forger-id')
+        expect(ring.createdAt).toBeDefined()
+        expect(ring.updatedAt).toBeDefined()
+    })
+
+    it("should be able to call forgers repository with the correct values", async () => {
+        const forgersRepositorySpy = vitest.spyOn(forgersRepository, 'findById')
+
+        await sut.execute({
+            ringId: 'ring-id',
+            forgerId: 'forger-id',
+            image: 'image',
+            name: 'name',
+            power: 'power',
+            proprietor: 'proprietor'
+        })
+
+        expect(forgersRepositorySpy).toHaveBeenCalledWith({
+            forgerId: 'forger-id',
+        })
+    })
+
+    it("should be able to throw if forger not exists", async () => {
+        vitest.spyOn(forgersRepository, 'findById').mockImplementationOnce(async () => null)
+
+        expect(() => sut.execute({
+            ringId: 'ring-id',
+            forgerId: 'forger-id',
+            image: 'image',
+            name: 'name',
+            power: 'power',
+            proprietor: 'proprietor'
+        })).rejects.toThrow('Forger not found')
+    })
+
+    it("should be able to throw if forger can not create any more rings", async () => {
+        const ring: Ring = {
+            ringId: 'ring-id',
+            forgerId: 'forger-id',
+            image: 'image',
+            name: 'name',
+            power: 'power',
+            proprietor: 'proprietor',
+            createdAt: new Date(),
+            updatedAt: new Date()
+        }
+        const forger = {
+            name: "name",
+            forgerId: "forger-id",
+            rings: [ring],
+            maxRings: 1,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        }
+
+        vitest.spyOn(forgersRepository, 'findById').mockImplementationOnce(async () => forger)   
+
+        expect(() =>  sut.execute({
+                ringId: 'ring-id',
+                forgerId: 'forger-id',
+                image: 'image',
+                name: 'name',
+                power: 'power',
+                proprietor: 'proprietor'
+            }) 
+        ).rejects.toThrow("Forger already has many rings")
+    })
+
+    it("should be able to call rings repository with the correct values", async () => {
+        const ringsRepositorySpy = vitest.spyOn(ringsRepository, 'create')
+
+        await sut.execute({
+            ringId: 'ring-id',
+            forgerId: 'forger-id',
+            image: 'image',
+            name: 'name',
+            power: 'power',
+            proprietor: 'proprietor'
+        })
+
+        expect(ringsRepositorySpy).toHaveBeenCalledWith({
+            ringId: 'ring-id',
+            forgerId: 'forger-id',
+            image: 'image',
+            name: 'name',
+            power: 'power',
+            proprietor: 'proprietor'
+        })
+    })
+})
