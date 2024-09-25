@@ -1,5 +1,7 @@
 import { IsNotEmpty, IsString } from "class-validator";
 
+import { ForgedBy } from "../types/ForgedBy";
+
 export class CreateRingDto {
   @IsString()
   @IsNotEmpty()
@@ -15,5 +17,5 @@ export class CreateRingDto {
 
   @IsString()
   @IsNotEmpty()
-  public forgedBy: string; // Ex: "Elfos"
+  public forgedBy: ForgedBy; // Ex: "Elfos"
 }
