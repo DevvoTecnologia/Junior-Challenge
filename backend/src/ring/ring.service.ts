@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
 
 import { CreateRingDto } from "./dto/create-ring.dto";
+import { UpdateRingDto } from "./dto/update-ring.dto";
 import { Ring } from "./entities/ring.entity";
 
 @Injectable()
@@ -30,7 +31,7 @@ export class RingService {
     return rings;
   }
 
-  async update(id: number, updateRingDto: CreateRingDto): Promise<Ring> {
+  async update(id: number, updateRingDto: UpdateRingDto): Promise<Ring> {
     const { name, power, owner, forgedBy } = updateRingDto;
 
     const ring = await this.ringModel.findByPk(id);
@@ -39,10 +40,10 @@ export class RingService {
       throw new NotFoundException(`Ring with id ${id} not found`);
     }
 
-    ring.name = name;
-    ring.power = power;
-    ring.owner = owner;
-    ring.forgedBy = forgedBy;
+    ring.name = name ?? ring.name;
+    ring.power = power ?? ring.power;
+    ring.owner = owner ?? ring.owner;
+    ring.forgedBy = forgedBy ?? ring.forgedBy;
 
     await ring.save();
 

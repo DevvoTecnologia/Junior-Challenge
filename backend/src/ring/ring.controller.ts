@@ -6,13 +6,17 @@ import {
   Param,
   Post,
   Put,
+  UsePipes,
+  ValidationPipe,
 } from "@nestjs/common";
 
 import { CreateRingDto } from "./dto/create-ring.dto";
+import { UpdateRingDto } from "./dto/update-ring.dto";
 import { Ring } from "./entities/ring.entity";
 import { RingService } from "./ring.service";
 
 @Controller("ring")
+@UsePipes(ValidationPipe)
 export class RingController {
   constructor(private readonly ringService: RingService) {}
 
@@ -28,7 +32,7 @@ export class RingController {
 
   @Put(":id")
   update(
-    @Body() updateRingDto: CreateRingDto,
+    @Body() updateRingDto: UpdateRingDto,
     @Param("id") id: number,
   ): Promise<Ring> {
     return this.ringService.update(id, updateRingDto);
