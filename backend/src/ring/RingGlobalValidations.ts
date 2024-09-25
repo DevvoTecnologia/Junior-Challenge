@@ -1,10 +1,12 @@
 import { BadRequestException } from "@nestjs/common";
+import { existsSync, mkdirSync, unlinkSync, writeFileSync } from "fs";
+import { join } from "path";
 
 import type { Ring } from "./entities/ring.entity";
 import type { ForgedBy } from "./types/ForgedBy";
 
 export default class RingGlobalValidations {
-  async validateRingCreation(
+  protected async validateRingCreation(
     ringModel: typeof Ring,
     forgedBy: string,
   ): Promise<void> {
@@ -45,7 +47,50 @@ export default class RingGlobalValidations {
     }
   }
 
-  isValidRing(forgedBy: ForgedBy): boolean {
+  protected isValidRing(forgedBy: ForgedBy): boolean {
     return ["Elfos", "Anões", "Homens", "Sauron"].includes(forgedBy);
+  }
+
+  protected async saveOrUpdateRingImage(
+    file: Express.Multer.File,
+    { isUpdate, oldFileName }: { isUpdate: boolean; oldFileName: string } = {
+      isUpdate: false,
+      oldFileName: "",
+    },
+  ): Promise<string> {
+    if (isUpdate && !oldFileName) {
+      throw new Error("oldFileName must be provided when isUpdate is true");
+    }
+
+    const destinationPath = join(process.cwd(), "uploads");
+
+    const newUniqueImageName = `${Date.now()}-${file.originalname}`;
+
+    const filePath = join(destinationPath, newUniqueImageName);
+
+    if (await !existsSync(destinationPath)) {
+      await mkdirSync(destinationPath);
+    }
+
+    if (isUpdate) {
+      await this.deleteRingImage(oldFileName);
+    }
+
+    // Convert the image buffer to a file
+    const bufferImageData = Buffer.from(file.buffer);
+
+    await writeFileSync(filePath, bufferImageData);
+
+    return newUniqueImageName;
+  }
+
+  protected async deleteRingImage(imageName: string): Promise<void> {
+    const destinationPath = join(process.cwd(), "uploads");
+
+    const filePath = join(destinationPath, imageName);
+
+    if (await existsSync(filePath)) {
+      await unlinkSync(filePath);
+    }
   }
 }

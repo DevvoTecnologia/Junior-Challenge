@@ -35,12 +35,15 @@ export class RingService extends RingGlobalValidations {
 
     await this.validateRingCreation(this.ringModel, createRingDto.forgedBy);
 
+    // Save or update ring image
+    const imageSaved = await this.saveOrUpdateRingImage(file);
+
     const newRing = await this.ringModel.create({
       name,
       power,
       owner,
       forgedBy,
-      image: file.originalname,
+      image: imageSaved,
     });
 
     return newRing;
@@ -78,11 +81,17 @@ export class RingService extends RingGlobalValidations {
       throw new NotFoundException(`Ring with id ${id} not found`);
     }
 
+    // Save or update ring image
+    const imageSaved = await this.saveOrUpdateRingImage(file, {
+      isUpdate: true,
+      oldFileName: ring.image,
+    });
+
     ring.name = name ?? ring.name;
     ring.power = power ?? ring.power;
     ring.owner = owner ?? ring.owner;
     ring.forgedBy = forgedBy ?? ring.forgedBy;
-    ring.image = file.originalname;
+    ring.image = imageSaved;
 
     await ring.save();
 
@@ -97,6 +106,8 @@ export class RingService extends RingGlobalValidations {
     }
 
     await ring.destroy();
+
+    await this.deleteRingImage(ring.image);
 
     return null;
   }
