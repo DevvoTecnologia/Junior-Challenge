@@ -23,13 +23,13 @@ export class RingController {
   constructor(private readonly ringService: RingService) {}
 
   @Get()
-  findAll(): Promise<Ring[]> {
-    return this.ringService.findAll();
+  async findAll(): Promise<Ring[]> {
+    return await this.ringService.findAll();
   }
 
   @Post()
   @UseInterceptors(FileInterceptor("image"))
-  create(
+  async create(
     @Body(ValidationPipe) createRingDto: CreateRingDto,
     @UploadedFile(
       new ParseFilePipeBuilder()
@@ -43,12 +43,12 @@ export class RingController {
     )
     file: Express.Multer.File,
   ): Promise<Ring> {
-    return this.ringService.create(createRingDto, file);
+    return await this.ringService.create(createRingDto, file);
   }
 
   @Put(":id")
   @UseInterceptors(FileInterceptor("image"))
-  update(
+  async update(
     @Body(ValidationPipe) updateRingDto: UpdateRingDto,
     @Param("id") id: number,
     @UploadedFile(
@@ -63,11 +63,11 @@ export class RingController {
     )
     file: Express.Multer.File,
   ): Promise<Ring> {
-    return this.ringService.update(id, updateRingDto, file);
+    return await this.ringService.update(id, updateRingDto, file);
   }
 
   @Delete(":id")
-  delete(@Param("id") id: number): Promise<null> {
-    return this.ringService.delete(id);
+  async delete(@Param("id") id: number): Promise<null> {
+    return await this.ringService.delete(id);
   }
 }

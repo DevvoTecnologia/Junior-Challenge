@@ -1,6 +1,5 @@
 import type { SequelizeModuleAsyncOptions } from "@nestjs/sequelize";
 import type { Dialect } from "sequelize";
-import { Ring } from "src/ring/entities/ring.entity";
 
 const sequelizeAsyncConfig: SequelizeModuleAsyncOptions = {
   useFactory: () => {
@@ -11,7 +10,6 @@ const sequelizeAsyncConfig: SequelizeModuleAsyncOptions = {
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      models: [Ring],
       autoLoadModels: true,
     };
   },
