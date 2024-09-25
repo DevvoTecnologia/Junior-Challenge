@@ -1,22 +1,15 @@
 import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
 import { SequelizeModule } from "@nestjs/sequelize";
 
 import { AppController } from "./app.controller";
-import { Ring } from "./ring/entities/ring.entity";
+import sequelizeAsyncConfig from "./configs/sequelize.config";
 import { RingModule } from "./ring/ring.module";
 
 @Module({
   imports: [
-    SequelizeModule.forRoot({
-      dialect: "mysql",
-      host: "192.168.100.3",
-      port: 3306,
-      username: "root",
-      password: "toor",
-      database: "ringdb",
-      models: [Ring],
-      autoLoadModels: true,
-    }),
+    ConfigModule.forRoot(),
+    SequelizeModule.forRootAsync(sequelizeAsyncConfig),
     RingModule,
   ],
   controllers: [AppController],
