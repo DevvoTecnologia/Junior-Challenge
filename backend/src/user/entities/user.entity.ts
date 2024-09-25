@@ -2,7 +2,9 @@ import { Column, Model, Table } from "sequelize-typescript";
 
 @Table
 export class User extends Model {
-  @Column
+  @Column({
+    unique: true,
+  })
   public username: string;
 
   @Column
