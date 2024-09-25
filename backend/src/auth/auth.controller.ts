@@ -1,13 +1,17 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
+  Request,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common";
 
+import { AuthGuard } from "./auth.guard";
 import { AuthService } from "./auth.service";
 import { AuthDto } from "./dto/auth.dto";
 
@@ -21,5 +25,12 @@ export class AuthController {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async signIn(@Body() authDto: AuthDto): Promise<any> {
     return await this.authService.signIn(authDto);
+  }
+
+  // 💡 This route is protected by the AuthGuard
+  @UseGuards(AuthGuard)
+  @Get("test")
+  getProfile(@Request() req: { user: unknown }): unknown {
+    return req.user;
   }
 }

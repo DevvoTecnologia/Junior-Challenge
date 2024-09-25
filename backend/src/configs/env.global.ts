@@ -12,6 +12,8 @@ interface EnvConfig {
 
   host: string;
   port: number;
+
+  tokenSecret?: string;
 }
 
 export default (): EnvConfig => ({
@@ -28,4 +30,6 @@ export default (): EnvConfig => ({
 
   host: process.env.HOST || "localhost",
   port: process.env.PORT ? parseInt(process.env.PORT, 10) : 3000,
+
+  tokenSecret: process.env.TOKEN_SECRET,
 });
