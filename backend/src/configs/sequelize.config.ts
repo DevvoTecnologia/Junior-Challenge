@@ -1,3 +1,4 @@
+import { Logger } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import type { SequelizeModuleAsyncOptions } from "@nestjs/sequelize";
 import type { Dialect } from "sequelize";
@@ -5,6 +6,7 @@ import type { Dialect } from "sequelize";
 const sequelizeAsyncConfig: SequelizeModuleAsyncOptions = {
   imports: [ConfigModule],
   useFactory: (configService: ConfigService) => {
+    const logger = new Logger("SequelizeConfig");
     return {
       dialect: configService.get("database.dialect") as Dialect,
       host: configService.get("database.host"),
@@ -23,6 +25,13 @@ const sequelizeAsyncConfig: SequelizeModuleAsyncOptions = {
       define: {
         timestamps: true,
         underscored: true,
+      },
+
+      logging: (sql): false | void => {
+        if (configService.get("nodeEnv") === "development") {
+          return logger.debug(sql);
+        }
+        return false;
       },
 
       sync: {

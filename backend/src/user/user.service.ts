@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
+import { Ring } from "src/ring/entities/ring.entity";
 
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
@@ -15,6 +16,12 @@ import { ReqAuthUser } from "./types/Req";
 export class UserService {
   private readonly logger = new Logger(UserService.name);
   private readonly atributesToShow = ["id", "username"];
+  private readonly includeAtributes = [
+    {
+      model: Ring,
+      attributes: ["id", "name", "power", "owner", "forgedBy"],
+    },
+  ];
 
   constructor(
     @InjectModel(User)
@@ -24,6 +31,7 @@ export class UserService {
   async findByPk(id: number): Promise<User> {
     const user = await this.userModel.findByPk(id, {
       attributes: this.atributesToShow,
+      include: this.includeAtributes,
     });
 
     if (!user) {
@@ -37,6 +45,7 @@ export class UserService {
     const user = await this.userModel.findOne({
       where: { username },
       attributes: this.atributesToShow,
+      include: this.includeAtributes,
     });
 
     if (!user) {
@@ -49,6 +58,7 @@ export class UserService {
   async findAll(): Promise<User[]> {
     const users = await this.userModel.findAll({
       attributes: this.atributesToShow,
+      include: this.includeAtributes,
     });
 
     if (users.length === 0) {
