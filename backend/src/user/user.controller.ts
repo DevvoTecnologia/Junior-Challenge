@@ -38,7 +38,7 @@ export class UserController {
   @Post()
   async create(
     @Body(ValidationPipe) createUserDto: CreateUserDto,
-  ): Promise<User> {
+  ): Promise<Pick<User, "id" | "username">> {
     return await this.userService.create(createUserDto);
   }
 
@@ -50,7 +50,7 @@ export class UserController {
     @Body(ValidationPipe) updateUserDto: UpdateUserDto,
     @Req()
     req: ReqAuthUser,
-  ): Promise<User> {
+  ): Promise<Pick<User, "id" | "username">> {
     return await this.userService.update(id, updateUserDto, req);
   }
 
@@ -60,7 +60,7 @@ export class UserController {
   async delete(
     @Param("id", ParseIntPipe) id: number,
     @Req() req: ReqAuthUser,
-  ): Promise<void> {
+  ): Promise<null> {
     return await this.userService.delete(id, req);
   }
 }

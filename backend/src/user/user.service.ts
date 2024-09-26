@@ -14,6 +14,7 @@ import { ReqAuthUser } from "./types/Req";
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(UserService.name);
+  private readonly atributesToShow = ["id", "username"];
 
   constructor(
     @InjectModel(User)
@@ -21,7 +22,9 @@ export class UserService {
   ) {}
 
   async findByPk(id: number): Promise<User> {
-    const user = await this.userModel.findByPk(id);
+    const user = await this.userModel.findByPk(id, {
+      attributes: this.atributesToShow,
+    });
 
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
@@ -31,7 +34,10 @@ export class UserService {
   }
 
   async findOne(username: CreateUserDto["username"]): Promise<User> {
-    const user = await this.userModel.findOne({ where: { username } });
+    const user = await this.userModel.findOne({
+      where: { username },
+      attributes: this.atributesToShow,
+    });
 
     if (!user) {
       throw new NotFoundException(`User with username ${username} not found`);
@@ -41,7 +47,9 @@ export class UserService {
   }
 
   async findAll(): Promise<User[]> {
-    const users = await this.userModel.findAll();
+    const users = await this.userModel.findAll({
+      attributes: this.atributesToShow,
+    });
 
     if (users.length === 0) {
       throw new NotFoundException("No users found");
@@ -50,7 +58,7 @@ export class UserService {
     return users;
   }
 
-  async create(user: CreateUserDto): Promise<User> {
+  async create(user: CreateUserDto): Promise<Pick<User, "id" | "username">> {
     const { username, password } = user;
 
     let newUser: User;
@@ -61,14 +69,17 @@ export class UserService {
       throw new BadRequestException("Username already exists");
     }
 
-    return newUser;
+    return {
+      id: newUser.id,
+      username: newUser.username,
+    };
   }
 
   async update(
     id: number,
     user: UpdateUserDto,
     req: ReqAuthUser,
-  ): Promise<User> {
+  ): Promise<Pick<User, "id" | "username">> {
     const { username, password } = user;
     const { sub } = req.user;
 
@@ -88,10 +99,13 @@ export class UserService {
       throw new BadRequestException("Username already exists");
     }
 
-    return userToUpdate;
+    return {
+      id: userToUpdate.id,
+      username: userToUpdate.username,
+    };
   }
 
-  async delete(id: number, req: ReqAuthUser): Promise<void> {
+  async delete(id: number, req: ReqAuthUser): Promise<null> {
     const { sub } = req.user;
 
     if (sub !== id) {
@@ -101,5 +115,7 @@ export class UserService {
     const user = await this.findByPk(id);
 
     await user.destroy();
+
+    return null;
   }
 }

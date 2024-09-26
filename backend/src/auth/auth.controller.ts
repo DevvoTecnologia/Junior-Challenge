@@ -36,7 +36,21 @@ export class AuthController {
   @Get("test")
   @UseGuards(AuthGuard)
   @ApiBearerAuth("defaultBearerAuth")
-  getProfile(@Request() req: { user: unknown }): unknown {
-    return req.user;
+  getProfile(
+    @Request()
+    req: {
+      user: {
+        sub: number;
+        username: string;
+      };
+    },
+  ): {
+    sub: number;
+    username: string;
+  } {
+    return {
+      sub: req.user.sub,
+      username: req.user.username,
+    };
   }
 }
