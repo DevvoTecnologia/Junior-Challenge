@@ -1,7 +1,8 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
-import { UserModule } from "src/user/user.module";
+import { SequelizeModule } from "@nestjs/sequelize";
+import { User } from "src/user/entities/user.entity";
 
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
@@ -9,7 +10,7 @@ import { AuthService } from "./auth.service";
 @Module({
   imports: [
     ConfigModule,
-    UserModule,
+    SequelizeModule.forFeature([User]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({

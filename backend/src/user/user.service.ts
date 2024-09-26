@@ -44,6 +44,8 @@ export class UserService {
   async findOne(username: CreateUserDto["username"]): Promise<User> {
     const user = await this.userModel.findOne({
       where: { username },
+      attributes: this.atributesToShow,
+      include: this.includeAtributes,
     });
 
     if (!user) {
@@ -95,7 +97,11 @@ export class UserService {
       throw new BadRequestException("You can not update this user");
     }
 
-    const userToUpdate = await this.findByPk(id);
+    const userToUpdate = await this.userModel.findByPk(id);
+
+    if (!userToUpdate) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
 
     userToUpdate.username = username ?? userToUpdate.username;
     userToUpdate.password = password ?? userToUpdate.password;
@@ -120,7 +126,11 @@ export class UserService {
       throw new BadRequestException("You can not delete this user");
     }
 
-    const user = await this.findByPk(id);
+    const user = await this.userModel.findByPk(id);
+
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
 
     await user.destroy();
 
