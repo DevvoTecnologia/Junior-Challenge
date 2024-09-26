@@ -7,8 +7,10 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UseGuards,
   ValidationPipe,
 } from "@nestjs/common";
+import { AuthGuard } from "src/auth/auth.guard";
 
 import { CreateUserDto } from "./dto/create-user.dto";
 import { User } from "./entities/user.entity";
@@ -35,6 +37,7 @@ export class UserController {
     return await this.userService.create(reateUserDto);
   }
 
+  @UseGuards(AuthGuard)
   @Put(":id")
   async update(
     @Param("id", ParseIntPipe) id: number,
@@ -43,6 +46,7 @@ export class UserController {
     return await this.userService.update(id, createUserDto);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(":id")
   async delete(@Param("id", ParseIntPipe) id: number): Promise<void> {
     return await this.userService.delete(id);

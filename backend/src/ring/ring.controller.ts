@@ -8,16 +8,19 @@ import {
   Post,
   Put,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
   ValidationPipe,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { AuthGuard } from "src/auth/auth.guard";
 
 import { CreateRingDto } from "./dto/create-ring.dto";
 import { UpdateRingDto } from "./dto/update-ring.dto";
 import { Ring } from "./entities/ring.entity";
 import { RingService } from "./ring.service";
 
+@UseGuards(AuthGuard)
 @Controller("ring")
 export class RingController {
   constructor(private readonly ringService: RingService) {}

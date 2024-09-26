@@ -24,10 +24,6 @@ const sequelizeAsyncConfig: SequelizeModuleAsyncOptions = {
         timestamps: true,
         underscored: true,
       },
-      sync: {
-        force: true,
-        alter: true,
-      },
     };
   },
   inject: [ConfigService],

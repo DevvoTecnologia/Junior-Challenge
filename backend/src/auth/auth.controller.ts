@@ -24,6 +24,8 @@ export class AuthController {
   @Post("login")
   async signIn(@Body() authDto: AuthDto): Promise<{
     accessToken: string;
+    userId: number;
+    username: string;
   }> {
     return await this.authService.signIn(authDto);
   }

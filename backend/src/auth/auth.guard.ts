@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
     const token = this.extractTokenFromHeader(request);
 
     if (!token) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("Missing token");
     }
 
     try {
@@ -33,7 +33,7 @@ export class AuthGuard implements CanActivate {
       // so that we can access it in our route handlers
       request["user"] = payload;
     } catch {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("Token is invalid or expired");
     }
     return true;
   }
