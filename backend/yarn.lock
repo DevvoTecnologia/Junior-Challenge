@@ -6264,6 +6264,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"multiform-validator@npm:^2.2.4":
+  version: 2.2.4
+  resolution: "multiform-validator@npm:2.2.4"
+  checksum: 10c0/6382d8110ed31cae46df502bbd7412a92cd41fcf5c2555b07ba9c4d751a3d463a5dc8b1d8d200ef7672d17349acb06ee4b45acd9c196b82b72e378abae0775e9
+  languageName: node
+  linkType: hard
+
 "mute-stream@npm:0.0.8":
   version: 0.0.8
   resolution: "mute-stream@npm:0.0.8"
@@ -7143,6 +7150,7 @@ __metadata:
     eslint-plugin-prettier: "npm:^5.0.0"
     helmet: "npm:^7.1.0"
     jest: "npm:^29.5.0"
+    multiform-validator: "npm:^2.2.4"
     mysql2: "npm:^3.11.3"
     prettier: "npm:^3.0.0"
     reflect-metadata: "npm:^0.2.0"

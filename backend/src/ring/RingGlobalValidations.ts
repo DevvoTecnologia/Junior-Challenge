@@ -1,5 +1,6 @@
 import { BadRequestException } from "@nestjs/common";
 import { existsSync, mkdirSync, unlinkSync, writeFileSync } from "fs";
+import { isValidImage } from "multiform-validator";
 import { join } from "path";
 
 import type { Ring } from "./entities/ring.entity";
@@ -9,10 +10,11 @@ export default class RingGlobalValidations {
   protected async validateRingCreation(
     ringModel: typeof Ring,
     forgedBy: string,
+    userId: number,
   ): Promise<void> {
     // Verify if Already Exists 3 Elfos Rings
     if (forgedBy === "Elfos") {
-      const elfosRings = await ringModel.count({ where: { forgedBy } });
+      const elfosRings = await ringModel.count({ where: { forgedBy, userId } });
 
       if (elfosRings >= 3) {
         throw new BadRequestException(`Elfos can't forge more than 3 rings`);
@@ -21,7 +23,7 @@ export default class RingGlobalValidations {
 
     // Verify if Already Exists 7 Anões Rings
     if (forgedBy === "Anões") {
-      const anoesRings = await ringModel.count({ where: { forgedBy } });
+      const anoesRings = await ringModel.count({ where: { forgedBy, userId } });
 
       if (anoesRings >= 7) {
         throw new BadRequestException(`Anões can't forge more than 7 rings`);
@@ -30,7 +32,9 @@ export default class RingGlobalValidations {
 
     // Verify if Already Exists 9 Homens Rings
     if (forgedBy === "Homens") {
-      const homensRings = await ringModel.count({ where: { forgedBy } });
+      const homensRings = await ringModel.count({
+        where: { forgedBy, userId },
+      });
 
       if (homensRings >= 9) {
         throw new BadRequestException(`Homens can't forge more than 9 rings`);
@@ -39,7 +43,9 @@ export default class RingGlobalValidations {
 
     // Verify if Already Exists 1 Sauron Ring
     if (forgedBy === "Sauron") {
-      const sauronRings = await ringModel.count({ where: { forgedBy } });
+      const sauronRings = await ringModel.count({
+        where: { forgedBy, userId },
+      });
 
       if (sauronRings >= 1) {
         throw new BadRequestException(`Sauron can't forge more than 1 ring`);
@@ -78,6 +84,12 @@ export default class RingGlobalValidations {
 
     // Convert the image buffer to a file
     const bufferImageData = Buffer.from(file.buffer);
+
+    if (!isValidImage(bufferImageData)) {
+      throw new BadRequestException(
+        "Validation failed (expected type is /jpeg|png/)",
+      );
+    }
 
     await writeFileSync(filePath, bufferImageData);
 

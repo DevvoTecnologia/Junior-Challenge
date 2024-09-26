@@ -1,4 +1,4 @@
-import { Column, Model, Table } from "sequelize-typescript";
+import { Column, DataType, Model, Table } from "sequelize-typescript";
 
 @Table
 export class Ring extends Model {
@@ -16,4 +16,7 @@ export class Ring extends Model {
 
   @Column
   public image: string;
+
+  @Column({ type: DataType.VIRTUAL })
+  public url: string;
 }

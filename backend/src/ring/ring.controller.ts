@@ -7,6 +7,7 @@ import {
   ParseFilePipeBuilder,
   Post,
   Put,
+  Req,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -20,6 +21,7 @@ import { CreateRingDto } from "./dto/create-ring.dto";
 import { UpdateRingDto } from "./dto/update-ring.dto";
 import { Ring } from "./entities/ring.entity";
 import { RingService } from "./ring.service";
+import { ReqAuthUser } from "./types/Req";
 
 @Controller("ring")
 @UseGuards(AuthGuard)
@@ -29,8 +31,8 @@ export class RingController {
   constructor(private readonly ringService: RingService) {}
 
   @Get()
-  async findAll(): Promise<Ring[]> {
-    return await this.ringService.findAll();
+  async findAll(@Req() req: ReqAuthUser): Promise<Ring[]> {
+    return await this.ringService.findAll(req);
   }
 
   @Post()
@@ -74,8 +76,9 @@ export class RingController {
         .build(),
     )
     file: Express.Multer.File,
+    @Req() req: ReqAuthUser,
   ): Promise<Ring> {
-    return await this.ringService.create(createRingDto, file);
+    return await this.ringService.create(createRingDto, file, req);
   }
 
   @Put(":id")
@@ -120,12 +123,16 @@ export class RingController {
         .build(),
     )
     file: Express.Multer.File,
+    @Req() req: ReqAuthUser,
   ): Promise<Ring> {
-    return await this.ringService.update(id, updateRingDto, file);
+    return await this.ringService.update(id, updateRingDto, file, req);
   }
 
   @Delete(":id")
-  async delete(@Param("id") id: number): Promise<null> {
-    return await this.ringService.delete(id);
+  async delete(
+    @Param("id") id: number,
+    @Req() req: ReqAuthUser,
+  ): Promise<null> {
+    return await this.ringService.delete(id, req);
   }
 }

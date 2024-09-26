@@ -3,9 +3,11 @@ import {
   BeforeSave,
   Column,
   DataType,
+  HasMany,
   Model,
   Table,
 } from "sequelize-typescript";
+import { Ring } from "src/ring/entities/ring.entity";
 
 @Table
 export class User extends Model {
@@ -31,4 +33,7 @@ export class User extends Model {
   async passwordIsValid(password: string): Promise<boolean> {
     return await bcrypt.compare(password, this.passwordHash);
   }
+
+  @HasMany(() => Ring, "userId")
+  public rings: Ring[];
 }

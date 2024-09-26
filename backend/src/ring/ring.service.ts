@@ -4,12 +4,14 @@ import {
   Logger,
   NotFoundException,
 } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { InjectModel } from "@nestjs/sequelize";
 
 import RingGlobalValidations from "./RingGlobalValidations";
 import { CreateRingDto } from "./dto/create-ring.dto";
 import { UpdateRingDto } from "./dto/update-ring.dto";
 import { Ring } from "./entities/ring.entity";
+import { ReqAuthUser } from "./types/Req";
 
 @Injectable()
 export class RingService extends RingGlobalValidations {
@@ -18,6 +20,7 @@ export class RingService extends RingGlobalValidations {
   constructor(
     @InjectModel(Ring)
     private readonly ringModel: typeof Ring,
+    private readonly configService: ConfigService,
   ) {
     super();
   }
@@ -25,6 +28,7 @@ export class RingService extends RingGlobalValidations {
   async create(
     createRingDto: CreateRingDto,
     file: Express.Multer.File,
+    req: ReqAuthUser,
   ): Promise<Ring> {
     const { name, power, owner, forgedBy } = createRingDto;
 
@@ -33,24 +37,45 @@ export class RingService extends RingGlobalValidations {
       throw new BadRequestException(`Invalid forgedBy value: ${forgedBy}`);
     }
 
-    await this.validateRingCreation(this.ringModel, createRingDto.forgedBy);
+    await this.validateRingCreation(
+      this.ringModel,
+      createRingDto.forgedBy,
+      req.user.sub,
+    );
 
     // Save or update ring image
     const imageSaved = await this.saveOrUpdateRingImage(file);
 
-    const newRing = await this.ringModel.create({
-      name,
-      power,
-      owner,
-      forgedBy,
-      image: imageSaved,
-    });
+    let newRing: Ring;
+
+    try {
+      newRing = await this.ringModel.create({
+        name,
+        power,
+        owner,
+        forgedBy,
+        image: imageSaved,
+        userId: req.user.sub,
+      });
+    } catch (error) {
+      this.logger.error(error.message, error.stack);
+      throw new BadRequestException("Error creating ring");
+    }
+
+    const host = this.configService.get("host");
+    const port = this.configService.get("port");
+
+    newRing.url = `${host}:${port}/uploads/${newRing.image}`;
 
     return newRing;
   }
 
-  async findAll(): Promise<Ring[]> {
-    const rings = await this.ringModel.findAll();
+  async findAll(req: ReqAuthUser): Promise<Ring[]> {
+    const rings = await this.ringModel.findAll({
+      where: {
+        userId: req.user.sub,
+      },
+    });
 
     if (!rings.length) {
       throw new NotFoundException("No rings found");
@@ -63,6 +88,7 @@ export class RingService extends RingGlobalValidations {
     id: number,
     updateRingDto: UpdateRingDto,
     file: Express.Multer.File,
+    req: ReqAuthUser,
   ): Promise<Ring> {
     const { name, power, owner, forgedBy } = updateRingDto;
 
@@ -72,10 +98,19 @@ export class RingService extends RingGlobalValidations {
     }
 
     if (updateRingDto.forgedBy) {
-      await this.validateRingCreation(this.ringModel, updateRingDto.forgedBy);
+      await this.validateRingCreation(
+        this.ringModel,
+        updateRingDto.forgedBy,
+        req.user.sub,
+      );
     }
 
-    const ring = await this.ringModel.findByPk(id);
+    const ring = await this.ringModel.findOne({
+      where: {
+        id: id,
+        userId: req.user.sub,
+      },
+    });
 
     if (!ring) {
       throw new NotFoundException(`Ring with id ${id} not found`);
@@ -93,13 +128,23 @@ export class RingService extends RingGlobalValidations {
     ring.forgedBy = forgedBy ?? ring.forgedBy;
     ring.image = imageSaved;
 
+    const host = this.configService.get("host");
+    const port = this.configService.get("port");
+
+    ring.url = `${host}:${port}/uploads/${ring.image}`;
+
     await ring.save();
 
     return ring;
   }
 
-  async delete(id: number): Promise<null> {
-    const ring = await this.ringModel.findByPk(id);
+  async delete(id: number, req: ReqAuthUser): Promise<null> {
+    const ring = await this.ringModel.findOne({
+      where: {
+        id: id,
+        userId: req.user.sub,
+      },
+    });
 
     if (!ring) {
       throw new NotFoundException(`Ring with id ${id} not found`);
