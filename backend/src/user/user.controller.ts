@@ -11,6 +11,7 @@ import {
   UseGuards,
   ValidationPipe,
 } from "@nestjs/common";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "src/auth/auth.guard";
 
 import { CreateUserDto } from "./dto/create-user.dto";
@@ -19,6 +20,7 @@ import { ReqAuthUser } from "./types/Req";
 import { UserService } from "./user.service";
 
 @Controller("user")
+@ApiTags("User")
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -39,8 +41,9 @@ export class UserController {
     return await this.userService.create(reateUserDto);
   }
 
-  @UseGuards(AuthGuard)
   @Put(":id")
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async update(
     @Param("id", ParseIntPipe) id: number,
     @Body(ValidationPipe) createUserDto: CreateUserDto,
@@ -50,8 +53,9 @@ export class UserController {
     return await this.userService.update(id, createUserDto, req);
   }
 
-  @UseGuards(AuthGuard)
   @Delete(":id")
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async delete(
     @Param("id", ParseIntPipe) id: number,
     @Req() req: ReqAuthUser,

@@ -8,7 +8,7 @@ import { RingController } from "./ring.controller";
 import { RingService } from "./ring.service";
 
 @Module({
-  imports: [SequelizeModule.forFeature([Ring]), JwtModule, ConfigModule],
+  imports: [SequelizeModule.forFeature([Ring]), ConfigModule, JwtModule],
   controllers: [RingController],
   providers: [RingService],
 })
