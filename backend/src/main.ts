@@ -4,8 +4,8 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 
 async function bootstrap(): Promise<void> {
-  const port = 3000;
-  const host = "http://localhost";
+  const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+  const host = process.env.HOST || "http://localhost";
 
   const logger = new Logger("bootstrap");
 

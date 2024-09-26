@@ -13,11 +13,17 @@ interface EnvConfig {
   host: string;
   port: number;
 
-  tokenSecret?: string;
+  token: {
+    secret?: string;
+    expiration: string;
+  };
 }
 
 export default (): EnvConfig => ({
   nodeEnv: process.env.NODE_ENV || "development",
+
+  host: process.env.HOST || "localhost",
+  port: process.env.PORT ? parseInt(process.env.PORT, 10) : 3000,
 
   database: {
     dialect: process.env.DB_DIALECT || "mysql",
@@ -28,8 +34,8 @@ export default (): EnvConfig => ({
     name: process.env.DB_NAME || "ringdb",
   },
 
-  host: process.env.HOST || "localhost",
-  port: process.env.PORT ? parseInt(process.env.PORT, 10) : 3000,
-
-  tokenSecret: process.env.TOKEN_SECRET,
+  token: {
+    secret: process.env.TOKEN_SECRET,
+    expiration: process.env.TOKEN_EXPIRATION || "1d",
+  },
 });

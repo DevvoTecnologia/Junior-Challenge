@@ -1,18 +1,36 @@
+import { ConfigModule, ConfigService } from "@nestjs/config";
 import type { SequelizeModuleAsyncOptions } from "@nestjs/sequelize";
 import type { Dialect } from "sequelize";
 
 const sequelizeAsyncConfig: SequelizeModuleAsyncOptions = {
-  useFactory: () => {
+  imports: [ConfigModule],
+  useFactory: (configService: ConfigService) => {
     return {
-      dialect: process.env.DB_DIALECT as Dialect,
-      host: process.env.DB_HOST,
-      port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 3306,
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      autoLoadModels: true,
+      dialect: configService.get("database.dialect") as Dialect,
+      host: configService.get("database.host"),
+      port: configService.get("database.port"),
+      username: configService.get("database.username"),
+      password: configService.get("database.password"),
+      database: configService.get("database.name"),
+      autoLoadModels: configService.get("nodeEnv") !== "production",
+
+      dialectOptions: {
+        timezone: "-03:00",
+      },
+
+      timezone: "-03:00",
+
+      define: {
+        timestamps: true,
+        underscored: true,
+      },
+      sync: {
+        force: true,
+        alter: true,
+      },
     };
   },
+  inject: [ConfigService],
 };
 
 export default sequelizeAsyncConfig;
