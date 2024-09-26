@@ -2,6 +2,7 @@ import { BadRequestException } from "@nestjs/common";
 import { existsSync, mkdirSync, unlinkSync, writeFileSync } from "fs";
 import { isValidImage } from "multiform-validator";
 import { join } from "path";
+import { v4 as uuidv4 } from "uuid";
 
 import type { Ring } from "./entities/ring.entity";
 import type { ForgedBy } from "./types/ForgedBy";
@@ -70,7 +71,7 @@ export default class RingGlobalValidations {
 
     const destinationPath = join(process.cwd(), "uploads");
 
-    const newUniqueImageName = `${Date.now()}-${file.originalname}`;
+    const newUniqueImageName = `${uuidv4()}-${Date.now()}-${file.originalname}`;
 
     const filePath = join(destinationPath, newUniqueImageName);
 

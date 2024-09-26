@@ -81,7 +81,12 @@ export class UserService {
     userToUpdate.username = username ?? userToUpdate.username;
     userToUpdate.password = password ?? userToUpdate.password;
 
-    await userToUpdate.save();
+    try {
+      await userToUpdate.save();
+    } catch (error) {
+      this.logger.error(error);
+      throw new BadRequestException("Username already exists");
+    }
 
     return userToUpdate;
   }

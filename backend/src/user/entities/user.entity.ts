@@ -34,6 +34,10 @@ export class User extends Model {
     return await bcrypt.compare(password, this.passwordHash);
   }
 
-  @HasMany(() => Ring, "userId")
+  @HasMany(() => Ring, {
+    foreignKey: "userId",
+    onDelete: "SET NULL",
+    onUpdate: "CASCADE",
+  })
   public rings: Ring[];
 }
