@@ -7,6 +7,7 @@ import {
 import { InjectModel } from "@nestjs/sequelize";
 
 import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./entities/user.entity";
 import { ReqAuthUser } from "./types/Req";
 
@@ -65,7 +66,7 @@ export class UserService {
 
   async update(
     id: number,
-    user: CreateUserDto,
+    user: UpdateUserDto,
     req: ReqAuthUser,
   ): Promise<User> {
     const { username, password } = user;
@@ -77,8 +78,8 @@ export class UserService {
 
     const userToUpdate = await this.findByPk(id);
 
-    userToUpdate.username = username;
-    userToUpdate.password = password;
+    userToUpdate.username = username ?? userToUpdate.username;
+    userToUpdate.password = password ?? userToUpdate.password;
 
     await userToUpdate.save();
 

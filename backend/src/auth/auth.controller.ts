@@ -35,7 +35,7 @@ export class AuthController {
   // 💡 This route is protected by the AuthGuard
   @Get("test")
   @UseGuards(AuthGuard)
-  @ApiBearerAuth()
+  @ApiBearerAuth("defaultBearerAuth")
   getProfile(@Request() req: { user: unknown }): unknown {
     return req.user;
   }

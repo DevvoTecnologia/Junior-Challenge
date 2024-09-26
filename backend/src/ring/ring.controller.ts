@@ -13,7 +13,7 @@ import {
   ValidationPipe,
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "src/auth/auth.guard";
 
 import { CreateRingDto } from "./dto/create-ring.dto";
@@ -24,7 +24,7 @@ import { RingService } from "./ring.service";
 @Controller("ring")
 @UseGuards(AuthGuard)
 @ApiTags("Ring")
-@ApiBearerAuth("access-token")
+@ApiBearerAuth("defaultBearerAuth")
 export class RingController {
   constructor(private readonly ringService: RingService) {}
 
@@ -35,6 +35,32 @@ export class RingController {
 
   @Post()
   @UseInterceptors(FileInterceptor("image"))
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    description: "Update ring with image",
+    schema: {
+      type: "object",
+      properties: {
+        name: {
+          type: "string",
+        },
+        power: {
+          type: "string",
+        },
+        owner: {
+          type: "string",
+        },
+        forgedBy: {
+          type: "string",
+          examples: ["Elfos", "Anões", "Homens", "Sauron"],
+        },
+        image: {
+          type: "imageFile",
+          format: "binary",
+        },
+      },
+    },
+  })
   async create(
     @Body(ValidationPipe) createRingDto: CreateRingDto,
     @UploadedFile(
@@ -54,6 +80,32 @@ export class RingController {
 
   @Put(":id")
   @UseInterceptors(FileInterceptor("image"))
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    description: "Update ring with image",
+    schema: {
+      type: "object",
+      properties: {
+        name: {
+          type: "string",
+        },
+        power: {
+          type: "string",
+        },
+        owner: {
+          type: "string",
+        },
+        forgedBy: {
+          type: "string",
+          examples: ["Elfos", "Anões", "Homens", "Sauron"],
+        },
+        image: {
+          type: "imageFile",
+          format: "binary",
+        },
+      },
+    },
+  })
   async update(
     @Body(ValidationPipe) updateRingDto: UpdateRingDto,
     @Param("id") id: number,

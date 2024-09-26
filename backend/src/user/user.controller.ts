@@ -15,6 +15,7 @@ import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "src/auth/auth.guard";
 
 import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./entities/user.entity";
 import { ReqAuthUser } from "./types/Req";
 import { UserService } from "./user.service";
@@ -36,26 +37,26 @@ export class UserController {
 
   @Post()
   async create(
-    @Body(ValidationPipe) reateUserDto: CreateUserDto,
+    @Body(ValidationPipe) createUserDto: CreateUserDto,
   ): Promise<User> {
-    return await this.userService.create(reateUserDto);
+    return await this.userService.create(createUserDto);
   }
 
   @Put(":id")
   @UseGuards(AuthGuard)
-  @ApiBearerAuth()
+  @ApiBearerAuth("defaultBearerAuth")
   async update(
     @Param("id", ParseIntPipe) id: number,
-    @Body(ValidationPipe) createUserDto: CreateUserDto,
+    @Body(ValidationPipe) updateUserDto: UpdateUserDto,
     @Req()
     req: ReqAuthUser,
   ): Promise<User> {
-    return await this.userService.update(id, createUserDto, req);
+    return await this.userService.update(id, updateUserDto, req);
   }
 
   @Delete(":id")
   @UseGuards(AuthGuard)
-  @ApiBearerAuth()
+  @ApiBearerAuth("defaultBearerAuth")
   async delete(
     @Param("id", ParseIntPipe) id: number,
     @Req() req: ReqAuthUser,

@@ -19,7 +19,7 @@ export class AuthService {
     const user = await this.userService.findOne(authDto.username);
 
     if (!(await user.passwordIsValid(authDto.password))) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException("Invalid credentials");
     }
 
     const payload = { sub: user.id, username: user.username };
