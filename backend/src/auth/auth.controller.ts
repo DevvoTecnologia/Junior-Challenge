@@ -22,8 +22,9 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post("login")
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async signIn(@Body() authDto: AuthDto): Promise<any> {
+  async signIn(@Body() authDto: AuthDto): Promise<{
+    accessToken: string;
+  }> {
     return await this.authService.signIn(authDto);
   }
 
