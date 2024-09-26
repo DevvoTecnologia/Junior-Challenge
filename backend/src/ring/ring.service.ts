@@ -58,7 +58,7 @@ export class RingService extends RingGlobalValidations {
         userId: req.user.sub,
       });
     } catch (error) {
-      this.logger.error(error.message, error.stack);
+      this.logger.error(error);
       throw new BadRequestException("Error creating ring");
     }
 

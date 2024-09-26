@@ -14,15 +14,15 @@ export class User extends Model {
   @Column({
     unique: true,
   })
-  public username: string;
+  public username!: string;
 
   @Column
-  public passwordHash: string;
+  public passwordHash!: string;
 
   @Column({
     type: DataType.VIRTUAL,
   })
-  public password: string;
+  public password!: string;
 
   @BeforeSave({ name: "hashPassword" })
   static async hashPassword(instance: User): Promise<void> {
@@ -39,5 +39,5 @@ export class User extends Model {
     onDelete: "SET NULL",
     onUpdate: "CASCADE",
   })
-  public rings: Ring[];
+  public rings!: Ring[];
 }

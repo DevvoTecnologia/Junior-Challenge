@@ -5,10 +5,10 @@ export class AuthDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  public username: string;
+  public username!: string;
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty()
-  public password: string;
+  public password!: string;
 }

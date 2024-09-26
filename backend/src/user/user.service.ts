@@ -44,8 +44,6 @@ export class UserService {
   async findOne(username: CreateUserDto["username"]): Promise<User> {
     const user = await this.userModel.findOne({
       where: { username },
-      attributes: this.atributesToShow,
-      include: this.includeAtributes,
     });
 
     if (!user) {

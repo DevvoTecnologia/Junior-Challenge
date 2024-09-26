@@ -17,12 +17,15 @@ export class AuthService {
     username: string;
   }> {
     const user = await this.userService.findOne(authDto.username);
+    console.log(user);
 
     if (!(await user.passwordIsValid(authDto.password))) {
       throw new UnauthorizedException("Invalid credentials");
     }
 
     const payload = { sub: user.id, username: user.username };
+
+    console.log("payload", payload);
 
     return {
       accessToken: await this.jwtService.signAsync(payload),

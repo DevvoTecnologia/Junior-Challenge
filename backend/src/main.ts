@@ -14,8 +14,7 @@ async function bootstrap(): Promise<void> {
 
   const port = configService.get("port");
   const host = configService.get("host");
-  const tokenEx =
-    configService.get("TOKEN_EXAMPLE") || "thisIsASampleBearerAuthToken123";
+  const tokenEx = "thisIsASampleBearerAuthToken123";
 
   const config = new DocumentBuilder()
     .setTitle("Junior-Challenge")
