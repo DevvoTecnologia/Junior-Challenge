@@ -1,0 +1,32 @@
+version : '3'
+
+services:
+
+  back:
+    build: ./back
+    ports: 
+      - 3001:3001
+    environment:
+      - DB_USER=root
+      - DB_PASS=password
+      - DB_NAME=rings
+      - DB_HOST=mariadb
+      - PORT_SERVER_BACK=3001
+      - JWT_SECRET=456a4sdsa4dsa8
+    volumes:
+      - ./back:/app-back
+    
+    container_name: rings_back
+    restart: always
+    depends_on:
+      - mariadb
+
+  mariadb:
+    image: mariadb:latest
+    container_name: docker-mariadb
+    ports:
+      - 3306:3306
+    environment:
+      - MARIADB_ROOT_PASSWORD=password
+      - MARIADB_DATABASE=rings
+    restart: always
