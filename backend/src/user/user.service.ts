@@ -8,6 +8,7 @@ import { InjectModel } from "@nestjs/sequelize";
 
 import { CreateUserDto } from "./dto/create-user.dto";
 import { User } from "./entities/user.entity";
+import { ReqAuthUser } from "./types/Req";
 
 @Injectable()
 export class UserService {
@@ -62,8 +63,17 @@ export class UserService {
     return newUser;
   }
 
-  async update(id: number, user: CreateUserDto): Promise<User> {
+  async update(
+    id: number,
+    user: CreateUserDto,
+    req: ReqAuthUser,
+  ): Promise<User> {
     const { username, password } = user;
+    const { sub } = req.user;
+
+    if (sub !== id) {
+      throw new BadRequestException("You can not update this user");
+    }
 
     const userToUpdate = await this.findByPk(id);
 
@@ -75,7 +85,13 @@ export class UserService {
     return userToUpdate;
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number, req: ReqAuthUser): Promise<void> {
+    const { sub } = req.user;
+
+    if (sub !== id) {
+      throw new BadRequestException("You can not delete this user");
+    }
+
     const user = await this.findByPk(id);
 
     await user.destroy();
