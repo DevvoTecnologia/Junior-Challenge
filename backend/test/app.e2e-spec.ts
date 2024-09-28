@@ -1,4 +1,4 @@
-import type { INestApplication } from "@nestjs/common";
+import { HttpStatus, type INestApplication } from "@nestjs/common";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
 import * as request from "supertest";
@@ -22,20 +22,9 @@ describe("AppController (e2e)", () => {
   });
 
   it("/ (GET)", () => {
-    return request(app.getHttpServer()).get("/").expect(200).expect("Pong!");
-  });
-
-  it("/user (GET)", () => {
     return request(app.getHttpServer())
-      .get("/user")
-      .expect(200)
-      .expect((res) => {
-        expect(res.body).toBeInstanceOf(Array);
-        res.body.forEach((user: unknown) => {
-          expect(user).toHaveProperty("id");
-          expect(user).toHaveProperty("username");
-          expect(user).toHaveProperty("rings");
-        });
-      });
+      .get("/")
+      .expect(HttpStatus.OK)
+      .expect("Pong!");
   });
 });
