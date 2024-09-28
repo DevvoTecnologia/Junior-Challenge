@@ -25,6 +25,20 @@ export class RingService extends RingGlobalValidations {
     super();
   }
 
+  async findAll(req: ReqAuthUser): Promise<Ring[]> {
+    const rings = await this.ringModel.findAll({
+      where: {
+        userId: req.user.sub,
+      },
+    });
+
+    if (!rings.length) {
+      throw new NotFoundException("No rings found");
+    }
+
+    return rings;
+  }
+
   async create(
     createRingDto: CreateRingDto,
     file: Express.Multer.File,
@@ -57,8 +71,7 @@ export class RingService extends RingGlobalValidations {
         image: imageSaved,
         userId: req.user.sub,
       });
-    } catch (error) {
-      this.logger.error(error);
+    } catch {
       throw new BadRequestException("Error creating ring");
     }
 
@@ -68,20 +81,6 @@ export class RingService extends RingGlobalValidations {
     newRing.url = `${host}:${port}/uploads/${newRing.image}`;
 
     return newRing;
-  }
-
-  async findAll(req: ReqAuthUser): Promise<Ring[]> {
-    const rings = await this.ringModel.findAll({
-      where: {
-        userId: req.user.sub,
-      },
-    });
-
-    if (!rings.length) {
-      throw new NotFoundException("No rings found");
-    }
-
-    return rings;
   }
 
   async update(
