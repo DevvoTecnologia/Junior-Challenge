@@ -36,6 +36,13 @@ export class RingService extends RingGlobalValidations {
       throw new NotFoundException("No rings found");
     }
 
+    rings.forEach((ring) => {
+      const host = this.configService.get("host");
+      const port = this.configService.get("port");
+
+      ring.url = `${host}:${port}/uploads/${ring.image}`;
+    });
+
     return rings;
   }
 
