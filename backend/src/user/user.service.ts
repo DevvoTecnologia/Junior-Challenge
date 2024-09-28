@@ -28,11 +28,26 @@ export class UserService {
     private readonly userModel: typeof User,
   ) {}
 
+  async findAll(): Promise<User[]> {
+    const users = await this.userModel.findAll({
+      attributes: this.atributesToShow,
+      include: this.includeAtributes,
+    });
+
+    if (users.length === 0) {
+      throw new NotFoundException("No users found");
+    }
+
+    return users;
+  }
+
   async findByPk(id: number): Promise<User> {
     const user = await this.userModel.findByPk(id, {
       attributes: this.atributesToShow,
       include: this.includeAtributes,
     });
+
+    this.logger.log(user);
 
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
@@ -53,19 +68,6 @@ export class UserService {
     }
 
     return user;
-  }
-
-  async findAll(): Promise<User[]> {
-    const users = await this.userModel.findAll({
-      attributes: this.atributesToShow,
-      include: this.includeAtributes,
-    });
-
-    if (users.length === 0) {
-      throw new NotFoundException("No users found");
-    }
-
-    return users;
   }
 
   async create(user: CreateUserDto): Promise<Pick<User, "id" | "username">> {
@@ -108,8 +110,7 @@ export class UserService {
 
     try {
       await userToUpdate.save();
-    } catch (error) {
-      this.logger.error(error);
+    } catch {
       throw new BadRequestException("Username already exists");
     }
 
