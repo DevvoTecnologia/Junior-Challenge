@@ -40,7 +40,7 @@ describe("UserController (e2e)", () => {
   describe("/user/:id (GET)", () => {
     it("should return 200 OK with user", () => {
       return request(app.getHttpServer())
-        .get("/user/4")
+        .get("/user/1")
         .expect(HttpStatus.OK)
         .expect((res) => {
           expect(res.body).toHaveProperty("id");
