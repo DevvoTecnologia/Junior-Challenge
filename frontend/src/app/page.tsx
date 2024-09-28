@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 
 import Loading from "@/components/Loading";
 import { getAllUsers } from "@/service/queries";
+import { useUserStore } from "@/zustand/store";
 
 export default function Home() {
   const { data: users, isLoading } = useQuery({
@@ -13,9 +14,13 @@ export default function Home() {
     queryKey: ["users"],
   });
 
+  const { setUserInfo } = useUserStore();
+
   useEffect(() => {
     toast("Hello, world!");
-  }, []);
+
+    setUserInfo();
+  }, [setUserInfo]);
 
   if (isLoading) {
     return <Loading />;
