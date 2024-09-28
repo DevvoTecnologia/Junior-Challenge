@@ -2,6 +2,7 @@ import "./globals.css";
 import "react-toastify/dist/ReactToastify.css";
 
 import type { Metadata } from "next";
+import { ToastContainer } from "react-toastify";
 
 import QueryClientProviderWrapper from "@/components/QueryClientProviderWrapper";
 import { geistMono, geistSans } from "@/fonts";
@@ -21,7 +22,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <QueryClientProviderWrapper>{children}</QueryClientProviderWrapper>
+        <QueryClientProviderWrapper>
+          <ToastContainer autoClose={1500} />
+          {children}
+        </QueryClientProviderWrapper>
       </body>
     </html>
   );
