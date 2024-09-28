@@ -26,12 +26,12 @@ export class User extends Model {
 
   @BeforeSave({ name: "hashPassword" })
   static async hashPassword(instance: User): Promise<void> {
-    const newPassword = await bcrypt.hash(instance.password, 8);
+    const newPassword = await bcrypt.hashSync(instance.password, 8);
     instance.passwordHash = newPassword;
   }
 
   async passwordIsValid(password: string): Promise<boolean> {
-    return await bcrypt.compare(password, this.passwordHash);
+    return await bcrypt.compareSync(password, this.passwordHash);
   }
 
   @HasMany(() => Ring, {
