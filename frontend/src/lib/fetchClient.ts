@@ -1,7 +1,6 @@
 "use client";
 
 import { getCookie } from "cookies-next";
-import { signOut } from "next-auth/react";
 
 import { tokenKey } from "@/global/storageKeys";
 import axiosInstance from "@/service/fetcher/axiosInstance";
@@ -15,10 +14,6 @@ export async function fetchClient<T = any>(url: string) {
       ...(jwt && { Authorization: `Bearer ${jwt}` }),
     },
   });
-
-  if (response.status !== 200) {
-    await signOut();
-  }
 
   return response;
 }

@@ -2,9 +2,9 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
 import { useEffect } from "react";
 
+import BtnLogout from "@/components/BtnLogout";
 import Loading from "@/components/Loading";
 import { getAllRings } from "@/service/queries";
 
@@ -50,15 +50,7 @@ export default function ClientPage() {
         </div>
       ))}
       <div>
-        <button
-          onClick={async () => {
-            await signOut({
-              redirect: false,
-            });
-          }}
-        >
-          Log out
-        </button>
+        <BtnLogout className="rounded bg-blue-500 p-4 text-white" />
       </div>
     </div>
   );

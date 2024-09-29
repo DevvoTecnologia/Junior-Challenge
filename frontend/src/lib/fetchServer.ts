@@ -1,5 +1,4 @@
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 import { tokenKey } from "@/global/storageKeys";
 import axiosInstance from "@/service/fetcher/axiosInstance";
@@ -13,10 +12,6 @@ export async function fetchServer<T = any>(url: string) {
       ...(jwt && { Authorization: `Bearer ${jwt}` }),
     },
   });
-
-  if (response.status !== 200) {
-    return redirect("/");
-  }
 
   return response;
 }

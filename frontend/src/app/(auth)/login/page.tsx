@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -21,11 +20,7 @@ export default function LoginPage() {
 
     setIsLoading(true);
 
-    const response = await signIn("credentials", {
-      username,
-      password,
-      redirect: false,
-    });
+    const response = await fetch("credentials");
 
     setIsLoading(false);
 
@@ -38,7 +33,7 @@ export default function LoginPage() {
     }
 
     if (response?.ok) {
-      return router.replace("/");
+      return router.replace("/tests/client");
     }
   }
 

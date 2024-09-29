@@ -1,6 +1,7 @@
 import type { AxiosResponse } from "axios";
 import { redirect } from "next/navigation";
 
+import BtnLogout from "@/components/BtnLogout";
 import { fetchServer } from "@/lib/fetchServer";
 import type { Rings } from "@/types/Ring";
 
@@ -28,6 +29,9 @@ export default async function ServerPage() {
           <p>{ring.forgedBy}</p>
         </div>
       ))}
+      <div>
+        <BtnLogout className="rounded bg-blue-500 p-4 text-white" />
+      </div>
     </div>
   );
 }
