@@ -16,3 +16,15 @@ export interface UserAuth {
   username: string;
   password: string;
 }
+
+export interface LoginSuccess {
+  accessToken: string;
+  userId: number;
+  username: string;
+}
+
+export interface UserState {
+  token: string;
+  id: number;
+  username: string;
+}

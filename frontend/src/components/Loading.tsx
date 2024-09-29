@@ -1,10 +1,8 @@
-import * as motion from "framer-motion/client";
-
 export default function Loading() {
   return (
-    <motion.div className="flex min-h-screen items-center justify-center">
+    <div className="flex min-h-screen items-center justify-center">
       <LoadingIcon />
-    </motion.div>
+    </div>
   );
 }
 

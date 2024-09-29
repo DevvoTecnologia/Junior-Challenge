@@ -1,35 +1,19 @@
-/* eslint-disable no-console */
-import { fetcher } from "@/actions/fetcher";
-import type { Users } from "@/types/User";
+import { fetchClient } from "@/lib/fetchClient";
+import type { Ring, Rings } from "@/types/Ring";
+import type { User, Users } from "@/types/User";
 
 export async function getAllUsers() {
-  try {
-    return await fetcher<Users>("/user");
-  } catch (error) {
-    console.error(error);
-  }
+  return (await fetchClient<Users>("/user")).data;
 }
 
 export async function getUserById(id: number) {
-  try {
-    return await fetcher<Users>(`/user/${id}`);
-  } catch (error) {
-    console.error(error);
-  }
+  return (await fetchClient<User>(`/user/${id}`)).data;
 }
 
 export async function getAllRings() {
-  try {
-    return await fetcher<Users>("/ring");
-  } catch (error) {
-    console.error(error);
-  }
+  return (await fetchClient<Rings>("/ring")).data;
 }
 
 export async function getRingById(id: number) {
-  try {
-    return await fetcher<Users>(`/ring/${id}`);
-  } catch (error) {
-    console.error(error);
-  }
+  return (await fetchClient<Ring>(`/ring/${id}`)).data;
 }

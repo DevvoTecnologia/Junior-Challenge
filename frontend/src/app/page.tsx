@@ -1,26 +1,15 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
-import { toast } from "react-toastify";
 
 import Loading from "@/components/Loading";
 import { getAllUsers } from "@/service/queries";
-import { useUserStore } from "@/zustand/store";
 
 export default function Home() {
   const { data: users, isLoading } = useQuery({
     queryFn: getAllUsers,
     queryKey: ["users"],
   });
-
-  const { setUserInfo } = useUserStore();
-
-  useEffect(() => {
-    toast("Hello, world!");
-
-    setUserInfo();
-  }, [setUserInfo]);
 
   if (isLoading) {
     return <Loading />;

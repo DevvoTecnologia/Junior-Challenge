@@ -1,18 +1,13 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
 
-const key = "ringstorage";
+type State = {
+  count: number;
+  increment: () => void;
+  decrement: () => void;
+};
 
-export const useUserStore = create(
-  persist(
-    (set) => ({
-      userInfo: {
-        token: "aaa",
-      },
-      setUserInfo: () => {
-        set((state: never) => state);
-      },
-    }),
-    { name: key },
-  ),
-);
+export const useStore = create<State>((set) => ({
+  count: 0,
+  increment: () => set((state) => ({ count: state.count + 1 })),
+  decrement: () => set((state) => ({ count: state.count - 1 })),
+}));
