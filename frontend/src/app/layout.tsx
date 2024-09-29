@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { ToastContainer } from "react-toastify";
 
 import QueryClientProviderWrapper from "@/components/QueryClientProviderWrapper";
+import SessionProviderLocal from "@/components/SessionProviderLocal";
 import { geistMono, geistSans } from "@/fonts";
 
 export const metadata: Metadata = {
@@ -18,15 +19,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <QueryClientProviderWrapper>
-          <ToastContainer autoClose={1500} />
-          {children}
-        </QueryClientProviderWrapper>
-      </body>
-    </html>
+    <SessionProviderLocal>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <QueryClientProviderWrapper>
+            <ToastContainer autoClose={1500} />
+            {children}
+          </QueryClientProviderWrapper>
+        </body>
+      </html>
+    </SessionProviderLocal>
   );
 }

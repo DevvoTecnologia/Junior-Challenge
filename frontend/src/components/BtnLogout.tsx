@@ -1,9 +1,7 @@
 "use client";
 
-import { deleteCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
-
-import { tokenKey, userIdKey, usernameKey } from "@/global/storageKeys";
+import { signOut } from "next-auth/react";
 
 interface BtnLogoutProps {
   className?: string;
@@ -12,10 +10,8 @@ interface BtnLogoutProps {
 export default function BtnLogout({ className }: BtnLogoutProps) {
   const router = useRouter();
 
-  function handleLogout() {
-    deleteCookie(tokenKey);
-    deleteCookie(userIdKey);
-    deleteCookie(usernameKey);
+  async function handleLogout() {
+    await signOut();
 
     router.replace("/login");
   }

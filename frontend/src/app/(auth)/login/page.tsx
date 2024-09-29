@@ -1,16 +1,12 @@
 "use client";
 
-import { AxiosError } from "axios";
-import { setCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
 import { LoadingIcon } from "@/components/Loading";
-import { tokenKey, userIdKey, usernameKey } from "@/global/storageKeys";
-import axiosInstance from "@/service/axiosInstance";
-import type { LoginSuccess } from "@/types/User";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -23,60 +19,27 @@ export default function LoginPage() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    try {
-      setIsLoading(true);
+    setIsLoading(true);
 
-      const response = await axiosInstance.post<LoginSuccess>("/auth/login", {
-        username,
-        password,
-      });
+    const response = await signIn("credentials", {
+      username,
+      password,
+      redirect: false,
+    });
 
-      /**
-       * 
-        cookies().set(tokenKey, response.data.accessToken, {
-          secure: true,
-          sameSite: "strict",
-          partitioned: true,
-          maxAge: DAY * 5, // 5 days
-        });
+    setIsLoading(false);
 
-        cookies().set(userIdKey, response.data.userId.toString(), {
-          sameSite: "strict",
-          maxAge: DAY * 5, // 5 days
-        });
+    console.log(response);
 
-        cookies().set(usernameKey, response.data.username, {
-          sameSite: "strict",
-          maxAge: DAY * 5, // 5 days
-        });
-       */
-
-      const MINUTE = 60;
-      const HOUR = 60 * MINUTE;
-      const DAY = 24 * HOUR;
-
-      setCookie(tokenKey, response.data.accessToken, {
-        maxAge: DAY * 5, // 5 days
-      });
-      setCookie(usernameKey, response.data.username, {
-        maxAge: DAY * 5, // 5 days
-      });
-      setCookie(userIdKey, response.data.userId, {
-        maxAge: DAY * 5, // 5 days
-      });
-
-      axiosInstance.defaults.headers.common.Authorization = `Bearer ${response.data.accessToken}`;
-
-      return router.replace("/tests/client");
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        return toast.error("Invalid username or password");
-      }
-
-      return toast.error("An error occurred");
-    } finally {
-      setIsLoading(false);
+    if (response?.status === 401) {
+      return toast.error("Invalid username or password");
     }
+
+    if (response?.status !== 200) {
+      return toast.error("An error occurred. Please try again later");
+    }
+
+    return router.replace("/tests/server");
   }
 
   return (
