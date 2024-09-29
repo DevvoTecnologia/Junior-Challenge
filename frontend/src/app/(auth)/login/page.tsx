@@ -1,11 +1,16 @@
 "use client";
 
+import { AxiosError } from "axios";
+import { setCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
 import { LoadingIcon } from "@/components/Loading";
+import { tokenKey } from "@/global/storageKeys";
+import axiosInstance from "@/service/fetcher/axiosInstance";
+import type { LoginSuccess } from "@/types/User";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -18,22 +23,25 @@ export default function LoginPage() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    setIsLoading(true);
+    try {
+      setIsLoading(true);
 
-    const response = await fetch("credentials");
+      const response = await axiosInstance.post<LoginSuccess>("/auth/login", {
+        username,
+        password,
+      });
 
-    setIsLoading(false);
+      setCookie(tokenKey, response.data.accessToken);
 
-    if (response?.status === 401) {
-      return toast.error("Invalid username or password");
-    }
-
-    if (response?.status !== 200) {
-      return toast.error("An error occurred");
-    }
-
-    if (response?.ok) {
       return router.replace("/tests/client");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        return toast.error("Invalid username or password");
+      }
+
+      return toast.error("An error occurred");
+    } finally {
+      setIsLoading(false);
     }
   }
 

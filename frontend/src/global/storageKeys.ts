@@ -1,5 +1,5 @@
-export const tokenKey = "next-auth-token";
+export const tokenKey = "token";
 
-export const usernameKey = "next-auth-user";
+export const usernameKey = "username";
 
-export const userIdKey = "next-auth-user-id";
+export const userIdKey = "userId";
