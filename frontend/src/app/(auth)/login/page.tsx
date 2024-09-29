@@ -8,8 +8,8 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 
 import { LoadingIcon } from "@/components/Loading";
-import { tokenKey } from "@/global/storageKeys";
-import axiosInstance from "@/service/fetcher/axiosInstance";
+import { tokenKey, userIdKey, usernameKey } from "@/global/storageKeys";
+import axiosInstance from "@/service/axiosInstance";
 import type { LoginSuccess } from "@/types/User";
 
 export default function LoginPage() {
@@ -31,7 +31,41 @@ export default function LoginPage() {
         password,
       });
 
-      setCookie(tokenKey, response.data.accessToken);
+      /**
+       * 
+        cookies().set(tokenKey, response.data.accessToken, {
+          secure: true,
+          sameSite: "strict",
+          partitioned: true,
+          maxAge: DAY * 5, // 5 days
+        });
+
+        cookies().set(userIdKey, response.data.userId.toString(), {
+          sameSite: "strict",
+          maxAge: DAY * 5, // 5 days
+        });
+
+        cookies().set(usernameKey, response.data.username, {
+          sameSite: "strict",
+          maxAge: DAY * 5, // 5 days
+        });
+       */
+
+      const MINUTE = 60;
+      const HOUR = 60 * MINUTE;
+      const DAY = 24 * HOUR;
+
+      setCookie(tokenKey, response.data.accessToken, {
+        maxAge: DAY * 5, // 5 days
+      });
+      setCookie(usernameKey, response.data.username, {
+        maxAge: DAY * 5, // 5 days
+      });
+      setCookie(userIdKey, response.data.userId, {
+        maxAge: DAY * 5, // 5 days
+      });
+
+      axiosInstance.defaults.headers.common.Authorization = `Bearer ${response.data.accessToken}`;
 
       return router.replace("/tests/client");
     } catch (error) {

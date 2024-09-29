@@ -2,14 +2,14 @@ import type { AxiosResponse } from "axios";
 import { redirect } from "next/navigation";
 
 import BtnLogout from "@/components/BtnLogout";
-import { fetchServer } from "@/lib/fetchServer";
+import fetchServer from "@/lib/fetchServer";
 import type { Rings } from "@/types/Ring";
 
 export default async function ServerPage() {
   let response: AxiosResponse<Rings>;
 
   try {
-    response = await fetchServer("/ring");
+    response = await fetchServer.get("/ring");
   } catch {
     return redirect("/login");
   }

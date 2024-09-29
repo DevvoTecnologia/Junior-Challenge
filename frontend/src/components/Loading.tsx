@@ -1,4 +1,4 @@
-export default function Loading({ size }: { size?: number }) {
+export default function Loading({ size = 12 }: { size?: number }) {
   return (
     <div className="flex min-h-screen items-center justify-center">
       <LoadingIcon size={size} />
@@ -7,10 +7,10 @@ export default function Loading({ size }: { size?: number }) {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function LoadingIcon({ size }: { size?: number }) {
+export function LoadingIcon({ size = 12 }: { size?: number }) {
   return (
     <svg
-      className={`h-12 w-12 animate-spin text-blue-500`}
+      className={`h-${size} w-${size} animate-spin text-blue-500`}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"

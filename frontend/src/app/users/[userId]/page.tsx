@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { IoMdArrowDropleftCircle } from "react-icons/io";
 
-import { fetchServer } from "@/lib/fetchServer";
+import fetchServer from "@/lib/fetchServer";
 import type { User } from "@/types/User";
 
 interface UserProfilePageProps {
@@ -19,7 +19,7 @@ export default async function UserProfilePage({
   let response: AxiosResponse<User>;
 
   try {
-    response = await fetchServer("/user/" + userId);
+    response = await fetchServer.get("/user/" + userId);
   } catch {
     return notFound();
   }

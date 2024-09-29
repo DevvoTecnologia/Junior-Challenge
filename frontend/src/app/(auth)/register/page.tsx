@@ -7,7 +7,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 
 import { LoadingIcon } from "@/components/Loading";
-import axiosInstance from "@/service/fetcher/axiosInstance";
+import axiosInstance from "@/service/axiosInstance";
 import type { RegisterSuccess } from "@/types/User";
 
 export default function RegisterPage() {

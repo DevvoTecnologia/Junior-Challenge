@@ -2,11 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { IoMdArrowDroprightCircle } from "react-icons/io";
 
-import { fetchServer } from "@/lib/fetchServer";
+import fetchServer from "@/lib/fetchServer";
 import type { Users } from "@/types/User";
 
 export default async function UsersProfilePage() {
-  const response = await fetchServer<Users>("/user");
+  const response = await fetchServer.get<Users>("/user");
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
