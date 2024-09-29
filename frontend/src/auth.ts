@@ -47,26 +47,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         },
       },
       async authorize(credentials) {
-        if (!credentials) {
-          return null;
+        const { username, password } = credentials;
+
+        if (!username || !password) {
+          throw new Error("Missing username or password");
         }
 
         const response = await axiosInstance.post<LoginSuccess>(
           "/auth/login",
           credentials,
         );
-
-        if (response.status !== 200) {
-          return null;
-        }
-
-        if (
-          !response.data.accessToken ||
-          !response.data.username ||
-          !response.data.userId
-        ) {
-          return null;
-        }
 
         return {
           accessToken: response.data.accessToken,

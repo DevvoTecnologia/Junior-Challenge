@@ -2,13 +2,14 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { signOut, useSession } from "next-auth/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import BtnLogout from "@/components/BtnLogout";
 import Loading from "@/components/Loading";
 import { getAllRings } from "@/service/queries";
 
 export default function ClientPage() {
+  const [isSessionReady, setIsSessionReady] = useState(false);
   const { data: session } = useSession();
 
   const {
@@ -18,7 +19,14 @@ export default function ClientPage() {
   } = useQuery({
     queryFn: () => getAllRings(session?.user.accessToken),
     queryKey: ["rings"],
+    enabled: isSessionReady,
   });
+
+  useEffect(() => {
+    if (session) {
+      setIsSessionReady(true);
+    }
+  }, [session]);
 
   useEffect(() => {
     const handleSignOut = async () => {

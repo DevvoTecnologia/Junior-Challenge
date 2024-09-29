@@ -19,6 +19,10 @@ export default function LoginPage() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    if (!username.trim() || !password.trim()) {
+      return toast.error("Please fill in all fields");
+    }
+
     setIsLoading(true);
 
     const response = await signIn("credentials", {
@@ -29,15 +33,11 @@ export default function LoginPage() {
 
     setIsLoading(false);
 
-    console.log(response);
-
-    if (response?.status === 401) {
+    if (response?.error) {
       return toast.error("Invalid username or password");
     }
 
-    if (response?.status !== 200) {
-      return toast.error("An error occurred. Please try again later");
-    }
+    toast.success("Logged in successfully");
 
     return router.replace("/tests/server");
   }
