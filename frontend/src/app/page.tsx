@@ -1,35 +1,22 @@
-"use client";
+import Link from "next/link";
 
-import { useQuery } from "@tanstack/react-query";
-
-import Loading from "@/components/Loading";
-import { getAllUsers } from "@/service/queries";
-
-export default function Home() {
-  const { data: users, isLoading } = useQuery({
-    queryFn: getAllUsers,
-    queryKey: ["users"],
-  });
-
-  if (isLoading) {
-    return <Loading />;
-  }
+export default function LoginPage() {
   return (
-    <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">
-      <h1>Hello, world!</h1>
-      {users?.map((user) => (
-        <div key={user.id}>
-          <h2>{user.username}</h2>
-          <div>
-            {user.rings.map((ring) => (
-              <div key={ring.id}>
-                <h3>{ring.name}</h3>
-                <p>{ring.power}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-r from-blue-400 to-purple-500 p-4">
+      <div className="rounded-lg bg-white p-8 text-center shadow-lg">
+        <h1 className="mb-4 text-4xl font-bold text-gray-800">
+          Welcome to the Rings App
+        </h1>
+        <p className="mb-6 text-gray-600">
+          You are not logged in. Please log in to access the Rings App.
+        </p>
+        <Link
+          href="/login"
+          className="inline-block rounded-lg bg-blue-500 px-6 py-3 text-lg font-semibold text-white shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+        >
+          Log In
+        </Link>
+      </div>
     </div>
   );
 }
