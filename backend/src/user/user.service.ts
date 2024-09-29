@@ -4,6 +4,7 @@ import {
   Logger,
   NotFoundException,
 } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { InjectModel } from "@nestjs/sequelize";
 import { Ring } from "src/ring/entities/ring.entity";
 
@@ -19,13 +20,14 @@ export class UserService {
   private readonly includeAtributes = [
     {
       model: Ring,
-      attributes: ["id", "name", "power", "owner", "forgedBy"],
+      attributes: ["id", "name", "power", "owner", "forgedBy", "image"],
     },
   ];
 
   constructor(
     @InjectModel(User)
     private readonly userModel: typeof User,
+    private readonly configService: ConfigService,
   ) {}
 
   async findAll(): Promise<User[]> {
@@ -37,6 +39,15 @@ export class UserService {
     if (users.length === 0) {
       throw new NotFoundException("No users found");
     }
+
+    users.forEach((user) => {
+      const host = this.configService.get("host");
+      const port = this.configService.get("port");
+
+      user.rings.forEach((ring) => {
+        ring.url = `${host}:${port}/uploads/${ring.image}`;
+      });
+    });
 
     return users;
   }
@@ -53,6 +64,13 @@ export class UserService {
       throw new NotFoundException(`User with id ${id} not found`);
     }
 
+    user.rings.forEach((ring) => {
+      const host = this.configService.get("host");
+      const port = this.configService.get("port");
+
+      ring.url = `${host}:${port}/uploads/${ring.image}`;
+    });
+
     return user;
   }
 
@@ -66,6 +84,13 @@ export class UserService {
     if (!user) {
       throw new NotFoundException(`User with username ${username} not found`);
     }
+
+    user.rings.forEach((ring) => {
+      const host = this.configService.get("host");
+      const port = this.configService.get("port");
+
+      ring.url = `${host}:${port}/uploads/${ring.image}`;
+    });
 
     return user;
   }
