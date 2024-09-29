@@ -1,15 +1,15 @@
-export default function Loading() {
+export default function Loading({ size = 12 }: { size?: number }) {
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <LoadingIcon />
+      <LoadingIcon size={size} />
     </div>
   );
 }
 
-export function LoadingIcon() {
+export function LoadingIcon({ size = 12 }: { size?: number }) {
   return (
     <svg
-      className="h-12 w-12 animate-spin text-blue-500"
+      className={`animate-spin text-blue-500 h-${size} w-${size}`}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"

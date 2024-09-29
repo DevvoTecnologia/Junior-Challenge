@@ -1,14 +1,16 @@
 "use client";
 
+import { AxiosError } from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
 import { LoadingIcon } from "@/components/Loading";
+import axiosInstance from "@/service/fetcher/axiosInstance";
+import type { RegisterSuccess } from "@/types/User";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -19,33 +21,37 @@ export default function LoginPage() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    setIsLoading(true);
+    try {
+      setIsLoading(true);
 
-    const response = await signIn("credentials", {
-      username,
-      password,
-      redirect: false,
-    });
+      await axiosInstance.post<RegisterSuccess>("/user", {
+        username,
+        password,
+      });
 
-    setIsLoading(false);
+      toast.success("User registered successfully");
+      router.push("/login");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (Array.isArray(error.response?.data.message)) {
+          return error.response?.data.message.forEach((msg: string) =>
+            toast.error(msg),
+          );
+        }
 
-    if (response?.status === 401) {
-      return toast.error("Invalid username or password");
-    }
+        return toast.error(error.response?.data.message);
+      }
 
-    if (response?.status !== 200) {
       return toast.error("An error occurred");
-    }
-
-    if (response?.ok) {
-      return router.replace("/");
+    } finally {
+      setIsLoading(false);
     }
   }
 
   return (
     <div className="flex min-h-screen items-center justify-center">
       <div className="w-full max-w-md rounded p-8 shadow-md">
-        <h1 className="mb-6 text-center text-2xl font-bold">Login Page</h1>
+        <h1 className="mb-6 text-center text-2xl font-bold">Register Page</h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="mb-2 block text-sm font-bold" htmlFor="username">
@@ -75,19 +81,21 @@ export default function LoginPage() {
           </div>
           <div className="flex items-center justify-between">
             {isLoading ? (
-              <LoadingIcon size={8} />
+              <div className="px-4">
+                <LoadingIcon size={8} />
+              </div>
             ) : (
               <button
                 className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
                 type="submit"
               >
-                Sign In
+                Register
               </button>
             )}
           </div>
         </form>
         <div className="mt-4">
-          <Link href="/register">Don&apos;t have an account? Register</Link>
+          <Link href="/login">Already have an account? Sign In</Link>
         </div>
       </div>
     </div>

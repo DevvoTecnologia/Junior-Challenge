@@ -1,12 +1,14 @@
 export interface User {
   id: number;
   username: string;
-  rings: {
+  rings?: {
     id: number;
     name: string;
     power: string;
     owner: string;
     forgedBy: string;
+    image: string;
+    url: string;
   }[];
 }
 
@@ -23,8 +25,12 @@ export interface LoginSuccess {
   username: string;
 }
 
-export interface UserState {
-  token: string;
+export interface RegisterSuccess {
+  id: number;
+  username: string;
+}
+
+export interface UpdateUserSuccess {
   id: number;
   username: string;
 }

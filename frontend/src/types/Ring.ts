@@ -12,3 +12,6 @@ export interface Ring {
 }
 
 export type Rings = Ring[];
+
+export type CreateRingSuccess = Ring;
+export type UpdateRingSuccess = Ring;

@@ -19,35 +19,48 @@ const handler = NextAuth({
           return null;
         }
 
-        try {
-          const response = await axiosInstance.post<LoginSuccess>(
-            "/auth/login",
-            credentials,
-          );
+        const response = await axiosInstance.post<LoginSuccess>(
+          "/auth/login",
+          credentials,
+        );
 
-          if (response.status !== 200) {
-            return null;
-          }
-
-          if (
-            !response.data.accessToken ||
-            !response.data.userId ||
-            !response.data.username
-          ) {
-            return null;
-          }
-
-          cookies().set(tokenKey, response.data.accessToken);
-          cookies().set(userIdKey, response.data.userId.toString());
-          cookies().set(usernameKey, response.data.username);
-
-          return {
-            id: response.data.userId.toString(),
-            username: response.data.username,
-          };
-        } catch {
+        if (response.status !== 200) {
           return null;
         }
+
+        if (
+          !response.data.accessToken ||
+          !response.data.userId ||
+          !response.data.username
+        ) {
+          return null;
+        }
+
+        const MINUTE = 60;
+        const HOUR = 60 * MINUTE;
+        const DAY = 24 * HOUR;
+
+        cookies().set(tokenKey, response.data.accessToken, {
+          secure: true,
+          sameSite: "strict",
+          partitioned: true,
+          maxAge: DAY * 5, // 5 days
+        });
+
+        cookies().set(userIdKey, response.data.userId.toString(), {
+          sameSite: "strict",
+          maxAge: DAY * 5, // 5 days
+        });
+
+        cookies().set(usernameKey, response.data.username, {
+          sameSite: "strict",
+          maxAge: DAY * 5, // 5 days
+        });
+
+        return {
+          id: response.data.userId.toString(),
+          username: response.data.username,
+        };
       },
     }),
   ],
