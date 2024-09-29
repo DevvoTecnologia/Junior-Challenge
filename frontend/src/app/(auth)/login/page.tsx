@@ -19,8 +19,12 @@ export default function LoginPage() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!username.trim() || !password.trim()) {
-      return toast.error("Please fill in all fields");
+    if (!username.trim()) {
+      return toast.error("Username is required");
+    }
+
+    if (!password.trim()) {
+      return toast.error("Password is required");
     }
 
     setIsLoading(true);
