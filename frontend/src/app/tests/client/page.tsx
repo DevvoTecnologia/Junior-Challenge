@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
 import { useEffect } from "react";
 
 import BtnLogout from "@/components/BtnLogout";
@@ -9,22 +9,28 @@ import Loading from "@/components/Loading";
 import { getAllRings } from "@/service/queries";
 
 export default function ClientPage() {
-  const router = useRouter();
+  const { data: session } = useSession();
 
   const {
     data: rings,
     isLoading,
     error,
   } = useQuery({
-    queryFn: getAllRings,
+    queryFn: () => getAllRings(session?.user.accessToken),
     queryKey: ["rings"],
   });
 
   useEffect(() => {
-    if (error) {
-      return router.replace("/login");
-    }
-  }, [error, router]);
+    const handleSignOut = async () => {
+      if (error) {
+        signOut({
+          redirectTo: "/login",
+        });
+      }
+    };
+
+    handleSignOut();
+  }, [error]);
 
   if (isLoading) {
     return <Loading />;

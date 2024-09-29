@@ -82,7 +82,7 @@ export default function RegisterPage() {
           <div className="flex items-center justify-between">
             {isLoading ? (
               <div className="px-4">
-                <LoadingIcon size={8} />
+                <LoadingIcon />
               </div>
             ) : (
               <button

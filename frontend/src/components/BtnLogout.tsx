@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 
 interface BtnLogoutProps {
@@ -8,16 +7,15 @@ interface BtnLogoutProps {
 }
 
 export default function BtnLogout({ className }: BtnLogoutProps) {
-  const router = useRouter();
-
-  async function handleLogout() {
-    await signOut();
-
-    router.replace("/login");
-  }
-
   return (
-    <button className={className} onClick={handleLogout}>
+    <button
+      className={className}
+      onClick={() => {
+        signOut({
+          redirectTo: "/login",
+        });
+      }}
+    >
       Logout
     </button>
   );

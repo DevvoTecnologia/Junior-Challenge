@@ -1,9 +1,9 @@
 import type { AxiosResponse } from "axios";
 import { redirect } from "next/navigation";
 
-import fetcher from "@/actions/fetcher";
 import { auth } from "@/auth";
 import BtnLogout from "@/components/BtnLogout";
+import fetchServer from "@/lib/fetchServer";
 import type { Rings } from "@/types/Ring";
 
 export default async function ServerPage() {
@@ -12,7 +12,13 @@ export default async function ServerPage() {
   let response: AxiosResponse<Rings>;
 
   try {
-    response = await fetcher("/ring", session?.user.accessToken);
+    response = await fetchServer.get("/ring", {
+      headers: {
+        ...(session?.user.accessToken && {
+          Authorization: `Bearer ${session?.user.accessToken}`,
+        }),
+      },
+    });
   } catch {
     return redirect("/login");
   }
