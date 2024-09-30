@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { IoMdArrowDroprightCircle } from "react-icons/io";
 
@@ -40,7 +41,16 @@ export default async function UsersProfilePage() {
                 {user.rings && user.rings.length > 0 ? (
                   <RingsCarousel UserRings={user.rings} />
                 ) : (
-                  <p className="text-gray-500">No rings available</p>
+                  <div className="">
+                    <p className="text-gray-500">No rings available</p>
+                    <Image
+                      className="m-auto mt-28 h-auto w-auto self-center"
+                      src="/no-content.png"
+                      alt="No ring"
+                      width={200}
+                      height={200}
+                    />
+                  </div>
                 )}
               </div>
             </div>
