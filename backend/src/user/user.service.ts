@@ -131,8 +131,12 @@ export class UserService {
       throw new NotFoundException(`User with id ${id} not found`);
     }
 
-    if (password && !(await userToUpdate.passwordIsValid(password))) {
-      throw new BadRequestException("Invalid password");
+    if (password) {
+      if (!(await userToUpdate.passwordIsValid(password))) {
+        throw new BadRequestException("Invalid password");
+      }
+    } else {
+      throw new BadRequestException("Password is required");
     }
 
     if (newPassword) {
@@ -145,6 +149,7 @@ export class UserService {
       userToUpdate.password = newPassword;
     }
 
+    userToUpdate.password = password;
     userToUpdate.username = username;
 
     try {
