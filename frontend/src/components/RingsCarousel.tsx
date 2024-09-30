@@ -3,19 +3,26 @@
 import useEmblaCarousel from "embla-carousel-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { useCallback } from "react";
+import { FaEdit } from "react-icons/fa";
 import {
   IoIosArrowDropleftCircle,
   IoIosArrowDroprightCircle,
 } from "react-icons/io";
+import { MdDelete } from "react-icons/md";
 
 import type { User } from "@/types/User";
 
 interface RingsCarouselProps {
   UserRings: User["rings"];
+  isMyProfile?: boolean;
 }
 
-export default function RingsCarousel({ UserRings }: RingsCarouselProps) {
+export default function RingsCarousel({
+  UserRings,
+  isMyProfile = false,
+}: RingsCarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
   });
@@ -37,6 +44,38 @@ export default function RingsCarousel({ UserRings }: RingsCarouselProps) {
               className="w-5/6 min-w-0 flex-none rounded bg-white p-4 shadow-md"
               key={ring.id}
             >
+              {isMyProfile && (
+                <div className="absolute right-2 top-2">
+                  <Link href={`/rings/${ring.id}`} className="mr-2">
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <FaEdit size={24} color="black" />
+                    </motion.button>
+                  </Link>
+
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => {
+                      if (
+                        confirm(
+                          "Você tem certeza que deseja deletar o anel " +
+                            ring.id +
+                            "?",
+                        )
+                      ) {
+                        // Código para deletar o anel
+                        alert("Anel " + ring.id + " deletado");
+                      }
+                    }}
+                  >
+                    <MdDelete size={24} color="black" />
+                  </motion.button>
+                </div>
+              )}
+
               <h3 className="mb-2 text-lg font-semibold text-gray-800">
                 {ring.name}
               </h3>

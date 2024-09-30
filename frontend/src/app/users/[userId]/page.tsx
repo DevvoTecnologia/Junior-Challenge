@@ -1,4 +1,5 @@
 import type { AxiosResponse } from "axios";
+import * as motion from "framer-motion/client";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { IoMdArrowDropleftCircle } from "react-icons/io";
@@ -26,15 +27,47 @@ export default async function UserProfilePage({
     return notFound();
   }
 
+  // Check if the user is viewing their own profile
+  const isMyProfile = session?.user.userId === response.data.id;
+
   return (
     <div className="min-h-screen bg-gray-50 p-2">
-      <h1 className="mb-8 mt-8 text-center text-4xl font-bold text-gray-800">
-        {session?.user.username === response.data.username
-          ? "My Profile"
-          : "User Profile"}
-      </h1>
+      <div className="mb-8 mt-8">
+        <h1 className="text-center text-4xl font-bold text-gray-800">
+          {isMyProfile ? "My Profile" : "User Profile"}
+        </h1>
+
+        {isMyProfile && (
+          <div className="flex justify-end">
+            <Link href={`/rings`}>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+              >
+                My Rings
+              </motion.button>
+            </Link>
+
+            <Link href="/users/settings">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="ml-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+              >
+                Settings
+              </motion.button>
+            </Link>
+          </div>
+        )}
+      </div>
       {response.data.rings && response.data.rings.length > 0 ? (
-        <div className="mx-auto max-w-5xl rounded-lg bg-white p-4 shadow-lg transition-shadow duration-300 hover:shadow-xl md:h-176">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="mx-auto max-w-5xl rounded-lg bg-white p-4 shadow-lg transition-shadow duration-300 hover:shadow-xl md:h-176"
+        >
           <div className="mt-2 flex justify-between">
             <h2 className="mb-4 text-2xl font-semibold text-gray-900">
               User:{" "}
@@ -47,9 +80,12 @@ export default async function UserProfilePage({
           </div>
 
           <div className="space-y-2">
-            <RingsCarousel UserRings={response.data.rings} />
+            <RingsCarousel
+              UserRings={response.data.rings}
+              isMyProfile={isMyProfile}
+            />
           </div>
-        </div>
+        </motion.div>
       ) : (
         <div className="flex flex-col items-center justify-center">
           <h2 className="mb-4 text-2xl font-semibold text-gray-900">
