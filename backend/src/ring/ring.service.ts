@@ -113,7 +113,7 @@ export class RingService extends RingGlobalValidations {
   async update(
     id: number,
     updateRingDto: UpdateRingDto,
-    file: Express.Multer.File,
+    file: Express.Multer.File | undefined,
     req: ReqAuthUser,
   ): Promise<Ring> {
     const { name, power, owner, forgedBy } = updateRingDto;
@@ -143,16 +143,19 @@ export class RingService extends RingGlobalValidations {
     }
 
     // Save or update ring image
-    const imageSaved = await this.saveOrUpdateRingImage(file, {
-      isUpdate: true,
-      oldFileName: ring.image,
-    });
+    if (file) {
+      const imageSaved = await this.saveOrUpdateRingImage(file, {
+        isUpdate: true,
+        oldFileName: ring.image,
+      });
 
-    ring.name = name ?? ring.name;
-    ring.power = power ?? ring.power;
-    ring.owner = owner ?? ring.owner;
-    ring.forgedBy = forgedBy ?? ring.forgedBy;
-    ring.image = imageSaved;
+      ring.image = imageSaved;
+    }
+
+    ring.name = name || ring.name;
+    ring.power = power || ring.power;
+    ring.owner = owner || ring.owner;
+    ring.forgedBy = forgedBy || ring.forgedBy;
 
     const host = this.configService.get("host");
     const port = this.configService.get("port");

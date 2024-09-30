@@ -129,9 +129,9 @@ export class RingController {
         .addMaxSizeValidator({
           maxSize: 1024 * 1024, // 1MB,
         })
-        .build(),
+        .build({ fileIsRequired: false }),
     )
-    file: Express.Multer.File,
+    file: Express.Multer.File | undefined,
     @Req() req: ReqAuthUser,
   ): Promise<Ring> {
     return await this.ringService.update(id, updateRingDto, file, req);

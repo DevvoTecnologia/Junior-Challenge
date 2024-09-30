@@ -150,7 +150,7 @@ export class UserService {
     }
 
     userToUpdate.password = password;
-    userToUpdate.username = username;
+    userToUpdate.username = username || userToUpdate.username;
 
     try {
       await userToUpdate.save();

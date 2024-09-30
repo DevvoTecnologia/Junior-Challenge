@@ -6,9 +6,5 @@ import { CreateUserDto } from "./create-user.dto";
 export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsString()
   @ApiProperty()
-  public newPassword!: string;
-
-  @IsString()
-  @ApiProperty()
-  public username!: string;
+  public newPassword?: string;
 }
