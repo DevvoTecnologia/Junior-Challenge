@@ -1,9 +1,11 @@
 "use client";
 
 import { AxiosError } from "axios";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 import { LoadingIcon } from "@/components/Loading";
@@ -13,17 +15,16 @@ import type { RegisterSuccess } from "@/types/User";
 export default function RegisterPage() {
   const router = useRouter();
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     try {
-      setIsLoading(true);
-
       await axiosInstance.post<RegisterSuccess>("/user", {
         username,
         password,
@@ -43,18 +44,37 @@ export default function RegisterPage() {
       }
 
       return toast.error("An error occurred");
-    } finally {
-      setIsLoading(false);
     }
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <div className="w-full max-w-md rounded p-8 shadow-md">
-        <h1 className="mb-6 text-center text-2xl font-bold">Register Page</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label className="mb-2 block text-sm font-bold" htmlFor="username">
+    <motion.div
+      className="flex min-h-screen items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.div
+        className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg dark:bg-gradient-to-r dark:from-blue-800 dark:to-gray-700"
+        initial={{ scale: 0.8 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <h1 className="mb-6 text-center text-3xl font-bold text-gray-800 dark:text-gray-200">
+          Register Page
+        </h1>
+        <motion.form
+          onSubmit={(e) => {
+            startTransition(async () => {
+              await handleSubmit(e);
+            });
+          }}
+        >
+          <motion.div className="mb-4" whileHover={{ scale: 1.05 }}>
+            <label
+              className="mb-2 block text-sm font-bold text-gray-700 dark:text-gray-200"
+              htmlFor="username"
+            >
               Username
             </label>
             <input
@@ -65,39 +85,60 @@ export default function RegisterPage() {
               value={username}
               onChange={(event) => setUsername(event.target.value)}
             />
-          </div>
-          <div className="mb-6">
-            <label className="mb-2 block text-sm font-bold" htmlFor="password">
+          </motion.div>
+          <motion.div className="relative mb-6" whileHover={{ scale: 1.05 }}>
+            <label
+              className="mb-2 block text-sm font-bold text-gray-700 dark:text-gray-200"
+              htmlFor="password"
+            >
               Password
             </label>
             <input
               className="focus:shadow-outline mb-3 w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
               id="password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
             />
-          </div>
-          <div className="flex items-center justify-between">
-            {isLoading ? (
-              <div className="px-4">
-                <LoadingIcon />
-              </div>
-            ) : (
-              <button
-                className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
-                type="submit"
-              >
-                Register
-              </button>
-            )}
-          </div>
-        </form>
-        <div className="mt-4">
+            <motion.button
+              type="button"
+              className="absolute right-2 top-9 text-gray-600"
+              onClick={() => setShowPassword(!showPassword)}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              {showPassword ? (
+                <FaEye color="black" size={24} />
+              ) : (
+                <FaEyeSlash color="black" size={24} />
+              )}
+            </motion.button>
+          </motion.div>
+          {isPending ? (
+            <motion.div className="flex justify-center">
+              <LoadingIcon />
+            </motion.div>
+          ) : (
+            <motion.button
+              type="submit"
+              className="focus:shadow-outline w-full rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              disabled={isPending}
+            >
+              Register
+            </motion.button>
+          )}
+        </motion.form>
+        <motion.button
+          whileHover={{ scale: 1.005 }}
+          whileTap={{ scale: 0.95 }}
+          className="mt-6 hover:underline focus:outline-none"
+        >
           <Link href="/login">Already have an account? Sign In</Link>
-        </div>
-      </div>
-    </div>
+        </motion.button>
+      </motion.div>
+    </motion.div>
   );
 }

@@ -30,12 +30,20 @@ export default async function UsersProfilePage() {
         Users
       </h1>
 
-      {session && (
+      {session ? (
         <div className="mb-4 flex justify-end">
           <Link href={`/users/${myUserId}`}>
             <button className="flex items-center justify-center rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700">
               My Profile
               <FaCircleUser className="ml-2 inline-block" />
+            </button>
+          </Link>
+        </div>
+      ) : (
+        <div className="mb-4 flex justify-end">
+          <Link href={`/login`}>
+            <button className="flex items-center justify-center rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700">
+              Login
             </button>
           </Link>
         </div>

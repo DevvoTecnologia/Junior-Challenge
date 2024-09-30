@@ -4,6 +4,7 @@ import { AxiosError } from "axios";
 import { motion } from "framer-motion";
 import { signOut } from "next-auth/react";
 import { useState, useTransition } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 import fetchClient from "@/lib/fetchClient";
@@ -27,6 +28,8 @@ export default function SettingsForm({
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [isPending, startTransition] = useTransition();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
 
   async function submitForm(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -63,6 +66,10 @@ export default function SettingsForm({
       );
 
       toast.success("User updated successfully.");
+
+      await signOut({
+        redirectTo: "/login",
+      });
     } catch (error) {
       if (error instanceof AxiosError) {
         if (Array.isArray(error.response?.data.message)) {
@@ -103,33 +110,59 @@ export default function SettingsForm({
           onChange={(e) => setUsername(e.target.value)}
         />
       </div>
-      <div className="mb-6">
+      <div className="relative mb-6">
         <label htmlFor="password" className="mb-2 block text-sm font-medium">
           Password:
         </label>
         <input
           className="w-full rounded border border-gray-300 p-2"
-          type="password"
+          type={showPassword ? "text" : "password"}
           name="password"
           id="password"
           placeholder="********"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        <motion.button
+          type="button"
+          className="absolute right-2 top-9 text-gray-600"
+          onClick={() => setShowPassword(!showPassword)}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          {showPassword ? (
+            <FaEye color="black" size={24} />
+          ) : (
+            <FaEyeSlash color="black" size={24} />
+          )}
+        </motion.button>
       </div>
-      <div className="mb-6">
+      <div className="relative mb-6">
         <label htmlFor="newPassword" className="mb-2 block text-sm font-medium">
           New Password:
         </label>
         <input
           className="w-full rounded border border-gray-300 p-2"
-          type="password"
+          type={showNewPassword ? "text" : "password"}
           name="newPassword"
           id="newPassword"
           placeholder="********"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
         />
+        <motion.button
+          type="button"
+          className="absolute right-2 top-9 text-gray-600"
+          onClick={() => setShowNewPassword(!showNewPassword)}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          {showNewPassword ? (
+            <FaEye color="black" size={24} />
+          ) : (
+            <FaEyeSlash color="black" size={24} />
+          )}
+        </motion.button>
       </div>
       {isPending ? (
         <LoadingIcon />
