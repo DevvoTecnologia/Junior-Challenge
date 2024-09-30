@@ -1,6 +1,6 @@
+import "next-auth/jwt";
+
 import NextAuth from "next-auth";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { JWT } from "next-auth/jwt";
 import Credentials from "next-auth/providers/credentials";
 
 import axiosInstance from "./service/axiosInstance";
@@ -85,6 +85,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.userId = token.userId;
 
       return session;
+    },
+  },
+
+  useSecureCookies: process.env.NODE_ENV === "production",
+
+  cookies: {
+    sessionToken: {
+      options: {
+        sameSite: "strict",
+      },
     },
   },
 });
