@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { FaCircleUser } from "react-icons/fa6";
 import { IoMdArrowDroprightCircle } from "react-icons/io";
 
 import { auth } from "@/auth";
@@ -30,8 +31,9 @@ export default async function UsersProfilePage() {
       </h1>
       <div className="mb-4 flex justify-end">
         <Link href={`/users/${myUserId}`}>
-          <button className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700">
+          <button className="flex items-center justify-center rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700">
             My Profile
+            <FaCircleUser className="ml-2 inline-block" />
           </button>
         </Link>
       </div>

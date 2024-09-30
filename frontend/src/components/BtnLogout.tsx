@@ -1,22 +1,26 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { signOut } from "next-auth/react";
 
 interface BtnLogoutProps {
   className?: string;
+  children?: React.ReactNode;
 }
 
-export default function BtnLogout({ className }: BtnLogoutProps) {
+export default function BtnLogout({ className, children }: BtnLogoutProps) {
   return (
-    <button
+    <motion.button
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
       className={className}
       onClick={() => {
         signOut({
-          redirectTo: "/login",
+          redirectTo: "/",
         });
       }}
     >
-      Logout
-    </button>
+      {children ? children : "Logout"}
+    </motion.button>
   );
 }

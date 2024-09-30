@@ -15,6 +15,7 @@ export default async function RingsPage() {
   const session = await auth();
 
   const token = session?.user.accessToken;
+  const userId = session?.user.userId;
 
   try {
     response = await fetchServer.get("/ring", {
@@ -33,6 +34,18 @@ export default async function RingsPage() {
       exit={{ opacity: 0 }}
       className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 p-4 text-white"
     >
+      <div className="absolute right-2 top-2">
+        <Link href={`/users/${userId}`}>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+          >
+            My Profile
+          </motion.button>
+        </Link>
+      </div>
+
       <h1 className="mb-6 text-4xl font-bold">Rings</h1>
       <p>
         {response?.data?.length} ring{response?.data?.length !== 1 && "s"} found

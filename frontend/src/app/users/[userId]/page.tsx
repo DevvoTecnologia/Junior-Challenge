@@ -2,9 +2,13 @@ import type { AxiosResponse } from "axios";
 import * as motion from "framer-motion/client";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CiSettings } from "react-icons/ci";
+import { GiBigDiamondRing } from "react-icons/gi";
 import { IoMdArrowDropleftCircle } from "react-icons/io";
+import { IoLogOut } from "react-icons/io5";
 
 import { auth } from "@/auth";
+import BtnLogout from "@/components/BtnLogout";
 import RingsCarousel from "@/components/RingsCarousel";
 import fetchServer from "@/lib/fetchServer";
 import type { User } from "@/types/User";
@@ -38,14 +42,15 @@ export default async function UserProfilePage({
         </h1>
 
         {isMyProfile && (
-          <div className="flex justify-end">
+          <div className="mt-2 flex justify-between sm:justify-end">
             <Link href={`/rings`}>
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+                className="flex items-center justify-center rounded bg-blue-500 px-2 py-2 text-white hover:bg-blue-700 sm:px-4"
               >
                 My Rings
+                <GiBigDiamondRing className="ml-2 inline-block" />
               </motion.button>
             </Link>
 
@@ -53,11 +58,17 @@ export default async function UserProfilePage({
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="ml-2 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+                className="ml-2 flex items-center justify-center rounded bg-blue-500 px-2 py-2 text-white hover:bg-blue-700 sm:px-4"
               >
                 Settings
+                <CiSettings className="ml-2 inline-block" />
               </motion.button>
             </Link>
+
+            <BtnLogout className="ml-2 flex items-center justify-center rounded bg-blue-500 px-2 py-2 text-white hover:bg-blue-700 sm:px-4">
+              Logout
+              <IoLogOut className="ml-2 inline-block" />
+            </BtnLogout>
           </div>
         )}
       </div>
