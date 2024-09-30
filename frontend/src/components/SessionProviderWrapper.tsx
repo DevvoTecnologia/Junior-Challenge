@@ -1,6 +1,6 @@
 import { SessionProvider } from "next-auth/react";
 
-export default function SessionProviderLocal({
+export default function SessionProviderWrapper({
   children,
 }: {
   children: React.ReactNode;

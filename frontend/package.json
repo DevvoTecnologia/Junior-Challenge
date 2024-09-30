@@ -12,6 +12,8 @@
     "@tanstack/react-query": "^5.56.2",
     "axios": "^1.7.7",
     "cookies-next": "^4.2.1",
+    "embla-carousel-autoplay": "^8.3.0",
+    "embla-carousel-react": "^8.3.0",
     "framer-motion": "^11.9.0",
     "next": "14.2.13",
     "next-auth": "^5.0.0-beta.22",
