@@ -1,4 +1,5 @@
 import { BadRequestException, NotFoundException } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
 import { getModelToken } from "@nestjs/sequelize";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
@@ -21,6 +22,7 @@ describe("UserService", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [ConfigModule],
       providers: [
         UserService,
         {
@@ -136,17 +138,25 @@ describe("UserService", () => {
   describe("update", () => {
     it("should throw an BadRequestException if the user is not the same as the authenticated user", async () => {
       await expect(
-        service.update(1, { username: "test", password: "test" }, {
-          user: { sub: 2 },
-        } as ReqAuthUser),
+        service.update(
+          1,
+          { username: "test", password: "test", newPassword: "" },
+          {
+            user: { sub: 2 },
+          } as ReqAuthUser,
+        ),
       ).rejects.toThrow(new NotFoundException("You can not update this user"));
     });
 
     it("should throw an NotFoundException if no user is found", async () => {
       await expect(
-        service.update(1, { username: "test", password: "test" }, {
-          user: { sub: 1 },
-        } as ReqAuthUser),
+        service.update(
+          1,
+          { username: "test", password: "test", newPassword: "" },
+          {
+            user: { sub: 1 },
+          } as ReqAuthUser,
+        ),
       ).rejects.toThrow(new NotFoundException("User with id 1 not found"));
     });
 
@@ -163,9 +173,13 @@ describe("UserService", () => {
         .mockResolvedValue(user);
 
       await expect(
-        service.update(1, { username: "test", password: "test" }, {
-          user: { sub: 1 },
-        } as ReqAuthUser),
+        service.update(
+          1,
+          { username: "test", password: "test", newPassword: "" },
+          {
+            user: { sub: 1 },
+          } as ReqAuthUser,
+        ),
       ).rejects.toThrow(new BadRequestException("Username already exists"));
 
       expect(findByPkSpyOn).toHaveBeenCalledWith(1);
@@ -185,9 +199,13 @@ describe("UserService", () => {
         .mockResolvedValue(user);
 
       expect(
-        await service.update(1, { username: "test", password: "test" }, {
-          user: { sub: 1 },
-        } as ReqAuthUser),
+        await service.update(
+          1,
+          { username: "test", password: "test", newPassword: "" },
+          {
+            user: { sub: 1 },
+          } as ReqAuthUser,
+        ),
       ).toEqual({
         id: 1,
         username: "test",
@@ -210,9 +228,13 @@ describe("UserService", () => {
         .mockResolvedValue(user);
 
       expect(
-        await service.update(1, {}, {
-          user: { sub: 1 },
-        } as ReqAuthUser),
+        await service.update(
+          1,
+          { username: "test", password: "test", newPassword: "" },
+          {
+            user: { sub: 1 },
+          } as ReqAuthUser,
+        ),
       ).toEqual({
         id: 1,
         username: "test",
@@ -225,13 +247,17 @@ describe("UserService", () => {
   describe("delete", () => {
     it("should throw an BadRequestException if the user is not the same as the authenticated user", async () => {
       await expect(
-        service.delete(1, { user: { sub: 2 } } as ReqAuthUser),
+        service.delete(1, { password: "test" }, {
+          user: { sub: 2 },
+        } as ReqAuthUser),
       ).rejects.toThrow(new NotFoundException("You can not delete this user"));
     });
 
     it("should throw an NotFoundException if no user is found", async () => {
       await expect(
-        service.delete(1, { user: { sub: 1 } } as ReqAuthUser),
+        service.delete(1, { password: "test" }, {
+          user: { sub: 1 },
+        } as ReqAuthUser),
       ).rejects.toThrow(new NotFoundException("User with id 1 not found"));
     });
 
@@ -246,7 +272,9 @@ describe("UserService", () => {
         .mockResolvedValue(user);
 
       expect(
-        await service.delete(1, { user: { sub: 1 } } as ReqAuthUser),
+        await service.delete(1, { password: "test" }, {
+          user: { sub: 1 },
+        } as ReqAuthUser),
       ).toBeNull();
 
       expect(findByPkSpyOn).toHaveBeenCalledWith(1);

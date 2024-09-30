@@ -15,6 +15,7 @@ import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { AuthGuard } from "src/auth/auth.guard";
 
 import { CreateUserDto } from "./dto/create-user.dto";
+import { DeleteUserDto } from "./dto/delete-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./entities/user.entity";
 import { ReqAuthUser } from "./types/Req";
@@ -58,9 +59,10 @@ export class UserController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth("defaultBearerAuth")
   async delete(
+    @Body(ValidationPipe) deleteUserDto: DeleteUserDto,
     @Param("id", ParseIntPipe) id: number,
     @Req() req: ReqAuthUser,
   ): Promise<null> {
-    return await this.userService.delete(id, req);
+    return await this.userService.delete(id, deleteUserDto, req);
   }
 }

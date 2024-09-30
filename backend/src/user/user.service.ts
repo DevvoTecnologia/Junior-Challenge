@@ -9,6 +9,7 @@ import { InjectModel } from "@nestjs/sequelize";
 import { Ring } from "src/ring/entities/ring.entity";
 
 import { CreateUserDto } from "./dto/create-user.dto";
+import { DeleteUserDto } from "./dto/delete-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./entities/user.entity";
 import { ReqAuthUser } from "./types/Req";
@@ -117,7 +118,7 @@ export class UserService {
     user: UpdateUserDto,
     req: ReqAuthUser,
   ): Promise<Pick<User, "id" | "username">> {
-    const { username, password } = user;
+    const { username, password, newPassword } = user;
     const { sub } = req.user;
 
     if (sub !== id) {
@@ -130,8 +131,21 @@ export class UserService {
       throw new NotFoundException(`User with id ${id} not found`);
     }
 
-    userToUpdate.username = username ?? userToUpdate.username;
-    userToUpdate.password = password ?? userToUpdate.password;
+    if (password && !(await userToUpdate.passwordIsValid(password))) {
+      throw new BadRequestException("Invalid password");
+    }
+
+    if (newPassword) {
+      if (newPassword === password) {
+        throw new BadRequestException(
+          "New password can not be the same as the old one",
+        );
+      }
+
+      userToUpdate.password = newPassword;
+    }
+
+    userToUpdate.username = username;
 
     try {
       await userToUpdate.save();
@@ -145,7 +159,13 @@ export class UserService {
     };
   }
 
-  async delete(id: number, req: ReqAuthUser): Promise<null> {
+  async delete(
+    id: number,
+    deleteUserDto: DeleteUserDto,
+    req: ReqAuthUser,
+  ): Promise<null> {
+    const { password } = deleteUserDto;
+
     const { sub } = req.user;
 
     if (sub !== id) {
@@ -156,6 +176,10 @@ export class UserService {
 
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
+    }
+
+    if (!(await user.passwordIsValid(password))) {
+      throw new BadRequestException("Invalid password");
     }
 
     await user.destroy();
