@@ -2,14 +2,16 @@ import { NextResponse } from "next/server";
 
 import { auth } from "@/auth";
 
-const protectedRoutes = ["/rings", "/tests/client", "/tests/server"];
+const protectedRoutes = [/^\/rings(\/.*)?$/, "/users/settings"];
 const unauthenticatedRoutes = ["/login", "/register"];
 
 export default auth((request) => {
   const session = request.auth;
   const path = request.nextUrl.pathname;
 
-  const isProtectedRoute = protectedRoutes.includes(path);
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    typeof route === "string" ? route === path : route.test(path),
+  );
   const isUnauthenticatedRoutes = unauthenticatedRoutes.includes(path);
 
   if (!session && isProtectedRoute) {
