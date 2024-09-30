@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   ParseFilePipeBuilder,
+  ParseIntPipe,
   Post,
   Put,
   Req,
@@ -33,6 +34,14 @@ export class RingController {
   @Get()
   async findAll(@Req() req: ReqAuthUser): Promise<Ring[]> {
     return await this.ringService.findAll(req);
+  }
+
+  @Get(":id")
+  async findOne(
+    @Param("id", ParseIntPipe) id: number,
+    @Req() req: ReqAuthUser,
+  ): Promise<Ring> {
+    return await this.ringService.findOne(id, req);
   }
 
   @Post()
@@ -111,7 +120,7 @@ export class RingController {
   })
   async update(
     @Body(ValidationPipe) updateRingDto: UpdateRingDto,
-    @Param("id") id: number,
+    @Param("id", ParseIntPipe) id: number,
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
@@ -130,7 +139,7 @@ export class RingController {
 
   @Delete(":id")
   async delete(
-    @Param("id") id: number,
+    @Param("id", ParseIntPipe) id: number,
     @Req() req: ReqAuthUser,
   ): Promise<null> {
     return await this.ringService.delete(id, req);

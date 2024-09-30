@@ -46,6 +46,26 @@ export class RingService extends RingGlobalValidations {
     return rings;
   }
 
+  async findOne(id: number, req: ReqAuthUser): Promise<Ring> {
+    const ring = await this.ringModel.findOne({
+      where: {
+        id: id,
+        userId: req.user.sub,
+      },
+    });
+
+    if (!ring) {
+      throw new NotFoundException(`Ring with id ${id} not found`);
+    }
+
+    const host = this.configService.get("host");
+    const port = this.configService.get("port");
+
+    ring.url = `${host}:${port}/uploads/${ring.image}`;
+
+    return ring;
+  }
+
   async create(
     createRingDto: CreateRingDto,
     file: Express.Multer.File,
