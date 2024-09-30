@@ -8,18 +8,22 @@ import type { Users } from "@/types/User";
 export default async function UsersProfilePage() {
   const response = await fetchServer.get<Users>("/user");
 
+  // Sort users by whether they have rings or not
+  const sortedUsers = response.data.sort((a, b) => {
+    if (a.rings && a.rings.length > 0) return -1;
+    if (b.rings && b.rings.length > 0) return 1;
+    return 0;
+  });
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
-      <h1 className="mb-8 text-center text-4xl font-bold text-gray-800">
+      <h1 className="mb-8 mt-8 text-center text-4xl font-bold text-gray-800">
         Users
       </h1>
-      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {response.data.map((user) => (
-          <div key={user.id} className="bg-gray-50">
-            <div
-              key={user.id}
-              className="rounded-lg bg-white p-6 shadow-lg transition-shadow duration-300 hover:shadow-xl"
-            >
+      <div className="flex flex-col gap-4 md:grid md:grid-cols-2 lg:grid-cols-3">
+        {sortedUsers.map((user) => (
+          <div key={user.id} className="rounded bg-gray-50">
+            <div className="min-h-64 rounded-lg bg-white p-6 shadow-lg transition-shadow duration-300 hover:shadow-xl md:min-h-[50rem]">
               <h2 className="mb-4 text-2xl font-semibold text-gray-900"></h2>
 
               <div className="flex justify-between">
