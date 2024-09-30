@@ -34,7 +34,7 @@ export default async function UsersProfilePage() {
                     user.username.slice(1)}
                 </h2>
                 <Link href={`/users/${user.id}`}>
-                  <IoMdArrowDroprightCircle className="cursor-pointer text-2xl text-blue-500" />
+                  <IoMdArrowDroprightCircle className="cursor-pointer text-3xl text-blue-500" />
                 </Link>
               </div>
               <div className="space-y-4">

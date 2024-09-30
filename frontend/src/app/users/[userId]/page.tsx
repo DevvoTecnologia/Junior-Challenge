@@ -34,7 +34,7 @@ export default async function UserProfilePage({
           : "User Profile"}
       </h1>
       {response.data.rings && response.data.rings.length > 0 ? (
-        <div className="md:h-176 mx-auto max-w-5xl rounded-lg bg-white p-4 shadow-lg transition-shadow duration-300 hover:shadow-xl">
+        <div className="mx-auto max-w-5xl rounded-lg bg-white p-4 shadow-lg transition-shadow duration-300 hover:shadow-xl md:h-176">
           <div className="mt-2 flex justify-between">
             <h2 className="mb-4 text-2xl font-semibold text-gray-900">
               User:{" "}
@@ -42,7 +42,7 @@ export default async function UserProfilePage({
                 response.data.username.slice(1)}
             </h2>
             <Link href={`/users`}>
-              <IoMdArrowDropleftCircle className="cursor-pointer text-2xl text-blue-500" />
+              <IoMdArrowDropleftCircle className="cursor-pointer text-3xl text-blue-500" />
             </Link>
           </div>
 
