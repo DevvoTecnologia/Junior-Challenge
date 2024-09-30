@@ -63,9 +63,9 @@ export default async function UserProfilePage({
       </div>
       {response.data.rings && response.data.rings.length > 0 ? (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
           className="mx-auto max-w-5xl rounded-lg bg-white p-4 shadow-lg transition-shadow duration-300 hover:shadow-xl md:h-176"
         >
           <div className="mt-2 flex justify-between">

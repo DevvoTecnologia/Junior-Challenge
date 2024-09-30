@@ -1,4 +1,4 @@
-export interface Ring {
+interface RingResponseBase {
   id: number;
   name: string;
   power: string;
@@ -11,7 +11,9 @@ export interface Ring {
   url: string;
 }
 
-export type Rings = Ring[];
+export type Ring = RingResponseBase | undefined;
 
-export type CreateRingSuccess = Ring;
-export type UpdateRingSuccess = Ring;
+export type Rings = RingResponseBase[] | undefined;
+
+export type CreateRingSuccess = RingResponseBase;
+export type UpdateRingSuccess = RingResponseBase;
