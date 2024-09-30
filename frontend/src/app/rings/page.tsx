@@ -3,6 +3,7 @@ import * as motion from "framer-motion/client";
 import Image from "next/image";
 import Link from "next/link";
 import { FaEdit } from "react-icons/fa";
+import { FaCircleUser } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
 
 import { auth } from "@/auth";
@@ -39,9 +40,10 @@ export default async function RingsPage() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+            className="flex items-center justify-center rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
           >
             My Profile
+            <FaCircleUser className="ml-2 inline-block" />
           </motion.button>
         </Link>
       </div>

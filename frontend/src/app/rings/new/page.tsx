@@ -15,7 +15,7 @@ export default async function RingNewPage() {
       exit={{ opacity: 0 }}
       className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-white"
     >
-      <h1 className="mb-8 text-5xl font-bold tracking-wide">
+      <h1 className="mb-8 text-center text-5xl font-bold tracking-wide">
         Ring Create Page
       </h1>
 

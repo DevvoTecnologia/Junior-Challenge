@@ -1,5 +1,6 @@
 import type { AxiosResponse } from "axios";
 import * as motion from "framer-motion/client";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CiSettings } from "react-icons/ci";
@@ -35,39 +36,39 @@ export default async function UserProfilePage({
   const isMyProfile = session?.user.userId === response.data.id;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-2">
-      <div className="mb-8 mt-8">
-        <h1 className="text-center text-4xl font-bold text-gray-800">
+    <div className="min-h-screen bg-gray-50 p-2 md:flex md:flex-col md:justify-center 2xl:items-center">
+      <div className="container mx-auto my-8 rounded-lg bg-white p-2 shadow-md sm:p-4">
+        <h1 className="text-start text-2xl font-bold tracking-tight text-gray-900">
           {isMyProfile ? "My Profile" : "User Profile"}
         </h1>
 
         {isMyProfile && (
-          <div className="mt-2 flex justify-between sm:justify-end">
+          <div className="mt-4 flex items-center justify-between gap-1 sm:justify-end sm:gap-4">
             <Link href={`/rings`}>
               <motion.button
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, translateY: -2 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center justify-center rounded bg-blue-500 px-2 py-2 text-white hover:bg-blue-700 sm:px-4"
+                className="flex items-center justify-center rounded-lg bg-blue-600 p-2 py-2 text-white shadow-md transition-all duration-300 hover:bg-blue-700 hover:shadow-lg sm:px-4"
               >
                 My Rings
-                <GiBigDiamondRing className="ml-2 inline-block" />
+                <GiBigDiamondRing className="ml-1 inline-block sm:ml-2" />
               </motion.button>
             </Link>
 
             <Link href="/users/settings">
               <motion.button
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, translateY: -2 }}
                 whileTap={{ scale: 0.95 }}
-                className="ml-2 flex items-center justify-center rounded bg-blue-500 px-2 py-2 text-white hover:bg-blue-700 sm:px-4"
+                className="flex items-center justify-center rounded-lg bg-blue-600 p-2 py-2 text-white shadow-md transition-all duration-300 hover:bg-blue-700 hover:shadow-lg sm:px-4"
               >
                 Settings
-                <CiSettings className="ml-2 inline-block" />
+                <CiSettings className="ml-1 inline-block sm:ml-2" />
               </motion.button>
             </Link>
 
-            <BtnLogout className="ml-2 flex items-center justify-center rounded bg-blue-500 px-2 py-2 text-white hover:bg-blue-700 sm:px-4">
+            <BtnLogout className="flex items-center justify-center rounded-lg bg-blue-600 p-2 py-2 text-white shadow-md transition-all duration-300 hover:bg-blue-700 hover:shadow-lg sm:px-4">
               Logout
-              <IoLogOut className="ml-2 inline-block" />
+              <IoLogOut className="ml-1 inline-block sm:ml-2" />
             </BtnLogout>
           </div>
         )}
@@ -77,7 +78,7 @@ export default async function UserProfilePage({
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="mx-auto max-w-5xl rounded-lg bg-white p-4 shadow-lg transition-shadow duration-300 hover:shadow-xl md:h-176"
+          className="container mx-auto my-8 rounded-lg bg-white p-6 shadow-lg transition-shadow duration-300 hover:shadow-xl"
         >
           <div className="mt-2 flex justify-between">
             <h2 className="mb-4 text-2xl font-semibold text-gray-900">
@@ -98,15 +99,23 @@ export default async function UserProfilePage({
           </div>
         </motion.div>
       ) : (
-        <div className="flex flex-col items-center justify-center">
-          <h2 className="mb-4 text-2xl font-semibold text-gray-900">
+        <div className="flex flex-col items-center justify-center gap-4">
+          <h2 className="mb-4 text-center text-2xl font-semibold text-gray-900">
             User:{" "}
             {response.data.username.charAt(0).toUpperCase() +
               response.data.username.slice(1)}
           </h2>
+          <Image
+            src="/no-content.png"
+            alt="no-content"
+            width={200}
+            height={200}
+            className="h-auto w-auto"
+            priority
+          />
           <p className="text-gray-500">No rings available</p>
           <Link
-            className="text-gray-500 hover:text-blue-400 active:text-blue-600"
+            className="text-2xl text-gray-700 hover:text-blue-400 active:text-blue-600"
             href={`/users`}
           >
             Back

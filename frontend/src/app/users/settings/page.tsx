@@ -32,7 +32,7 @@ export default async function UsersSettingsPage() {
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5 }}
-        className="mb-4 text-4xl font-bold"
+        className="mb-4 text-center text-4xl font-bold"
       >
         Hello{" "}
         {username && username?.charAt(0).toUpperCase() + username?.slice(1)}!

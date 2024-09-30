@@ -29,20 +29,22 @@ export default async function UsersProfilePage() {
       <h1 className="mb-8 mt-8 text-center text-4xl font-bold text-gray-800">
         Users
       </h1>
-      <div className="mb-4 flex justify-end">
-        <Link href={`/users/${myUserId}`}>
-          <button className="flex items-center justify-center rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700">
-            My Profile
-            <FaCircleUser className="ml-2 inline-block" />
-          </button>
-        </Link>
-      </div>
-      <div className="flex flex-col gap-4 md:grid md:grid-cols-2 lg:grid-cols-3">
+
+      {session && (
+        <div className="mb-4 flex justify-end">
+          <Link href={`/users/${myUserId}`}>
+            <button className="flex items-center justify-center rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700">
+              My Profile
+              <FaCircleUser className="ml-2 inline-block" />
+            </button>
+          </Link>
+        </div>
+      )}
+
+      <div className="flex flex-col gap-4 md:grid md:grid-cols-2 lg:grid-cols-2">
         {sortedUsers.map((user) => (
           <div key={user.id} className="rounded bg-gray-50">
-            <div className="min-h-64 rounded-lg bg-white p-6 shadow-lg transition-shadow duration-300 hover:shadow-xl md:min-h-[50rem]">
-              <h2 className="mb-4 text-2xl font-semibold text-gray-900"></h2>
-
+            <div className="min-h-96 rounded-lg bg-white p-6 shadow-lg transition-shadow duration-300 hover:shadow-xl sm:min-h-[32rem] md:min-h-[38rem]">
               <div className="flex justify-between">
                 <h2 className="mb-4 text-2xl font-semibold text-gray-900">
                   User:{" "}
@@ -60,7 +62,7 @@ export default async function UsersProfilePage() {
                   <div className="">
                     <p className="text-gray-500">No rings available</p>
                     <Image
-                      className="m-auto mt-28 h-auto w-auto self-center"
+                      className="m-auto mt-10 h-auto w-auto self-center sm:mt-20 md:mt-28"
                       src="/no-content.png"
                       alt="No ring"
                       width={200}

@@ -41,7 +41,7 @@ export default function RingsCarousel({
         <div className="flex gap-4 p-2">
           {UserRings?.map((ring) => (
             <div
-              className="w-5/6 min-w-0 flex-none rounded bg-white p-4 shadow-md"
+              className="relative w-4/6 min-w-0 flex-none rounded bg-white p-4 shadow-md"
               key={ring.id}
             >
               {isMyProfile && (
@@ -91,7 +91,7 @@ export default function RingsCarousel({
                 <span className="font-semibold text-gray-700">Forged By:</span>{" "}
                 {ring.forgedBy}
               </p>
-              <div className="relative mx-auto h-64 w-5/6 overflow-hidden rounded-lg md:h-96">
+              <div className="relative mx-auto h-28 w-2/3 overflow-hidden rounded-lg sm:h-32 sm:w-1/3 md:h-[12rem] md:w-2/3 lg:h-[14rem] lg:w-3/5 xl:w-5/12">
                 <Image
                   src={ring.url}
                   alt={ring.name}
