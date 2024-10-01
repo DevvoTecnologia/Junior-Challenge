@@ -55,6 +55,8 @@ Once the server is running, open [http://localhost:3000](http://localhost:3000) 
 
 You can run various tests to ensure your application is working as expected:
 
+For e2e testing, remember to check if the information passed exists in the database.
+
 - **Unit Tests**:
     ```bash
     yarn test

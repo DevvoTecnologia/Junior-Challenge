@@ -2,21 +2,24 @@
 
 To set up the project, follow these steps:
 
-### 1. Create a `.env.local` file in Root Folder
+### 1. Create a `.env.local` File
 
-Start by creating a `.env.local` file with the same information as the `.env.local.example` file.
+Begin by creating a `.env.local` file in the root folder. Use the variables and values from the `.env.local.example` file as a starting point.
 
-### 2. Important Configuration
+### 2. Essential Configuration
 
-When testing the production build with `yarn build` followed by `yarn start`, make sure to correctly set the `AUTH_TRUST_HOST` variable to match the URL you're using for testing.
+When testing the production build using `yarn build` and `yarn start`, ensure that the `AUTH_TRUST_HOST` variable is set to match the URL you're testing with.
 
-For example, if you're testing locally at `http://localhost:3001`, your `.env.local` should include:
+For example, if you're running the app locally on `http://localhost:3001`, your `.env.local` should include:
 ```
 AUTH_TRUST_HOST=http://localhost:3001
 ```
-Don't forget to set the backend baseURL in the axiosInstance file
 
+Additionally, ensure that the backend's `baseURL` is correctly configured in the Axios instance. You can set it in:
+
+```
 frontend/src/service/axiosInstance/index.ts
+```
 
 ### 3. Authentication Secret
 
@@ -26,7 +29,7 @@ The `AUTH_SECRET` variable is responsible for securing session hashes in cookies
 
 ## Running the Project
 
-Install the project dependencies by running:
+First, install all required dependencies:
 
 ```bash
 yarn install
@@ -38,7 +41,7 @@ To start the development server, run:
 yarn dev
 ```
 
-If you want to test the production build, follow these steps:
+For testing the production version, follow these steps:
 
 1. Build the project:
     ```bash
@@ -49,6 +52,21 @@ If you want to test the production build, follow these steps:
     yarn start
     ```
 
-Once the server is running, open [http://localhost:3001](http://localhost:3001) in your browser to view the app.
+Once the server is running, visit [http://localhost:3001](http://localhost:3001) in your browser to access the app.
+
+---
+
+## Running Tests
+
+You can run end-to-end (e2e) tests using Cypress. Follow these steps:
+
+1. Start the development server:
+    ```bash
+    yarn dev
+    ```
+2. Open Cypress for testing:
+    ```bash
+    yarn cy:open
+    ```
 
 Created by: Gabriel Logan

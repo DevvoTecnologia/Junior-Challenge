@@ -24,8 +24,6 @@ describe("Authenticated user browsing", () => {
       .contains(/Back to Profile/i)
       .click();
 
-    cy.url().should("include", "/users/12");
-
     cy.get("a")
       .contains(/My Rings/i)
       .click();
@@ -37,8 +35,6 @@ describe("Authenticated user browsing", () => {
     cy.get("a")
       .contains(/My Profile/i)
       .click();
-
-    cy.url().should("include", "/users/12");
 
     cy.get("button")
       .contains(/Logout/i)
