@@ -14,8 +14,8 @@ export default function BtnLogout({ className, children }: BtnLogoutProps) {
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       className={className}
-      onClick={() => {
-        signOut({
+      onClick={async () => {
+        await signOut({
           redirectTo: "/",
         });
       }}

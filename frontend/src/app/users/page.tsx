@@ -1,6 +1,6 @@
+import * as motion from "framer-motion/client";
 import Image from "next/image";
 import Link from "next/link";
-import { FaCircleUser } from "react-icons/fa6";
 import { IoMdArrowDroprightCircle } from "react-icons/io";
 
 import { auth } from "@/auth";
@@ -27,90 +27,104 @@ export default async function UsersProfilePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
-      {sortedUsers.length > 0 && (
-        <h1 className="mb-8 mt-8 text-center text-4xl font-bold text-gray-800">
-          Users
-        </h1>
-      )}
-
-      {session ? (
-        <div className="mb-4 flex justify-end">
-          <Link href={`/users/${myUserId}`}>
-            <button className="flex items-center justify-center rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700">
-              My Profile
-              <FaCircleUser className="ml-2 inline-block" />
-            </button>
-          </Link>
-        </div>
-      ) : (
-        <div className="mb-4 flex justify-end">
-          <Link href={`/login`}>
-            <button className="flex items-center justify-center rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700">
-              Login
-            </button>
-          </Link>
-        </div>
-      )}
-
       {sortedUsers && sortedUsers.length > 0 ? (
-        <>
-          <div
-            datatype="users-list"
-            className="flex flex-col gap-4 md:grid md:grid-cols-2 lg:grid-cols-2"
-          >
-            {sortedUsers.map((user) => (
-              <div
-                key={user.id}
-                datatype="user-list-id"
-                data-user-id={user.id}
-                className="rounded bg-gray-50"
-              >
-                <div className="min-h-96 rounded-lg bg-white p-6 shadow-lg transition-shadow duration-300 hover:shadow-xl sm:min-h-[32rem] md:min-h-[38rem]">
-                  <div className="flex justify-between">
-                    <h2 className="mb-4 text-2xl font-semibold text-gray-900">
-                      User:{" "}
-                      {user.username.charAt(0).toUpperCase() +
-                        user.username.slice(1)}
-                    </h2>
-                    <Link
-                      datatype="user-link-profile"
-                      href={`/users/${user.id}`}
-                    >
-                      <IoMdArrowDroprightCircle className="cursor-pointer text-3xl text-blue-500" />
-                    </Link>
-                  </div>
-                  <div className="space-y-4">
-                    {user.rings && user.rings.length > 0 ? (
-                      <RingsCarousel UserRings={user.rings} token={token} />
-                    ) : (
-                      <div className="">
-                        <p className="text-gray-500">No rings available</p>
-                        <Image
-                          className="m-auto mt-10 h-auto w-auto self-center sm:mt-20 md:mt-28"
-                          src="/no-content.png"
-                          alt="No ring"
-                          width={200}
-                          height={200}
-                        />
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </>
+        <UsersFound sortedUsers={sortedUsers} token={token} />
       ) : (
-        <div className="flex h-screen flex-col items-center justify-center border">
-          <p className="mb-4 text-3xl text-gray-500">No users available</p>
-          <Image
-            src="/no-content.png"
-            alt="No users"
-            width={400}
-            height={400}
-          />
-        </div>
+        <NoUsersFound />
       )}
     </div>
+  );
+}
+
+interface UsersFoundProps {
+  sortedUsers: Users;
+  token: string | undefined;
+}
+
+function UsersFound({ sortedUsers, token }: UsersFoundProps) {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="mt-6 grid gap-6 p-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+      datatype="users-list"
+    >
+      {sortedUsers.map((user) => (
+        <motion.div
+          key={user.id}
+          datatype="user-list-id"
+          data-user-id={user.id}
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.3 }}
+          className="flex flex-col overflow-hidden rounded-lg bg-white p-6 shadow-lg transition-shadow duration-300 hover:shadow-xl"
+        >
+          <div className="mb-4 flex items-center justify-between">
+            <motion.h2
+              className="text-xl font-bold text-gray-900"
+              initial={{ x: -20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.4 }}
+            >
+              {user.username.charAt(0).toUpperCase() + user.username.slice(1)}
+            </motion.h2>
+
+            <Link datatype="user-link-profile" href={`/users/${user.id}`}>
+              <motion.div
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
+                className="cursor-pointer"
+              >
+                <IoMdArrowDroprightCircle className="text-3xl text-blue-600 transition-colors duration-200 hover:text-blue-800" />
+              </motion.div>
+            </Link>
+          </div>
+
+          <div className="max-h-[25rem] min-h-[24rem] space-y-4">
+            {user.rings && user.rings.length > 0 ? (
+              <RingsCarousel UserRings={user.rings} token={token} />
+            ) : (
+              <motion.div
+                className="flex h-full flex-col items-center justify-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                <p className="text-gray-500">No rings available</p>
+                <Image
+                  className="mt-6"
+                  src="/no-content.png"
+                  alt="No ring"
+                  width={150}
+                  height={150}
+                />
+              </motion.div>
+            )}
+          </div>
+        </motion.div>
+      ))}
+    </motion.div>
+  );
+}
+
+function NoUsersFound() {
+  return (
+    <motion.div
+      className="flex min-h-screen flex-col items-center justify-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+    >
+      <p className="mb-6 text-2xl text-gray-500">No users available</p>
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Image src="/no-content.png" alt="No users" width={300} height={300} />
+      </motion.div>
+    </motion.div>
   );
 }

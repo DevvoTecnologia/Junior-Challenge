@@ -42,7 +42,9 @@ export default function LoginPage() {
 
     toast.success("Logged in successfully");
 
-    return router.replace(`/users`);
+    router.replace(`/users`);
+
+    router.refresh();
   }
 
   return (
