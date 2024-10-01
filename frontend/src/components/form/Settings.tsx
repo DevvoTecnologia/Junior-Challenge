@@ -1,12 +1,12 @@
 "use client";
 
-import { AxiosError } from "axios";
 import { motion } from "framer-motion";
 import { signOut } from "next-auth/react";
 import { useState, useTransition } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
 
+import catchErrorClient from "@/lib/catchErrorClient";
 import fetchClient from "@/lib/fetchClient";
 import type { UpdateUserSuccess } from "@/types/User";
 
@@ -71,17 +71,10 @@ export default function SettingsForm({
         redirectTo: "/login",
       });
     } catch (error) {
-      if (error instanceof AxiosError) {
-        if (Array.isArray(error.response?.data.message)) {
-          return error.response?.data.message.forEach((message: string) => {
-            toast.error(message);
-          });
-        }
-
-        return toast.error(error.response?.data.message);
-      }
-
-      return toast.error("An error occurred while updating the user.");
+      return catchErrorClient(
+        error,
+        "An error occurred while updating the user.",
+      );
     }
   }
 
@@ -203,17 +196,10 @@ export function BtnDeleteUser({ token, userId }: BtnDeleteUserProps) {
         redirectTo: "/",
       });
     } catch (error) {
-      if (error instanceof AxiosError) {
-        if (Array.isArray(error.response?.data.message)) {
-          return error.response?.data.message.forEach((message: string) => {
-            toast.error(message);
-          });
-        }
-
-        return toast.error(error.response?.data.message);
-      }
-
-      return toast.error("An error occurred while deleting the user.");
+      return catchErrorClient(
+        error,
+        "An error occurred while deleting the user.",
+      );
     }
   }
 

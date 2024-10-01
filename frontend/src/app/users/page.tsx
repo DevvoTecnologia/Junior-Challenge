@@ -11,6 +11,7 @@ import type { Users } from "@/types/User";
 export default async function UsersProfilePage() {
   const response = await fetchServer.get<Users>("/user");
   const session = await auth();
+  const token = session?.user.accessToken;
 
   const myUserId = session?.user.userId;
 
@@ -65,7 +66,7 @@ export default async function UsersProfilePage() {
               </div>
               <div className="space-y-4">
                 {user.rings && user.rings.length > 0 ? (
-                  <RingsCarousel UserRings={user.rings} />
+                  <RingsCarousel UserRings={user.rings} token={token} />
                 ) : (
                   <div className="">
                     <p className="text-gray-500">No rings available</p>

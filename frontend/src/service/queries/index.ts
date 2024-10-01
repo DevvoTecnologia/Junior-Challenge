@@ -1,3 +1,5 @@
+"use client";
+
 import fetchClient from "@/lib/fetchClient";
 import type { Ring, Rings } from "@/types/Ring";
 import type { User, Users } from "@/types/User";

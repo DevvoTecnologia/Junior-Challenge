@@ -34,7 +34,10 @@ async function submitDeleteRing({
 
       router.refresh();
     } catch (error) {
-      return catchErrorClient(error);
+      return catchErrorClient(
+        error,
+        "An error occurred while deleting the ring",
+      );
     }
   }
 }

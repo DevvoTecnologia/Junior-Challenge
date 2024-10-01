@@ -1,6 +1,5 @@
 "use client";
 
-import { AxiosError } from "axios";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -9,6 +8,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 import { LoadingIcon } from "@/components/Loading";
+import catchErrorClient from "@/lib/catchErrorClient";
 import axiosInstance from "@/service/axiosInstance";
 import type { RegisterSuccess } from "@/types/User";
 
@@ -33,17 +33,7 @@ export default function RegisterPage() {
       toast.success("User registered successfully");
       router.push("/login");
     } catch (error) {
-      if (error instanceof AxiosError) {
-        if (Array.isArray(error.response?.data.message)) {
-          return error.response?.data.message.forEach((msg: string) =>
-            toast.error(msg),
-          );
-        }
-
-        return toast.error(error.response?.data.message);
-      }
-
-      return toast.error("An error occurred");
+      return catchErrorClient(error);
     }
   }
 

@@ -1,11 +1,11 @@
 "use client";
 
-import { AxiosError } from "axios";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "react-toastify";
 
+import catchErrorClient from "@/lib/catchErrorClient";
 import fetchClient from "@/lib/fetchClient";
 import type { CreateRingSuccess } from "@/types/Ring";
 
@@ -68,17 +68,10 @@ export default function RingsCreateForm({ token }: RingsCreateFormProps) {
 
       refresh();
     } catch (error) {
-      if (error instanceof AxiosError) {
-        if (Array.isArray(error.response?.data.message)) {
-          return error.response?.data.message.forEach((message: string) => {
-            toast.error(message);
-          });
-        }
-
-        return toast.error(error.response?.data.message);
-      }
-
-      return toast.error("An error occurred while creating the ring.");
+      return catchErrorClient(
+        error,
+        "An error occurred while creating the ring.",
+      );
     }
   }
 
