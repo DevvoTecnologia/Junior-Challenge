@@ -16,9 +16,10 @@ async function bootstrap(): Promise<void> {
   const port = configService.get("port");
   const host = configService.get("host");
   const allowedOrigin = configService.get("allowedOrigin");
+  const nodeEnv = configService.get("nodeEnv");
 
   app.enableCors({
-    origin: allowedOrigin,
+    origin: nodeEnv !== "development" ? allowedOrigin : "*",
   });
 
   app.use(
