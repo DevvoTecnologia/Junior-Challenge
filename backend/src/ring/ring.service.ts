@@ -123,14 +123,6 @@ export class RingService extends RingGlobalValidations {
       throw new BadRequestException(`Invalid forgedBy value: ${forgedBy}`);
     }
 
-    if (updateRingDto.forgedBy) {
-      await this.validateRingCreation(
-        this.ringModel,
-        updateRingDto.forgedBy,
-        req.user.sub,
-      );
-    }
-
     const ring = await this.ringModel.findOne({
       where: {
         id: id,
@@ -140,6 +132,15 @@ export class RingService extends RingGlobalValidations {
 
     if (!ring) {
       throw new NotFoundException(`Ring with id ${id} not found`);
+    }
+
+    if (updateRingDto.forgedBy) {
+      await this.validateRingCreation(
+        this.ringModel,
+        updateRingDto.forgedBy,
+        req.user.sub,
+        ring,
+      );
     }
 
     // Save or update ring image

@@ -8,7 +8,7 @@ import type { Ring } from "./entities/ring.entity";
 import type { ForgedBy } from "./types/ForgedBy";
 
 export default class RingGlobalValidations {
-  protected async validateRingCreation(
+  private async validateForgedByLimit(
     ringModel: typeof Ring,
     forgedBy: string,
     userId: number,
@@ -52,6 +52,24 @@ export default class RingGlobalValidations {
         throw new BadRequestException(`Sauron can't forge more than 1 ring`);
       }
     }
+  }
+
+  protected async validateRingCreation(
+    ringModel: typeof Ring,
+    forgedBy: string,
+    userId: number,
+    ring?: Ring,
+  ): Promise<void> {
+    if (ring) {
+      if (ring.forgedBy !== forgedBy) {
+        await this.validateForgedByLimit(ringModel, forgedBy, userId);
+      }
+      // Allow the update
+      return;
+    }
+
+    // Apply the limit validation
+    await this.validateForgedByLimit(ringModel, forgedBy, userId);
   }
 
   protected isValidRing(forgedBy: ForgedBy): boolean {
