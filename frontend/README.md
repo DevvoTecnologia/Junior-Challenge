@@ -14,6 +14,9 @@ For example, if you're testing locally at `http://localhost:3001`, your `.env.lo
 ```
 AUTH_TRUST_HOST=http://localhost:3001
 ```
+Don't forget to set the backend baseURL in the axiosInstance file
+
+frontend/src/service/axiosInstance/index.ts
 
 ### 3. Authentication Secret
 
