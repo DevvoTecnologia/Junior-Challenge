@@ -63,7 +63,7 @@ export default function RingsCarousel({
                 </div>
               )}
 
-              <div className="">
+              <div className="sm:mt-2">
                 <h3 className="mt-6 text-xl font-semibold text-gray-800 sm:mt-2">
                   <span className="font-semibold">Name:</span> {ring.name}
                 </h3>
