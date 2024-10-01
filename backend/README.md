@@ -74,3 +74,5 @@ You can run various tests to ensure your application is working as expected:
     ```bash
     yarn test:all
     ```
+
+Created by: Gabriel Logan
