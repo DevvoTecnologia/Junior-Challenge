@@ -14,7 +14,7 @@ export interface User {
   rings?: UserRings[];
 }
 
-export type Users = User[];
+export type Users = User[] | [];
 
 export interface UserAuth {
   username: string;
