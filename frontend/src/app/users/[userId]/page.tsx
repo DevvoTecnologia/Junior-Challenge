@@ -75,7 +75,11 @@ function RingsFound({
         <h2 className="text-4xl font-bold text-gray-800">
           {username.charAt(0).toUpperCase() + username.slice(1)}&apos;s Rings
         </h2>
-        <Link href={`/users`} className="text-blue-600 hover:text-blue-800">
+        <Link
+          datatype="user-link-back-to-users"
+          href={`/users`}
+          className="text-blue-600 hover:text-blue-800"
+        >
           <IoMdArrowDropleftCircle className="text-5xl" />
         </Link>
       </div>

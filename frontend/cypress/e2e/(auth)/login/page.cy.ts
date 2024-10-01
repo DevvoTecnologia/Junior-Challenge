@@ -21,8 +21,8 @@ describe("Login Page", () => {
 
   it("should login successfully and navigate to /users page", () => {
     cy.visit("http://localhost:3001/login");
-    cy.get("input[name=username]").type("admin2");
-    cy.get("input[name=password]").type("password");
+    cy.get("input[name=username]").type("admin");
+    cy.get("input[name=password]").type("admin");
     cy.get("button[type=submit]").click();
     cy.get(".Toastify__toast-body").contains(/Logged in successfully/i);
     cy.url().should("include", "/users");

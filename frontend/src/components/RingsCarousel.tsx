@@ -96,6 +96,7 @@ export default function RingsCarousel({
 
       <div className="mt-4 flex justify-center space-x-4">
         <motion.button
+          datatype="move-carousel-left"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={scrollPrev}
@@ -104,6 +105,7 @@ export default function RingsCarousel({
           <IoIosArrowDropleftCircle size={36} />
         </motion.button>
         <motion.button
+          datatype="move-carousel-right"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={scrollNext}

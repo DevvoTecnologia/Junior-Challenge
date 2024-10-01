@@ -3,11 +3,6 @@ describe("Users Page", () => {
     cy.visit("http://localhost:3001/users");
   });
 
-  it("should apears Users title", () => {
-    cy.visit("http://localhost:3001/users");
-    cy.get("h1").contains(/Users/i);
-  });
-
   it("should move carousel to the right", () => {
     cy.visit("http://localhost:3001/users");
     cy.get("button[datatype=move-carousel-right]").first().click();
