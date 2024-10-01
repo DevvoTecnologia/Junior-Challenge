@@ -50,7 +50,8 @@ export default async function RingsPage() {
 
       <h1 className="mb-6 text-4xl font-bold">Rings</h1>
       <p>
-        {response?.data?.length} ring{response?.data?.length !== 1 && "s"} found
+        {response?.data?.length ? response?.data?.length : "No"} ring
+        {response?.data?.length !== 1 && "s"} found
       </p>
       <motion.div className="mt-2 flex flex-col items-center">
         <h3 className="mb-4 text-lg">Want to create a new ring?</h3>

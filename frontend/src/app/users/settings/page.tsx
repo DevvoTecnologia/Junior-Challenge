@@ -2,7 +2,7 @@ import * as motion from "framer-motion/client";
 import Link from "next/link";
 
 import { auth } from "@/auth";
-import SettingsForm, { BtnDeleteUser } from "@/components/form/Settings";
+import SettingsForm from "@/components/form/Settings";
 
 export default async function UsersSettingsPage() {
   const session = await auth();
@@ -50,8 +50,6 @@ export default async function UsersSettingsPage() {
       </motion.h2>
 
       <SettingsForm usernameSession={username} userId={userId} token={token} />
-
-      <BtnDeleteUser userId={userId} token={token} />
     </motion.div>
   );
 }

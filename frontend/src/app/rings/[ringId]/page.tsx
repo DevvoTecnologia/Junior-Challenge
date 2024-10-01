@@ -50,17 +50,25 @@ export default async function RingIdPage({
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="mb-8 flex flex-col items-center gap-4 rounded-lg bg-white p-6 text-black shadow-lg"
+          className="mb-8 flex flex-col items-center gap-4 rounded-lg border bg-white p-6 text-black shadow-lg"
         >
-          <p className="text-lg font-semibold">{response.data.name}</p>
-          <Image
-            src={response.data.url}
-            alt={response.data.name}
-            width={120}
-            height={120}
-            priority
-            className="rounded-full border shadow-md"
-          />
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="relative h-32 w-32 overflow-hidden rounded-full border-4 border-blue-500 shadow-xl"
+          >
+            <Image
+              src={response.data.url}
+              alt={response.data.name}
+              layout="fill"
+              objectFit="cover"
+              className="rounded-full"
+            />
+          </motion.div>
+          <p className="mt-4 text-center text-xl font-semibold">
+            {response.data.name}
+          </p>
         </motion.div>
       )}
 
