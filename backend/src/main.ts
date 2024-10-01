@@ -17,6 +17,7 @@ async function bootstrap(): Promise<void> {
   const host = configService.get("host");
   const allowedOrigin = configService.get("allowedOrigin");
   const nodeEnv = configService.get("nodeEnv");
+  const baseUrl = nodeEnv === "development" ? `${host}:${port}` : host;
 
   app.enableCors({
     origin: nodeEnv !== "development" ? allowedOrigin : "*",
@@ -42,7 +43,7 @@ async function bootstrap(): Promise<void> {
   });
 
   await app.listen(port, () => {
-    logger.verbose(`Server is running on ${host}:${port}`);
+    logger.verbose(`Server is running on ${baseUrl}`);
   });
 }
 
