@@ -35,6 +35,8 @@ First, install all required dependencies:
 yarn install
 ```
 
+Make sure you have the backend running on the correct port and host.
+
 To start the development server, run:
 
 ```bash
