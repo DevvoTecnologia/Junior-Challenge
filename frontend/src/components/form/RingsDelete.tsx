@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { MdDelete } from "react-icons/md";
 import { toast } from "react-toastify";
 
-import catchErrorClient from "@/lib/catchErrorClient";
+import catchErrorClient from "@/global/catchErrorClient";
 import fetchClient from "@/lib/fetchClient";
 import type { RingResponseBase } from "@/types/Ring";
 import type { UserRings } from "@/types/User";

@@ -6,7 +6,7 @@ import { useState, useTransition } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
 
-import catchErrorClient from "@/lib/catchErrorClient";
+import catchErrorClient from "@/global/catchErrorClient";
 import fetchClient from "@/lib/fetchClient";
 import type { UpdateUserSuccess } from "@/types/User";
 

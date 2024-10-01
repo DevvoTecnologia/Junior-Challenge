@@ -8,7 +8,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 import { LoadingIcon } from "@/components/Loading";
-import catchErrorClient from "@/lib/catchErrorClient";
+import catchErrorClient from "@/global/catchErrorClient";
 import axiosInstance from "@/service/axiosInstance";
 import type { RegisterSuccess } from "@/types/User";
 

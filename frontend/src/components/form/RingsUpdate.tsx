@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "react-toastify";
 
-import catchErrorClient from "@/lib/catchErrorClient";
+import catchErrorClient from "@/global/catchErrorClient";
 import fetchClient from "@/lib/fetchClient";
 import type { UpdateRingSuccess } from "@/types/Ring";
 
