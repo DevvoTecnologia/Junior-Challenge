@@ -59,8 +59,8 @@ export class UserController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth("defaultBearerAuth")
   async delete(
-    @Body(ValidationPipe) deleteUserDto: DeleteUserDto,
     @Param("id", ParseIntPipe) id: number,
+    @Body(ValidationPipe) deleteUserDto: DeleteUserDto,
     @Req() req: ReqAuthUser,
   ): Promise<null> {
     return await this.userService.delete(id, deleteUserDto, req);

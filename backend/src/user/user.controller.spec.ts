@@ -118,7 +118,15 @@ describe("UserController", () => {
         },
       } as ReqAuthUser;
 
-      expect(await controller.delete(1, req)).toBeNull();
+      expect(
+        await controller.delete(
+          1,
+          {
+            password: "test",
+          },
+          req,
+        ),
+      ).toBeNull();
     });
   });
 });

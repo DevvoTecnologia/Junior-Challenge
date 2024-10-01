@@ -37,6 +37,7 @@ describe("RingController", () => {
 
   const mockRingService = {
     findAll: jest.fn(() => [mockRingServiceFindAll]),
+    findOne: jest.fn(() => mockRingServiceFindAll),
     create: jest.fn(() => mockRingServiceCreateAndUpdate),
     update: jest.fn(() => mockRingServiceCreateAndUpdate),
     delete: jest.fn(() => null),
@@ -64,6 +65,14 @@ describe("RingController", () => {
       expect(await controller.findAll({} as ReqAuthUser)).toEqual([
         mockRingServiceFindAll,
       ]);
+    });
+  });
+
+  describe("findOne", () => {
+    it("should return a ring", async () => {
+      expect(await controller.findOne(7, {} as ReqAuthUser)).toEqual(
+        mockRingServiceFindAll,
+      );
     });
   });
 

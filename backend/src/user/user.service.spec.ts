@@ -59,6 +59,13 @@ describe("UserService", () => {
         {
           id: 1,
           username: "test",
+          rings: [
+            {
+              id: 1,
+              name: "test",
+              image: "test",
+            },
+          ],
         } as User,
       ]);
 
@@ -66,6 +73,14 @@ describe("UserService", () => {
         {
           id: 1,
           username: "test",
+          rings: [
+            {
+              id: 1,
+              name: "test",
+              image: "test",
+              url: "undefined:undefined/uploads/test",
+            },
+          ],
         } as User,
       ]);
     });
@@ -82,11 +97,26 @@ describe("UserService", () => {
       jest.spyOn(userModel, "findByPk").mockResolvedValue({
         id: 1,
         username: "test",
+        rings: [
+          {
+            id: 1,
+            name: "test",
+            image: "test",
+          },
+        ],
       } as User);
 
       expect(await service.findByPk(1)).toEqual({
         id: 1,
         username: "test",
+        rings: [
+          {
+            id: 1,
+            name: "test",
+            image: "test",
+            url: "undefined:undefined/uploads/test",
+          },
+        ],
       });
     });
   });
@@ -102,11 +132,26 @@ describe("UserService", () => {
       jest.spyOn(userModel, "findOne").mockResolvedValue({
         id: 1,
         username: "test",
+        rings: [
+          {
+            id: 1,
+            name: "test",
+            image: "test",
+          },
+        ],
       } as User);
 
       expect(await service.findOne("test")).toEqual({
         id: 1,
         username: "test",
+        rings: [
+          {
+            id: 1,
+            name: "test",
+            image: "test",
+            url: "undefined:undefined/uploads/test",
+          },
+        ],
       });
     });
   });
@@ -166,6 +211,7 @@ describe("UserService", () => {
         username: "test",
         password: "test",
         save: jest.fn().mockRejectedValue(new Error()),
+        passwordIsValid: jest.fn().mockResolvedValue(true),
       } as unknown as User;
 
       const findByPkSpyOn = jest
@@ -186,12 +232,154 @@ describe("UserService", () => {
       expect(user.save).toHaveBeenCalled();
     });
 
+    it("should throw an BadRequestException if the password is passed and is invalid", async () => {
+      const user = {
+        id: 1,
+        username: "test",
+        password: "test",
+        save: jest.fn(),
+        passwordIsValid: jest.fn().mockResolvedValue(false),
+      } as unknown as User;
+
+      const findByPkSpyOn = jest
+        .spyOn(userModel, "findByPk")
+        .mockResolvedValue(user);
+
+      await expect(
+        service.update(
+          1,
+          { username: "test", password: "test", newPassword: "" },
+          {
+            user: { sub: 1 },
+          } as ReqAuthUser,
+        ),
+      ).rejects.toThrow(new BadRequestException("Invalid password"));
+
+      expect(findByPkSpyOn).toHaveBeenCalledWith(1);
+      expect(user.save).not.toHaveBeenCalled();
+    });
+
+    it("should throw an BadRequestException if the password is not passed", async () => {
+      const user = {
+        id: 1,
+        username: "test",
+        password: "test",
+        save: jest.fn(),
+        passwordIsValid: jest.fn(),
+      } as unknown as User;
+
+      const findByPkSpyOn = jest
+        .spyOn(userModel, "findByPk")
+        .mockResolvedValue(user);
+
+      await expect(
+        service.update(1, { username: "test", password: "", newPassword: "" }, {
+          user: { sub: 1 },
+        } as ReqAuthUser),
+      ).rejects.toThrow(new BadRequestException("Password is required"));
+
+      expect(findByPkSpyOn).toHaveBeenCalledWith(1);
+      expect(user.save).not.toHaveBeenCalled();
+    });
+
+    it("should throw an BadRequestException if the new password is the same as the old one", async () => {
+      const user = {
+        id: 1,
+        username: "test",
+        password: "test",
+        save: jest.fn(),
+        passwordIsValid: jest.fn().mockResolvedValue(true),
+      } as unknown as User;
+
+      const findByPkSpyOn = jest
+        .spyOn(userModel, "findByPk")
+        .mockResolvedValue(user);
+
+      await expect(
+        service.update(
+          1,
+          { username: "test", password: "test", newPassword: "test" },
+          {
+            user: { sub: 1 },
+          } as ReqAuthUser,
+        ),
+      ).rejects.toThrow(
+        new BadRequestException(
+          "New password can not be the same as the old one",
+        ),
+      );
+
+      expect(findByPkSpyOn).toHaveBeenCalledWith(1);
+      expect(user.save).not.toHaveBeenCalled();
+    });
+
+    it("should update the user password with newPassword", async () => {
+      const user = {
+        id: 1,
+        username: "test",
+        password: "test",
+        save: jest.fn(),
+        passwordIsValid: jest.fn().mockResolvedValue(true),
+      } as unknown as User;
+
+      const findByPkSpyOn = jest
+        .spyOn(userModel, "findByPk")
+        .mockResolvedValue(user);
+
+      expect(
+        await service.update(
+          1,
+          { username: "test", password: "test", newPassword: "newTest" },
+          {
+            user: { sub: 1 },
+          } as ReqAuthUser,
+        ),
+      ).toEqual({
+        id: 1,
+        username: "test",
+      });
+
+      expect(findByPkSpyOn).toHaveBeenCalledWith(1);
+      expect(user.save).toHaveBeenCalled();
+    });
+
+    it("should update the user with current username if no username is provided", async () => {
+      const user = {
+        id: 1,
+        username: "test",
+        password: "test",
+        save: jest.fn(),
+        passwordIsValid: jest.fn().mockResolvedValue(true),
+      } as unknown as User;
+
+      const findByPkSpyOn = jest
+        .spyOn(userModel, "findByPk")
+        .mockResolvedValue(user);
+
+      expect(
+        await service.update(
+          1,
+          { username: "", password: "test", newPassword: "" },
+          {
+            user: { sub: 1 },
+          } as ReqAuthUser,
+        ),
+      ).toEqual({
+        id: 1,
+        username: "test",
+      });
+
+      expect(findByPkSpyOn).toHaveBeenCalledWith(1);
+      expect(user.save).toHaveBeenCalled();
+    });
+
     it("should return a user", async () => {
       const user = {
         id: 1,
         username: "test",
         password: "test",
         save: jest.fn(),
+        passwordIsValid: jest.fn().mockResolvedValue(true),
       } as unknown as User;
 
       const findByPkSpyOn = jest
@@ -221,6 +409,7 @@ describe("UserService", () => {
         username: "test",
         password: "test",
         save: jest.fn(),
+        passwordIsValid: jest.fn().mockResolvedValue(true),
       } as unknown as User;
 
       const findByPkSpyOn = jest
@@ -261,10 +450,32 @@ describe("UserService", () => {
       ).rejects.toThrow(new NotFoundException("User with id 1 not found"));
     });
 
+    it("should throw an BadRequestException if the password is passed and is invalid", async () => {
+      const user = {
+        id: 1,
+        destroy: jest.fn(),
+        passwordIsValid: jest.fn().mockResolvedValue(false),
+      } as unknown as User;
+
+      const findByPkSpyOn = jest
+        .spyOn(userModel, "findByPk")
+        .mockResolvedValue(user);
+
+      await expect(
+        service.delete(1, { password: "test" }, {
+          user: { sub: 1 },
+        } as ReqAuthUser),
+      ).rejects.toThrow(new BadRequestException("Invalid password"));
+
+      expect(findByPkSpyOn).toHaveBeenCalledWith(1);
+      expect(user.destroy).not.toHaveBeenCalled();
+    });
+
     it("should delete a user", async () => {
       const user = {
         id: 1,
         destroy: jest.fn(),
+        passwordIsValid: jest.fn().mockResolvedValue(true),
       } as unknown as User;
 
       const findByPkSpyOn = jest

@@ -104,156 +104,21 @@ describe("RingService", () => {
     });
   });
 
-  describe("validateRingCreation", () => {
-    it("should throw BadRequestEx if the user has already forged 3 Elfos rings", async () => {
-      jest.spyOn(ringModel, "count").mockResolvedValue(3);
-
-      const createRingDto = {
-        name: "Nenya, the Ring of Water",
-        power: "The ring of Nenya is set with a white stone.",
-        owner: "Galadriel",
-        forgedBy: "Elfos",
-      };
-
-      await expect(
-        service.create(createRingDto as CreateRingDto, imageMock, {
-          user: { sub: 4 },
-        } as ReqAuthUser),
-      ).rejects.toThrow(
-        new BadRequestException(`Elfos can't forge more than 3 rings`),
-      );
-    });
-
-    it("should throw BadRequestEx if the user has already forged 7 Anões rings", async () => {
-      jest.spyOn(ringModel, "count").mockResolvedValue(7);
-
-      const createRingDto = {
-        name: "Nenya, the Ring of Water",
-        power: "The ring of Nenya is set with a white stone.",
-        owner: "Galadriel",
-        forgedBy: "Anões",
-      };
-
-      await expect(
-        service.create(createRingDto as CreateRingDto, imageMock, {
-          user: { sub: 4 },
-        } as ReqAuthUser),
-      ).rejects.toThrow(
-        new BadRequestException(`Anões can't forge more than 7 rings`),
-      );
-    });
-
-    it("should throw BadRequestEx if the user has already forged 9 Homens rings", async () => {
-      jest.spyOn(ringModel, "count").mockResolvedValue(9);
-
-      const createRingDto = {
-        name: "Nenya, the Ring of Water",
-        power: "The ring of Nenya is set with a white stone.",
-        owner: "Galadriel",
-        forgedBy: "Homens",
-      };
-
-      await expect(
-        service.create(createRingDto as CreateRingDto, imageMock, {
-          user: { sub: 4 },
-        } as ReqAuthUser),
-      ).rejects.toThrow(
-        new BadRequestException(`Homens can't forge more than 9 rings`),
-      );
-    });
-
-    it("should throw BadRequestEx if the user has already forged 1 Sauron ring", async () => {
-      jest.spyOn(ringModel, "count").mockResolvedValue(1);
-
-      const createRingDto = {
-        name: "Nenya, the Ring of Water",
-        power: "The ring of Nenya is set with a white stone.",
-        owner: "Galadriel",
-        forgedBy: "Sauron",
-      };
-
-      await expect(
-        service.create(createRingDto as CreateRingDto, imageMock, {
-          user: { sub: 4 },
-        } as ReqAuthUser),
-      ).rejects.toThrow(
-        new BadRequestException(`Sauron can't forge more than 1 ring`),
-      );
-    });
-
-    it("should throw new Error if isUpdate is true and oldFileName is not provided", async () => {
-      const withoudOldFileName = {
-        ...mockRingModelCreateAndUpdate,
-        image: undefined,
-      };
-
-      jest
-        .spyOn(ringModel, "findOne")
-        .mockResolvedValue(withoudOldFileName as unknown as Ring);
-
-      const updateRingDto = {
-        name: "Nenya, the Ring of Water",
-        power: "The ring of Nenya is set with a white stone.",
-        owner: "Galadriel",
-        forgedBy: "Elfos",
-      };
-
-      await expect(
-        service.update(7, updateRingDto as UpdateRingDto, imageMock, {
-          user: { sub: 4 },
-        } as ReqAuthUser),
-      ).rejects.toThrow(
-        new Error("oldFileName must be provided when isUpdate is true"),
-      );
-    });
-
-    it("should create folder uploads if it does not exist", async () => {
-      jest
-        .spyOn(ringModel, "create")
-        .mockResolvedValue(mockRingModelCreateAndUpdate);
-
-      jest.spyOn(fs, "existsSync").mockReturnValue(false);
-
-      const fsSpyOn = jest.spyOn(fs, "mkdirSync").mockReturnValue(undefined);
-
-      const createRingDto = {
-        name: "Nenya, the Ring of Water",
-        power: "The ring of Nenya is set with a white stone.",
-        owner: "Galadriel",
-        forgedBy: "Elfos",
-      };
-
-      await service.create(createRingDto as CreateRingDto, imageMock, {
+  describe("findOne", () => {
+    it("should return a ring", async () => {
+      const ring = await service.findOne(7, {
         user: { sub: 4 },
       } as ReqAuthUser);
 
-      expect(fsSpyOn).toHaveBeenCalled();
+      expect(ring).toEqual(mockRingModelFind);
     });
 
-    it("should throw BadRequestEx if is not a valid image type", async () => {
-      const invalidBuffer = Buffer.from([0x00, 0x00, 0x00, 0x00]);
-
-      const invalidImageMock = {
-        ...imageMock,
-        buffer: invalidBuffer,
-      };
-
-      const createRingDto = {
-        name: "Nenya, the Ring of Water",
-        power: "The ring of Nenya is set with a white stone.",
-        owner: "Galadriel",
-        forgedBy: "Elfos",
-      };
+    it("should throw NotFoundEx if the ring is not found", async () => {
+      jest.spyOn(ringModel, "findOne").mockResolvedValue(null);
 
       await expect(
-        service.create(createRingDto as CreateRingDto, invalidImageMock, {
-          user: { sub: 4 },
-        } as ReqAuthUser),
-      ).rejects.toThrow(
-        new BadRequestException(
-          "Validation failed (expected type is /jpeg|png/)",
-        ),
-      );
+        service.findOne(7, { user: { sub: 4 } } as ReqAuthUser),
+      ).rejects.toThrow(new NotFoundException("Ring with id 7 not found"));
     });
   });
 
@@ -423,6 +288,159 @@ describe("RingService", () => {
       await service.delete(7, { user: { sub: 4 } } as ReqAuthUser);
 
       expect(fsSpyOn).toHaveBeenCalled();
+    });
+  });
+
+  describe("validateRingCreation", () => {
+    it("should throw BadRequestEx if the user has already forged 3 Elfos rings", async () => {
+      jest.spyOn(ringModel, "count").mockResolvedValue(3);
+
+      const createRingDto = {
+        name: "Nenya, the Ring of Water",
+        power: "The ring of Nenya is set with a white stone.",
+        owner: "Galadriel",
+        forgedBy: "Elfos",
+      };
+
+      await expect(
+        service.create(createRingDto as CreateRingDto, imageMock, {
+          user: { sub: 4 },
+        } as ReqAuthUser),
+      ).rejects.toThrow(
+        new BadRequestException(`Elfos can't forge more than 3 rings`),
+      );
+    });
+
+    it("should throw BadRequestEx if the user has already forged 7 Anões rings", async () => {
+      jest.spyOn(ringModel, "count").mockResolvedValue(7);
+
+      const createRingDto = {
+        name: "Nenya, the Ring of Water",
+        power: "The ring of Nenya is set with a white stone.",
+        owner: "Galadriel",
+        forgedBy: "Anões",
+      };
+
+      await expect(
+        service.create(createRingDto as CreateRingDto, imageMock, {
+          user: { sub: 4 },
+        } as ReqAuthUser),
+      ).rejects.toThrow(
+        new BadRequestException(`Anões can't forge more than 7 rings`),
+      );
+    });
+
+    it("should throw BadRequestEx if the user has already forged 9 Homens rings", async () => {
+      jest.spyOn(ringModel, "count").mockResolvedValue(9);
+
+      const createRingDto = {
+        name: "Nenya, the Ring of Water",
+        power: "The ring of Nenya is set with a white stone.",
+        owner: "Galadriel",
+        forgedBy: "Homens",
+      };
+
+      await expect(
+        service.create(createRingDto as CreateRingDto, imageMock, {
+          user: { sub: 4 },
+        } as ReqAuthUser),
+      ).rejects.toThrow(
+        new BadRequestException(`Homens can't forge more than 9 rings`),
+      );
+    });
+
+    it("should throw BadRequestEx if the user has already forged 1 Sauron ring", async () => {
+      jest.spyOn(ringModel, "count").mockResolvedValue(1);
+
+      const createRingDto = {
+        name: "Nenya, the Ring of Water",
+        power: "The ring of Nenya is set with a white stone.",
+        owner: "Galadriel",
+        forgedBy: "Sauron",
+      };
+
+      await expect(
+        service.create(createRingDto as CreateRingDto, imageMock, {
+          user: { sub: 4 },
+        } as ReqAuthUser),
+      ).rejects.toThrow(
+        new BadRequestException(`Sauron can't forge more than 1 ring`),
+      );
+    });
+
+    it("should throw new Error if isUpdate is true and oldFileName is not provided", async () => {
+      const withoudOldFileName = {
+        ...mockRingModelCreateAndUpdate,
+        image: undefined,
+      };
+
+      jest
+        .spyOn(ringModel, "findOne")
+        .mockResolvedValue(withoudOldFileName as unknown as Ring);
+
+      const updateRingDto = {
+        name: "Nenya, the Ring of Water",
+        power: "The ring of Nenya is set with a white stone.",
+        owner: "Galadriel",
+        forgedBy: "Elfos",
+      };
+
+      await expect(
+        service.update(7, updateRingDto as UpdateRingDto, imageMock, {
+          user: { sub: 4 },
+        } as ReqAuthUser),
+      ).rejects.toThrow(
+        new Error("oldFileName must be provided when isUpdate is true"),
+      );
+    });
+
+    it("should create folder uploads if it does not exist", async () => {
+      jest
+        .spyOn(ringModel, "create")
+        .mockResolvedValue(mockRingModelCreateAndUpdate);
+
+      jest.spyOn(fs, "existsSync").mockReturnValue(false);
+
+      const fsSpyOn = jest.spyOn(fs, "mkdirSync").mockReturnValue(undefined);
+
+      const createRingDto = {
+        name: "Nenya, the Ring of Water",
+        power: "The ring of Nenya is set with a white stone.",
+        owner: "Galadriel",
+        forgedBy: "Elfos",
+      };
+
+      await service.create(createRingDto as CreateRingDto, imageMock, {
+        user: { sub: 4 },
+      } as ReqAuthUser);
+
+      expect(fsSpyOn).toHaveBeenCalled();
+    });
+
+    it("should throw BadRequestEx if is not a valid image type", async () => {
+      const invalidBuffer = Buffer.from([0x00, 0x00, 0x00, 0x00]);
+
+      const invalidImageMock = {
+        ...imageMock,
+        buffer: invalidBuffer,
+      };
+
+      const createRingDto = {
+        name: "Nenya, the Ring of Water",
+        power: "The ring of Nenya is set with a white stone.",
+        owner: "Galadriel",
+        forgedBy: "Elfos",
+      };
+
+      await expect(
+        service.create(createRingDto as CreateRingDto, invalidImageMock, {
+          user: { sub: 4 },
+        } as ReqAuthUser),
+      ).rejects.toThrow(
+        new BadRequestException(
+          "Validation failed (expected type is /jpeg|png/)",
+        ),
+      );
     });
   });
 });
