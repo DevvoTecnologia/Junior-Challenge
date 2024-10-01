@@ -368,6 +368,53 @@ describe("RingService", () => {
       );
     });
 
+    it("should not validate forgedBy limit if ring is being updated and forgedBy dont change", async () => {
+      jest
+        .spyOn(ringModel, "findOne")
+        .mockResolvedValue(mockRingModelCreateAndUpdate as unknown as Ring);
+
+      const updateRingDto = {
+        name: "Nenya, the Ring of Water",
+        power: "The ring of Nenya is set with a white stone.",
+        owner: "Galadriel",
+        forgedBy: "Elfos",
+      };
+
+      const updatedRing = await service.update(
+        7,
+        updateRingDto as UpdateRingDto,
+        imageMock,
+        {
+          user: { sub: 4 },
+        } as ReqAuthUser,
+      );
+
+      expect(updatedRing).toEqual(mockRingModelCreateAndUpdate);
+    });
+
+    it("should validate forgedBy limit if ring is being updated and forgedBy change", async () => {
+      jest
+        .spyOn(ringModel, "findOne")
+        .mockResolvedValue(mockRingModelCreateAndUpdate as unknown as Ring);
+
+      jest.spyOn(ringModel, "count").mockResolvedValue(1);
+
+      const updateRingDto = {
+        name: "Nenya, the Ring of Water",
+        power: "The ring of Nenya is set with a white stone.",
+        owner: "Galadriel",
+        forgedBy: "Sauron",
+      };
+
+      await expect(
+        service.update(7, updateRingDto as UpdateRingDto, imageMock, {
+          user: { sub: 4 },
+        } as ReqAuthUser),
+      ).rejects.toThrow(
+        new BadRequestException(`Sauron can't forge more than 1 ring`),
+      );
+    });
+
     it("should throw new Error if isUpdate is true and oldFileName is not provided", async () => {
       const withoudOldFileName = {
         ...mockRingModelCreateAndUpdate,
