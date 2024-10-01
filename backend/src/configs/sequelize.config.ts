@@ -14,7 +14,7 @@ const sequelizeAsyncConfig: SequelizeModuleAsyncOptions = {
       username: configService.get("database.username"),
       password: configService.get("database.password"),
       database: configService.get("database.name"),
-      autoLoadModels: configService.get("nodeEnv") !== "production",
+      autoLoadModels: true,
 
       dialectOptions: {
         timezone: "-03:00",
