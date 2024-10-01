@@ -34,10 +34,6 @@ export default function SettingsForm({
   async function submitForm(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (!username.trim()) {
-      return toast.error("Username is required.");
-    }
-
     if (!password.trim()) {
       return toast.error("Password is required.");
     }
@@ -52,7 +48,7 @@ export default function SettingsForm({
       await fetchClient.put<UpdateUserSuccess>(
         `/user/${userId}`,
         {
-          username,
+          username: username || undefined,
           password,
           newPassword,
         },
@@ -90,6 +86,12 @@ export default function SettingsForm({
         });
       }}
     >
+      <p className="mb-2">
+        <span className="text-sm text-red-500">
+          Be careful when updating your information. You will be logged out and
+          you will not able to recover your account!
+        </span>
+      </p>
       <div className="mb-4">
         <label htmlFor="username" className="mb-2 block text-sm font-medium">
           Username:
@@ -130,6 +132,11 @@ export default function SettingsForm({
           )}
         </motion.button>
       </div>
+      <p>
+        <span className="text-sm text-gray-500">
+          Leave blank to keep the same.
+        </span>
+      </p>
       <div className="relative mb-6">
         <label htmlFor="newPassword" className="mb-2 block text-sm font-medium">
           New Password:
@@ -179,14 +186,26 @@ interface BtnDeleteUserProps {
 
 export function BtnDeleteUser({ token, userId }: BtnDeleteUserProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState("");
 
   async function deleteUser() {
+    if (!password.trim()) {
+      return toast.error("Password is required.");
+    }
+
+    setIsLoading(true);
     try {
       await fetchClient.delete(`/user/${userId}`, {
         headers: {
           ...(token && {
             Authorization: `Bearer ${token}`,
           }),
+        },
+        data: {
+          password,
         },
       });
 
@@ -200,6 +219,8 @@ export function BtnDeleteUser({ token, userId }: BtnDeleteUserProps) {
         error,
         "An error occurred while deleting the user.",
       );
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -235,6 +256,40 @@ export function BtnDeleteUser({ token, userId }: BtnDeleteUserProps) {
         >
           <h2 className="mb-4 text-lg font-bold">Confirm Deletion</h2>
           <p className="mb-4">Are you sure you want to delete your account?</p>
+          <div className="mb-4">
+            <p className="mb-4 text-red-500">
+              This action is irreversible. You will lose all your data and you
+              will be logged out!
+            </p>
+
+            <p className="mb-4">
+              If you want to proceed, please type your current password to
+              confirm.
+            </p>
+
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="w-full rounded border border-gray-300 p-2 pl-12 text-black"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <motion.button
+                type="button"
+                className="absolute left-3 top-[0.60rem] border-r pr-2 text-gray-600"
+                onClick={() => setShowPassword(!showPassword)}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+              >
+                {showPassword ? (
+                  <FaEye color="black" size={24} />
+                ) : (
+                  <FaEyeSlash color="black" size={24} />
+                )}
+              </motion.button>
+            </div>
+          </div>
           <div className="flex justify-end">
             <button
               onClick={() => setIsModalOpen(false)}
@@ -243,6 +298,7 @@ export function BtnDeleteUser({ token, userId }: BtnDeleteUserProps) {
               Cancel
             </button>
             <button
+              disabled={isLoading}
               onClick={handleConfirmDelete}
               className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
             >
