@@ -1,0 +1,248 @@
+@import "https://fonts.googleapis.com/css2?family=Spicy+Rice&display=swap";
+@import "https://fonts.googleapis.com/css2?family=Spicy+Rice&family=Unbounded:wght@200..900&display=swap";
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: #11001C;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.fade-in {
+  animation: fadeIn 2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.slide-in {
+  animation: slideIn 1s ease-in-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+h1 {
+  font-family: 'Spicy Rice', regular;
+  font-size: 200px;
+}
+.fundo {
+  background-image: url('./assets/fundoTela.png');
+}
+
+.fundoEstrela {
+  background-image: url('./assets/estrela.png');
+}
+
+.btn-criar-inicio {
+  background-color: #6FD69E; 
+  color: #10002B; 
+  font-family: 'Unbounded', sans-serif; 
+  font-size: 20px; 
+  padding: 10px 20px; 
+  border-radius: 20px; 
+  border: 2px solid #FBE300; 
+  text-decoration: none; 
+  transition: background-color 0.3s ease; 
+}
+
+.btn-criar-inicio:hover {
+  background-color: #5cc78b; 
+  color: #FFFFFF; 
+}
+card-container {
+  background-color: #02010A;
+  width: 840px;
+  height: 500px;
+  border-radius: 50px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 0 auto; 
+}
+
+.card-item {
+  width: 256px;
+  height: 400px;
+  background-color: #DEAAFF; 
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Unbounded', sans-serif
+}
+
+
+.card-item img {
+  width: 100px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.card-item p {
+  font-family: 'Unbounded', sans-serif;
+  color: #10002B;
+}
+
+.edit-btn {
+  width: 50px;
+  height: 24px;
+  color: #DEAAFF;
+  background-color: #10002B;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 30px;
+}
+
+.anel-img {
+  width: 100px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.description-container {
+  background-color: #11001C;
+  color: #DEAAFF;
+  font-family: 'Spicy Rice', cursive;
+  font-size: 22px;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.card-coringa {
+  height: 400px;
+  background-color: #DEAAFF;
+  background-image: url('./assets/fundoCardCoringa.png');
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  color: #02010A;
+  font-family: 'Unbounded', sans-serif; 
+  font-weight: 200; 
+  line-height: 0;
+}
+.strong-300{
+  font-weight: 300; 
+}
+.strong-400{
+  font-weight: 400; 
+}
+.strong-500{
+  font-weight: 500; 
+}
+footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.container-criar {
+  background-image: url('./assets/estrela.png');
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-criar {
+  background-image: url('./assets/fundoCardCoringa.png');
+  width: 432px;
+  height: 613px;
+  background-color: #ffffff; 
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.form-group {
+  width: 100%;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-family: 'Unbounded', sans-serif;
+  color: #02010A;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #FBE300;
+  color: #02010A;
+  font-family: 'Unbounded', sans-serif;
+  text-align: center;
+}
+
+.btn-criar {
+  width: 100%;
+  padding: 10px;
+  background-color: #10002B;
+  color: #FBE300;
+  border: none;
+  border-radius: 5px;
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 200;
+  cursor: pointer;
+  text-align: center;
+}
+
+.btn-criar:hover {
+  background-color: #08001F; 
+}
+footer {
+  font-family: 'Spicy Rice', regular;
+  color: #FBE300;
+  font-size: 30px;
+}
