@@ -53,7 +53,7 @@ export default function LoginPage() {
       transition={{ duration: 0.5 }}
     >
       <motion.div
-        className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg dark:bg-gradient-to-r dark:from-blue-800 dark:to-gray-700"
+        className="mx-2 w-full max-w-md rounded-lg bg-white p-8 shadow-lg sm:mx-0 dark:bg-gradient-to-r dark:from-blue-800 dark:to-gray-700"
         initial={{ scale: 0.8 }}
         animate={{ scale: 1 }}
         transition={{ duration: 0.5 }}
