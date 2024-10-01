@@ -147,9 +147,10 @@ export class UserService {
       }
 
       userToUpdate.password = newPassword;
+    } else {
+      userToUpdate.password = password;
     }
 
-    userToUpdate.password = password;
     userToUpdate.username = username || userToUpdate.username;
 
     try {
