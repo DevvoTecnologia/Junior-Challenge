@@ -24,12 +24,22 @@ export class UserService {
       attributes: ["id", "name", "power", "owner", "forgedBy", "image"],
     },
   ];
+  private readonly host: string;
+  private readonly port: string;
+  private readonly nodeEnv: string;
+  public readonly baseUrl: string;
 
   constructor(
     @InjectModel(User)
     private readonly userModel: typeof User,
     private readonly configService: ConfigService,
-  ) {}
+  ) {
+    this.host = this.configService.get<string>("host")!;
+    this.port = this.configService.get<string>("port")!;
+    this.nodeEnv = this.configService.get<string>("nodeEnv")!;
+    this.baseUrl =
+      this.nodeEnv === "development" ? `${this.host}:${this.port}` : this.host;
+  }
 
   async findAll(): Promise<User[]> {
     const users = await this.userModel.findAll({
@@ -41,14 +51,9 @@ export class UserService {
       throw new NotFoundException("No users found");
     }
 
-    const host = this.configService.get("host");
-    const port = this.configService.get("port");
-    const nodeEnv = this.configService.get("nodeEnv");
-    const baseUrl = nodeEnv === "development" ? `${host}:${port}` : host;
-
     users.forEach((user) => {
       user.rings.forEach((ring) => {
-        ring.url = `${baseUrl}/uploads/${ring.image}`;
+        ring.url = `${this.baseUrl}/uploads/${ring.image}`;
       });
     });
 
@@ -67,13 +72,8 @@ export class UserService {
       throw new NotFoundException(`User with id ${id} not found`);
     }
 
-    const host = this.configService.get("host");
-    const port = this.configService.get("port");
-    const nodeEnv = this.configService.get("nodeEnv");
-    const baseUrl = nodeEnv === "development" ? `${host}:${port}` : host;
-
     user.rings.forEach((ring) => {
-      ring.url = `${baseUrl}/uploads/${ring.image}`;
+      ring.url = `${this.baseUrl}/uploads/${ring.image}`;
     });
 
     return user;
@@ -90,13 +90,8 @@ export class UserService {
       throw new NotFoundException(`User with username ${username} not found`);
     }
 
-    const host = this.configService.get("host");
-    const port = this.configService.get("port");
-    const nodeEnv = this.configService.get("nodeEnv");
-    const baseUrl = nodeEnv === "development" ? `${host}:${port}` : host;
-
     user.rings.forEach((ring) => {
-      ring.url = `${baseUrl}/uploads/${ring.image}`;
+      ring.url = `${this.baseUrl}/uploads/${ring.image}`;
     });
 
     return user;
