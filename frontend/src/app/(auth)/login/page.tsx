@@ -79,6 +79,7 @@ export default function LoginPage() {
               className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
               id="username"
               type="text"
+              name="username"
               placeholder="Enter your username"
               value={username}
               onChange={(event) => setUsername(event.target.value)}
@@ -94,6 +95,7 @@ export default function LoginPage() {
             <input
               className="focus:shadow-outline mb-3 w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
               id="password"
+              name="password"
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
               value={password}

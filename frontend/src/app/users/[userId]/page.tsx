@@ -87,7 +87,7 @@ export default async function UserProfilePage({
               {response.data.username.charAt(0).toUpperCase() +
                 response.data.username.slice(1)}
             </h2>
-            <Link href={`/users`}>
+            <Link datatype="user-link-back-to-users" href={`/users`}>
               <IoMdArrowDropleftCircle className="cursor-pointer text-3xl text-blue-500" />
             </Link>
           </div>

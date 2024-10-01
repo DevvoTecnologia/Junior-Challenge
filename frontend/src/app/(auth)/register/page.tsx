@@ -71,6 +71,7 @@ export default function RegisterPage() {
               className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
               id="username"
               type="text"
+              name="username"
               placeholder="Enter your username"
               value={username}
               onChange={(event) => setUsername(event.target.value)}
@@ -87,6 +88,7 @@ export default function RegisterPage() {
               className="focus:shadow-outline mb-3 w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
               id="password"
               type={showPassword ? "text" : "password"}
+              name="password"
               placeholder="Enter your password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}

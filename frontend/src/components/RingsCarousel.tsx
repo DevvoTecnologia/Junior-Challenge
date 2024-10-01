@@ -100,6 +100,7 @@ export default function RingsCarousel({
             whileTap={{ scale: 0.9 }}
             className="embla__prev"
             onClick={scrollPrev}
+            datatype="move-carousel-left"
           >
             <IoIosArrowDropleftCircle size={32} color="black" />
           </motion.button>
@@ -108,6 +109,7 @@ export default function RingsCarousel({
             whileTap={{ scale: 0.9 }}
             className="embla__next"
             onClick={scrollNext}
+            datatype="move-carousel-right"
           >
             <IoIosArrowDroprightCircle size={32} color="black" />
           </motion.button>

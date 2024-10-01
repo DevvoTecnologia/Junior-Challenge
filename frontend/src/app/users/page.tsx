@@ -50,9 +50,17 @@ export default async function UsersProfilePage() {
         </div>
       )}
 
-      <div className="flex flex-col gap-4 md:grid md:grid-cols-2 lg:grid-cols-2">
+      <div
+        datatype="users-list"
+        className="flex flex-col gap-4 md:grid md:grid-cols-2 lg:grid-cols-2"
+      >
         {sortedUsers.map((user) => (
-          <div key={user.id} className="rounded bg-gray-50">
+          <div
+            key={user.id}
+            datatype="user-list-id"
+            data-user-id={user.id}
+            className="rounded bg-gray-50"
+          >
             <div className="min-h-96 rounded-lg bg-white p-6 shadow-lg transition-shadow duration-300 hover:shadow-xl sm:min-h-[32rem] md:min-h-[38rem]">
               <div className="flex justify-between">
                 <h2 className="mb-4 text-2xl font-semibold text-gray-900">
@@ -60,7 +68,7 @@ export default async function UsersProfilePage() {
                   {user.username.charAt(0).toUpperCase() +
                     user.username.slice(1)}
                 </h2>
-                <Link href={`/users/${user.id}`}>
+                <Link datatype="user-link-profile" href={`/users/${user.id}`}>
                   <IoMdArrowDroprightCircle className="cursor-pointer text-3xl text-blue-500" />
                 </Link>
               </div>
