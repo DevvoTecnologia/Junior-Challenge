@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaEdit } from "react-icons/fa";
 import { FaCircleUser } from "react-icons/fa6";
-import { MdDelete } from "react-icons/md";
 
 import { auth } from "@/auth";
+import { RingsDeleteBtnIconRed } from "@/components/form/RingsDelete";
 import fetchServer from "@/lib/fetchServer";
 import type { Rings } from "@/types/Ring";
 
@@ -82,13 +82,8 @@ export default async function RingsPage() {
                   <FaEdit />
                 </motion.button>
               </Link>
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="rounded-full bg-red-500 p-2 text-white hover:bg-red-600"
-              >
-                <MdDelete />
-              </motion.button>
+
+              <RingsDeleteBtnIconRed ring={ring} token={token} />
             </div>
             <Image
               src={ring.url}

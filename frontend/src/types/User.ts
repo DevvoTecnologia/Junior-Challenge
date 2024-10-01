@@ -1,15 +1,17 @@
+export interface UserRings {
+  id: number;
+  name: string;
+  power: string;
+  owner: string;
+  forgedBy: string;
+  image: string;
+  url: string;
+}
+
 export interface User {
   id: number;
   username: string;
-  rings?: {
-    id: number;
-    name: string;
-    power: string;
-    owner: string;
-    forgedBy: string;
-    image: string;
-    url: string;
-  }[];
+  rings?: UserRings[];
 }
 
 export type Users = User[];

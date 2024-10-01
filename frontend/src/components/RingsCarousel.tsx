@@ -10,18 +10,21 @@ import {
   IoIosArrowDropleftCircle,
   IoIosArrowDroprightCircle,
 } from "react-icons/io";
-import { MdDelete } from "react-icons/md";
 
 import type { User } from "@/types/User";
+
+import { RingsDeleteBtnIconBlack } from "./form/RingsDelete";
 
 interface RingsCarouselProps {
   UserRings: User["rings"];
   isMyProfile?: boolean;
+  token: string | undefined;
 }
 
 export default function RingsCarousel({
   UserRings,
   isMyProfile = false,
+  token,
 }: RingsCarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
@@ -55,24 +58,7 @@ export default function RingsCarousel({
                     </motion.button>
                   </Link>
 
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => {
-                      if (
-                        confirm(
-                          "Você tem certeza que deseja deletar o anel " +
-                            ring.id +
-                            "?",
-                        )
-                      ) {
-                        // Código para deletar o anel
-                        alert("Anel " + ring.id + " deletado");
-                      }
-                    }}
-                  >
-                    <MdDelete size={24} color="black" />
-                  </motion.button>
+                  <RingsDeleteBtnIconBlack ring={ring} token={token} />
                 </div>
               )}
 

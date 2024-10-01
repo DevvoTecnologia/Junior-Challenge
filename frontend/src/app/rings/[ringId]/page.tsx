@@ -5,6 +5,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { RingsDeleteBtnText } from "@/components/form/RingsDelete";
+import RingsUpdateForm from "@/components/form/RingsUpdate";
 import fetchServer from "@/lib/fetchServer";
 import type { Ring } from "@/types/Ring";
 
@@ -56,99 +58,27 @@ export default async function RingIdPage({
             alt={response.data.name}
             width={120}
             height={120}
+            priority
             className="rounded-full border shadow-md"
           />
         </motion.div>
       )}
 
-      <motion.form
-        method="POST"
-        initial={{ x: "-100vw" }}
-        animate={{ x: 0 }}
-        transition={{ type: "spring", stiffness: 50 }}
-        className="w-full max-w-lg space-y-4 rounded-lg bg-white p-6 text-black shadow-md"
-      >
-        <div className="flex flex-col space-y-2">
-          <motion.label htmlFor="name" className="font-semibold">
-            Name
-          </motion.label>
-          <motion.input
-            id="name"
-            name="name"
-            type="text"
-            placeholder={response?.data?.name}
-            className="rounded-md border border-gray-300 p-2 text-gray-900"
-          />
-        </div>
-
-        <div className="flex flex-col space-y-2">
-          <motion.label htmlFor="power" className="font-semibold">
-            Power
-          </motion.label>
-          <motion.input
-            id="power"
-            name="power"
-            type="text"
-            placeholder={response?.data?.power}
-            className="rounded-md border border-gray-300 p-2 text-gray-900"
-          />
-        </div>
-
-        <div className="flex flex-col space-y-2">
-          <motion.label htmlFor="owner" className="font-semibold">
-            Owner
-          </motion.label>
-          <motion.input
-            id="owner"
-            name="owner"
-            type="text"
-            placeholder={response?.data?.owner}
-            className="rounded-md border border-gray-300 p-2 text-gray-900"
-          />
-        </div>
-
-        <div className="flex flex-col space-y-2">
-          <motion.label htmlFor="forgedBy" className="font-semibold">
-            Forged By
-          </motion.label>
-          <motion.input
-            id="forgedBy"
-            name="forgedBy"
-            type="text"
-            placeholder={response?.data?.forgedBy}
-            className="rounded-md border border-gray-300 p-2 text-gray-900"
-          />
-        </div>
-
-        <div className="flex flex-col space-y-2">
-          <motion.label htmlFor="image" className="font-semibold">
-            Image
-          </motion.label>
-          <motion.input
-            id="image"
-            name="image"
-            type="file"
-            accept="image/*"
-            className="cursor-pointer file:rounded-md file:border file:border-gray-300 file:p-2 file:text-sm file:text-gray-600"
-          />
-        </div>
-
-        <motion.button
-          type="submit"
-          className="w-full rounded-md bg-blue-500 p-3 text-white hover:bg-blue-600"
-          whileHover={{ scale: 1.05 }}
-        >
-          Save
-        </motion.button>
-      </motion.form>
+      <RingsUpdateForm
+        token={token}
+        ringId={ringId}
+        responseName={response.data?.name}
+        responsePower={response.data?.power}
+        responseOwner={response.data?.owner}
+        responseForgedBy={response.data?.forgedBy}
+      />
 
       <motion.div className="mt-6 flex space-x-4">
-        <motion.button
-          className="rounded-md bg-red-500 p-3 text-white hover:bg-red-600"
-          whileHover={{ scale: 1.05 }}
-        >
-          Delete
-        </motion.button>
+        <RingsDeleteBtnText
+          ringId={ringId}
+          ringName={response.data?.name}
+          token={token}
+        />
 
         <Link href="/rings">
           <motion.button

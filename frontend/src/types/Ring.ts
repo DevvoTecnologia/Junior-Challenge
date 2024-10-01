@@ -1,4 +1,4 @@
-interface RingResponseBase {
+export interface RingResponseBase {
   id: number;
   name: string;
   power: string;

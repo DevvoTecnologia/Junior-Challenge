@@ -25,6 +25,7 @@ export default async function UserProfilePage({
 }: UserProfilePageProps) {
   let response: AxiosResponse<User>;
   const session = await auth();
+  const token = session?.user.accessToken;
 
   try {
     response = await fetchServer.get("/user/" + userId);
@@ -95,6 +96,7 @@ export default async function UserProfilePage({
             <RingsCarousel
               UserRings={response.data.rings}
               isMyProfile={isMyProfile}
+              token={token}
             />
           </div>
         </motion.div>

@@ -7,23 +7,41 @@ import { useState, useTransition } from "react";
 import { toast } from "react-toastify";
 
 import fetchClient from "@/lib/fetchClient";
-import type { CreateRingSuccess } from "@/types/Ring";
+import type { UpdateRingSuccess } from "@/types/Ring";
 
 import { LoadingIcon } from "../Loading";
 
-interface RingsCreateFormProps {
+interface RingsUpdateFormProps {
   token: string | undefined;
+  ringId: string;
+  responseName: string | undefined;
+  responsePower: string | undefined;
+  responseOwner: string | undefined;
+  responseForgedBy: string | undefined;
 }
 
 const permittedForgedBy = ["Elfos", "Anões", "Homens", "Sauron"];
 
-export default function RingsCreateForm({ token }: RingsCreateFormProps) {
+export default function RingsUpdateForm({
+  token,
+  ringId,
+  responseName,
+  responsePower,
+  responseOwner,
+  responseForgedBy,
+}: RingsUpdateFormProps) {
   const { push, refresh } = useRouter();
 
-  const [name, setName] = useState("");
-  const [power, setPower] = useState("");
-  const [owner, setOwner] = useState("");
-  const [forgedBy, setForgedBy] = useState("");
+  const defaultName = responseName || "";
+  const defaultPower = responsePower || "";
+  const defaultOwner = responseOwner || "";
+  const defaultForgedBy = responseForgedBy || "";
+
+  const [name, setName] = useState(defaultName);
+  const [power, setPower] = useState(defaultPower);
+  const [owner, setOwner] = useState(defaultOwner);
+  const [forgedBy, setForgedBy] = useState(defaultForgedBy);
+
   const [image, setImage] = useState<File | null>(null);
 
   const [isPending, startTransition] = useTransition();
@@ -32,13 +50,13 @@ export default function RingsCreateForm({ token }: RingsCreateFormProps) {
     e.preventDefault();
 
     if (
-      !name.trim() ||
-      !power.trim() ||
-      !owner.trim() ||
-      !forgedBy.trim() ||
+      !name.trim() &&
+      !power.trim() &&
+      !owner.trim() &&
+      !forgedBy.trim() &&
       !image
     ) {
-      return toast.error("Please fill out all fields.");
+      return toast.error("Please fill in at least one field.");
     }
 
     if (!permittedForgedBy.includes(forgedBy)) {
@@ -49,20 +67,30 @@ export default function RingsCreateForm({ token }: RingsCreateFormProps) {
 
     const formData = new FormData();
 
-    formData.append("name", name);
-    formData.append("power", power);
-    formData.append("owner", owner);
-    formData.append("forgedBy", forgedBy);
-    formData.append("image", image);
+    if (name) {
+      formData.append("name", name);
+    }
+    if (power) {
+      formData.append("power", power);
+    }
+    if (owner) {
+      formData.append("owner", owner);
+    }
+    if (forgedBy) {
+      formData.append("forgedBy", forgedBy);
+    }
+    if (image) {
+      formData.append("image", image);
+    }
 
     try {
-      await fetchClient.post<CreateRingSuccess>("/ring", formData, {
+      await fetchClient.put<UpdateRingSuccess>(`/ring/${ringId}`, formData, {
         headers: {
           ...(token && { Authorization: `Bearer ${token}` }),
         },
       });
 
-      toast.success("Ring created successfully.");
+      toast.success("Ring updated successfully.");
 
       push("/rings");
 
@@ -78,16 +106,14 @@ export default function RingsCreateForm({ token }: RingsCreateFormProps) {
         return toast.error(error.response?.data.message);
       }
 
-      return toast.error("An error occurred while creating the ring.");
+      return toast.error("An error occurred while updating the ring.");
     }
   }
 
   return (
     <motion.form
       onSubmit={(e) => {
-        startTransition(async () => {
-          await submitForm(e);
-        });
+        startTransition(async () => await submitForm(e));
       }}
       method="POST"
       initial={{ x: "-100vw" }}
@@ -105,7 +131,7 @@ export default function RingsCreateForm({ token }: RingsCreateFormProps) {
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Ex. Ring of Power"
+          placeholder={responseName}
           className="rounded-md border border-gray-300 p-2 text-gray-900"
         />
       </div>
@@ -120,7 +146,7 @@ export default function RingsCreateForm({ token }: RingsCreateFormProps) {
           type="text"
           value={power}
           onChange={(e) => setPower(e.target.value)}
-          placeholder="Ex. Invisibility"
+          placeholder={responsePower}
           className="rounded-md border border-gray-300 p-2 text-gray-900"
         />
       </div>
@@ -135,7 +161,7 @@ export default function RingsCreateForm({ token }: RingsCreateFormProps) {
           type="text"
           value={owner}
           onChange={(e) => setOwner(e.target.value)}
-          placeholder="Ex. Frodo Baggins"
+          placeholder={responseOwner}
           className="rounded-md border border-gray-300 p-2 text-gray-900"
         />
       </div>
@@ -150,7 +176,7 @@ export default function RingsCreateForm({ token }: RingsCreateFormProps) {
           type="text"
           value={forgedBy}
           onChange={(e) => setForgedBy(e.target.value)}
-          placeholder="Ex. Sauron"
+          placeholder={responseForgedBy}
           className="rounded-md border border-gray-300 p-2 text-gray-900"
         />
       </div>
@@ -180,7 +206,7 @@ export default function RingsCreateForm({ token }: RingsCreateFormProps) {
           className="w-full rounded-md bg-blue-500 p-3 text-white hover:bg-blue-600"
           whileHover={{ scale: 1.05 }}
         >
-          Create
+          Save
         </motion.button>
       )}
     </motion.form>
