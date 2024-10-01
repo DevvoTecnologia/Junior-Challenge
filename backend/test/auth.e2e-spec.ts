@@ -25,7 +25,7 @@ describe("AuthController (e2e)", () => {
     it("should login with valid credentials", () => {
       return request(app.getHttpServer())
         .post("/auth/login")
-        .send({ username: "admin", password: "password" })
+        .send({ username: "admin2", password: "password" })
         .expect(HttpStatus.OK)
         .expect((res) => {
           expect(res.body).toHaveProperty("accessToken");
