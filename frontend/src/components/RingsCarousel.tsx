@@ -62,7 +62,7 @@ export default function RingsCarousel({
                 </div>
               )}
 
-              <h3 className="mb-2 text-lg font-semibold text-gray-800">
+              <h3 className="mb-2 mt-6 text-lg font-semibold text-gray-800 sm:mt-2">
                 {ring.name}
               </h3>
               <p className="mb-1 text-sm text-gray-600">
@@ -77,7 +77,7 @@ export default function RingsCarousel({
                 <span className="font-semibold text-gray-700">Forged By:</span>{" "}
                 {ring.forgedBy}
               </p>
-              <div className="relative mx-auto h-28 w-2/3 overflow-hidden rounded-lg sm:h-32 sm:w-1/3 md:h-[12rem] md:w-2/3 lg:h-[14rem] lg:w-3/5 xl:w-5/12">
+              <div className="relative mx-auto h-28 w-32 overflow-hidden rounded-lg sm:h-32 sm:w-1/3 md:h-[12rem] md:w-2/3 lg:h-[14rem] lg:w-3/5 xl:w-4/12">
                 <Image
                   src={ring.url}
                   alt={ring.name}
