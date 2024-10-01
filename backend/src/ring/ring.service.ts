@@ -35,12 +35,13 @@ export class RingService extends RingGlobalValidations {
     if (!rings.length) {
       throw new NotFoundException("No rings found");
     }
+    const host = this.configService.get("host");
+    const port = this.configService.get("port");
+    const nodeEnv = this.configService.get("nodeEnv");
+    const baseUrl = nodeEnv === "development" ? `${host}:${port}` : host;
 
     rings.forEach((ring) => {
-      const host = this.configService.get("host");
-      const port = this.configService.get("port");
-
-      ring.url = `${host}:${port}/uploads/${ring.image}`;
+      ring.url = `${baseUrl}/uploads/${ring.image}`;
     });
 
     return rings;
@@ -60,8 +61,10 @@ export class RingService extends RingGlobalValidations {
 
     const host = this.configService.get("host");
     const port = this.configService.get("port");
+    const nodeEnv = this.configService.get("nodeEnv");
+    const baseUrl = nodeEnv === "development" ? `${host}:${port}` : host;
 
-    ring.url = `${host}:${port}/uploads/${ring.image}`;
+    ring.url = `${baseUrl}/uploads/${ring.image}`;
 
     return ring;
   }
@@ -104,8 +107,10 @@ export class RingService extends RingGlobalValidations {
 
     const host = this.configService.get("host");
     const port = this.configService.get("port");
+    const nodeEnv = this.configService.get("nodeEnv");
+    const baseUrl = nodeEnv === "development" ? `${host}:${port}` : host;
 
-    newRing.url = `${host}:${port}/uploads/${newRing.image}`;
+    newRing.url = `${baseUrl}/uploads/${newRing.image}`;
 
     return newRing;
   }
@@ -160,8 +165,10 @@ export class RingService extends RingGlobalValidations {
 
     const host = this.configService.get("host");
     const port = this.configService.get("port");
+    const nodeEnv = this.configService.get("nodeEnv");
+    const baseUrl = nodeEnv === "development" ? `${host}:${port}` : host;
 
-    ring.url = `${host}:${port}/uploads/${ring.image}`;
+    ring.url = `${baseUrl}/uploads/${ring.image}`;
 
     await ring.save();
 

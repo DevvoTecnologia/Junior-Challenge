@@ -41,12 +41,14 @@ export class UserService {
       throw new NotFoundException("No users found");
     }
 
-    users.forEach((user) => {
-      const host = this.configService.get("host");
-      const port = this.configService.get("port");
+    const host = this.configService.get("host");
+    const port = this.configService.get("port");
+    const nodeEnv = this.configService.get("nodeEnv");
+    const baseUrl = nodeEnv === "development" ? `${host}:${port}` : host;
 
+    users.forEach((user) => {
       user.rings.forEach((ring) => {
-        ring.url = `${host}:${port}/uploads/${ring.image}`;
+        ring.url = `${baseUrl}/uploads/${ring.image}`;
       });
     });
 
@@ -65,11 +67,13 @@ export class UserService {
       throw new NotFoundException(`User with id ${id} not found`);
     }
 
-    user.rings.forEach((ring) => {
-      const host = this.configService.get("host");
-      const port = this.configService.get("port");
+    const host = this.configService.get("host");
+    const port = this.configService.get("port");
+    const nodeEnv = this.configService.get("nodeEnv");
+    const baseUrl = nodeEnv === "development" ? `${host}:${port}` : host;
 
-      ring.url = `${host}:${port}/uploads/${ring.image}`;
+    user.rings.forEach((ring) => {
+      ring.url = `${baseUrl}/uploads/${ring.image}`;
     });
 
     return user;
@@ -86,11 +90,13 @@ export class UserService {
       throw new NotFoundException(`User with username ${username} not found`);
     }
 
-    user.rings.forEach((ring) => {
-      const host = this.configService.get("host");
-      const port = this.configService.get("port");
+    const host = this.configService.get("host");
+    const port = this.configService.get("port");
+    const nodeEnv = this.configService.get("nodeEnv");
+    const baseUrl = nodeEnv === "development" ? `${host}:${port}` : host;
 
-      ring.url = `${host}:${port}/uploads/${ring.image}`;
+    user.rings.forEach((ring) => {
+      ring.url = `${baseUrl}/uploads/${ring.image}`;
     });
 
     return user;

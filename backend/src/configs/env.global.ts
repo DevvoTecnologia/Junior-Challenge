@@ -1,6 +1,8 @@
 interface EnvConfig {
   nodeEnv: string;
 
+  allowedOrigin: string;
+
   database: {
     dialect: string;
     host: string;
@@ -21,6 +23,8 @@ interface EnvConfig {
 
 export default (): EnvConfig => ({
   nodeEnv: process.env.NODE_ENV || "development",
+
+  allowedOrigin: process.env.ALLOWED_ORIGIN || "http://192.168.100.3:3001",
 
   host: process.env.HOST || "localhost",
   port: process.env.PORT ? parseInt(process.env.PORT, 10) : 3000,

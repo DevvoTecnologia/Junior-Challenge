@@ -86,5 +86,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       return session;
     },
+
+    redirect({ url }) {
+      url = process.env.AUTH_TRUST_HOST || "http://localhost:3001";
+
+      return Promise.resolve(url);
+    },
   },
 });
