@@ -87,14 +87,4 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
   },
-
-  useSecureCookies: process.env.NODE_ENV === "production",
-
-  cookies: {
-    sessionToken: {
-      options: {
-        sameSite: "strict",
-      },
-    },
-  },
 });
