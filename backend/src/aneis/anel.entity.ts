@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { User } from '../users/user.entity';
 
 @Entity()
 export class Anel {
@@ -19,4 +20,7 @@ export class Anel {
 
   @Column()
   imagem: string;
+
+  @ManyToOne(() => User, (user) => user.aneis)
+  user: User;
 }

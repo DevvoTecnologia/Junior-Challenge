@@ -1,11 +1,15 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, ParseIntPipe } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Controller, UseGuards, Get, Post, Put, Delete, Body, Param, ParseIntPipe, Req } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AneisService } from './aneis.service';
 import { Anel } from './anel.entity';
 import { CreateAnelDto, UpdateAnelDto } from './dto/anel.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { AuthenticatedRequest } from '../auth/authenticated-request.interface';
 
 @ApiTags('aneis')
 @Controller('aneis')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
 export class AneisController {
   constructor(private readonly aneisService: AneisService) {}
 
@@ -28,8 +32,8 @@ export class AneisController {
   @ApiOperation({ summary: 'Criar um novo anel' })
   @ApiResponse({ status: 201, description: 'Anel criado com sucesso', type: Anel })
   @ApiResponse({ status: 400, description: 'Dados inválidos ou limite de anéis atingido' })
-  create(@Body() createAnelDto: CreateAnelDto): Promise<Anel> {
-    return this.aneisService.create(createAnelDto);
+  create(@Body() createAnelDto: CreateAnelDto, @Req() req: AuthenticatedRequest): Promise<Anel> {
+    return this.aneisService.create(createAnelDto, req.user.userId);
   }
 
   @Put(':id')
