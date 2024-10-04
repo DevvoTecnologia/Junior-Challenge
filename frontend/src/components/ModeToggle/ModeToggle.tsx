@@ -1,28 +1,27 @@
-import { useState, useEffect } from 'react';
-import { MoonIcon, SunIcon } from '@radix-ui/react-icons';
-import { Button } from '@/components/ui/button';
+import { useState, useEffect } from "react";
+import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
+import { Button } from "@/components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
   TooltipProvider,
-} from '@/components/ui/tooltip';
+} from "@/components/ui/tooltip";
 
 export function ModeToggle() {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState("light");
 
-  // Efeito para sincronizar o tema com o armazenamento local ou preferências do usuário
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || 'light';
+    const savedTheme = localStorage.getItem("theme") || "light";
     setTheme(savedTheme);
-    document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+    document.documentElement.classList.toggle("dark", savedTheme === "dark");
   }, []);
 
   const toggleTheme = () => {
-    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    const newTheme = theme === "dark" ? "light" : "dark";
     setTheme(newTheme);
-    document.documentElement.classList.toggle('dark', newTheme === 'dark');
-    localStorage.setItem('theme', newTheme);
+    document.documentElement.classList.toggle("dark", newTheme === "dark");
+    localStorage.setItem("theme", newTheme);
   };
 
   return (

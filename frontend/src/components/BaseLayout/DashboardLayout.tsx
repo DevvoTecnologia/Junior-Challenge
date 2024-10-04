@@ -1,14 +1,19 @@
-// DashboardLayout.tsx
-import React from 'react';
-import { cn } from '../../lib/utils';
-import { useStore } from '../../hooks/use-store'; 
-import { AdminFooter } from '../AdminFooter/AdminFooter';
-import { AdminSideBar } from '../AdminSideBar/AdminSideBar';
-import { useSidebarToggle } from '../../hooks/use-sidebar-toggle';
-import { Outlet } from 'react-router-dom';
+import React from "react";
+import { cn } from "../../lib/utils";
+import { useStore } from "../../hooks/use-store";
+import { AdminFooter } from "../AdminFooter/AdminFooter";
+import { AdminSideBar } from "../AdminSideBar/AdminSideBar";
+import { useSidebarToggle } from "../../hooks/use-sidebar-toggle";
+import { Outlet, Navigate } from "react-router-dom";
+import { useAuthStore } from "../../stores/authStore";
 
 const DashboardLayout: React.FC = () => {
   const sidebar = useStore(useSidebarToggle, (state) => state);
+  const { isAuthenticated } = useAuthStore();
+
+  if (!isAuthenticated()) {
+    return <Navigate to="/" replace />;
+  }
 
   if (!sidebar) return null;
 

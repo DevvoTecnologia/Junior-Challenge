@@ -1,8 +1,7 @@
-// components/BaseLayout/LoginLayout.tsx
-import React from 'react';
-import { Outlet } from 'react-router-dom';
-import { ThemeProvider } from '../ThemeContext/ThemeContext';
-import '../../index.css'; // Certifique-se de que este arquivo CSS está acessível
+import React from "react";
+import { Outlet } from "react-router-dom";
+import { ThemeProvider } from "../ThemeContext/ThemeContext";
+import "../../index.css";
 
 const LoginLayout: React.FC = () => {
   return (

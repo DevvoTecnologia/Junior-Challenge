@@ -1,5 +1,4 @@
 import {
-  Users,
   Settings,
   SquarePen,
   LayoutGrid,
@@ -39,69 +38,33 @@ export function getMenuList(pathname: string): Group[] {
       ],
     },
     {
-      groupLabel: "Contents",
+      groupLabel: "Administrar anéis",
       menus: [
         {
           href: "",
-          label: "Alunos",
-          active: pathname.includes("/cursos"),
+          label: "Crie seu anel",
+          active: pathname.includes("/aneis"),
           icon: SquarePen,
           submenus: [
             {
-              href: "/alunos/alunos",
-              label: "Todos os alunos",
-              active: pathname === "/alunos",
+              href: "/aneis/create",
+              label: "Criar / Editar aneis",
+              active: pathname === "/aneis",
             },
             {
-              href: "/alunos/alunosEmProgressao",
-              label: "Alunos em progressão",
+              href: "/aneis/show",
+              label: "Visualizar Aneis",
               active: pathname === "/alunosEmProgressao",
             },
-            {
-              href: "/alunos/concluidos",
-              label: "Alunos concluídos",
-              active: pathname === "/concluidos",
-            },
-            {
-              href: "/alunos/desistentes",
-              label: "Alunos desistentes",
-              active: pathname === "/desistentes",
-            },
-            {
-              href: "/alunos/cadastroDeAlunos",
-              label: "Cadastrar Alunos",
-              active: pathname === "/cadastroDeAlunos",
-            }
+ 
           ],
-        },
-        {
-          href: "",
-          label: "Cursos",
-          active: pathname.includes("/cursos"),
-          icon: SquarePen,
-          submenus: [
-            {
-              href: "/cursos/todosOsCursos",
-              label: "Todos os cursos",
-              active: pathname === "/todosOsCursos",
-            },
-            
-          ],
-        },
-        
+        },        
       ],
       
     },
     {
-      groupLabel: "Settings",
+      groupLabel: "Configurações",
       menus: [
-        {
-          href: "/users",
-          label: "Usuários",
-          active: pathname.includes("/users"),
-          icon: Users,
-          submenus: [],
-        },
         {
           href: "/account",
           label: "Conta",

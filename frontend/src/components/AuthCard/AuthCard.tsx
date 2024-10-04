@@ -1,36 +1,67 @@
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAuthStore } from "../../stores/authStore";
 
 export function AuthCard() {
-  const [activeTab, setActiveTab] = useState("login")
-  const [loginEmail, setLoginEmail] = useState("")
-  const [loginPassword, setLoginPassword] = useState("")
-  const [registerName, setRegisterName] = useState("")
-  const [registerEmail, setRegisterEmail] = useState("")
-  const [registerPassword, setRegisterPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-  const [passwordError, setPasswordError] = useState("")
+  const [activeTab, setActiveTab] = useState("login");
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [registerName, setRegisterName] = useState("");
+  const [registerEmail, setRegisterEmail] = useState("");
+  const [registerPassword, setRegisterPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [authError, setAuthError] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log("Login:", { email: loginEmail, password: loginPassword })
-    // Implement login logic here
-  }
+  const { login, register } = useAuthStore();
+  const navigate = useNavigate();
 
-  const handleRegister = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (registerPassword !== confirmPassword) {
-      setPasswordError("As senhas não coincidem")
-      return
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError("");
+    try {
+      await login(loginEmail, loginPassword);
+      navigate("/dashboard");
+    } catch (error) {
+      setAuthError(
+        error instanceof Error ? error.message : "Erro ao fazer login"
+      );
     }
-    setPasswordError("")
-    console.log("Register:", { name: registerName, email: registerEmail, password: registerPassword })
-    // Implement registration logic here
-  }
+  };
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthError("");
+    if (registerPassword !== confirmPassword) {
+      setPasswordError("As senhas não coincidem");
+      return;
+    }
+    setPasswordError("");
+    try {
+      await register(registerName, registerEmail, registerPassword);
+      setActiveTab("login");
+      setAuthError("Cadastro realizado com sucesso. Por favor, faça login.");
+      setRegisterName("");
+      setRegisterEmail("");
+      setRegisterPassword("");
+      setConfirmPassword("");
+    } catch (error) {
+      setAuthError(
+        error instanceof Error ? error.message : "Erro ao realizar o cadastro"
+      );
+    }
+  };
 
   return (
     <Card className="w-[350px]">
@@ -44,6 +75,17 @@ export function AuthCard() {
             <TabsTrigger value="login">Login</TabsTrigger>
             <TabsTrigger value="register">Cadastro</TabsTrigger>
           </TabsList>
+          {authError && (
+            <p
+              className={`text-sm mt-2 ${
+                authError.includes("sucesso")
+                  ? "text-green-500"
+                  : "text-red-500"
+              }`}
+            >
+              {authError}
+            </p>
+          )}
           <TabsContent value="login">
             <form onSubmit={handleLogin}>
               <div className="grid w-full items-center gap-4">
@@ -118,7 +160,9 @@ export function AuthCard() {
                     required
                   />
                 </div>
-                {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
+                {passwordError && (
+                  <p className="text-red-500 text-sm">{passwordError}</p>
+                )}
               </div>
               <Button className="w-full mt-4" type="submit">
                 Cadastrar
@@ -128,5 +172,5 @@ export function AuthCard() {
         </Tabs>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -1,5 +1,3 @@
-
-import logo from "/assets/images/favcon.png"
 import { cn } from "@/lib/utils";
 import { useStore } from "@/hooks/use-store";
 import { Button } from "@/components/ui/button";
@@ -30,14 +28,6 @@ export function AdminSideBar() {
           asChild
         >
           <a href="/dashboard" className="flex items-center gap-2">
-          <img
-            src= {logo}
-            width={18}
-            height={10}
-            alt="RC Planing"
-            title="RC Planing"
-            className="w-7 h-7 object-cover"
-            />
             <h1
               className={cn(
                 "font-bold text-lg whitespace-nowrap transition-[transform,opacity,display] ease-in-out duration-300",
@@ -46,7 +36,7 @@ export function AdminSideBar() {
                   : "translate-x-0 opacity-100"
               )}
             >
-              planing
+              Os anéis do poder
             </h1>
           </a>
         </Button>

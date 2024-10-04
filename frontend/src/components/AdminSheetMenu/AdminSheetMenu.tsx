@@ -1,14 +1,14 @@
-import { Link } from 'react-router-dom'; // Substituir por React Router
-import { MenuIcon } from 'lucide-react';
-import logo from '/assets/images/favcon.png'; // Certifique-se de que o caminho está correto
-import { Button } from '@/components/ui/button';
-import { Menu } from '@/components/AdminMenu/AdminMenu';
+import { Link } from "react-router-dom";
+import { MenuIcon } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Menu } from "@/components/AdminMenu/AdminMenu";
 import {
   Sheet,
   SheetHeader,
   SheetContent,
   SheetTrigger,
-} from '@/components/ui/sheet';
+} from "@/components/ui/sheet";
 
 export function SheetMenu() {
   return (
@@ -26,15 +26,7 @@ export function SheetMenu() {
             asChild
           >
             <Link to="/dashboard" className="flex items-center gap-2">
-              <img
-                src={logo}
-                width={30}
-                height={30}
-                alt="RC Planing"
-                title="RC Planing"
-                className="w-7 h-7 object-cover"
-              />
-              <h1 className="font-bold text-lg">planing</h1>
+              <h1 className="font-bold text-lg">Anéis do Poder</h1>
             </Link>
           </Button>
         </SheetHeader>
