@@ -1,8 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Anel } from './anel.entity';
-import { CreateAnelDto, UpdateAnelDto } from './dto/anel.dto';
+import { CreateAnelDto, UpdateAnelDto } from '../dto/anel.dto';
 import { User } from '../users/user.entity';
 
 @Injectable()
@@ -14,14 +14,20 @@ export class AneisService {
     private userRepository: Repository<User>,
   ) {}
 
-  async findAll(): Promise<Anel[]> {
-    return this.anelRepository.find({ relations: ['user'] });
+  async findAllByUser(userId: number): Promise<Anel[]> {
+    return this.anelRepository.find({
+      where: { user: { id: userId } },
+      relations: ['user']
+    });
   }
 
-  async findOne(id: number): Promise<Anel> {
-    const anel = await this.anelRepository.findOne({ where: { id }, relations: ['user'] });
+  async findOneByUser(id: number, userId: number): Promise<Anel> {
+    const anel = await this.anelRepository.findOne({
+      where: { id, user: { id: userId } },
+      relations: ['user']
+    });
     if (!anel) {
-      throw new NotFoundException(`Anel com ID ${id} não encontrado`);
+      throw new NotFoundException(`Anel com ID ${id} não encontrado ou não pertence ao usuário`);
     }
     return anel;
   }
@@ -47,14 +53,14 @@ export class AneisService {
     return this.anelRepository.save(anel);
   }
 
-  async update(id: number, updateAnelDto: UpdateAnelDto): Promise<Anel> {
-    const anel = await this.findOne(id);
+  async update(id: number, updateAnelDto: UpdateAnelDto, userId: number): Promise<Anel> {
+    const anel = await this.findOneByUser(id, userId);
     Object.assign(anel, updateAnelDto);
     return this.anelRepository.save(anel);
   }
 
-  async remove(id: number): Promise<void> {
-    const anel = await this.findOne(id);
+  async remove(id: number, userId: number): Promise<void> {
+    const anel = await this.findOneByUser(id, userId);
     await this.anelRepository.remove(anel);
   }
 

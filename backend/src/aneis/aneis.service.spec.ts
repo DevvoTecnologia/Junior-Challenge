@@ -3,12 +3,14 @@ import { AneisService } from './aneis.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Anel } from './anel.entity';
+import { User } from '../users/user.entity';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
-import { CreateAnelDto, UpdateAnelDto } from './dto/anel.dto';
+import { CreateAnelDto, UpdateAnelDto } from '../dto/anel.dto';
 
 describe('AneisService', () => {
   let service: AneisService;
-  let repo: Repository<Anel>;
+  let anelRepo: Repository<Anel>;
+  let userRepo: Repository<User>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -18,43 +20,56 @@ describe('AneisService', () => {
           provide: getRepositoryToken(Anel),
           useClass: Repository,
         },
+        {
+          provide: getRepositoryToken(User),
+          useClass: Repository,
+        },
       ],
     }).compile();
 
     service = module.get<AneisService>(AneisService);
-    repo = module.get<Repository<Anel>>(getRepositoryToken(Anel));
+    anelRepo = module.get<Repository<Anel>>(getRepositoryToken(Anel));
+    userRepo = module.get<Repository<User>>(getRepositoryToken(User));
   });
 
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
 
-  describe('findAll', () => {
-    it('should return an array of aneis', async () => {
+  describe('findAllByUser', () => {
+    it('should return an array of aneis for a user', async () => {
       const result = [new Anel()];
-      jest.spyOn(repo, 'find').mockResolvedValue(result);
+      jest.spyOn(anelRepo, 'find').mockResolvedValue(result);
 
-      expect(await service.findAll()).toEqual(result);
+      expect(await service.findAllByUser(1)).toEqual(result);
+      expect(anelRepo.find).toHaveBeenCalledWith({
+        where: { user: { id: 1 } },
+        relations: ['user']
+      });
     });
   });
 
-  describe('findOne', () => {
-    it('should return an anel', async () => {
+  describe('findOneByUser', () => {
+    it('should return an anel for a user', async () => {
       const result = new Anel();
-      jest.spyOn(repo, 'findOne').mockResolvedValue(result);
+      jest.spyOn(anelRepo, 'findOne').mockResolvedValue(result);
 
-      expect(await service.findOne(1)).toEqual(result);
+      expect(await service.findOneByUser(1, 1)).toEqual(result);
+      expect(anelRepo.findOne).toHaveBeenCalledWith({
+        where: { id: 1, user: { id: 1 } },
+        relations: ['user']
+      });
     });
 
-    it('should throw NotFoundException', async () => {
-      jest.spyOn(repo, 'findOne').mockResolvedValue(null);
+    it('Deve retornar um NotFoundException', async () => {
+      jest.spyOn(anelRepo, 'findOne').mockResolvedValue(null);
 
-      await expect(service.findOne(1)).rejects.toThrow(NotFoundException);
+      await expect(service.findOneByUser(1, 1)).rejects.toThrow(NotFoundException);
     });
   });
 
   describe('create', () => {
-    it('should successfully create an anel', async () => {
+    it('Deve conseguir criar um anel', async () => {
       const createAnelDto: CreateAnelDto = {
         nome: 'Narya',
         poder: 'Fogo',
@@ -65,15 +80,19 @@ describe('AneisService', () => {
       const newAnel = new Anel();
       Object.assign(newAnel, createAnelDto);
 
-      jest.spyOn(repo, 'count').mockResolvedValue(0);
-      jest.spyOn(repo, 'create').mockReturnValue(newAnel);
-      jest.spyOn(repo, 'save').mockResolvedValue(newAnel);
+      const mockUser = new User();
+      mockUser.id = 1;
 
-      const result = await service.create(createAnelDto);
+      jest.spyOn(anelRepo, 'count').mockResolvedValue(0);
+      jest.spyOn(userRepo, 'findOne').mockResolvedValue(mockUser);
+      jest.spyOn(anelRepo, 'create').mockReturnValue(newAnel);
+      jest.spyOn(anelRepo, 'save').mockResolvedValue(newAnel);
+
+      const result = await service.create(createAnelDto, 1);
       expect(result).toEqual(newAnel);
     });
 
-    it('should throw BadRequestException if limit is exceeded', async () => {
+    it('Deve retornar um BadRequestException se o limite for excedido', async () => {
       const createAnelDto: CreateAnelDto = {
         nome: 'Narya',
         poder: 'Fogo',
@@ -82,12 +101,12 @@ describe('AneisService', () => {
         imagem: 'http://example.com/narya.jpg'
       };
 
-      jest.spyOn(repo, 'count').mockResolvedValue(3);
+      jest.spyOn(anelRepo, 'count').mockResolvedValue(3);
 
-      await expect(service.create(createAnelDto)).rejects.toThrow(BadRequestException);
+      await expect(service.create(createAnelDto, 1)).rejects.toThrow(BadRequestException);
     });
 
-    it('should throw BadRequestException for invalid forjadoPor', async () => {
+    it('Deve retornar um BadRequestException se o campo forjadoPor for invalido', async () => {
       const createAnelDto: CreateAnelDto = {
         nome: 'Anel Inválido',
         poder: 'Poder Inválido',
@@ -96,14 +115,12 @@ describe('AneisService', () => {
         imagem: 'http://example.com/invalido.jpg'
       };
 
-      jest.spyOn(repo, 'count').mockResolvedValue(0);
-
-      await expect(service.create(createAnelDto)).rejects.toThrow(BadRequestException);
+      await expect(service.create(createAnelDto, 1)).rejects.toThrow(BadRequestException);
     });
   });
 
   describe('update', () => {
-    it('should update an anel', async () => {
+    it('Deve realizar um update no anel', async () => {
       const anel = new Anel();
       anel.id = 1;
       anel.nome = 'Narya';
@@ -114,33 +131,33 @@ describe('AneisService', () => {
 
       const updateAnelDto: UpdateAnelDto = { nome: 'Narya Atualizado' };
 
-      jest.spyOn(repo, 'findOne').mockResolvedValue(anel);
-      jest.spyOn(repo, 'save').mockResolvedValue({ ...anel, ...updateAnelDto });
+      jest.spyOn(service, 'findOneByUser').mockResolvedValue(anel);
+      jest.spyOn(anelRepo, 'save').mockResolvedValue({ ...anel, ...updateAnelDto });
 
-      const result = await service.update(1, updateAnelDto);
+      const result = await service.update(1, updateAnelDto, 1);
       expect(result.nome).toBe('Narya Atualizado');
     });
 
-    it('should throw NotFoundException if anel not found', async () => {
-      jest.spyOn(repo, 'findOne').mockResolvedValue(null);
+    it('Deve retornar um NotFoundException se um anel não for encontrado', async () => {
+      jest.spyOn(service, 'findOneByUser').mockRejectedValue(new NotFoundException());
 
-      await expect(service.update(1, { nome: 'Teste' })).rejects.toThrow(NotFoundException);
+      await expect(service.update(1, { nome: 'Teste' }, 1)).rejects.toThrow(NotFoundException);
     });
   });
 
   describe('remove', () => {
-    it('should remove an anel', async () => {
+    it('Deve remover um anel', async () => {
       const anel = new Anel();
-      jest.spyOn(repo, 'findOne').mockResolvedValue(anel);
-      jest.spyOn(repo, 'remove').mockResolvedValue(undefined);
+      jest.spyOn(service, 'findOneByUser').mockResolvedValue(anel);
+      jest.spyOn(anelRepo, 'remove').mockResolvedValue(anel);
 
-      await expect(service.remove(1)).resolves.not.toThrow();
+      await expect(service.remove(1, 1)).resolves.not.toThrow();
     });
 
-    it('should throw NotFoundException if anel not found', async () => {
-      jest.spyOn(repo, 'findOne').mockResolvedValue(null);
+    it('Deve retornar um NotFoundException se um anel não for encontrado', async () => {
+      jest.spyOn(service, 'findOneByUser').mockRejectedValue(new NotFoundException());
 
-      await expect(service.remove(1)).rejects.toThrow(NotFoundException);
+      await expect(service.remove(1, 1)).rejects.toThrow(NotFoundException);
     });
   });
 });

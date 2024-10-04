@@ -1,7 +1,7 @@
 import { Controller, Post, Body, UnauthorizedException } from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { AuthService } from "./auth.service";
-import { LoginDto } from "../aneis/dto/login.dto";
+import { LoginDto } from "../dto/login.dto";
 
 @ApiTags("auth")
 @Controller("auth")
@@ -19,6 +19,7 @@ export class AuthController {
         id: { type: "number" },
         nome: { type: "string" },
         email: { type: "string" },
+       
       },
     },
   })
