@@ -12,9 +12,8 @@ class FetchClient {
       const response = await axiosInstance.get<T>(url, config);
 
       return response;
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
+    } catch {
+      return undefined;
     }
   }
 
@@ -23,9 +22,8 @@ class FetchClient {
       const response = await axiosInstance.post<T>(url, data, config);
 
       return response;
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
+    } catch {
+      return undefined;
     }
   }
 
@@ -34,9 +32,8 @@ class FetchClient {
       const response = await axiosInstance.put<T>(url, data, config);
 
       return response;
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
+    } catch {
+      return undefined;
     }
   }
 
@@ -45,9 +42,8 @@ class FetchClient {
       const response = await axiosInstance.delete<T>(url, config);
 
       return response;
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
+    } catch {
+      return undefined;
     }
   }
 }

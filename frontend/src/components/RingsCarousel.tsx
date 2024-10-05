@@ -41,11 +41,11 @@ export default function RingsCarousel({
   return (
     <section className="rounded-lg border-[1px] border-yellow-600 bg-gradient-to-b from-gray-900 to-gray-800 p-6 shadow-lg">
       <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex gap-6">
+        <div className="flex gap-1">
           {UserRings?.map((ring) => (
             <motion.div
               key={ring.id}
-              className="relative flex w-64 flex-none flex-col justify-between rounded-lg border-2 border-yellow-600 bg-gray-700 p-4 shadow-md transition-shadow duration-300 hover:shadow-xl"
+              className="relative ml-2 flex w-64 flex-none flex-col justify-between rounded-lg border-2 border-yellow-600 bg-gray-700 p-4 shadow-md transition-shadow duration-300 hover:shadow-xl"
               style={{ visibility: "visible" }} // Adicione esta linha
             >
               {isMyProfile && (
