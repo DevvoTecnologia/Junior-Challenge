@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 
 import { auth } from "@/auth";
 
+// Define the routes that require authentication
 const protectedRoutes = [/^\/rings(\/.*)?$/, "/users/settings"];
+
+// Define the routes that do not require authentication and are only accessible to unauthenticated users
 const unauthenticatedRoutes = ["/login", "/register"];
 
 export default auth((request) => {
@@ -22,6 +25,7 @@ export default auth((request) => {
     return NextResponse.redirect(new URL("/", request.nextUrl));
   }
 
+  // Continue to the next middleware
   return NextResponse.next();
 });
 
