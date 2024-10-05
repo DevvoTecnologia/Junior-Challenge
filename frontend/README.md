@@ -62,6 +62,16 @@ Once the server is running, visit [http://localhost:3001](http://localhost:3001)
 
 You can run end-to-end (e2e) tests using Cypress. Follow these steps:
 
+Make sure you have a test user
+
+username: admin
+
+password: admin
+
+id: 1
+
+for cypress to work properly, OR add a user and modify the tests
+
 1. Start the development server:
     ```bash
     yarn dev
