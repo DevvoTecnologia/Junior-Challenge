@@ -4,10 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
-import { RingsDeleteBtnText } from "@/components/form/RingsDelete";
+import RingsDeleteBtnText from "@/components/form/RingsDelete/RingsDeleteBtnText";
 import RingsUpdateForm from "@/components/form/RingsUpdate";
 import fetchServer from "@/lib/fetchServer";
+import getSessionServer from "@/lib/getSessionServer";
 import type { Ring } from "@/types/Ring";
 
 interface RingIdPageProps {
@@ -21,8 +21,7 @@ export default async function RingIdPage({
 }: Readonly<RingIdPageProps>) {
   let response: AxiosResponse<Ring> | null;
 
-  const session = await auth();
-  const token = session?.user.accessToken;
+  const { token } = await getSessionServer();
 
   try {
     response = await fetchServer.get(`/ring/${ringId}`, {

@@ -2,21 +2,17 @@ import { type AxiosResponse } from "axios";
 import * as motion from "framer-motion/client";
 import Image from "next/image";
 import Link from "next/link";
-import { FaEdit } from "react-icons/fa";
-import { FaCircleUser } from "react-icons/fa6";
+import { FaEdit, FaUserCircle } from "react-icons/fa";
 
-import { auth } from "@/auth";
-import { RingsDeleteBtnIconRed } from "@/components/form/RingsDelete";
+import RingsDeleteBtnIconRed from "@/components/form/RingsDelete/RingsDeleteBtnIconRed";
 import fetchServer from "@/lib/fetchServer";
+import getSessionServer from "@/lib/getSessionServer";
 import type { Rings } from "@/types/Ring";
 
 export default async function RingsPage() {
   let response: AxiosResponse<Rings> | null;
 
-  const session = await auth();
-
-  const token = session?.user.accessToken;
-  const userId = session?.user.userId;
+  const { token, userId } = await getSessionServer();
 
   try {
     response = await fetchServer.get("/ring", {
@@ -43,7 +39,7 @@ export default async function RingsPage() {
             className="flex items-center justify-center rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
           >
             My Profile
-            <FaCircleUser className="ml-2 inline-block" />
+            <FaUserCircle className="ml-2 inline-block" />
           </motion.button>
         </Link>
       </div>

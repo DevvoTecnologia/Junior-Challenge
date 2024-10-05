@@ -3,12 +3,12 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
 import { useState, useTransition } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { toast } from "react-toastify";
 
 import { LoadingIcon } from "@/components/Loading";
+import { authenticateUser } from "@/lib/(auth)/login/auth";
+import { validatePassword, validateUsername } from "@/lib/(auth)/validators";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -22,37 +22,16 @@ export default function LoginPage() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (username.length < 3) {
-      return toast.error("Username should be at least 3 characters long");
+    if (!validateUsername(username) || !validatePassword(password)) {
+      return;
     }
 
-    if (password.length < 4) {
-      return toast.error("Password should be at least 4 characters long");
+    const isAuthenticated = await authenticateUser(username, password);
+
+    if (isAuthenticated) {
+      router.replace(`/users`);
+      router.refresh();
     }
-
-    if (password.length > 255) {
-      return toast.error("Password should be at most 255 characters long");
-    }
-
-    if (username.length > 20) {
-      return toast.error("Username should be at most 20 characters long");
-    }
-
-    const response = await signIn("credentials", {
-      username,
-      password,
-      redirect: false,
-    });
-
-    if (response?.error) {
-      return toast.error("Invalid username or password");
-    }
-
-    toast.success("Logged in successfully");
-
-    router.replace(`/users`);
-
-    router.refresh();
   }
 
   return (

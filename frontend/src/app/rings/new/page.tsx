@@ -1,12 +1,11 @@
 import * as motion from "framer-motion/client";
 import Link from "next/link";
 
-import { auth } from "@/auth";
 import RingsCreateForm from "@/components/form/RingsCreate";
+import getSessionServer from "@/lib/getSessionServer";
 
 export default async function RingNewPage() {
-  const session = await auth();
-  const token = session?.user.accessToken;
+  const { token } = await getSessionServer();
 
   return (
     <motion.div

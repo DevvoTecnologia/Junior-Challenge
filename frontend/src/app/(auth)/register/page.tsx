@@ -5,12 +5,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { toast } from "react-toastify";
 
 import { LoadingIcon } from "@/components/Loading";
-import catchErrorClient from "@/global/catchErrorClient";
-import axiosInstance from "@/service/axiosInstance";
-import type { RegisterSuccess } from "@/types/User";
+import { registerUser } from "@/lib/(auth)/register/auth";
+import { validatePassword, validateUsername } from "@/lib/(auth)/validators";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -24,32 +22,14 @@ export default function RegisterPage() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (username.length < 3) {
-      return toast.error("Username should be at least 3 characters long");
+    if (!validateUsername(username) || !validatePassword(password)) {
+      return;
     }
 
-    if (password.length < 4) {
-      return toast.error("Password should be at least 4 characters long");
-    }
+    const isRegistered = await registerUser(username, password);
 
-    if (password.length > 255) {
-      return toast.error("Password should be at most 255 characters long");
-    }
-
-    if (username.length > 20) {
-      return toast.error("Username should be at most 20 characters long");
-    }
-
-    try {
-      await axiosInstance.post<RegisterSuccess>("/user", {
-        username,
-        password,
-      });
-
-      toast.success("User registered successfully");
+    if (isRegistered) {
       router.push("/login");
-    } catch (error) {
-      return catchErrorClient(error);
     }
   }
 

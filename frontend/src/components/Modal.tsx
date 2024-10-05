@@ -1,6 +1,4 @@
-"use client";
-
-import { motion } from "framer-motion";
+import * as motion from "framer-motion/client";
 
 interface ModalProps {
   children: React.ReactNode;

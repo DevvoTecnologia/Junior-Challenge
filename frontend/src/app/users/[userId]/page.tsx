@@ -5,9 +5,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { IoMdArrowDropleftCircle } from "react-icons/io";
 
-import { auth } from "@/auth";
 import RingsCarousel from "@/components/RingsCarousel";
 import fetchServer from "@/lib/fetchServer";
+import getSessionServer from "@/lib/getSessionServer";
 import type { User, UserRings } from "@/types/User";
 
 interface UserProfilePageProps {
@@ -20,8 +20,8 @@ export default async function UserProfilePage({
   params: { userId },
 }: Readonly<UserProfilePageProps>) {
   let response: AxiosResponse<User>;
-  const session = await auth();
-  const token = session?.user.accessToken;
+
+  const { token, userId: userIdFromSession } = await getSessionServer();
 
   try {
     response = await fetchServer.get("/user/" + userId);
@@ -30,7 +30,7 @@ export default async function UserProfilePage({
   }
 
   // Check if the user is viewing their own profile
-  const isMyProfile = session?.user.userId === response.data.id;
+  const isMyProfile = userIdFromSession === response.data.id;
 
   return (
     <div className="min-h-screen bg-gray-50">

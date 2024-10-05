@@ -1,9 +1,9 @@
 import Link from "next/link";
 
-import { auth } from "@/auth";
+import getSessionServer from "@/lib/getSessionServer";
 
 export default async function LoginPage() {
-  const session = await auth();
+  const { session } = await getSessionServer();
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-r from-blue-400 to-purple-500 p-4">

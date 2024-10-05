@@ -13,7 +13,7 @@ import {
 
 import type { User } from "@/types/User";
 
-import { RingsDeleteBtnIconBlack } from "./form/RingsDelete";
+import RingsDeleteBtnIconBlack from "./form/RingsDelete/RingsDeleteBtnIconBlack";
 
 interface RingsCarouselProps {
   UserRings: User["rings"];

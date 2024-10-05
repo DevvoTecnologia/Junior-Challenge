@@ -3,20 +3,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { IoMdArrowDroprightCircle } from "react-icons/io";
 
-import { auth } from "@/auth";
 import RingsCarousel from "@/components/RingsCarousel";
 import fetchServer from "@/lib/fetchServer";
+import getSessionServer from "@/lib/getSessionServer";
 import type { Users } from "@/types/User";
 
 export default async function UsersProfilePage() {
   const response = await fetchServer.get<Users>("/user");
-  const session = await auth();
-  const token = session?.user.accessToken;
 
-  const myUserId = session?.user.userId;
+  const { token, userId } = await getSessionServer();
 
   // Filter out the current user
-  const filteredUsers = response.data.filter((user) => user.id !== myUserId);
+  const filteredUsers = response.data.filter((user) => user.id !== userId);
 
   // Sort users by whether they have rings or not
   const sortedUsers = filteredUsers.toSorted((a, b) => {

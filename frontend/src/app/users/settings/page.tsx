@@ -1,13 +1,10 @@
 import * as motion from "framer-motion/client";
 
-import { auth } from "@/auth";
 import SettingsForm from "@/components/form/Settings";
+import getSessionServer from "@/lib/getSessionServer";
 
 export default async function UsersSettingsPage() {
-  const session = await auth();
-  const username = session?.user.username;
-  const userId = session?.user.userId;
-  const token = session?.user.accessToken;
+  const { token, userId, username } = await getSessionServer();
 
   return (
     <motion.div

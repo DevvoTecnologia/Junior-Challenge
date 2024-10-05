@@ -5,14 +5,13 @@ import { CiSettings } from "react-icons/ci";
 import { GiBigDiamondRing } from "react-icons/gi";
 import { IoLogIn, IoLogOut } from "react-icons/io5";
 
-import { auth } from "@/auth";
+import getSessionServer from "@/lib/getSessionServer";
 
 import BtnLogout from "../BtnLogout";
 import ProfileOrUsers from "./ProfileOrUsers";
 
 export default async function Header() {
-  const session = await auth();
-  const userId = session?.user.userId;
+  const { session, userId } = await getSessionServer();
 
   return (
     <header className="flex h-28 flex-col items-center justify-evenly bg-gray-800 px-2 shadow-lg sm:px-6 md:h-[4.5rem] md:flex-row md:justify-between">
