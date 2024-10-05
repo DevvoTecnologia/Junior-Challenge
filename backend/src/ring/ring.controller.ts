@@ -1,9 +1,15 @@
-import { CacheInterceptor } from "@nestjs/cache-manager";
+import {
+  Cache,
+  CACHE_MANAGER,
+  CacheInterceptor,
+  CacheKey,
+} from "@nestjs/cache-manager";
 import {
   Body,
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   ParseFilePipeBuilder,
   ParseIntPipe,
@@ -31,14 +37,19 @@ import { ReqAuthUser } from "./types/Req";
 @ApiBearerAuth("defaultBearerAuth")
 @UseInterceptors(CacheInterceptor)
 export class RingController {
-  constructor(private readonly ringService: RingService) {}
+  constructor(
+    private readonly ringService: RingService,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+  ) {}
 
   @Get()
+  @CacheKey("rings")
   async findAll(@Req() req: ReqAuthUser): Promise<Ring[]> {
     return await this.ringService.findAll(req);
   }
 
   @Get(":id")
+  @CacheKey("rings/:id")
   async findOne(
     @Param("id", ParseIntPipe) id: number,
     @Req() req: ReqAuthUser,
@@ -89,7 +100,10 @@ export class RingController {
     file: Express.Multer.File,
     @Req() req: ReqAuthUser,
   ): Promise<Ring> {
-    return await this.ringService.create(createRingDto, file, req);
+    const ring = await this.ringService.create(createRingDto, file, req);
+    await this.cacheManager.del("rings");
+    await this.cacheManager.del("rings/:id");
+    return ring;
   }
 
   @Put(":id")
@@ -136,7 +150,10 @@ export class RingController {
     file: Express.Multer.File | undefined,
     @Req() req: ReqAuthUser,
   ): Promise<Ring> {
-    return await this.ringService.update(id, updateRingDto, file, req);
+    const ring = await this.ringService.update(id, updateRingDto, file, req);
+    await this.cacheManager.del("rings");
+    await this.cacheManager.del("rings/:id");
+    return ring;
   }
 
   @Delete(":id")
@@ -144,6 +161,9 @@ export class RingController {
     @Param("id", ParseIntPipe) id: number,
     @Req() req: ReqAuthUser,
   ): Promise<null> {
-    return await this.ringService.delete(id, req);
+    const ring = await this.ringService.delete(id, req);
+    await this.cacheManager.del("rings");
+    await this.cacheManager.del("rings/:id");
+    return ring;
   }
 }

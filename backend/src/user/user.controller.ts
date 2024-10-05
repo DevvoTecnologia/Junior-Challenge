@@ -1,9 +1,15 @@
-import { CacheInterceptor } from "@nestjs/cache-manager";
+import {
+  Cache,
+  CACHE_MANAGER,
+  CacheInterceptor,
+  CacheKey,
+} from "@nestjs/cache-manager";
 import {
   Body,
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   ParseIntPipe,
   Post,
@@ -27,14 +33,19 @@ import { UserService } from "./user.service";
 @ApiTags("User")
 @UseInterceptors(CacheInterceptor)
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+  ) {}
 
   @Get()
+  @CacheKey("users")
   async findAll(): Promise<User[]> {
     return await this.userService.findAll();
   }
 
   @Get(":id")
+  @CacheKey("users/:id")
   async findByPk(@Param("id", ParseIntPipe) id: number): Promise<User> {
     return await this.userService.findByPk(id);
   }
@@ -43,7 +54,10 @@ export class UserController {
   async create(
     @Body(ValidationPipe) createUserDto: CreateUserDto,
   ): Promise<Pick<User, "id" | "username">> {
-    return await this.userService.create(createUserDto);
+    const user = await this.userService.create(createUserDto);
+    await this.cacheManager.del("users");
+    await this.cacheManager.del("users/:id");
+    return user;
   }
 
   @Put(":id")
@@ -55,7 +69,10 @@ export class UserController {
     @Req()
     req: ReqAuthUser,
   ): Promise<Pick<User, "id" | "username">> {
-    return await this.userService.update(id, updateUserDto, req);
+    const user = await this.userService.update(id, updateUserDto, req);
+    await this.cacheManager.del("users");
+    await this.cacheManager.del("users/:id");
+    return user;
   }
 
   @Delete(":id")
@@ -66,6 +83,9 @@ export class UserController {
     @Body(ValidationPipe) deleteUserDto: DeleteUserDto,
     @Req() req: ReqAuthUser,
   ): Promise<null> {
-    return await this.userService.delete(id, deleteUserDto, req);
+    const user = await this.userService.delete(id, deleteUserDto, req);
+    await this.cacheManager.del("users");
+    await this.cacheManager.del("users/:id");
+    return user;
   }
 }
