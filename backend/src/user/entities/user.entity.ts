@@ -26,7 +26,7 @@ export class User extends Model {
 
   @BeforeSave({ name: "hashPassword" })
   static async hashPassword(instance: User): Promise<void> {
-    const newPassword = await bcrypt.hashSync(instance.password, 8);
+    const newPassword = await bcrypt.hash(instance.password, 8);
     instance.passwordHash = newPassword;
   }
 

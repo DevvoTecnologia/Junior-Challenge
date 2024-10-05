@@ -154,10 +154,10 @@ export class RingService extends RingGlobalValidations {
       ring.image = imageSaved;
     }
 
-    ring.name = name || ring.name;
-    ring.power = power || ring.power;
-    ring.owner = owner || ring.owner;
-    ring.forgedBy = forgedBy || ring.forgedBy;
+    ring.name = name ?? ring.name;
+    ring.power = power ?? ring.power;
+    ring.owner = owner ?? ring.owner;
+    ring.forgedBy = forgedBy ?? ring.forgedBy;
 
     ring.url = `${this.baseUrl}/uploads/${ring.image}`;
 

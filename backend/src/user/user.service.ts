@@ -152,7 +152,7 @@ export class UserService {
       userToUpdate.password = password;
     }
 
-    userToUpdate.username = username || userToUpdate.username;
+    userToUpdate.username = username || userToUpdate.username; // nosonar
 
     try {
       await userToUpdate.save();

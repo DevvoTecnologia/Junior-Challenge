@@ -94,7 +94,7 @@ export default class RingGlobalValidations {
     const filePath = join(destinationPath, newUniqueImageName);
 
     if (await !existsSync(destinationPath)) {
-      await mkdirSync(destinationPath);
+      mkdirSync(destinationPath);
     }
 
     if (isUpdate) {
@@ -110,7 +110,7 @@ export default class RingGlobalValidations {
       );
     }
 
-    await writeFileSync(filePath, bufferImageData);
+    writeFileSync(filePath, bufferImageData);
 
     return newUniqueImageName;
   }
@@ -121,7 +121,7 @@ export default class RingGlobalValidations {
     const filePath = join(destinationPath, imageName);
 
     if (await existsSync(filePath)) {
-      await unlinkSync(filePath);
+      unlinkSync(filePath);
     }
   }
 }

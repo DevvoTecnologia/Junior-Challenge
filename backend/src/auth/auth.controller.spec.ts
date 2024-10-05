@@ -57,7 +57,7 @@ describe("AuthController", () => {
 
   describe("getProfile", () => {
     it("should return an object with sub and username", async () => {
-      const response = await controller.getProfile({
+      const response = controller.getProfile({
         user: {
           sub: 1,
           username: "admin",
