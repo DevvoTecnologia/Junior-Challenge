@@ -82,7 +82,7 @@ export class RingController {
           fileType: /jpeg|png/,
         })
         .addMaxSizeValidator({
-          maxSize: 1024 * 1024,
+          maxSize: 1024 * 1024, // 1MB,
         })
         .build(),
     )
