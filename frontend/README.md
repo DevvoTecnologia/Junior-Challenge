@@ -15,7 +15,7 @@ For example, if you're running the app locally on `http://localhost:3001`, your 
 AUTH_TRUST_HOST=http://localhost:3001
 ```
 
-Additionally, ensure that the backend's `baseURL` is correctly configured in the Axios instance. You can set it in:
+Additionally, ensure that the backend's `baseURL` is correctly configured in the Axios instance. You can set it in: API_BASE_HOST at .env.local file
 
 ```
 frontend/src/service/axiosInstance/index.ts
