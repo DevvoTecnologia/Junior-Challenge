@@ -38,7 +38,7 @@ describe('AuthController', () => {
         nome: 'Test User',
         email: 'test@example.com',
         imagem: 'http://example.com/avatar.jpg', // Adicione esta linha
-        aneis: [] as Anel[]
+        aneis: [] as Anel[],
       };
       const mockLoginResult = {
         access_token: 'jwt_token',
@@ -46,19 +46,28 @@ describe('AuthController', () => {
         nome: 'Test User',
         email: 'test@example.com',
         imagem: 'http://example.com/avatar.jpg', // Adicione esta linha
-        aneis: [] as Anel[]
+        aneis: [] as Anel[],
       };
       jest.spyOn(service, 'validateUser').mockResolvedValue(mockUser);
       jest.spyOn(service, 'login').mockResolvedValue(mockLoginResult);
 
-      expect(await controller.login({ email: 'test@example.com', senha: 'password' })).toEqual(mockLoginResult);
+      expect(
+        await controller.login({
+          email: 'test@example.com',
+          senha: 'password',
+        }),
+      ).toEqual(mockLoginResult);
     });
 
     it('Deve retornoar um UnauthorizedException se as credenciais forem inválidas', async () => {
       jest.spyOn(service, 'validateUser').mockResolvedValue(null);
 
-      await expect(controller.login({ email: 'test@example.com', senha: 'wrong_password' }))
-        .rejects.toThrow(UnauthorizedException);
+      await expect(
+        controller.login({
+          email: 'test@example.com',
+          senha: 'wrong_password',
+        }),
+      ).rejects.toThrow(UnauthorizedException);
     });
   });
 });

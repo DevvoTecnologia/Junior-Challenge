@@ -17,8 +17,9 @@ O backend do projeto Anéis de Poder é construído com NestJS e TypeScript, ofe
 
 ## Tecnologias Utilizadas
 
-- **NestJS com TypeScript**: 
+- **NestJS com TypeScript**:
   NestJS foi escolhido sobre o Express padrão devido às suas vantagens para este projeto:
+
   - Arquitetura modular que promove organização e manutenibilidade do código.
   - Suporte nativo ao TypeScript, oferecendo tipagem estática e melhor tooling.
   - Injeção de dependência integrada, facilitando testes e desacoplamento.
@@ -101,7 +102,7 @@ JWT_SECRET=sua_chave_secreta
 ```
 
 5. Execute o projeto:
-npm run start:dev
+   npm run start:dev
 
 ## Banco de Dados
 
@@ -114,16 +115,14 @@ A autenticação é realizada usando JWT (JSON Web Tokens). O segredo do JWT é 
 Para gerar um novo JWT_SECRET, você pode usar o seguinte comando no Node.js:
 
 ```javascript
-
 console.log(require('crypto').randomBytes(64).toString('hex'));
-
 ```
 
 Execute este comando no terminal para gerar uma nova string segura para o JWT_SECRET.
 
 ## Testes
 
-Os testes unitários são realizados com Jest. 
+Os testes unitários são realizados com Jest.
 
 Para executar os testes: npm run test
 
@@ -132,8 +131,3 @@ Para executar os testes: npm run test
 A documentação da API é gerada automaticamente usando Swagger. Após iniciar o servidor, acesse:
 
 http://localhost:3000/api
-Esta página fornecerá uma interface interativa para explorar e testar os endpoints da API.
-
-Esta documentação fornece uma visão geral abrangente do backend do seu projeto, incluindo a estrutura detalhada, configuração, e informações importantes sobre as tecnologias utilizadas. A estrutura do projeto reflete exatamente o que foi mostrado na imagem fornecida. 
-
-Lembre-se de que você pode adicionar ou modificar seções conforme necessário para melhor atender às especificidades 

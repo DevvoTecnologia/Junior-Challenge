@@ -41,53 +41,84 @@ describe('AneisController', () => {
 
   describe('findAll', () => {
     it('should return an array of aneis for the user', async () => {
-      expect(await controller.findAll({ user: mockUser } as any)).toEqual([mockAnel]);
+      expect(await controller.findAll({ user: mockUser } as any)).toEqual([
+        mockAnel,
+      ]);
       expect(service.findAllByUser).toHaveBeenCalledWith(mockUser.userId);
     });
   });
 
   describe('findOne', () => {
     it('should return a single anel for the user', async () => {
-      expect(await controller.findOne(1, { user: mockUser } as any)).toEqual(mockAnel);
+      expect(await controller.findOne(1, { user: mockUser } as any)).toEqual(
+        mockAnel,
+      );
       expect(service.findOneByUser).toHaveBeenCalledWith(1, mockUser.userId);
     });
 
     it('should throw NotFoundException when anel is not found', async () => {
-      jest.spyOn(service, 'findOneByUser').mockRejectedValue(new NotFoundException());
-      await expect(controller.findOne(999, { user: mockUser } as any)).rejects.toThrow(NotFoundException);
+      jest
+        .spyOn(service, 'findOneByUser')
+        .mockRejectedValue(new NotFoundException());
+      await expect(
+        controller.findOne(999, { user: mockUser } as any),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 
   describe('create', () => {
     it('should create a new anel for the user', async () => {
-      const createAnelDto = { nome: 'Novo Anel', poder: 'Invisibilidade', portador: 'Frodo', forjadoPor: 'Elfos', imagem: 'url' };
-      expect(await controller.create(createAnelDto, { user: mockUser } as any)).toEqual(mockAnel);
-      expect(service.create).toHaveBeenCalledWith(createAnelDto, mockUser.userId);
+      const createAnelDto = {
+        nome: 'Novo Anel',
+        poder: 'Invisibilidade',
+        portador: 'Frodo',
+        forjadoPor: 'Elfos',
+        imagem: 'url',
+      };
+      expect(
+        await controller.create(createAnelDto, { user: mockUser } as any),
+      ).toEqual(mockAnel);
+      expect(service.create).toHaveBeenCalledWith(
+        createAnelDto,
+        mockUser.userId,
+      );
     });
   });
 
   describe('update', () => {
     it('should update an anel for the user', async () => {
       const updateAnelDto = { nome: 'Anel Atualizado' };
-      expect(await controller.update(1, updateAnelDto, { user: mockUser } as any)).toEqual(mockAnel);
-      expect(service.update).toHaveBeenCalledWith(1, updateAnelDto, mockUser.userId);
+      expect(
+        await controller.update(1, updateAnelDto, { user: mockUser } as any),
+      ).toEqual(mockAnel);
+      expect(service.update).toHaveBeenCalledWith(
+        1,
+        updateAnelDto,
+        mockUser.userId,
+      );
     });
 
     it('should throw NotFoundException when anel is not found', async () => {
       jest.spyOn(service, 'update').mockRejectedValue(new NotFoundException());
-      await expect(controller.update(999, {}, { user: mockUser } as any)).rejects.toThrow(NotFoundException);
+      await expect(
+        controller.update(999, {}, { user: mockUser } as any),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 
   describe('remove', () => {
     it('should remove an anel for the user', async () => {
-      expect(await controller.remove(1, { user: mockUser } as any)).toBeUndefined();
+      expect(
+        await controller.remove(1, { user: mockUser } as any),
+      ).toBeUndefined();
       expect(service.remove).toHaveBeenCalledWith(1, mockUser.userId);
     });
 
     it('should throw NotFoundException when anel is not found', async () => {
       jest.spyOn(service, 'remove').mockRejectedValue(new NotFoundException());
-      await expect(controller.remove(999, { user: mockUser } as any)).rejects.toThrow(NotFoundException);
+      await expect(
+        controller.remove(999, { user: mockUser } as any),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 });

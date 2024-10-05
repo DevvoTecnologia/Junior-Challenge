@@ -1,37 +1,36 @@
-import { Controller, Post, Body, UnauthorizedException } from "@nestjs/common";
-import { ApiTags, ApiOperation, ApiResponse } from "@nestjs/swagger";
-import { AuthService } from "./auth.service";
-import { LoginDto } from "../dto/login.dto";
+import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { AuthService } from './auth.service';
+import { LoginDto } from '../dto/login.dto';
 
-@ApiTags("auth")
-@Controller("auth")
+@ApiTags('auth')
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post("login")
-  @ApiOperation({ summary: "Realizar login de usuário" })
+  @Post('login')
+  @ApiOperation({ summary: 'Realizar login de usuário' })
   @ApiResponse({
     status: 200,
-    description: "Login realizado com sucesso",
+    description: 'Login realizado com sucesso',
     schema: {
       properties: {
-        access_token: { type: "string" },
-        id: { type: "number" },
-        nome: { type: "string" },
-        email: { type: "string" },
-        imagem: { type: "string" },
-       
+        access_token: { type: 'string' },
+        id: { type: 'number' },
+        nome: { type: 'string' },
+        email: { type: 'string' },
+        imagem: { type: 'string' },
       },
     },
   })
-  @ApiResponse({ status: 401, description: "Credenciais inválidas" })
+  @ApiResponse({ status: 401, description: 'Credenciais inválidas' })
   async login(@Body() loginDto: LoginDto) {
     const user = await this.authService.validateUser(
       loginDto.email,
-      loginDto.senha
+      loginDto.senha,
     );
     if (!user) {
-      throw new UnauthorizedException("Credenciais inválidas");
+      throw new UnauthorizedException('Credenciais inválidas');
     }
     return this.authService.login(user);
   }

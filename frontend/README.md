@@ -6,7 +6,6 @@
 2. [Tecnologias e Ferramentas Utilizadas](#tecnologias-e-ferramentas-utilizadas)
 3. [Estrutura do Projeto](#estrutura-do-projeto)
 
-
 ## Visão Geral
 
 O front-end do projeto Anéis de Poder é uma aplicação React que permite aos usuários visualizar, criar, editar e excluir anéis mágicos inspirados no universo de J.R.R. Tolkien. A interface inclui um carrossel para exibição dos anéis e um formulário para criação/edição.
@@ -14,6 +13,7 @@ O front-end do projeto Anéis de Poder é uma aplicação React que permite aos 
 ## Tecnologias e Ferramentas Utilizadas
 
 - **Vite + SWC**: Build tool e dev server com compilação rápida.
+
   - **Vantagens do SWC**:
     - Compilação significativamente mais rápida comparada ao Babel.
     - Escrito em Rust, oferecendo melhor performance.
@@ -24,6 +24,7 @@ O front-end do projeto Anéis de Poder é uma aplicação React que permite aos 
 - **TypeScript**: Para tipagem estática e melhor tooling.
 
 - **Zustand**: Para gerenciamento de estado.
+
   - **Vantagens sobre Redux**:
     - API mais simples e menos boilerplate.
     - Curva de aprendizado menor.
@@ -32,14 +33,17 @@ O front-end do projeto Anéis de Poder é uma aplicação React que permite aos 
     - Não requer providers adicionais no nível da aplicação.
 
 - **TailwindCSS**: Para estilização.
+
   - Abordagem utility-first para CSS.
   - Altamente customizável e fácil de manter.
 
 - **shadcn/ui**: Biblioteca de componentes.
+
   - Componentes reutilizáveis e customizáveis.
   - Boa integração com TailwindCSS.
 
 - **Biome.js**: Para linting e formatação de código.
+
   - Alternativa mais rápida e moderna ao ESLint.
   - Configuração simplificada.
 
@@ -85,6 +89,7 @@ FRONTEND/
 Esta estrutura reflete uma organização típica de um projeto React moderno usando Vite. Aqui está uma breve descrição de cada diretório e arquivo principal:
 
 - `src/`: Contém todo o código-fonte da aplicação.
+
   - `api/`: Contém um interceptador do Axios para manipulação de requisições HTTP.
   - `assets/`: Armazena recursos estáticos como imagens, fontes, etc.
   - `components/`: Contém componentes React reutilizáveis.
@@ -104,4 +109,4 @@ Esta estrutura reflete uma organização típica de um projeto React moderno usa
   - `eslint.config.js`: Configuração do ESLint (se ainda estiver em uso).
   - `postcss.config.js`: Configuração do PostCSS.
 
-Esta estrutura demonstra uma organização clara e modular, facilitando a manutenção e escalabilidade do projeto.
+Esta estrutura oferece uma organização clara e modular, facilitando a manutenção e escalabilidade do projeto.

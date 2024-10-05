@@ -1,4 +1,11 @@
-import { IsString, IsEmail, IsOptional, MinLength, IsUrl, IsNotEmpty } from 'class-validator';
+import {
+  IsString,
+  IsEmail,
+  IsOptional,
+  MinLength,
+  IsUrl,
+  IsNotEmpty,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateUserDto {
@@ -12,7 +19,10 @@ export class UpdateUserDto {
   @IsEmail()
   email?: string;
 
-  @ApiProperty({ description: 'URL da imagem de avatar do usuário', required: false })
+  @ApiProperty({
+    description: 'URL da imagem de avatar do usuário',
+    required: false,
+  })
   @IsOptional()
   @IsUrl()
   imagem?: string;
@@ -24,7 +34,6 @@ export class UpdateUserWithPasswordDto extends UpdateUserDto {
   @IsString()
   senhaAtual: string;
 }
-
 
 export class UpdatePasswordDto {
   @ApiProperty({ description: 'Senha atual do usuário' })

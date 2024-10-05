@@ -3,7 +3,10 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { UpdateUserWithPasswordDto, UpdatePasswordDto } from '../dto/update-user.dto';
+import {
+  UpdateUserWithPasswordDto,
+  UpdatePasswordDto,
+} from '../dto/update-user.dto';
 import { UnauthorizedException, NotFoundException } from '@nestjs/common';
 
 describe('UsersController', () => {
@@ -39,7 +42,7 @@ describe('UsersController', () => {
         nome: 'Test User',
         email: 'test@example.com',
         senha: 'password',
-        imagem: 'http://example.com/avatar.jpg'
+        imagem: 'http://example.com/avatar.jpg',
       };
       const mockUser = new User();
       Object.assign(mockUser, createUserDto);
@@ -55,7 +58,7 @@ describe('UsersController', () => {
       const createUserDto: CreateUserDto = {
         nome: 'Test User',
         email: 'test@example.com',
-        senha: 'password'
+        senha: 'password',
       };
       const mockUser = new User();
       Object.assign(mockUser, createUserDto);
@@ -74,57 +77,83 @@ describe('UsersController', () => {
       const updateUserDto: UpdateUserWithPasswordDto = {
         nome: 'Updated Name',
         imagem: 'http://example.com/new-avatar.jpg',
-        senhaAtual: 'correctPassword'
+        senhaAtual: 'correctPassword',
       };
       const mockUser = new User();
-      Object.assign(mockUser, { id: 1, nome: updateUserDto.nome, imagem: updateUserDto.imagem });
+      Object.assign(mockUser, {
+        id: 1,
+        nome: updateUserDto.nome,
+        imagem: updateUserDto.imagem,
+      });
 
       jest.spyOn(service, 'updateUser').mockResolvedValue(mockUser);
 
       const req = { user: { userId: 1 } };
-      expect(await controller.updateProfile(req, updateUserDto)).toEqual(mockUser);
+      expect(await controller.updateProfile(req, updateUserDto)).toEqual(
+        mockUser,
+      );
       expect(service.updateUser).toHaveBeenCalledWith(1, updateUserDto);
     });
 
     it('Deve lançar NotFoundException se o usuário não for encontrado', async () => {
-      const updateUserDto: UpdateUserWithPasswordDto = { 
-        nome: 'Updated Name', 
-        senhaAtual: 'correctPassword'
+      const updateUserDto: UpdateUserWithPasswordDto = {
+        nome: 'Updated Name',
+        senhaAtual: 'correctPassword',
       };
-      jest.spyOn(service, 'updateUser').mockRejectedValue(new NotFoundException());
+      jest
+        .spyOn(service, 'updateUser')
+        .mockRejectedValue(new NotFoundException());
 
       const req = { user: { userId: 999 } };
-      await expect(controller.updateProfile(req, updateUserDto)).rejects.toThrow(NotFoundException);
+      await expect(
+        controller.updateProfile(req, updateUserDto),
+      ).rejects.toThrow(NotFoundException);
     });
 
     it('Deve lançar UnauthorizedException se a senha atual estiver incorreta', async () => {
-      const updateUserDto: UpdateUserWithPasswordDto = { 
-        nome: 'Updated Name', 
-        senhaAtual: 'wrongPassword'
+      const updateUserDto: UpdateUserWithPasswordDto = {
+        nome: 'Updated Name',
+        senhaAtual: 'wrongPassword',
       };
-      jest.spyOn(service, 'updateUser').mockRejectedValue(new UnauthorizedException('Senha atual incorreta'));
+      jest
+        .spyOn(service, 'updateUser')
+        .mockRejectedValue(new UnauthorizedException('Senha atual incorreta'));
 
       const req = { user: { userId: 1 } };
-      await expect(controller.updateProfile(req, updateUserDto)).rejects.toThrow(UnauthorizedException);
+      await expect(
+        controller.updateProfile(req, updateUserDto),
+      ).rejects.toThrow(UnauthorizedException);
     });
   });
 
   describe('updatePassword', () => {
     it('Deve atualizar a senha do usuário', async () => {
-      const updatePasswordDto: UpdatePasswordDto = { senhaAtual: 'oldpassword', novaSenha: 'newpassword' };
+      const updatePasswordDto: UpdatePasswordDto = {
+        senhaAtual: 'oldpassword',
+        novaSenha: 'newpassword',
+      };
       jest.spyOn(service, 'updatePassword').mockResolvedValue(undefined);
 
       const req = { user: { userId: 1 } };
-      await expect(controller.updatePassword(req, updatePasswordDto)).resolves.not.toThrow();
+      await expect(
+        controller.updatePassword(req, updatePasswordDto),
+      ).resolves.not.toThrow();
       expect(service.updatePassword).toHaveBeenCalledWith(1, updatePasswordDto);
     });
 
     it('Deve lançar UnauthorizedException se a senha atual estiver incorreta', async () => {
-      const updatePasswordDto: UpdatePasswordDto = { senhaAtual: 'wrongpassword', novaSenha: 'newpassword' };
-      jest.spyOn(service, 'updatePassword').mockRejectedValue(new UnauthorizedException('Senha atual incorreta'));
+      const updatePasswordDto: UpdatePasswordDto = {
+        senhaAtual: 'wrongpassword',
+        novaSenha: 'newpassword',
+      };
+      jest
+        .spyOn(service, 'updatePassword')
+        .mockRejectedValue(new UnauthorizedException('Senha atual incorreta'));
 
       const req = { user: { userId: 1 } };
-      await expect(controller.updatePassword(req, updatePasswordDto)).rejects.toThrow(UnauthorizedException);
+      await expect(
+        controller.updatePassword(req, updatePasswordDto),
+      ).rejects.toThrow(UnauthorizedException);
     });
   });
 });

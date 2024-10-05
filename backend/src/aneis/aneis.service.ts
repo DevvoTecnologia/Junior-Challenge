@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Anel } from './anel.entity';
@@ -17,17 +21,19 @@ export class AneisService {
   async findAllByUser(userId: number): Promise<Anel[]> {
     return this.anelRepository.find({
       where: { user: { id: userId } },
-      relations: ['user']
+      relations: ['user'],
     });
   }
 
   async findOneByUser(id: number, userId: number): Promise<Anel> {
     const anel = await this.anelRepository.findOne({
       where: { id, user: { id: userId } },
-      relations: ['user']
+      relations: ['user'],
     });
     if (!anel) {
-      throw new NotFoundException(`Anel com ID ${id} não encontrado ou não pertence ao usuário`);
+      throw new NotFoundException(
+        `Anel com ID ${id} não encontrado ou não pertence ao usuário`,
+      );
     }
     return anel;
   }
@@ -48,15 +54,22 @@ export class AneisService {
 
     const anel = this.anelRepository.create({
       ...createAnelDto,
-      user: user
+      user: user,
     });
     return this.anelRepository.save(anel);
   }
 
-  async update(id: number, updateAnelDto: UpdateAnelDto, userId: number): Promise<Anel> {
+  async update(
+    id: number,
+    updateAnelDto: UpdateAnelDto,
+    userId: number,
+  ): Promise<Anel> {
     const anel = await this.findOneByUser(id, userId);
-    
-    if (updateAnelDto.forjadoPor && updateAnelDto.forjadoPor !== anel.forjadoPor) {
+
+    if (
+      updateAnelDto.forjadoPor &&
+      updateAnelDto.forjadoPor !== anel.forjadoPor
+    ) {
       await this.validateAnelLimit(updateAnelDto.forjadoPor, id);
     }
 
@@ -69,8 +82,12 @@ export class AneisService {
     await this.anelRepository.remove(anel);
   }
 
-  private async validateAnelLimit(forjadoPor: string, excludeId?: number): Promise<void> {
-    const query = this.anelRepository.createQueryBuilder('anel')
+  private async validateAnelLimit(
+    forjadoPor: string,
+    excludeId?: number,
+  ): Promise<void> {
+    const query = this.anelRepository
+      .createQueryBuilder('anel')
       .where('anel.forjadoPor = :forjadoPor', { forjadoPor });
 
     if (excludeId) {
@@ -80,14 +97,16 @@ export class AneisService {
     const count = await query.getCount();
 
     const limits = {
-      'Elfos': 3,
-      'Anões': 7,
-      'Homens': 9,
-      'Sauron': 1
+      Elfos: 3,
+      Anões: 7,
+      Homens: 9,
+      Sauron: 1,
     };
 
     if (count >= limits[forjadoPor]) {
-      throw new BadRequestException(`Limite de anéis excedido para ${forjadoPor}`);
+      throw new BadRequestException(
+        `Limite de anéis excedido para ${forjadoPor}`,
+      );
     }
   }
 }
