@@ -41,6 +41,18 @@ export default function RingsCreateForm({ token }: RingsCreateFormProps) {
       return toast.error("Please fill out all fields.");
     }
 
+    if (name.length > 35) {
+      return toast.error("The name must be less than 35 characters.");
+    }
+
+    if (power.length > 255) {
+      return toast.error("The power must be less than 255 characters.");
+    }
+
+    if (owner.length > 20) {
+      return toast.error("The owner must be less than 20 characters.");
+    }
+
     if (!permittedForgedBy.includes(forgedBy)) {
       return toast.error(
         "The ring can only be forged by Elfos, Anões, Homens, or Sauron.",

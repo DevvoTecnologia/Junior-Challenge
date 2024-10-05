@@ -24,6 +24,22 @@ export default function RegisterPage() {
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    if (username.length < 3) {
+      return toast.error("Username should be at least 3 characters long");
+    }
+
+    if (password.length < 4) {
+      return toast.error("Password should be at least 4 characters long");
+    }
+
+    if (password.length > 255) {
+      return toast.error("Password should be at most 255 characters long");
+    }
+
+    if (username.length > 20) {
+      return toast.error("Username should be at most 20 characters long");
+    }
+
     try {
       await axiosInstance.post<RegisterSuccess>("/user", {
         username,

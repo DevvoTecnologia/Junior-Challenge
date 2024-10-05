@@ -39,10 +39,22 @@ export default function SettingsForm({
       return toast.error("Password is required.");
     }
 
+    if (newPassword.length > 255) {
+      return toast.error("New password should be at most 255 characters long");
+    }
+
     if (newPassword === password) {
       return toast.error(
         "New password must be different from the current password.",
       );
+    }
+
+    if (password.length > 255) {
+      return toast.error("Password should be at most 255 characters long");
+    }
+
+    if (username.length > 20) {
+      return toast.error("Username should be at most 20 characters long");
     }
 
     try {
@@ -216,6 +228,10 @@ export function BtnDeleteUser({
   async function deleteUser() {
     if (!password.trim()) {
       return toast.error("Password is required.");
+    }
+
+    if (password.length > 255) {
+      return toast.error("Password should be at most 255 characters long");
     }
 
     await startTransition(async () => {
