@@ -1,0 +1,28 @@
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #4c2e03;
+}
+
+input{
+    width: 96%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 16px;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+}
+  
+.errorInput {
+    border: 1px solid red;
+}
+  
+.errorText {
+    color: red;
+    font-size: 12px;
+}

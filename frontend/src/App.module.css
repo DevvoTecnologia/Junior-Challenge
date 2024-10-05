@@ -1,0 +1,25 @@
+.background {
+  transition: background 1s ease-in-out; /* Transição suave */
+  background-size: cover; /* Cobrir o fundo */
+  height: 100vh; /* Altura total da viewport */
+}
+
+.backgroundHome {
+  background-image: url('../public/img/desktop_home_background.png'); /* Imagem de fundo da Home */
+}
+
+.backgroundRegister {
+  background-image: url('../public/img/form_background.png'); /* Imagem de fundo da Register */
+}
+
+.fadeIn {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+  height: 100vh;
+}
+
+.fadeOut {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  height: 100vh;
+}

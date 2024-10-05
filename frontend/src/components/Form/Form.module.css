@@ -1,0 +1,53 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 400px;
+    margin: 0px auto;
+    padding: 20px;
+    background-color: #ffe8c6;
+    border-radius: 10px;
+    box-shadow: 0px 0px 8px #f8a529;
+}
+
+.titleForm {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 10px;
+}
+  
+.formGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.errorInput {
+    border-color: red;
+}
+
+.errorText {
+    color: red;
+    font-size: 12px;
+}
+
+.footerBtns {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.footerBtns > button {
+    width: 100%;
+}
+
+@media screen and (max-width: 576px) {
+    .form {
+        width: 80%;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    .form {
+        margin-top: 80px;
+    }
+}
