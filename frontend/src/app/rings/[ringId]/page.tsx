@@ -18,7 +18,7 @@ interface RingIdPageProps {
 
 export default async function RingIdPage({
   params: { ringId },
-}: RingIdPageProps) {
+}: Readonly<RingIdPageProps>) {
   let response: AxiosResponse<Ring> | null;
 
   const session = await auth();

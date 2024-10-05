@@ -17,7 +17,9 @@ interface RingsCreateFormProps {
 
 const permittedForgedBy = ["Elfos", "Anões", "Homens", "Sauron"];
 
-export default function RingsCreateForm({ token }: RingsCreateFormProps) {
+export default function RingsCreateForm({
+  token,
+}: Readonly<RingsCreateFormProps>) {
   const { push, refresh } = useRouter();
 
   const [name, setName] = useState("");

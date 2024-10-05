@@ -9,7 +9,9 @@ interface ProfileOrUsersProps {
   userId: number | undefined;
 }
 
-export default function ProfileOrUsers({ userId }: ProfileOrUsersProps) {
+export default function ProfileOrUsers({
+  userId,
+}: Readonly<ProfileOrUsersProps>) {
   const pathname = usePathname();
 
   return (

@@ -50,7 +50,7 @@ interface RingsDeleteBtnIconRedProps {
 export function RingsDeleteBtnIconRed({
   ring,
   token,
-}: RingsDeleteBtnIconRedProps) {
+}: Readonly<RingsDeleteBtnIconRedProps>) {
   const router = useRouter();
 
   return (
@@ -80,7 +80,7 @@ interface RingsDeleteBtnIconBlackProps {
 export function RingsDeleteBtnIconBlack({
   ring,
   token,
-}: RingsDeleteBtnIconBlackProps) {
+}: Readonly<RingsDeleteBtnIconBlackProps>) {
   const router = useRouter();
 
   return (
@@ -111,7 +111,7 @@ export function RingsDeleteBtnText({
   ringId,
   token,
   ringName = "",
-}: RingsDeleteBtnTextProps) {
+}: Readonly<RingsDeleteBtnTextProps>) {
   const router = useRouter();
 
   return (

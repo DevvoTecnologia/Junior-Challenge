@@ -25,7 +25,7 @@ export default function RingsCarousel({
   UserRings,
   isMyProfile = false,
   token,
-}: RingsCarouselProps) {
+}: Readonly<RingsCarouselProps>) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
   });

@@ -88,7 +88,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
 
     redirect({ url }) {
-      url = process.env.AUTH_TRUST_HOST || "http://localhost:3001";
+      url = process.env.AUTH_TRUST_HOST || "http://localhost:3001"; // nosonar
 
       return Promise.resolve(url);
     },

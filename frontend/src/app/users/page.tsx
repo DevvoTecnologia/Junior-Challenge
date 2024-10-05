@@ -19,7 +19,7 @@ export default async function UsersProfilePage() {
   const filteredUsers = response.data.filter((user) => user.id !== myUserId);
 
   // Sort users by whether they have rings or not
-  const sortedUsers = filteredUsers.sort((a, b) => {
+  const sortedUsers = filteredUsers.toSorted((a, b) => {
     if (a.rings && a.rings.length > 0) return -1;
     if (b.rings && b.rings.length > 0) return 1;
     return 0;
@@ -41,7 +41,7 @@ interface UsersFoundProps {
   token: string | undefined;
 }
 
-function UsersFound({ sortedUsers, token }: UsersFoundProps) {
+function UsersFound({ sortedUsers, token }: Readonly<UsersFoundProps>) {
   return (
     <motion.div
       initial={{ opacity: 0 }}

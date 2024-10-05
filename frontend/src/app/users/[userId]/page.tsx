@@ -18,7 +18,7 @@ interface UserProfilePageProps {
 
 export default async function UserProfilePage({
   params: { userId },
-}: UserProfilePageProps) {
+}: Readonly<UserProfilePageProps>) {
   let response: AxiosResponse<User>;
   const session = await auth();
   const token = session?.user.accessToken;
@@ -63,7 +63,7 @@ function RingsFound({
   isMyProfile,
   token,
   username,
-}: RingsFoundProps) {
+}: Readonly<RingsFoundProps>) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -102,7 +102,7 @@ interface NoRingsFoundProps {
   isMyProfile: boolean;
 }
 
-function NoRingsFound({ username, isMyProfile }: NoRingsFoundProps) {
+function NoRingsFound({ username, isMyProfile }: Readonly<NoRingsFoundProps>) {
   return (
     <motion.div
       className="flex h-screen flex-col items-center justify-center gap-8"

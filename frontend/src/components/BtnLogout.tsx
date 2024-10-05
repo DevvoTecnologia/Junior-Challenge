@@ -11,14 +11,17 @@ interface BtnLogoutProps {
   children?: React.ReactNode;
 }
 
-export default function BtnLogout({ className, children }: BtnLogoutProps) {
+export default function BtnLogout({
+  className,
+  children,
+}: Readonly<BtnLogoutProps>) {
   const [isPending, startTransition] = useTransition();
   return (
     <motion.form>
       <motion.button
         disabled={isPending}
         onClick={async () => {
-          await startTransition(async () => {
+          startTransition(async () => {
             await handleLogoutServer();
 
             toast.success("You have been logged out successfully");
@@ -28,7 +31,7 @@ export default function BtnLogout({ className, children }: BtnLogoutProps) {
         whileTap={{ scale: 0.95 }}
         className={className}
       >
-        {children ? children : "Logout"}
+        {children || "Logout"}
       </motion.button>
     </motion.form>
   );

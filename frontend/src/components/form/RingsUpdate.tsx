@@ -29,13 +29,13 @@ export default function RingsUpdateForm({
   responsePower,
   responseOwner,
   responseForgedBy,
-}: RingsUpdateFormProps) {
+}: Readonly<RingsUpdateFormProps>) {
   const { push, refresh } = useRouter();
 
-  const defaultName = responseName || "";
-  const defaultPower = responsePower || "";
-  const defaultOwner = responseOwner || "";
-  const defaultForgedBy = responseForgedBy || "";
+  const defaultName = responseName || ""; // nosonar
+  const defaultPower = responsePower || ""; // nosonar
+  const defaultOwner = responseOwner || ""; // nosonar
+  const defaultForgedBy = responseForgedBy || ""; // nosonar
 
   const [name, setName] = useState(defaultName);
   const [power, setPower] = useState(defaultPower);

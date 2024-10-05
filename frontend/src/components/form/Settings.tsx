@@ -24,7 +24,7 @@ export default function SettingsForm({
   usernameSession = "",
   userId = 0,
   token = "",
-}: SettingsFormProps) {
+}: Readonly<SettingsFormProps>) {
   const [username, setUsername] = useState(usernameSession);
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -219,7 +219,7 @@ export function BtnDeleteUser({
   userId,
   isPending,
   startTransition,
-}: BtnDeleteUserProps) {
+}: Readonly<BtnDeleteUserProps>) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -234,7 +234,7 @@ export function BtnDeleteUser({
       return toast.error("Password should be at most 255 characters long");
     }
 
-    await startTransition(async () => {
+    startTransition(async () => {
       try {
         await fetchClient.delete(`/user/${userId}`, {
           headers: {

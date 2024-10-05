@@ -7,7 +7,7 @@ interface ModalProps {
   isModalOpen: boolean;
 }
 
-export default function Modal({ children, isModalOpen }: ModalProps) {
+export default function Modal({ children, isModalOpen }: Readonly<ModalProps>) {
   return (
     <>
       {isModalOpen && (
