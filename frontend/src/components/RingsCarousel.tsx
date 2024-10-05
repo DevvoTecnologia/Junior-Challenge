@@ -39,7 +39,7 @@ export default function RingsCarousel({
   }, [emblaApi]);
 
   return (
-    <section className="rounded-lg border-[1px] border-yellow-600 bg-gradient-to-b from-gray-900 to-gray-800 p-6 shadow-lg">
+    <section className="rounded-lg border-[1px] border-yellow-600 bg-gradient-to-b from-gray-900 to-gray-800 p-1 shadow-lg sm:p-2 md:p-4">
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex gap-1">
           {UserRings?.map((ring) => (

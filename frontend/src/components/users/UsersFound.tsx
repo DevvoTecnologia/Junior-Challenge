@@ -21,7 +21,7 @@ export default function UsersFound({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="mt-6 grid gap-6 bg-gradient-to-br from-gray-900 to-gray-800 p-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+      className="mt-6 grid gap-6 bg-gradient-to-br from-gray-900 to-gray-800 p-2 sm:grid-cols-1 sm:p-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
       datatype="users-list"
     >
       {sortedUsers.map((user) => (
@@ -31,7 +31,7 @@ export default function UsersFound({
           data-user-id={user.id}
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.3 }}
           className="flex flex-col overflow-hidden rounded-lg border border-yellow-600 bg-gray-800 p-6 shadow-lg transition-shadow duration-300 hover:shadow-2xl"
         >
