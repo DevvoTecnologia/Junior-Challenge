@@ -71,4 +71,11 @@ You can run end-to-end (e2e) tests using Cypress. Follow these steps:
     yarn cy:open
     ```
 
+## 🌐 Demonstração do Projeto
+
+### Site em Produção
+Explore a aplicação desenvolvida para o desafio: [Visite o Site](https://gl-junior-challenge.vercel.app). Aqui, você pode interagir com a interface e ver como os anéis são gerenciados, incluindo as funcionalidades de criação, visualização e edição.
+
+--- 
+
 Created by: Gabriel Logan

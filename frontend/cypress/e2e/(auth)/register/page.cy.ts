@@ -16,6 +16,7 @@ describe("Register Page", () => {
     cy.get("input[name=username]").type("admin");
     cy.get("input[name=password]").type("wrongpassword");
     cy.get("button[type=submit]").click();
+    cy.wait(600);
     cy.get(".Toastify__toast-body").contains(/Username already exists/i);
   });
 });

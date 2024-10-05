@@ -24,12 +24,22 @@ export class UserService {
       attributes: ["id", "name", "power", "owner", "forgedBy", "image"],
     },
   ];
+  private readonly host: string;
+  private readonly port: string;
+  private readonly nodeEnv: string;
+  public readonly baseUrl: string;
 
   constructor(
     @InjectModel(User)
     private readonly userModel: typeof User,
     private readonly configService: ConfigService,
-  ) {}
+  ) {
+    this.host = this.configService.get<string>("host")!;
+    this.port = this.configService.get<string>("port")!;
+    this.nodeEnv = this.configService.get<string>("nodeEnv")!;
+    this.baseUrl =
+      this.nodeEnv === "development" ? `${this.host}:${this.port}` : this.host;
+  }
 
   async findAll(): Promise<User[]> {
     const users = await this.userModel.findAll({
@@ -42,11 +52,8 @@ export class UserService {
     }
 
     users.forEach((user) => {
-      const host = this.configService.get("host");
-      const port = this.configService.get("port");
-
       user.rings.forEach((ring) => {
-        ring.url = `${host}:${port}/uploads/${ring.image}`;
+        ring.url = `${this.baseUrl}/uploads/${ring.image}`;
       });
     });
 
@@ -66,10 +73,7 @@ export class UserService {
     }
 
     user.rings.forEach((ring) => {
-      const host = this.configService.get("host");
-      const port = this.configService.get("port");
-
-      ring.url = `${host}:${port}/uploads/${ring.image}`;
+      ring.url = `${this.baseUrl}/uploads/${ring.image}`;
     });
 
     return user;
@@ -87,10 +91,7 @@ export class UserService {
     }
 
     user.rings.forEach((ring) => {
-      const host = this.configService.get("host");
-      const port = this.configService.get("port");
-
-      ring.url = `${host}:${port}/uploads/${ring.image}`;
+      ring.url = `${this.baseUrl}/uploads/${ring.image}`;
     });
 
     return user;

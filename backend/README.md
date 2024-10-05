@@ -77,4 +77,13 @@ For e2e testing, remember to check if the information passed exists in the datab
     yarn test:all
     ```
 
+## 🌐 Demonstração do Projeto
+
+### Documentação da API
+A documentação da API foi construída utilizando Swagger, permitindo uma visualização clara e interativa das rotas disponíveis. Acesse a documentação aqui: [Documentação da API](https://api-junior-challenge.vercel.app/api).
+
+Na documentação, você encontrará detalhes sobre cada endpoint, exemplos de requisições e respostas, além de descrições de erros comuns.
+
+--- 
+
 Created by: Gabriel Logan

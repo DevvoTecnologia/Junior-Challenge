@@ -17,12 +17,22 @@ import { ReqAuthUser } from "./types/Req";
 export class RingService extends RingGlobalValidations {
   private readonly logger = new Logger(RingService.name);
 
+  private readonly host: string;
+  private readonly port: string;
+  private readonly nodeEnv: string;
+  private readonly baseUrl: string;
+
   constructor(
     @InjectModel(Ring)
     private readonly ringModel: typeof Ring,
     private readonly configService: ConfigService,
   ) {
     super();
+    this.host = this.configService.get<string>("host")!;
+    this.port = this.configService.get<string>("port")!;
+    this.nodeEnv = this.configService.get<string>("nodeEnv")!;
+    this.baseUrl =
+      this.nodeEnv === "development" ? `${this.host}:${this.port}` : this.host;
   }
 
   async findAll(req: ReqAuthUser): Promise<Ring[]> {
@@ -37,10 +47,7 @@ export class RingService extends RingGlobalValidations {
     }
 
     rings.forEach((ring) => {
-      const host = this.configService.get("host");
-      const port = this.configService.get("port");
-
-      ring.url = `${host}:${port}/uploads/${ring.image}`;
+      ring.url = `${this.baseUrl}/uploads/${ring.image}`;
     });
 
     return rings;
@@ -58,10 +65,7 @@ export class RingService extends RingGlobalValidations {
       throw new NotFoundException(`Ring with id ${id} not found`);
     }
 
-    const host = this.configService.get("host");
-    const port = this.configService.get("port");
-
-    ring.url = `${host}:${port}/uploads/${ring.image}`;
+    ring.url = `${this.baseUrl}/uploads/${ring.image}`;
 
     return ring;
   }
@@ -102,10 +106,7 @@ export class RingService extends RingGlobalValidations {
       throw new BadRequestException("Error creating ring");
     }
 
-    const host = this.configService.get("host");
-    const port = this.configService.get("port");
-
-    newRing.url = `${host}:${port}/uploads/${newRing.image}`;
+    newRing.url = `${this.baseUrl}/uploads/${newRing.image}`;
 
     return newRing;
   }
@@ -158,10 +159,7 @@ export class RingService extends RingGlobalValidations {
     ring.owner = owner || ring.owner;
     ring.forgedBy = forgedBy || ring.forgedBy;
 
-    const host = this.configService.get("host");
-    const port = this.configService.get("port");
-
-    ring.url = `${host}:${port}/uploads/${ring.image}`;
+    ring.url = `${this.baseUrl}/uploads/${ring.image}`;
 
     await ring.save();
 

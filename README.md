@@ -1,6 +1,20 @@
 # Desafio Fullstack: Os Anéis de Poder
 _One Challenge to rule them all, One Challenge to find them, One Challenge to bring them all, and in the darkness bind them_
 
+---
+
+## 🌐 Demonstração do Projeto
+
+### Site em Produção
+Explore a aplicação desenvolvida para o desafio: [Visite o Site](https://gl-junior-challenge.vercel.app). Aqui, você pode interagir com a interface e ver como os anéis são gerenciados, incluindo as funcionalidades de criação, visualização e edição.
+
+### Documentação da API
+A documentação da API foi construída utilizando Swagger, permitindo uma visualização clara e interativa das rotas disponíveis. Acesse a documentação aqui: [Documentação da API](https://api-junior-challenge.vercel.app/api).
+
+Na documentação, você encontrará detalhes sobre cada endpoint, exemplos de requisições e respostas, além de descrições de erros comuns.
+
+--- 
+
 ## 💍 Contexto do Desafio
 
 O grande mago J.R.R. Tolkien nos deixou a famosa frase:
