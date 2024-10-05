@@ -205,6 +205,68 @@ describe("UserService", () => {
       ).rejects.toThrow(new NotFoundException("User with id 1 not found"));
     });
 
+    it("should throw an BadRequestEx if new password.length < 4", async () => {
+      const user = {
+        id: 1,
+        username: "test",
+        password: "test",
+        save: jest.fn(),
+        passwordIsValid: jest.fn().mockResolvedValue(true),
+      } as unknown as User;
+
+      const findByPkSpyOn = jest
+        .spyOn(userModel, "findByPk")
+        .mockResolvedValue(user);
+
+      await expect(
+        service.update(
+          1,
+          { username: "test", password: "test", newPassword: "123" },
+          {
+            user: { sub: 1 },
+          } as ReqAuthUser,
+        ),
+      ).rejects.toThrow(
+        new BadRequestException("Password must be at least 4 characters long"),
+      );
+
+      expect(findByPkSpyOn).toHaveBeenCalledWith(1);
+      expect(user.save).not.toHaveBeenCalled();
+    });
+
+    it("should throw an BadRequestEx if new password.length > 255", async () => {
+      const user = {
+        id: 1,
+        username: "test",
+        password: "test",
+        save: jest.fn(),
+        passwordIsValid: jest.fn().mockResolvedValue(true),
+      } as unknown as User;
+
+      const findByPkSpyOn = jest
+        .spyOn(userModel, "findByPk")
+        .mockResolvedValue(user);
+
+      await expect(
+        service.update(
+          1,
+          {
+            username: "test",
+            password: "test",
+            newPassword: "a".repeat(256),
+          },
+          {
+            user: { sub: 1 },
+          } as ReqAuthUser,
+        ),
+      ).rejects.toThrow(
+        new BadRequestException("Password must be at most 255 characters long"),
+      );
+
+      expect(findByPkSpyOn).toHaveBeenCalledWith(1);
+      expect(user.save).not.toHaveBeenCalled();
+    });
+
     it("should throw an BadRequestException if the username already exists", async () => {
       const user = {
         id: 1,
