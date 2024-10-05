@@ -10,7 +10,7 @@ import getSessionServer from "@/lib/getSessionServer";
 import type { Rings } from "@/types/Ring";
 
 export default async function RingsPage() {
-  let response: AxiosResponse<Rings> | null;
+  let response: AxiosResponse<Rings> | undefined;
 
   const { token, userId } = await getSessionServer();
 
@@ -21,7 +21,7 @@ export default async function RingsPage() {
       },
     });
   } catch {
-    response = null;
+    response = undefined;
   }
 
   return (

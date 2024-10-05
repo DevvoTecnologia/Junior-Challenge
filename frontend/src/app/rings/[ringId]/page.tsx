@@ -19,7 +19,7 @@ interface RingIdPageProps {
 export default async function RingIdPage({
   params: { ringId },
 }: Readonly<RingIdPageProps>) {
-  let response: AxiosResponse<Ring> | null;
+  let response: AxiosResponse<Ring> | undefined;
 
   const { token } = await getSessionServer();
 
@@ -30,7 +30,7 @@ export default async function RingIdPage({
       },
     });
   } catch {
-    response = null;
+    response = undefined;
     redirect("/rings");
   }
 
@@ -74,16 +74,16 @@ export default async function RingIdPage({
       <RingsUpdateForm
         token={token}
         ringId={ringId}
-        responseName={response.data?.name}
-        responsePower={response.data?.power}
-        responseOwner={response.data?.owner}
-        responseForgedBy={response.data?.forgedBy}
+        responseName={response?.data?.name}
+        responsePower={response?.data?.power}
+        responseOwner={response?.data?.owner}
+        responseForgedBy={response?.data?.forgedBy}
       />
 
       <motion.div className="mt-6 flex space-x-4">
         <RingsDeleteBtnText
           ringId={ringId}
-          ringName={response.data?.name}
+          ringName={response?.data?.name}
           token={token}
         />
 

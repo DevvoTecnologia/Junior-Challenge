@@ -16,7 +16,7 @@ interface UserProfilePageProps {
 export default async function UserProfilePage({
   params: { userId },
 }: Readonly<UserProfilePageProps>) {
-  let response: AxiosResponse<User>;
+  let response: AxiosResponse<User> | undefined;
 
   const { token, userId: userIdFromSession } = await getSessionServer();
 
@@ -27,11 +27,11 @@ export default async function UserProfilePage({
   }
 
   // Check if the user is viewing their own profile
-  const isMyProfile = userIdFromSession === response.data.id;
+  const isMyProfile = userIdFromSession === response?.data.id;
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {response.data.rings && response.data.rings.length > 0 ? (
+      {response?.data.rings && response.data.rings.length > 0 ? (
         <RingsFound
           UserRings={response.data.rings}
           isMyProfile={isMyProfile}
@@ -40,7 +40,7 @@ export default async function UserProfilePage({
         />
       ) : (
         <NoRingsFound
-          username={response.data.username}
+          username={response?.data.username}
           isMyProfile={isMyProfile}
         />
       )}

@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface NoRingsFoundProps {
-  username: string;
+  username: string | undefined;
   isMyProfile: boolean;
 }
 
@@ -24,7 +24,9 @@ export default function NoRingsFound({
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        Username: {username.charAt(0).toUpperCase() + username.slice(1)}
+        Username:{" "}
+        {(username ?? "User").charAt(0).toUpperCase() +
+          (username ?? "User").slice(1)}
       </motion.h2>
       <motion.p
         className="text-yellow-300"
