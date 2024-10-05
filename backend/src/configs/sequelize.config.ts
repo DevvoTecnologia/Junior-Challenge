@@ -7,13 +7,25 @@ const sequelizeAsyncConfig: SequelizeModuleAsyncOptions = {
   imports: [ConfigModule],
   useFactory: (configService: ConfigService) => {
     const logger = new Logger("SequelizeConfig");
+    const nodeEnv = configService.get("nodeEnv");
+
+    const host = configService.get("database.host");
+
+    const port = configService.get("database.port");
+
+    const username = configService.get("database.username");
+
+    const password = configService.get("database.password");
+
+    const database = configService.get("database.name");
+
     return {
       dialect: configService.get("database.dialect") as Dialect,
-      host: configService.get("database.host"),
-      port: configService.get("database.port"),
-      username: configService.get("database.username"),
-      password: configService.get("database.password"),
-      database: configService.get("database.name"),
+      host: host,
+      port: port,
+      username: username,
+      password: password,
+      database: database,
       autoLoadModels: true,
 
       dialectOptions: {
@@ -28,7 +40,7 @@ const sequelizeAsyncConfig: SequelizeModuleAsyncOptions = {
       },
 
       logging: (sql): false | void => {
-        if (configService.get("nodeEnv") === "development") {
+        if (nodeEnv === "development") {
           return logger.debug(sql);
         }
         return false;
