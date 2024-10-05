@@ -111,10 +111,10 @@ Desenvolver uma interface simples em **React** com as seguintes telas:
 ## 🛠️ Instruções
 
 1. Faça o **fork** deste repositório.
-2. Crie uma nova branch com o nome do seu desafio: `git checkout -b desafio-seu-nome`.
+2. Crie uma nova branch com o nome do seu desafio: `git checkout -b junior-challenge-desafio-fullstack-gabriel-logan`.
 3. Implemente sua solução backend e frontend conforme os requisitos descritos.
 4. Faça o **commit** das suas alterações: `git commit -m 'Desafio finalizado'`.
-5. Faça o **push** para a branch criada: `git push origin desafio-seu-nome`.
+5. Faça o **push** para a branch criada: `git push origin junior-challenge-desafio-fullstack-gabriel-logan`.
 6. Crie um **Pull Request** para o repositório principal.
 7. Envie um email para "contato@devvo.com.br" com o seu CV em anexo e o link do Pull Request, o assunto deve ser: "Desafio finalizado - Full Stack JR"
 
