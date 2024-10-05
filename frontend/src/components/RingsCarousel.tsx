@@ -94,26 +94,28 @@ export default function RingsCarousel({
         </div>
       </div>
 
-      <div className="mt-4 flex justify-center space-x-4">
-        <motion.button
-          datatype="move-carousel-left"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={scrollPrev}
-          className="text-gray-600 hover:text-gray-800"
-        >
-          <IoIosArrowDropleftCircle size={36} />
-        </motion.button>
-        <motion.button
-          datatype="move-carousel-right"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={scrollNext}
-          className="text-gray-600 hover:text-gray-800"
-        >
-          <IoIosArrowDroprightCircle size={36} />
-        </motion.button>
-      </div>
+      {UserRings && UserRings.length > 1 && (
+        <div className="mt-4 flex justify-center space-x-4">
+          <motion.button
+            datatype="move-carousel-left"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={scrollPrev}
+            className="text-gray-600 hover:text-gray-800"
+          >
+            <IoIosArrowDropleftCircle size={36} />
+          </motion.button>
+          <motion.button
+            datatype="move-carousel-right"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={scrollNext}
+            className="text-gray-600 hover:text-gray-800"
+          >
+            <IoIosArrowDroprightCircle size={36} />
+          </motion.button>
+        </div>
+      )}
     </section>
   );
 }
