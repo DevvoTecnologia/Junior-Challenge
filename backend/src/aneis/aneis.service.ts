@@ -39,7 +39,7 @@ export class AneisService {
       throw new BadRequestException(`Criador inválido: ${forjadoPor}`);
     }
 
-    await this.validateAnelCreation(forjadoPor);
+    await this.validateAnelLimit(forjadoPor);
 
     const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) {
@@ -55,6 +55,11 @@ export class AneisService {
 
   async update(id: number, updateAnelDto: UpdateAnelDto, userId: number): Promise<Anel> {
     const anel = await this.findOneByUser(id, userId);
+    
+    if (updateAnelDto.forjadoPor && updateAnelDto.forjadoPor !== anel.forjadoPor) {
+      await this.validateAnelLimit(updateAnelDto.forjadoPor, id);
+    }
+
     Object.assign(anel, updateAnelDto);
     return this.anelRepository.save(anel);
   }
@@ -64,8 +69,15 @@ export class AneisService {
     await this.anelRepository.remove(anel);
   }
 
-  private async validateAnelCreation(forjadoPor: string): Promise<void> {
-    const count = await this.anelRepository.count({ where: { forjadoPor } });
+  private async validateAnelLimit(forjadoPor: string, excludeId?: number): Promise<void> {
+    const query = this.anelRepository.createQueryBuilder('anel')
+      .where('anel.forjadoPor = :forjadoPor', { forjadoPor });
+
+    if (excludeId) {
+      query.andWhere('anel.id != :excludeId', { excludeId });
+    }
+
+    const count = await query.getCount();
 
     const limits = {
       'Elfos': 3,

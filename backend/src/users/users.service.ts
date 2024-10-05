@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { UpdateUserDto, UpdatePasswordDto } from '../dto/update-user.dto';
+import { UpdateUserWithPasswordDto, UpdatePasswordDto } from '../dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -19,6 +19,7 @@ export class UsersService {
     const user = this.usersRepository.create({
       ...createUserDto,
       senha: hashedPassword,
+      imagem: createUserDto.imagem || 'https://example.com/default-avatar.jpg'
     });
     return this.usersRepository.save(user);
   }
@@ -27,14 +28,20 @@ export class UsersService {
     return this.usersRepository.findOne({ where: { email }, relations: ['aneis'] });
   }
 
-  async updateUser(userId: number, updateUserDto: UpdateUserDto): Promise<User> {
+  async updateUser(userId: number, updateUserDto: UpdateUserWithPasswordDto): Promise<User> {
     const user = await this.usersRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new NotFoundException('Usuário não encontrado');
     }
 
+    const isPasswordValid = await bcrypt.compare(updateUserDto.senhaAtual, user.senha);
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Senha atual incorreta');
+    }
+
     if (updateUserDto.nome) user.nome = updateUserDto.nome;
     if (updateUserDto.email) user.email = updateUserDto.email;
+    if (updateUserDto.imagem) user.imagem = updateUserDto.imagem;
 
     return this.usersRepository.save(user);
   }

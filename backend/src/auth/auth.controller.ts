@@ -19,6 +19,7 @@ export class AuthController {
         id: { type: "number" },
         nome: { type: "string" },
         email: { type: "string" },
+        imagem: { type: "string" },
        
       },
     },

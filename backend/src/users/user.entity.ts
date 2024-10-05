@@ -15,6 +15,9 @@ export class User {
   @Column()
   senha: string;
 
+  @Column({ default: 'https://example.com/default-avatar.jpg' })
+  imagem: string;
+
   @OneToMany(() => Anel, (anel) => anel.user)
   aneis: Anel[];
 }

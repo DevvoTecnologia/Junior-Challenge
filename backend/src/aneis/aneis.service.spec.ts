@@ -83,8 +83,11 @@ describe('AneisService', () => {
       const mockUser = new User();
       mockUser.id = 1;
 
-      jest.spyOn(anelRepo, 'count').mockResolvedValue(0);
       jest.spyOn(userRepo, 'findOne').mockResolvedValue(mockUser);
+      jest.spyOn(anelRepo, 'createQueryBuilder').mockReturnValue({
+        where: jest.fn().mockReturnThis(),
+        getCount: jest.fn().mockResolvedValue(0),
+      } as any);
       jest.spyOn(anelRepo, 'create').mockReturnValue(newAnel);
       jest.spyOn(anelRepo, 'save').mockResolvedValue(newAnel);
 
@@ -101,7 +104,10 @@ describe('AneisService', () => {
         imagem: 'http://example.com/narya.jpg'
       };
 
-      jest.spyOn(anelRepo, 'count').mockResolvedValue(3);
+      jest.spyOn(anelRepo, 'createQueryBuilder').mockReturnValue({
+        where: jest.fn().mockReturnThis(),
+        getCount: jest.fn().mockResolvedValue(3),
+      } as any);
 
       await expect(service.create(createAnelDto, 1)).rejects.toThrow(BadRequestException);
     });
@@ -142,6 +148,23 @@ describe('AneisService', () => {
       jest.spyOn(service, 'findOneByUser').mockRejectedValue(new NotFoundException());
 
       await expect(service.update(1, { nome: 'Teste' }, 1)).rejects.toThrow(NotFoundException);
+    });
+
+    it('Deve validar o limite ao atualizar forjadoPor', async () => {
+      const anel = new Anel();
+      anel.id = 1;
+      anel.forjadoPor = 'Elfos';
+
+      const updateAnelDto: UpdateAnelDto = { forjadoPor: 'Anões' };
+
+      jest.spyOn(service, 'findOneByUser').mockResolvedValue(anel);
+      jest.spyOn(anelRepo, 'createQueryBuilder').mockReturnValue({
+        where: jest.fn().mockReturnThis(),
+        andWhere: jest.fn().mockReturnThis(),
+        getCount: jest.fn().mockResolvedValue(7),
+      } as any);
+
+      await expect(service.update(1, updateAnelDto, 1)).rejects.toThrow(BadRequestException);
     });
   });
 

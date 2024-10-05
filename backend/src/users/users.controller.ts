@@ -3,7 +3,7 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagg
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { CreateUserDto } from '../dto/create-user.dto';
-import { UpdateUserDto, UpdatePasswordDto } from '../dto/update-user.dto';
+import { UpdateUserWithPasswordDto, UpdatePasswordDto } from '../dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @ApiTags('users')
@@ -24,8 +24,8 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Atualizar dados do usuário' })
   @ApiResponse({ status: 200, description: 'Dados atualizados com sucesso', type: User })
-  @ApiResponse({ status: 401, description: 'Não autorizado' })
-  async updateProfile(@Request() req, @Body() updateUserDto: UpdateUserDto): Promise<User> {
+  @ApiResponse({ status: 401, description: 'Não autorizado ou senha incorreta' })
+  async updateProfile(@Request() req, @Body() updateUserDto: UpdateUserWithPasswordDto): Promise<User> {
     return this.usersService.updateUser(req.user.userId, updateUserDto);
   }
 

@@ -1,24 +1,14 @@
 import { create } from "zustand";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import { User } from "@/types/user";
 
 const API_URL = "http://localhost:3000/auth";
 const API_URL_USERS = "http://localhost:3000";
 
-interface Anel {
-	id: number;
-	nome: string;
-	poder: string;
-	portador: string;
-	forjadoPor: string;
-	imagem: string;
-}
-
-interface User {
-	id: number;
-	nome: string;
-	email: string;
-	access_token: string;
-	aneis: Anel[];
+interface DecodedToken {
+	exp: number;
+	[key: string]: string | number;
 }
 
 interface AuthState {
@@ -27,10 +17,21 @@ interface AuthState {
 	register: (nome: string, email: string, senha: string) => Promise<void>;
 	logout: () => void;
 	isAuthenticated: () => boolean;
+	updateUser: (userData: Partial<User>) => void;
+	checkTokenExpiration: () => boolean;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
 	user: JSON.parse(localStorage.getItem("user") || "null"),
+
+	updateUser: (userData: Partial<User>) => {
+		const currentUser = get().user;
+		if (currentUser) {
+			const updatedUser = { ...currentUser, ...userData };
+			localStorage.setItem("user", JSON.stringify(updatedUser));
+			set({ user: updatedUser });
+		}
+	},
 
 	login: async (email: string, senha: string) => {
 		const response = await axios.post(`${API_URL}/login`, { email, senha });
@@ -41,6 +42,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 				email: response.data.email,
 				access_token: response.data.access_token,
 				aneis: response.data.aneis,
+				imagem: response.data.imagem,
 			};
 			localStorage.setItem("user", JSON.stringify(userData));
 			set({ user: userData });
@@ -64,6 +66,31 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 	},
 
 	isAuthenticated: () => {
-		return get().user !== null;
+		return get().user !== null && get().checkTokenExpiration();
+	},
+
+	checkTokenExpiration: () => {
+		const user = get().user;
+		if (!user || !user.access_token) {
+			get().logout();
+			return false;
+		}
+
+		try {
+			const decodedToken: DecodedToken = jwtDecode(user.access_token);
+			const currentTime = Date.now() / 1000;
+
+			if (decodedToken.exp < currentTime) {
+				// Token expirado
+				get().logout();
+				return false;
+			}
+
+			return true;
+		} catch (error) {
+			console.error("Erro ao decodificar token:", error);
+			get().logout();
+			return false;
+		}
 	},
 }));

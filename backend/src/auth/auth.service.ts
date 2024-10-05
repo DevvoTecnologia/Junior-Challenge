@@ -31,6 +31,7 @@ export class AuthService {
       nome: user.nome,
       email: user.email,
       aneis: user.aneis,
+      imagem: user.imagem
     };
   }
 }

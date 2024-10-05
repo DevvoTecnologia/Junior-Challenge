@@ -1,85 +1,139 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Documentação do Backend - Projeto Anéis de Poder
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Índice
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+1. [Visão Geral](#visão-geral)
+2. [Tecnologias Utilizadas](#tecnologias-utilizadas)
+3. [Estrutura do Projeto](#estrutura-do-projeto)
+4. [Configuração e Execução](#configuração-e-execução)
+5. [Banco de Dados](#banco-de-dados)
+6. [Autenticação](#autenticação)
+7. [Testes](#testes)
+8. [Documentação da API](#documentação-da-api)
 
-## Description
+## Visão Geral
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+O backend do projeto Anéis de Poder é construído com NestJS e TypeScript, oferecendo uma API robusta e escalável para gerenciar os dados dos anéis mágicos e usuários.
 
-## Project setup
+## Tecnologias Utilizadas
 
-```bash
-$ npm install
+- **NestJS com TypeScript**: 
+  NestJS foi escolhido sobre o Express padrão devido às suas vantagens para este projeto:
+  - Arquitetura modular que promove organização e manutenibilidade do código.
+  - Suporte nativo ao TypeScript, oferecendo tipagem estática e melhor tooling.
+  - Injeção de dependência integrada, facilitando testes e desacoplamento.
+  - Decorators para criação rápida de endpoints, pipes, guards, etc.
+  - Integração fácil com ORMs como TypeORM para PostgreSQL.
+  - Suporte robusto para criação de microserviços e aplicações escaláveis.
+
+- **PostgreSQL**: Banco de dados relacional escolhido para armazenamento de dados.
+- **Jest**: Framework de testes para realizar testes unitários.
+- **Swagger**: Utilizado para documentação automática da API.
+- **JWT (JSON Web Tokens)**: Para autenticação e autorização.
+
+## Estrutura do Projeto
+
+BACKEND/
+|-- dist/
+|-- node_modules/
+|-- src/
+| |-- aneis/
+| | |-- aneis.controller.spec.ts
+| | |-- aneis.controller.ts
+| | |-- aneis.module.ts
+| | |-- aneis.service.spec.ts
+| | |-- aneis.service.ts
+| | |-- anel.entity.ts
+| |-- auth/
+| | |-- auth.controller.spec.ts
+| | |-- auth.controller.ts
+| | |-- auth.module.ts
+| | |-- auth.service.ts
+| | |-- authenticated-request.interface.ts
+| | |-- jwt-auth.guard.ts
+| | |-- jwt.strategy.ts
+| |-- dto/
+| | |-- anel.dto.ts
+| | |-- create-user.dto.ts
+| | |-- login.dto.ts
+| | |-- update-user.dto.ts
+| |-- filters/
+| | |-- http-exception.filter.ts
+| |-- users/
+| | |-- user.entity.ts
+| | |-- users.controller.spec.ts
+| | |-- users.controller.ts
+| | |-- users.module.ts
+| | |-- users.service.ts
+| |-- app.controller.spec.ts
+| |-- app.controller.ts
+| |-- app.module.ts
+| |-- app.service.ts
+| |-- main.ts
+|-- test/
+|-- .env
+|-- .gitignore
+|-- nest-cli.json
+|-- package-lock.json
+|-- package.json
+|-- tsconfig.build.json
+|-- tsconfig.json
+
+## Configuração e Execução
+
+1. Clone o repositório.
+2. Instale as dependências:
+
+npm install
+
+3. Configure o banco de dados PostgreSQL.
+
+4. Crie um arquivo `.env` na raiz do projeto com o seguinte conteúdo:
+
+```
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_NAME=nome_do_banco_de_dados
+JWT_SECRET=sua_chave_secreta
+
 ```
 
-## Compile and run the project
+5. Execute o projeto:
+npm run start:dev
 
-```bash
-# development
-$ npm run start
+## Banco de Dados
 
-# watch mode
-$ npm run start:dev
+O projeto utiliza PostgreSQL. Certifique-se de que o banco de dados está configurado e acessível com as credenciais fornecidas no arquivo `.env`.
 
-# production mode
-$ npm run start:prod
+## Autenticação
+
+A autenticação é realizada usando JWT (JSON Web Tokens). O segredo do JWT é definido no arquivo `.env`.
+
+Para gerar um novo JWT_SECRET, você pode usar o seguinte comando no Node.js:
+
+```javascript
+
+console.log(require('crypto').randomBytes(64).toString('hex'));
+
 ```
 
-## Run tests
+Execute este comando no terminal para gerar uma nova string segura para o JWT_SECRET.
 
-```bash
-# unit tests
-$ npm run test
+## Testes
 
-# e2e tests
-$ npm run test:e2e
+Os testes unitários são realizados com Jest. 
 
-# test coverage
-$ npm run test:cov
-```
+Para executar os testes: npm run test
 
-## Resources
+## Documentação da API
 
-Check out a few resources that may come in handy when working with NestJS:
+A documentação da API é gerada automaticamente usando Swagger. Após iniciar o servidor, acesse:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+http://localhost:3000/api
+Esta página fornecerá uma interface interativa para explorar e testar os endpoints da API.
 
-## Support
+Esta documentação fornece uma visão geral abrangente do backend do seu projeto, incluindo a estrutura detalhada, configuração, e informações importantes sobre as tecnologias utilizadas. A estrutura do projeto reflete exatamente o que foi mostrado na imagem fornecida. 
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Lembre-se de que você pode adicionar ou modificar seções conforme necessário para melhor atender às especificidades 

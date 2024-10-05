@@ -32,11 +32,12 @@ describe('AuthController', () => {
   });
 
   describe('login', () => {
-    it('Deve retornar o token JWT e as informações do usuário caso o login seja válido', async () => {
+    it('should return a JWT token and user info when credentials are valid', async () => {
       const mockUser: Omit<User, 'senha'> = {
         id: 1,
         nome: 'Test User',
         email: 'test@example.com',
+        imagem: 'http://example.com/avatar.jpg', // Adicione esta linha
         aneis: [] as Anel[]
       };
       const mockLoginResult = {
@@ -44,6 +45,7 @@ describe('AuthController', () => {
         id: 1,
         nome: 'Test User',
         email: 'test@example.com',
+        imagem: 'http://example.com/avatar.jpg', // Adicione esta linha
         aneis: [] as Anel[]
       };
       jest.spyOn(service, 'validateUser').mockResolvedValue(mockUser);
