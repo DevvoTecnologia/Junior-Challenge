@@ -1,22 +1,14 @@
 import {
-  Cache,
-  CACHE_MANAGER,
-  CacheInterceptor,
-  CacheKey,
-} from "@nestjs/cache-manager";
-import {
   Body,
   Controller,
   Delete,
   Get,
-  Inject,
   Param,
   ParseIntPipe,
   Post,
   Put,
   Req,
   UseGuards,
-  UseInterceptors,
   ValidationPipe,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
@@ -31,21 +23,15 @@ import { UserService } from "./user.service";
 
 @Controller("user")
 @ApiTags("User")
-@UseInterceptors(CacheInterceptor)
 export class UserController {
-  constructor(
-    private readonly userService: UserService,
-    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   @Get()
-  @CacheKey("users")
   async findAll(): Promise<User[]> {
     return await this.userService.findAll();
   }
 
   @Get(":id")
-  @CacheKey("users/:id")
   async findByPk(@Param("id", ParseIntPipe) id: number): Promise<User> {
     return await this.userService.findByPk(id);
   }
@@ -55,8 +41,6 @@ export class UserController {
     @Body(ValidationPipe) createUserDto: CreateUserDto,
   ): Promise<Pick<User, "id" | "username">> {
     const user = await this.userService.create(createUserDto);
-    await this.cacheManager.del("users");
-    await this.cacheManager.del("users/:id");
     return user;
   }
 
@@ -70,8 +54,6 @@ export class UserController {
     req: ReqAuthUser,
   ): Promise<Pick<User, "id" | "username">> {
     const user = await this.userService.update(id, updateUserDto, req);
-    await this.cacheManager.del("users");
-    await this.cacheManager.del("users/:id");
     return user;
   }
 
@@ -84,8 +66,6 @@ export class UserController {
     @Req() req: ReqAuthUser,
   ): Promise<null> {
     const user = await this.userService.delete(id, deleteUserDto, req);
-    await this.cacheManager.del("users");
-    await this.cacheManager.del("users/:id");
     return user;
   }
 }

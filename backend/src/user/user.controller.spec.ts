@@ -1,4 +1,3 @@
-import { CacheModule } from "@nestjs/cache-manager";
 import { ConfigModule } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import type { TestingModule } from "@nestjs/testing";
@@ -50,11 +49,7 @@ describe("UserController", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        JwtModule,
-        ConfigModule,
-        CacheModule.register({ ttl: 60000 * 10 }),
-      ],
+      imports: [JwtModule, ConfigModule],
       controllers: [UserController],
       providers: [UserService],
     })
