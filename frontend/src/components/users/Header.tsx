@@ -14,7 +14,7 @@ export default async function Header() {
   const { session, userId } = await getSessionServer();
 
   return (
-    <header className="flex h-28 flex-col items-center justify-evenly bg-gray-800 px-2 shadow-lg sm:px-6 md:h-[4.5rem] md:flex-row md:justify-between">
+    <header className="flex h-28 flex-col items-center justify-evenly bg-gradient-to-r from-gray-900 to-gray-800 px-2 shadow-lg sm:px-6 md:h-[4.5rem] md:flex-row md:justify-between">
       {/* Logo and Title */}
       <div className="flex items-center gap-2">
         <motion.div

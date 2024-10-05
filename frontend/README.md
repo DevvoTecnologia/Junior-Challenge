@@ -64,11 +64,9 @@ You can run end-to-end (e2e) tests using Cypress. Follow these steps:
 
 Make sure you have a test user
 
-username: admin
-
-password: admin
-
 id: 1
+username: admin
+password: admin
 
 for cypress to work properly, OR add a user and modify the tests
 

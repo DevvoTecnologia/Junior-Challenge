@@ -36,10 +36,10 @@ export default async function RingsPage() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="flex items-center justify-center rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+            className="flex items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 px-5 py-3 text-sm font-medium text-white shadow-lg transition duration-300 hover:from-blue-700 hover:to-blue-600"
           >
             My Profile
-            <FaUserCircle className="ml-2 inline-block" />
+            <FaUserCircle className="ml-2 inline-block text-xl" />
           </motion.button>
         </Link>
       </div>

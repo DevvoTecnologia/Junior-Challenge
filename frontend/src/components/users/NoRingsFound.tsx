@@ -13,13 +13,13 @@ export default function NoRingsFound({
 }: Readonly<NoRingsFoundProps>) {
   return (
     <motion.div
-      className="flex h-screen flex-col items-center justify-center gap-8"
+      className="flex h-screen flex-col items-center justify-center gap-8 bg-gradient-to-br from-gray-900 to-gray-800 text-yellow-200"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
       <motion.h2
-        className="mb-1 text-center text-2xl font-semibold text-gray-900"
+        className="mb-1 text-center font-serif text-3xl text-yellow-400"
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
@@ -27,7 +27,7 @@ export default function NoRingsFound({
         Username: {username.charAt(0).toUpperCase() + username.slice(1)}
       </motion.h2>
       <motion.p
-        className="text-gray-500"
+        className="text-yellow-300"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.6 }}
@@ -42,7 +42,7 @@ export default function NoRingsFound({
           transition={{ duration: 0.5, delay: 0.8 }}
         >
           <Link
-            className="flex items-center text-2xl text-blue-600 hover:text-blue-800 active:text-blue-900"
+            className="flex items-center text-2xl text-yellow-400 hover:text-yellow-500"
             href={`/rings/new`}
           >
             <svg
@@ -85,7 +85,7 @@ export default function NoRingsFound({
         transition={{ duration: 0.5, delay: 0.8 }}
       >
         <Link
-          className="text-2xl text-gray-700 hover:text-blue-400 active:text-blue-600"
+          className="text-2xl text-yellow-400 hover:text-yellow-500"
           href={`/users`}
         >
           Back

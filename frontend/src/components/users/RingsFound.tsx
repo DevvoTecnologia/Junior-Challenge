@@ -24,16 +24,16 @@ export default function RingsFound({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="flex min-h-screen flex-col bg-gradient-to-br from-blue-50 to-indigo-100"
+      className="flex min-h-screen flex-col bg-gradient-to-br from-gray-900 to-gray-800 text-yellow-200"
     >
-      <div className="flex items-center justify-between bg-white p-6 shadow-md">
-        <h2 className="text-4xl font-bold text-gray-800">
+      <div className="flex items-center justify-between border-b border-yellow-600 bg-gray-800 p-6 shadow-md">
+        <h2 className="font-serif text-4xl text-yellow-400">
           {username.charAt(0).toUpperCase() + username.slice(1)}&apos;s Rings
         </h2>
         <Link
           datatype="user-link-back-to-users"
           href={`/users`}
-          className="text-blue-600 hover:text-blue-800"
+          className="text-yellow-400 hover:text-yellow-500"
         >
           <IoMdArrowDropleftCircle className="text-5xl" />
         </Link>

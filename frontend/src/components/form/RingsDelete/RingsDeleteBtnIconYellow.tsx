@@ -12,7 +12,7 @@ interface RingsDeleteBtnIconBlackProps {
   token: string | undefined;
 }
 
-export default function RingsDeleteBtnIconBlack({
+export default function RingsDeleteBtnIconYellow({
   ring,
   token,
 }: Readonly<RingsDeleteBtnIconBlackProps>) {
@@ -31,7 +31,7 @@ export default function RingsDeleteBtnIconBlack({
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
     >
-      <MdDelete size={24} color="black" />
+      <MdDelete size={24} color="#facc15a1" />
     </motion.button>
   );
 }

@@ -21,7 +21,7 @@ export default function UsersFound({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="mt-6 grid gap-6 p-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+      className="mt-6 grid gap-6 bg-gradient-to-br from-gray-900 to-gray-800 p-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
       datatype="users-list"
     >
       {sortedUsers.map((user) => (
@@ -33,11 +33,11 @@ export default function UsersFound({
           animate={{ scale: 1, opacity: 1 }}
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.3 }}
-          className="flex flex-col overflow-hidden rounded-lg bg-white p-6 shadow-lg transition-shadow duration-300 hover:shadow-xl"
+          className="flex flex-col overflow-hidden rounded-lg border border-yellow-600 bg-gray-800 p-6 shadow-lg transition-shadow duration-300 hover:shadow-2xl"
         >
           <div className="mb-4 flex items-center justify-between">
             <motion.h2
-              className="text-xl font-bold text-gray-900"
+              className="font-serif text-2xl text-yellow-400"
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.4 }}
@@ -47,11 +47,11 @@ export default function UsersFound({
 
             <Link datatype="user-link-profile" href={`/users/${user.id}`}>
               <motion.div
-                whileHover={{ scale: 1.2 }}
+                whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 className="cursor-pointer"
               >
-                <IoMdArrowDroprightCircle className="text-3xl text-blue-600 transition-colors duration-200 hover:text-blue-800" />
+                <IoMdArrowDroprightCircle className="text-4xl text-yellow-400 transition-colors duration-200 hover:text-yellow-500" />
               </motion.div>
             </Link>
           </div>
@@ -66,10 +66,10 @@ export default function UsersFound({
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.5 }}
               >
-                <p className="text-gray-500">No rings available</p>
+                <p className="text-yellow-300">No rings available</p>
                 <Image
                   className="mt-6"
-                  src="/no-content.png"
+                  src="/ring.png"
                   alt="No ring"
                   width={150}
                   height={150}

@@ -10,13 +10,9 @@ const sequelizeAsyncConfig: SequelizeModuleAsyncOptions = {
     const nodeEnv = configService.get("nodeEnv");
 
     const host = configService.get("database.host");
-
     const port = configService.get("database.port");
-
     const username = configService.get("database.username");
-
     const password = configService.get("database.password");
-
     const database = configService.get("database.name");
 
     return {
