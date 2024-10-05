@@ -57,6 +57,13 @@ You can run various tests to ensure your application is working as expected:
 
 For e2e testing, remember to check if the information passed exists in the database.
 
+Make sure you have a test user
+
+id: 1
+username: admin
+password: admin
+for supertest to work properly, OR add a user and modify the tests
+
 - **Unit Tests**:
     ```bash
     yarn test

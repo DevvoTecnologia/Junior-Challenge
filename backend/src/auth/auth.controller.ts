@@ -10,11 +10,12 @@ import {
   UsePipes,
   ValidationPipe,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from "@nestjs/swagger";
 
 import { AuthGuard } from "./auth.guard";
 import { AuthService } from "./auth.service";
 import { AuthDto } from "./dto/auth.dto";
+import { getProfileApiOkResponse, signInApiOkResponse } from "./swagger.config";
 
 @Controller("auth")
 @UsePipes(ValidationPipe)
@@ -24,6 +25,7 @@ export class AuthController {
 
   @Post("login")
   @HttpCode(HttpStatus.OK)
+  @ApiOkResponse(signInApiOkResponse)
   async signIn(@Body() authDto: AuthDto): Promise<{
     accessToken: string;
     userId: number;
@@ -36,6 +38,7 @@ export class AuthController {
   @Get("test")
   @UseGuards(AuthGuard)
   @ApiBearerAuth("defaultBearerAuth")
+  @ApiOkResponse(getProfileApiOkResponse)
   getProfile(
     @Request()
     req: {
