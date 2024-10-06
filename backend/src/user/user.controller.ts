@@ -15,9 +15,11 @@ import {
   ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
 import { AuthGuard } from "src/auth/auth.guard";
+import { errorResponsePatternStructure } from "src/swagger.config";
 
 import { CreateUserDto } from "./dto/create-user.dto";
 import { DeleteUserDto } from "./dto/delete-user.dto";
@@ -39,18 +41,21 @@ export class UserController {
 
   @Get()
   @ApiOkResponse(findAllApiOkResponse)
+  @ApiResponse(errorResponsePatternStructure)
   async findAll(): Promise<User[]> {
     return await this.userService.findAll();
   }
 
   @Get(":id")
   @ApiOkResponse(findOneApiOkResponse)
+  @ApiResponse(errorResponsePatternStructure)
   async findByPk(@Param("id", ParseIntPipe) id: number): Promise<User> {
     return await this.userService.findByPk(id);
   }
 
   @Post()
   @ApiCreatedResponse(createApiOkResponse)
+  @ApiResponse(errorResponsePatternStructure)
   async create(
     @Body(ValidationPipe) createUserDto: CreateUserDto,
   ): Promise<Pick<User, "id" | "username">> {
@@ -62,6 +67,7 @@ export class UserController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth("defaultBearerAuth")
   @ApiOkResponse(updateApiOkResponse)
+  @ApiResponse(errorResponsePatternStructure)
   async update(
     @Param("id", ParseIntPipe) id: number,
     @Body(ValidationPipe) updateUserDto: UpdateUserDto,
@@ -78,6 +84,7 @@ export class UserController {
   @ApiOkResponse({
     description: "No body returned for response",
   })
+  @ApiResponse(errorResponsePatternStructure)
   async delete(
     @Param("id", ParseIntPipe) id: number,
     @Body(ValidationPipe) deleteUserDto: DeleteUserDto,

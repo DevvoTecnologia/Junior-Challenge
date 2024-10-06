@@ -28,9 +28,11 @@ import {
   ApiConsumes,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
 import { AuthGuard } from "src/auth/auth.guard";
+import { errorResponsePatternStructure } from "src/swagger.config";
 
 import { CreateRingDto } from "./dto/create-ring.dto";
 import { UpdateRingDto } from "./dto/update-ring.dto";
@@ -60,12 +62,14 @@ export class RingController {
   @UseInterceptors(CacheInterceptor)
   @CacheKey("rings")
   @ApiOkResponse(findAllApiOkResponse)
+  @ApiResponse(errorResponsePatternStructure)
   async findAll(@Req() req: ReqAuthUser): Promise<Ring[]> {
     return await this.ringService.findAll(req);
   }
 
   @Get(":id")
   @ApiOkResponse(findOneApiOkResponse)
+  @ApiResponse(errorResponsePatternStructure)
   async findOne(
     @Param("id", ParseIntPipe) id: number,
     @Req() req: ReqAuthUser,
@@ -78,6 +82,7 @@ export class RingController {
   @ApiConsumes("multipart/form-data")
   @ApiBody(createApiBody)
   @ApiCreatedResponse(createApiOkResponse)
+  @ApiResponse(errorResponsePatternStructure)
   async create(
     @Body(ValidationPipe) createRingDto: CreateRingDto,
     @UploadedFile(
@@ -103,6 +108,7 @@ export class RingController {
   @ApiConsumes("multipart/form-data")
   @ApiBody(updateApiBody)
   @ApiOkResponse(updateApiOkResponse)
+  @ApiResponse(errorResponsePatternStructure)
   async update(
     @Body(ValidationPipe) updateRingDto: UpdateRingDto,
     @Param("id", ParseIntPipe) id: number,
@@ -128,6 +134,7 @@ export class RingController {
   @ApiOkResponse({
     description: "No body returned for response",
   })
+  @ApiResponse(errorResponsePatternStructure)
   async delete(
     @Param("id", ParseIntPipe) id: number,
     @Req() req: ReqAuthUser,
