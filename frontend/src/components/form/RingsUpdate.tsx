@@ -7,9 +7,14 @@ import { toast } from "react-toastify";
 
 import catchErrorClient from "@/global/catchErrorClient";
 import fetchClient from "@/lib/fetchClient";
-import type { UpdateRingSuccess } from "@/types/Ring";
+import type { PermittedForgedBy, UpdateRingSuccess } from "@/types/Ring";
 
 import { LoadingIcon } from "../Loading";
+import RingsInputForgedBy from "../RingsGeneralInputs/ForgedBy";
+import RingsInputImage from "../RingsGeneralInputs/Image";
+import RingsInputName from "../RingsGeneralInputs/Name";
+import RingsInputOwner from "../RingsGeneralInputs/Owner";
+import RingsInputPower from "../RingsGeneralInputs/Power";
 
 interface RingsUpdateFormProps {
   token: string | undefined;
@@ -17,10 +22,15 @@ interface RingsUpdateFormProps {
   responseName: string | undefined;
   responsePower: string | undefined;
   responseOwner: string | undefined;
-  responseForgedBy: string | undefined;
+  responseForgedBy: PermittedForgedBy | undefined;
 }
 
-const permittedForgedBy = ["Elfos", "Anões", "Homens", "Sauron"];
+const permittedForgedBy: PermittedForgedBy[] = [
+  "Elfos",
+  "Anões",
+  "Homens",
+  "Sauron",
+];
 
 export default function RingsUpdateForm({
   token,
@@ -35,16 +45,24 @@ export default function RingsUpdateForm({
   const defaultName = responseName || ""; // nosonar
   const defaultPower = responsePower || ""; // nosonar
   const defaultOwner = responseOwner || ""; // nosonar
-  const defaultForgedBy = responseForgedBy || ""; // nosonar
+  const defaultForgedBy = responseForgedBy || "Elfos"; // nosonar
 
   const [name, setName] = useState(defaultName);
   const [power, setPower] = useState(defaultPower);
   const [owner, setOwner] = useState(defaultOwner);
-  const [forgedBy, setForgedBy] = useState(defaultForgedBy);
+  const [forgedBy, setForgedBy] = useState<PermittedForgedBy>(defaultForgedBy);
 
   const [image, setImage] = useState<File | null>(null);
 
   const [isPending, startTransition] = useTransition();
+
+  // Sort the permittedForgedBy initiating with the defaultForgedBy
+  const sortedForgedBy = responseForgedBy
+    ? [
+        responseForgedBy,
+        ...permittedForgedBy.filter((item) => item !== responseForgedBy),
+      ]
+    : permittedForgedBy;
 
   async function submitForm(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -114,79 +132,31 @@ export default function RingsUpdateForm({
       transition={{ type: "spring", stiffness: 50 }}
       className="w-full max-w-lg space-y-4 rounded-lg bg-white p-6 text-black shadow-md"
     >
-      <div className="flex flex-col space-y-2">
-        <motion.label htmlFor="name" className="font-semibold">
-          Name
-        </motion.label>
-        <motion.input
-          id="name"
-          name="name"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder={responseName}
-          className="rounded-md border border-gray-300 p-2 text-gray-900"
-        />
-      </div>
+      <RingsInputName
+        name={name}
+        setName={setName}
+        placeholder={responseName}
+      />
 
-      <div className="flex flex-col space-y-2">
-        <motion.label htmlFor="power" className="font-semibold">
-          Power
-        </motion.label>
-        <motion.input
-          id="power"
-          name="power"
-          type="text"
-          value={power}
-          onChange={(e) => setPower(e.target.value)}
-          placeholder={responsePower}
-          className="rounded-md border border-gray-300 p-2 text-gray-900"
-        />
-      </div>
+      <RingsInputPower
+        power={power}
+        setPower={setPower}
+        placeholder={responsePower}
+      />
 
-      <div className="flex flex-col space-y-2">
-        <motion.label htmlFor="owner" className="font-semibold">
-          Owner
-        </motion.label>
-        <motion.input
-          id="owner"
-          name="owner"
-          type="text"
-          value={owner}
-          onChange={(e) => setOwner(e.target.value)}
-          placeholder={responseOwner}
-          className="rounded-md border border-gray-300 p-2 text-gray-900"
-        />
-      </div>
+      <RingsInputOwner
+        owner={owner}
+        setOwner={setOwner}
+        placeholder={responseOwner}
+      />
 
-      <div className="flex flex-col space-y-2">
-        <motion.label htmlFor="forgedBy" className="font-semibold">
-          Forged By
-        </motion.label>
-        <motion.input
-          id="forgedBy"
-          name="forgedBy"
-          type="text"
-          value={forgedBy}
-          onChange={(e) => setForgedBy(e.target.value)}
-          placeholder={responseForgedBy}
-          className="rounded-md border border-gray-300 p-2 text-gray-900"
-        />
-      </div>
+      <RingsInputForgedBy
+        forgedBy={forgedBy}
+        setForgedBy={setForgedBy}
+        forgedByList={sortedForgedBy}
+      />
 
-      <div className="flex flex-col space-y-2">
-        <motion.label htmlFor="image" className="font-semibold">
-          Image
-        </motion.label>
-        <motion.input
-          id="image"
-          name="image"
-          type="file"
-          onChange={(e) => setImage(e.target.files?.[0] || null)}
-          accept="image/*"
-          className="cursor-pointer file:rounded-md file:border file:border-gray-300 file:p-2 file:text-sm file:text-gray-600"
-        />
-      </div>
+      <RingsInputImage setImage={setImage} />
 
       {isPending ? (
         <div className="flex justify-center">

@@ -50,7 +50,6 @@ import { ReqAuthUser } from "./types/Req";
 @UseGuards(AuthGuard)
 @ApiTags("Ring")
 @ApiBearerAuth("defaultBearerAuth")
-@UseInterceptors(CacheInterceptor)
 export class RingController {
   constructor(
     private readonly ringService: RingService,
@@ -58,6 +57,7 @@ export class RingController {
   ) {}
 
   @Get()
+  @UseInterceptors(CacheInterceptor)
   @CacheKey("rings")
   @ApiOkResponse(findAllApiOkResponse)
   async findAll(@Req() req: ReqAuthUser): Promise<Ring[]> {
@@ -65,7 +65,6 @@ export class RingController {
   }
 
   @Get(":id")
-  @CacheKey("rings/:id")
   @ApiOkResponse(findOneApiOkResponse)
   async findOne(
     @Param("id", ParseIntPipe) id: number,
@@ -96,7 +95,6 @@ export class RingController {
   ): Promise<Ring> {
     const ring = await this.ringService.create(createRingDto, file, req);
     await this.cacheManager.del("rings");
-    await this.cacheManager.del("rings/:id");
     return ring;
   }
 
@@ -123,7 +121,6 @@ export class RingController {
   ): Promise<Ring> {
     const ring = await this.ringService.update(id, updateRingDto, file, req);
     await this.cacheManager.del("rings");
-    await this.cacheManager.del("rings/:id");
     return ring;
   }
 
@@ -137,7 +134,6 @@ export class RingController {
   ): Promise<null> {
     const ring = await this.ringService.delete(id, req);
     await this.cacheManager.del("rings");
-    await this.cacheManager.del("rings/:id");
     return ring;
   }
 }

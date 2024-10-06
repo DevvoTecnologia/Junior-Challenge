@@ -13,7 +13,7 @@ Create a schema in MySQL, and set its name as the `DB_NAME` value in the `.env` 
 ### 3. API Documentation
 
 You can find the API documentation in two locations:
-- Swagger UI: [http://192.168.100.3:3000/api](http://192.168.100.3:3000/api)
+- Swagger UI: [http://localhost:3000/api](http://localhost:3000/api)
 - Insomnia/Postman: In the root folder, there is an `Insomnia.json` file that can be imported into Insomnia or Postman for easy API testing.
 
 ---
