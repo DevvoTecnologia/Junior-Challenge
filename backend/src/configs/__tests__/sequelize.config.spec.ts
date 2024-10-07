@@ -15,7 +15,7 @@ describe("sequelize.config", () => {
           useValue: {
             get: jest.fn((key: string) => {
               const config = {
-                "database.dialect": "postgres",
+                "database.dialect": "mysql",
                 "database.host": "localhost",
                 "database.port": 5432,
                 "database.username": "testuser",
@@ -39,7 +39,7 @@ describe("sequelize.config", () => {
     }
     const config = await sequelizeAsyncConfig.useFactory(configService);
     expect(config).toBeDefined();
-    expect(config.dialect).toBe("postgres");
+    expect(config.dialect).toBe("mysql");
     expect(config.host).toBe("localhost");
     expect(config.port).toBe(5432);
     expect(config.username).toBe("testuser");

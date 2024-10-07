@@ -4,7 +4,6 @@ import {
   Logger,
   NotFoundException,
 } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { InjectModel } from "@nestjs/sequelize";
 
 import RingGlobalValidations from "./RingGlobalValidations";
@@ -17,22 +16,11 @@ import { ReqAuthUser } from "./types/Req";
 export class RingService extends RingGlobalValidations {
   private readonly logger = new Logger(RingService.name);
 
-  private readonly host: string;
-  private readonly port: string;
-  private readonly nodeEnv: string;
-  private readonly baseUrl: string;
-
   constructor(
     @InjectModel(Ring)
     private readonly ringModel: typeof Ring,
-    private readonly configService: ConfigService,
   ) {
     super();
-    this.host = this.configService.get<string>("host")!;
-    this.port = this.configService.get<string>("port")!;
-    this.nodeEnv = this.configService.get<string>("nodeEnv")!;
-    this.baseUrl =
-      this.nodeEnv === "development" ? `${this.host}:${this.port}` : this.host;
   }
 
   async findAll(req: ReqAuthUser): Promise<Ring[]> {
@@ -45,10 +33,6 @@ export class RingService extends RingGlobalValidations {
     if (!rings.length) {
       throw new NotFoundException("No rings found");
     }
-
-    rings.forEach((ring) => {
-      ring.url = `${this.baseUrl}/uploads/${ring.image}`;
-    });
 
     return rings;
   }
@@ -64,8 +48,6 @@ export class RingService extends RingGlobalValidations {
     if (!ring) {
       throw new NotFoundException(`Ring with id ${id} not found`);
     }
-
-    ring.url = `${this.baseUrl}/uploads/${ring.image}`;
 
     return ring;
   }
@@ -105,8 +87,6 @@ export class RingService extends RingGlobalValidations {
     } catch {
       throw new BadRequestException("Error creating ring");
     }
-
-    newRing.url = `${this.baseUrl}/uploads/${newRing.image}`;
 
     return newRing;
   }
@@ -158,8 +138,6 @@ export class RingService extends RingGlobalValidations {
     ring.power = power || ring.power; // nosonar
     ring.owner = owner || ring.owner; // nosonar
     ring.forgedBy = forgedBy || ring.forgedBy; // nosonar
-
-    ring.url = `${this.baseUrl}/uploads/${ring.image}`;
 
     await ring.save();
 

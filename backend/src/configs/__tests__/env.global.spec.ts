@@ -11,6 +11,14 @@ describe("env.global", () => {
     expect(config.nodeEnv).toBe(process.env.NODE_ENV ?? "development");
   });
 
+  it("should have an allowedOrigin property", () => {
+    const config = envGlobal();
+    expect(config.allowedOrigin).toBeDefined();
+    expect(config.allowedOrigin).toBe(
+      process.env.ALLOWED_ORIGIN ?? "http://localhost:3001",
+    );
+  });
+
   it("should have a host and port property", () => {
     const config = envGlobal();
     expect(config.host).toBeDefined();
@@ -18,6 +26,14 @@ describe("env.global", () => {
     expect(config.port).toBeDefined();
     expect(config.port).toBe(
       process.env.PORT ? parseInt(process.env.PORT, 10) : 3000,
+    );
+  });
+
+  it("should have imagesUrl property", () => {
+    const config = envGlobal();
+    expect(config.imagesUrl).toBeDefined();
+    expect(config.imagesUrl).toBe(
+      process.env.IMAGES_URL ?? "http://localhost:3000/uploads",
     );
   });
 

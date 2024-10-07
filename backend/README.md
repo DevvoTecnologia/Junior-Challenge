@@ -8,7 +8,7 @@ Start by creating a `.env` file with the same variables and values as found in t
 
 ### 2. Database Setup
 
-Create a schema in MySQL, and set its name as the `DB_NAME` value in the `.env` file. If the `NODE_ENV` is not set to `production`, Sequelize will automatically load and sync the tables in the MySQL database.
+Create a schema in MySQL, and set its name as the `DB_NAME` value in the `.env` file.
 
 ### 3. API Documentation
 
@@ -86,7 +86,7 @@ for supertest to work properly, OR add a user and modify the tests
 
 ## 🌐 Demonstração do Projeto
 
-### Documentação da API
+### Documentação da API - Produção
 A documentação da API foi construída utilizando Swagger, permitindo uma visualização clara e interativa das rotas disponíveis. Acesse a documentação aqui: [Documentação da API](https://api-junior-challenge.vercel.app/api).
 
 Na documentação, você encontrará detalhes sobre cada endpoint, exemplos de requisições e respostas, além de descrições de erros comuns.

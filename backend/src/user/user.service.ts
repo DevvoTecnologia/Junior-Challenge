@@ -4,7 +4,6 @@ import {
   Logger,
   NotFoundException,
 } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { InjectModel } from "@nestjs/sequelize";
 import { Ring } from "src/ring/entities/ring.entity";
 
@@ -21,25 +20,14 @@ export class UserService {
   private readonly includeAtributes = [
     {
       model: Ring,
-      attributes: ["id", "name", "power", "owner", "forgedBy", "image"],
+      attributes: ["id", "name", "power", "owner", "forgedBy", "image", "url"],
     },
   ];
-  private readonly host: string;
-  private readonly port: string;
-  private readonly nodeEnv: string;
-  public readonly baseUrl: string;
 
   constructor(
     @InjectModel(User)
     private readonly userModel: typeof User,
-    private readonly configService: ConfigService,
-  ) {
-    this.host = this.configService.get<string>("host")!;
-    this.port = this.configService.get<string>("port")!;
-    this.nodeEnv = this.configService.get<string>("nodeEnv")!;
-    this.baseUrl =
-      this.nodeEnv === "development" ? `${this.host}:${this.port}` : this.host;
-  }
+  ) {}
 
   async findAll(): Promise<User[]> {
     const users = await this.userModel.findAll({
@@ -50,12 +38,6 @@ export class UserService {
     if (users.length === 0) {
       throw new NotFoundException("No users found");
     }
-
-    users.forEach((user) => {
-      user.rings.forEach((ring) => {
-        ring.url = `${this.baseUrl}/uploads/${ring.image}`;
-      });
-    });
 
     return users;
   }
@@ -72,10 +54,6 @@ export class UserService {
       throw new NotFoundException(`User with id ${id} not found`);
     }
 
-    user.rings.forEach((ring) => {
-      ring.url = `${this.baseUrl}/uploads/${ring.image}`;
-    });
-
     return user;
   }
 
@@ -89,10 +67,6 @@ export class UserService {
     if (!user) {
       throw new NotFoundException(`User with username ${username} not found`);
     }
-
-    user.rings.forEach((ring) => {
-      ring.url = `${this.baseUrl}/uploads/${ring.image}`;
-    });
 
     return user;
   }
@@ -122,9 +96,11 @@ export class UserService {
     const { username, password, newPassword } = user;
     const { sub } = req.user;
 
-    if (sub !== id) {
-      throw new BadRequestException("You can not update this user");
-    }
+    this.validateUpdateOrDeleteUser({
+      id,
+      sub,
+      msg: "You can not update this user",
+    });
 
     const userToUpdate = await this.userModel.findByPk(id);
 
@@ -133,31 +109,13 @@ export class UserService {
     }
 
     if (password) {
-      if (!(await userToUpdate.passwordIsValid(password))) {
-        throw new BadRequestException("Invalid password");
-      }
+      await this.validatePassword(userToUpdate, password);
     } else {
       throw new BadRequestException("Password is required");
     }
 
     if (newPassword) {
-      if (newPassword.length < 4) {
-        throw new BadRequestException(
-          "Password must be at least 4 characters long",
-        );
-      }
-
-      if (newPassword.length > 255) {
-        throw new BadRequestException(
-          "Password must be at most 255 characters long",
-        );
-      }
-
-      if (newPassword === password) {
-        throw new BadRequestException(
-          "New password can not be the same as the old one",
-        );
-      }
+      this.validateNewPassword(newPassword, password);
 
       userToUpdate.password = newPassword;
     } else {
@@ -187,9 +145,11 @@ export class UserService {
 
     const { sub } = req.user;
 
-    if (sub !== id) {
-      throw new BadRequestException("You can not delete this user");
-    }
+    this.validateUpdateOrDeleteUser({
+      id,
+      sub,
+      msg: "You can not delete this user",
+    });
 
     const user = await this.userModel.findByPk(id);
 
@@ -197,12 +157,50 @@ export class UserService {
       throw new NotFoundException(`User with id ${id} not found`);
     }
 
-    if (!(await user.passwordIsValid(password))) {
-      throw new BadRequestException("Invalid password");
-    }
+    await this.validatePassword(user, password);
 
     await user.destroy();
 
     return null;
+  }
+
+  private async validatePassword(user: User, password: string): Promise<void> {
+    if (!(await user.passwordIsValid(password))) {
+      throw new BadRequestException("Invalid password");
+    }
+  }
+
+  private validateNewPassword(newPassword: string, oldPassword: string): void {
+    if (newPassword.length < 4) {
+      throw new BadRequestException(
+        "Password must be at least 4 characters long",
+      );
+    }
+
+    if (newPassword.length > 255) {
+      throw new BadRequestException(
+        "Password must be at most 255 characters long",
+      );
+    }
+
+    if (newPassword === oldPassword) {
+      throw new BadRequestException(
+        "New password can not be the same as the old one",
+      );
+    }
+  }
+
+  private validateUpdateOrDeleteUser({
+    id,
+    sub,
+    msg,
+  }: {
+    id: number;
+    sub: number;
+    msg: string;
+  }): void {
+    if (sub !== id) {
+      throw new BadRequestException(msg);
+    }
   }
 }

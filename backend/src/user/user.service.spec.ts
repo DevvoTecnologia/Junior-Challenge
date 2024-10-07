@@ -64,6 +64,7 @@ describe("UserService", () => {
               id: 1,
               name: "test",
               image: "test",
+              url: "undefined/uploads/test",
             },
           ],
         } as User,
@@ -102,6 +103,7 @@ describe("UserService", () => {
             id: 1,
             name: "test",
             image: "test",
+            url: "undefined/uploads/test",
           },
         ],
       } as User);
@@ -137,6 +139,7 @@ describe("UserService", () => {
             id: 1,
             name: "test",
             image: "test",
+            url: "undefined/uploads/test",
           },
         ],
       } as User);

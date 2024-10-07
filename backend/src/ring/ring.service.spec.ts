@@ -44,6 +44,7 @@ describe("RingService", () => {
     createdAt: "2024-09-28T04:29:57.000Z",
     updatedAt: "2024-09-28T04:29:57.000Z",
     userId: 4,
+    url: "http://localhost:3000/uploads/ad35fcfe-08d0-42d7-b3ae-2f7ae67deb96-1727497797763-asd.jpg",
   };
 
   const mockRingModelCreateAndUpdate = {
@@ -56,7 +57,7 @@ describe("RingService", () => {
     userId: 4,
     updatedAt: "2024-09-28T04:29:57.766Z",
     createdAt: "2024-09-28T04:29:57.766Z",
-    url: "http://192.168.100.3:3000/uploads/ad35fcfe-08d0-42d7-b3ae-2f7ae67deb96-1727497797763-asd.jpg",
+    url: "http://localhost:3000/uploads/ad35fcfe-08d0-42d7-b3ae-2f7ae67deb96-1727497797763-asd.jpg",
     save: jest.fn(),
   };
 
