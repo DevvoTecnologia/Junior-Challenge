@@ -1,0 +1,35 @@
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 43%;
+    padding: 15px 20px;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    margin-left: 70px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    z-index: 1000;
+}
+
+.toast p {
+    margin: 0;
+}
+
+.success {
+    background-color: #28a745;
+}
+
+.error {
+    background-color: #dc3545;
+}
+
+.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+  
+.hide {
+    transform: translateY(-20px);
+    opacity: 0;
+}

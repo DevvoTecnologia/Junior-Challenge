@@ -6,6 +6,7 @@ import TextInput from '../TextInput/TextInput';
 import { useNavigate } from 'react-router-dom';
 import { GiHammerDrop } from "react-icons/gi";
 import { TiArrowBackOutline } from "react-icons/ti";
+import Toast from '../Toast/Toast';
 
 const Form: React.FC = () => {
   const navigate = useNavigate();
@@ -30,6 +31,10 @@ const Form: React.FC = () => {
     ring_image_url: '',
   });
 
+  const [loading, setLoading] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [toastType, setToastType] = useState<'success' | 'error'>('success');
+
   const validate = () => {
     const newErrors = { ring_name: '', ring_power: '', ring_carrier: '', ring_forged_by: '', ring_image_url: '' };
     if (!formData.ring_name) newErrors.ring_name = 'O nome do anel é obrigatório';
@@ -42,31 +47,41 @@ const Form: React.FC = () => {
     return !newErrors.ring_name && !newErrors.ring_power && !newErrors.ring_carrier && !newErrors.ring_forged_by && !newErrors.ring_image_url;
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (validate()) {
-      console.log('Dados do formulário:', formData);
-      // Aqui você pode enviar os dados para o back-end
-      alert('Formulário enviado com sucesso!');
-      setFormData({ ring_name: '', ring_power: '', ring_carrier: '', ring_forged_by: '', ring_image_url: '' });
+      setLoading(true);
+      try {
+        setToastType('success');
+        setToastMessage('Formulário enviado com sucesso!');
+        setFormData({ ring_name: '', ring_power: '', ring_carrier: '', ring_forged_by: '', ring_image_url: '' });
+      } catch (error) {
+        setToastType('error');
+        setToastMessage('Erro ao enviar o formulário: ' + error);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
+      {toastMessage && <Toast message={toastMessage} type={toastType} onClose={() => setToastMessage(null)} />}
+
       <div className={styles.titleForm}>
         <Text content={"Crie um anel"} color={"#4c2e03"} size={"extra-large"} bold={true} />
       </div>
 
       <TextInput
+        type={"text"}
         id="ring_name"
         name="ring_name"
         label="Nome"
@@ -77,6 +92,7 @@ const Form: React.FC = () => {
       />
 
       <TextInput
+        type={"text"}
         id="ring_power"
         name="ring_power"
         label="Poder"
@@ -87,6 +103,7 @@ const Form: React.FC = () => {
       />
 
       <TextInput
+        type={"text"}
         id="ring_carrier"
         name="ring_carrier"
         label="Portador"
@@ -97,6 +114,7 @@ const Form: React.FC = () => {
       />
 
       <TextInput
+        type={"select"}
         id="ring_forged_by"
         name="ring_forged_by"
         label="Forjado por"
@@ -107,6 +125,7 @@ const Form: React.FC = () => {
       />
 
       <TextInput
+        type={"text"}
         id="ring_image_url"
         name="ring_image_url"
         label="Imagem"
@@ -118,7 +137,7 @@ const Form: React.FC = () => {
 
       <div className={styles.footerBtns}>
         <Button type={"button"} onClick={handleBackHome} text={"Voltar"} color={"#000"} icon={TiArrowBackOutline} />
-        <Button type={"submit"} text={"Forjar"} color={"#714411"} icon={GiHammerDrop} />
+        <Button type={"submit"} text={"Forjar"} color={"#714411"} icon={GiHammerDrop} disabled={loading} />
       </div>
     </form>
   );

@@ -5,12 +5,15 @@ label {
     color: #4c2e03;
 }
 
-input{
-    width: 96%;
+input, select{
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 20px;
     font-size: 16px;
+}
+
+input {
+    width: 94%;
 }
 
 .formGroup {
