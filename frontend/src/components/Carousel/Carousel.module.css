@@ -1,0 +1,23 @@
+:global(.slick-list) {
+    border-left: 5px solid rgb(113, 68, 17);
+    border-right: 5px solid rgb(113, 68, 17);
+    border-radius: 35%;
+    box-shadow: 0px 10px 10px #000;
+    padding: 5px 100px !important;
+}
+
+.carousel {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.carousel .slick-slide {
+  display: flex;
+  justify-content: center;
+}
+
+@media screen and (max-width: 576px) {
+    :global(.slick-list) {
+        border-radius: 15%;
+    }
+}
