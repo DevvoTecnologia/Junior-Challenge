@@ -18,22 +18,21 @@ const App: React.FC = () => {
 const AppContent: React.FC = () => {
   const [fadeClass, setFadeClass] = useState(styles.fadeIn);
   const [backgroundClass, setBackgroundClass] = useState(styles.backgroundHome);
-  const [contentVisible, setContentVisible] = useState(true); // Estado para controle de visibilidade
+  const [contentVisible, setContentVisible] = useState(true);
   const location = useLocation();
 
   useEffect(() => {
     setFadeClass(styles.fadeOut); 
-    setContentVisible(false); // Esconder o conteúdo durante a transição
+    setContentVisible(false);
 
     const timeout = setTimeout(() => {
       setBackgroundClass(location.pathname === '/' ? styles.backgroundHome : styles.backgroundRegister);
       setFadeClass(styles.fadeIn);
-      
-      // Atrasar a exibição do conteúdo até o fade-in estar completo
+
       setTimeout(() => {
         setContentVisible(true);
-      }, 500); // Deve ser o mesmo tempo que a transição no CSS
-    }, 500); // Tempo do fade-out
+      }, 500);
+    }, 500);
 
     return () => clearTimeout(timeout);
   }, [location.pathname]);
@@ -41,7 +40,7 @@ const AppContent: React.FC = () => {
   return (
     <div className={`${styles.background} ${backgroundClass} ${fadeClass}`}>
       <Header />
-      {contentVisible && ( // Condicionar a renderização do conteúdo
+      {contentVisible && (
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />

@@ -3,7 +3,7 @@ import styles from './Form.module.css';
 import Button from '../Button/Button';
 import Text from '../Text/Text';
 import TextInput from '../TextInput/TextInput';
-import Toast from '../Toast/Toast'; // Importe o Toast
+import Toast from '../Toast/Toast';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { GiHammerDrop } from "react-icons/gi";
 import { TiArrowBackOutline, TiPencil } from "react-icons/ti";
@@ -11,7 +11,7 @@ import { TiArrowBackOutline, TiPencil } from "react-icons/ti";
 const Form: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const ring = location.state || {}; // Dados do anel passado pelo state
+  const ring = location.state || {};
 
   const handleBackHome = () => {
     navigate('/');
@@ -34,13 +34,12 @@ const Form: React.FC = () => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [isUpdate, setIsUpdate] = useState(false); // Estado para controlar se é "Salvar" ou "Atualizar"
-  const [toastVisible, setToastVisible] = useState(false); // Controle de visibilidade do toast
-  const [toastMessage, setToastMessage] = useState(''); // Mensagem do toast
-  const [toastType, setToastType] = useState<'success' | 'error'>('success'); // Tipo do toast
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [toastVisible, setToastVisible] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastType, setToastType] = useState<'success' | 'error'>('success');
 
   useEffect(() => {
-    // Preencher o formulário apenas se os dados do anel estiverem presentes
     if (ring && Object.keys(ring).length > 0) {
       setFormData({
         ring_name: ring.name || '',
@@ -49,9 +48,9 @@ const Form: React.FC = () => {
         ring_forged_by: ring.forgedBy || '',
         ring_image_url: ring.imgSrc || '',
       });
-      setIsUpdate(true); // Define que é uma atualização
+      setIsUpdate(true);
     } else {
-      setIsUpdate(false); // Define que é uma criação
+      setIsUpdate(false);
     }
   }, [ring]);
 
@@ -94,21 +93,19 @@ const Form: React.FC = () => {
           setToastMessage('Formulário enviado com sucesso!');
           setToastType('success');
         }
-        console.log(formData);
-        // Resetando os dados do formulário após o envio
         setFormData({ ring_name: '', ring_power: '', ring_carrier: '', ring_forged_by: '', ring_image_url: '' });
       } catch (error) {
         setToastMessage('Erro ao enviar o formulário: ' + error);
         setToastType('error');
       } finally {
         setLoading(false);
-        setToastVisible(true); // Exibe o toast
+        setToastVisible(true);
       }
     }
   };
 
   const handleToastClose = () => {
-    setToastVisible(false); // Oculta o toast
+    setToastVisible(false);
   };
 
   return (
@@ -184,8 +181,6 @@ const Form: React.FC = () => {
           />
         </div>
       </form>
-
-      {/* Renderiza o Toast se estiver visível */}
       {toastVisible && (
         <Toast message={toastMessage} type={toastType} onClose={handleToastClose} />
       )}
