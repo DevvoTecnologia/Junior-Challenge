@@ -5,6 +5,9 @@
     border-radius: 10px;
     transition: transform 0.3s ease;
     perspective: 1000px;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
 }
   
 .cardWrapper:hover {
@@ -76,4 +79,32 @@
 
 .bold {
     font-weight: bold;
+}
+
+.tooltip {
+    position: absolute;
+    bottom: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #7d5211;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 9999;
+    opacity: 1;
+    font-size: 14px;
+    visibility: visible;
+    box-shadow: 0px 0px 5px #000;
+}
+  
+  .tooltip::after {
+    content: '';
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #7d5211 transparent transparent transparent;
 }

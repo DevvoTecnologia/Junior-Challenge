@@ -2,8 +2,47 @@ import React from 'react';
 import Slider from 'react-slick';
 import styles from './Carousel.module.css';
 import Card from '../Card/Card';
+import { useNavigate } from 'react-router-dom';
+
+interface RingData {
+  id: number;
+  imgSrc: string;
+  name: string;
+  power: string;
+  carrier: string;
+  forgedBy: string;
+}
 
 const Carousel: React.FC = () => {
+  const navigate = useNavigate();
+
+  const ringData: RingData[] = [
+    {
+      id: 1,
+      imgSrc: "img/anel_1.png",
+      name: "O anel do poder",
+      power: "Controlar os outros anéis",
+      carrier: "Sauron",
+      forgedBy: "Sauron"
+    },
+    {
+      id: 2,
+      imgSrc: "img/anel_2.png",
+      name: "Nenya, o Anel da Água",
+      power: "Controlar as águas",
+      carrier: "Galadriel",
+      forgedBy: "Celebrimbor"
+    },
+    {
+      id: 3,
+      imgSrc: "img/anel_3.png",
+      name: "Vilya, o Anel do Ar",
+      power: "Controlar o vento",
+      carrier: "Elrond",
+      forgedBy: "Celebrimbor"
+    }
+  ];
+
   const settings = {
     className: "center",
     centerMode: true,
@@ -60,30 +99,24 @@ const Carousel: React.FC = () => {
     ]
   };
 
+  const handleCardClick = (ring: RingData) => {
+    navigate('/register', { state: ring });
+  };
+
   return (
     <div className={styles.carousel}>
       <Slider {...settings}>
-        <Card
-          imgSrc="img/anel_1.png"
-          name="O anel do poder"
-          power="Controlar os outros anéis"
-          carrier="Sauron"
-          forgedBy="Sauron"
-        />
-        <Card
-          imgSrc="img/anel_2.png"
-          name="Nenya, o Anel da Água"
-          power="Controlar as águas"
-          carrier="Galadriel"
-          forgedBy="Celebrimbor"
-        />
-        <Card
-          imgSrc="img/anel_3.png"
-          name="Vilya, o Anel do Ar"
-          power="Controlar o vento"
-          carrier="Elrond"
-          forgedBy="Celebrimbor"
-        />
+        {ringData.map((ring) => (
+          <div key={ring.id} onClick={() => handleCardClick(ring)}>
+            <Card
+              imgSrc={ring.imgSrc}
+              name={ring.name}
+              power={ring.power}
+              carrier={ring.carrier}
+              forgedBy={ring.forgedBy}
+            />
+          </div>
+        ))}
       </Slider>
     </div>
   );

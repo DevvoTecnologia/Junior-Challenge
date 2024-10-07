@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Text from '../Text/Text';
 import styles from './Card.module.css';
 
@@ -11,11 +11,25 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ imgSrc, name, power, carrier, forgedBy }) => {
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const handleMouseEnter = () => {
+    setShowTooltip(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowTooltip(false);
+  };
+
   return (
-    <div className={styles.cardWrapper}>
+    <div
+      className={styles.cardWrapper}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <div className={styles.card}>
         <div className={styles.img}>
-          <img src={imgSrc} alt="" />
+          <img src={imgSrc} alt={name} />
         </div>
         <div className={styles.infoCard}>
           <div className={styles.titleCard}>
@@ -37,6 +51,12 @@ const Card: React.FC<CardProps> = ({ imgSrc, name, power, carrier, forgedBy }) =
           </div>
         </div>
       </div>
+
+      {showTooltip && (
+        <div className={styles.tooltip}>
+          <Text content="Clique no anel para editar" color={"#fff"} size={"small"} bold={false} />
+        </div>
+      )}
     </div>
   );
 };
