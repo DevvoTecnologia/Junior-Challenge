@@ -1,0 +1,29 @@
+.home-container {
+  .grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-content: center;
+    gap: 32px;
+
+    @media only screen and (min-width: 748px) and (max-width: 1023px) {
+      grid-template-columns: auto auto;
+    }
+  }
+
+  .card-home {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 280px !important;
+    border: 2px solid;
+    border-radius: 16px;
+    padding: 12px;
+
+    .image-size {
+      height: 250px;
+      width: 250px;
+      border-radius: 12px;
+    }
+  }
+}
