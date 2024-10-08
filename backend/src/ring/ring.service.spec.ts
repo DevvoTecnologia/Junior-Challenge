@@ -1,3 +1,4 @@
+import { CacheModule } from "@nestjs/cache-manager";
 import { BadRequestException, NotFoundException } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { getModelToken } from "@nestjs/sequelize";
@@ -74,7 +75,12 @@ describe("RingService", () => {
     jest.spyOn(fs, "writeFileSync").mockReturnValue(undefined);
 
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule],
+      imports: [
+        ConfigModule,
+        CacheModule.register({
+          ttl: 60000 * 10, // 10 minutes
+        }),
+      ],
       providers: [
         RingService,
         { provide: getModelToken(Ring), useValue: mockRingModel },
@@ -103,6 +109,17 @@ describe("RingService", () => {
         service.findAll({ user: { sub: 4 } } as ReqAuthUser),
       ).rejects.toThrow(new NotFoundException("No rings found"));
     });
+
+    it("should return rings from cache", async () => {
+      jest
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .spyOn((service as any).cacheManager, "get")
+        .mockResolvedValue([mockRingModelFind]);
+
+      const rings = await service.findAll({ user: { sub: 4 } } as ReqAuthUser);
+
+      expect(rings).toEqual([mockRingModelFind]);
+    });
   });
 
   describe("findOne", () => {
@@ -120,6 +137,19 @@ describe("RingService", () => {
       await expect(
         service.findOne(7, { user: { sub: 4 } } as ReqAuthUser),
       ).rejects.toThrow(new NotFoundException("Ring with id 7 not found"));
+    });
+
+    it("should return ring from cache", async () => {
+      jest
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .spyOn((service as any).cacheManager, "get")
+        .mockResolvedValue(mockRingModelFind);
+
+      const ring = await service.findOne(7, {
+        user: { sub: 4 },
+      } as ReqAuthUser);
+
+      expect(ring).toEqual(mockRingModelFind);
     });
   });
 
@@ -160,6 +190,27 @@ describe("RingService", () => {
       expect(ring).toEqual(mockRingModelCreateAndUpdate);
     });
 
+    it("should invalidate cache after creating a new ring", async () => {
+      const cacheManagerDelSpy = jest.spyOn(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (service as any).cacheManager,
+        "del",
+      );
+
+      const createRingDto = {
+        name: "Nenya, the Ring of Water",
+        power: "The ring of Nenya is set with a white stone.",
+        owner: "Galadriel",
+        forgedBy: "Elfos",
+      };
+
+      await service.create(createRingDto as CreateRingDto, imageMock, {
+        user: { sub: 4 },
+      } as ReqAuthUser);
+
+      expect(cacheManagerDelSpy).toHaveBeenCalledTimes(1);
+    });
+
     it("should throw BadRequestEx if an error occurs in database", async () => {
       jest.spyOn(ringModel, "create").mockRejectedValue(new Error());
 
@@ -194,6 +245,31 @@ describe("RingService", () => {
       ).rejects.toThrow(
         new BadRequestException("Invalid forgedBy value: INVALIDO"),
       );
+    });
+
+    it("should invalidate cache after updating a ring", async () => {
+      const cacheManagerDelSpy = jest.spyOn(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (service as any).cacheManager,
+        "del",
+      );
+
+      jest
+        .spyOn(ringModel, "findOne")
+        .mockResolvedValue(mockRingModelCreateAndUpdate as unknown as Ring);
+
+      const updateRingDto = {
+        name: "Nenya, the Ring of Water",
+        power: "The ring of Nenya is set with a white stone.",
+        owner: "Galadriel",
+        forgedBy: "Elfos",
+      };
+
+      await service.update(7, updateRingDto as UpdateRingDto, imageMock, {
+        user: { sub: 4 },
+      } as ReqAuthUser);
+
+      expect(cacheManagerDelSpy).toHaveBeenCalledTimes(2);
     });
 
     it("should throw NotFoundEx if the ring is not found", async () => {
@@ -269,6 +345,20 @@ describe("RingService", () => {
       await expect(
         service.delete(7, { user: { sub: 4 } } as ReqAuthUser),
       ).rejects.toThrow(new NotFoundException("Ring with id 7 not found"));
+    });
+
+    it("should invalidate cache after deleting a ring", async () => {
+      const cacheManagerDelSpy = jest.spyOn(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (service as any).cacheManager,
+        "del",
+      );
+
+      jest.spyOn(ringModel, "findOne").mockResolvedValue(ring);
+
+      await service.delete(7, { user: { sub: 4 } } as ReqAuthUser);
+
+      expect(cacheManagerDelSpy).toHaveBeenCalledTimes(2);
     });
 
     it("should delete a ring", async () => {

@@ -1,15 +1,8 @@
 import {
-  Cache,
-  CACHE_MANAGER,
-  CacheInterceptor,
-  CacheKey,
-} from "@nestjs/cache-manager";
-import {
   Body,
   Controller,
   Delete,
   Get,
-  Inject,
   Param,
   ParseFilePipeBuilder,
   ParseIntPipe,
@@ -53,14 +46,9 @@ import { ReqAuthUser } from "./types/Req";
 @ApiTags("Ring")
 @ApiBearerAuth("defaultBearerAuth")
 export class RingController {
-  constructor(
-    private readonly ringService: RingService,
-    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
-  ) {}
+  constructor(private readonly ringService: RingService) {}
 
   @Get()
-  @UseInterceptors(CacheInterceptor)
-  @CacheKey("rings")
   @ApiOkResponse(findAllApiOkResponse)
   @ApiResponse(errorResponsePatternStructure)
   async findAll(@Req() req: ReqAuthUser): Promise<Ring[]> {
@@ -99,7 +87,6 @@ export class RingController {
     @Req() req: ReqAuthUser,
   ): Promise<Ring> {
     const ring = await this.ringService.create(createRingDto, file, req);
-    await this.cacheManager.del("rings");
     return ring;
   }
 
@@ -126,7 +113,6 @@ export class RingController {
     @Req() req: ReqAuthUser,
   ): Promise<Ring> {
     const ring = await this.ringService.update(id, updateRingDto, file, req);
-    await this.cacheManager.del("rings");
     return ring;
   }
 
@@ -140,7 +126,6 @@ export class RingController {
     @Req() req: ReqAuthUser,
   ): Promise<null> {
     const ring = await this.ringService.delete(id, req);
-    await this.cacheManager.del("rings");
     return ring;
   }
 }
