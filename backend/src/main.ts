@@ -23,11 +23,13 @@ async function bootstrap(): Promise<void> {
     origin: nodeEnv !== "development" ? allowedOrigin : "*",
   });
 
-  app.use(
-    helmet({
-      crossOriginResourcePolicy: { policy: "cross-origin" },
-    }),
-  );
+  if (nodeEnv !== "development" || host === "http://localhost") {
+    app.use(
+      helmet({
+        crossOriginResourcePolicy: { policy: "cross-origin" },
+      }),
+    );
+  }
 
   const config = new DocumentBuilder()
     .setTitle("Junior-Challenge")

@@ -1,9 +1,11 @@
+import type { PermittedForgedBy } from "./Ring";
+
 export interface UserRings {
   id: number;
   name: string;
   power: string;
   owner: string;
-  forgedBy: string;
+  forgedBy: PermittedForgedBy;
   image: string;
   url: string;
 }

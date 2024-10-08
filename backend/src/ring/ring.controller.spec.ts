@@ -1,4 +1,3 @@
-import { CacheModule } from "@nestjs/cache-manager";
 import { ConfigModule } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import type { TestingModule } from "@nestjs/testing";
@@ -21,6 +20,7 @@ describe("RingController", () => {
     createdAt: "2024-09-28T04:29:57.000Z",
     updatedAt: "2024-09-28T04:29:57.000Z",
     userId: 4,
+    url: "http://localhost:3000/uploads/ad35fcfe-08d0-42d7-b3ae-2f7ae67deb96-1727497797763-asd.jpg",
   };
 
   const mockRingServiceCreateAndUpdate = {
@@ -33,7 +33,7 @@ describe("RingController", () => {
     userId: 4,
     updatedAt: "2024-09-28T04:29:57.766Z",
     createdAt: "2024-09-28T04:29:57.766Z",
-    url: "http://192.168.100.3:3000/uploads/ad35fcfe-08d0-42d7-b3ae-2f7ae67deb96-1727497797763-asd.jpg",
+    url: "http://localhost:3000/uploads/ad35fcfe-08d0-42d7-b3ae-2f7ae67deb96-1727497797763-asd.jpg",
   };
 
   const mockRingService = {
@@ -46,11 +46,7 @@ describe("RingController", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        JwtModule,
-        ConfigModule,
-        CacheModule.register({ ttl: 60000 * 10 }),
-      ],
+      imports: [JwtModule, ConfigModule],
       controllers: [RingController],
       providers: [RingService],
     })

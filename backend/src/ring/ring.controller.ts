@@ -1,15 +1,8 @@
 import {
-  Cache,
-  CACHE_MANAGER,
-  CacheInterceptor,
-  CacheKey,
-} from "@nestjs/cache-manager";
-import {
   Body,
   Controller,
   Delete,
   Get,
-  Inject,
   Param,
   ParseFilePipeBuilder,
   ParseIntPipe,
@@ -28,9 +21,11 @@ import {
   ApiConsumes,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
 import { AuthGuard } from "src/auth/auth.guard";
+import { errorResponsePatternStructure } from "src/swagger.config";
 
 import { CreateRingDto } from "./dto/create-ring.dto";
 import { UpdateRingDto } from "./dto/update-ring.dto";
@@ -50,23 +45,19 @@ import { ReqAuthUser } from "./types/Req";
 @UseGuards(AuthGuard)
 @ApiTags("Ring")
 @ApiBearerAuth("defaultBearerAuth")
-@UseInterceptors(CacheInterceptor)
 export class RingController {
-  constructor(
-    private readonly ringService: RingService,
-    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
-  ) {}
+  constructor(private readonly ringService: RingService) {}
 
   @Get()
-  @CacheKey("rings")
   @ApiOkResponse(findAllApiOkResponse)
+  @ApiResponse(errorResponsePatternStructure)
   async findAll(@Req() req: ReqAuthUser): Promise<Ring[]> {
     return await this.ringService.findAll(req);
   }
 
   @Get(":id")
-  @CacheKey("rings/:id")
   @ApiOkResponse(findOneApiOkResponse)
+  @ApiResponse(errorResponsePatternStructure)
   async findOne(
     @Param("id", ParseIntPipe) id: number,
     @Req() req: ReqAuthUser,
@@ -79,6 +70,7 @@ export class RingController {
   @ApiConsumes("multipart/form-data")
   @ApiBody(createApiBody)
   @ApiCreatedResponse(createApiOkResponse)
+  @ApiResponse(errorResponsePatternStructure)
   async create(
     @Body(ValidationPipe) createRingDto: CreateRingDto,
     @UploadedFile(
@@ -95,8 +87,6 @@ export class RingController {
     @Req() req: ReqAuthUser,
   ): Promise<Ring> {
     const ring = await this.ringService.create(createRingDto, file, req);
-    await this.cacheManager.del("rings");
-    await this.cacheManager.del("rings/:id");
     return ring;
   }
 
@@ -105,6 +95,7 @@ export class RingController {
   @ApiConsumes("multipart/form-data")
   @ApiBody(updateApiBody)
   @ApiOkResponse(updateApiOkResponse)
+  @ApiResponse(errorResponsePatternStructure)
   async update(
     @Body(ValidationPipe) updateRingDto: UpdateRingDto,
     @Param("id", ParseIntPipe) id: number,
@@ -122,8 +113,6 @@ export class RingController {
     @Req() req: ReqAuthUser,
   ): Promise<Ring> {
     const ring = await this.ringService.update(id, updateRingDto, file, req);
-    await this.cacheManager.del("rings");
-    await this.cacheManager.del("rings/:id");
     return ring;
   }
 
@@ -131,13 +120,12 @@ export class RingController {
   @ApiOkResponse({
     description: "No body returned for response",
   })
+  @ApiResponse(errorResponsePatternStructure)
   async delete(
     @Param("id", ParseIntPipe) id: number,
     @Req() req: ReqAuthUser,
   ): Promise<null> {
     const ring = await this.ringService.delete(id, req);
-    await this.cacheManager.del("rings");
-    await this.cacheManager.del("rings/:id");
     return ring;
   }
 }

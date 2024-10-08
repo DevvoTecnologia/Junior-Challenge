@@ -30,11 +30,7 @@ export default function RingsFound({
         <h2 className="font-serif text-4xl text-yellow-400">
           {username.charAt(0).toUpperCase() + username.slice(1)}&apos;s Rings
         </h2>
-        <Link
-          datatype="user-link-back-to-users"
-          href={`/users`}
-          className="text-yellow-400 hover:text-yellow-500"
-        >
+        <Link href={`/users`} className="text-yellow-400 hover:text-yellow-500">
           <IoMdArrowDropleftCircle className="text-5xl" />
         </Link>
       </div>

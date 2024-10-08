@@ -1,9 +1,11 @@
+export type PermittedForgedBy = "Elfos" | "Anões" | "Homens" | "Sauron";
+
 export interface RingResponseBase {
   id: number;
   name: string;
   power: string;
   owner: string;
-  forgedBy: string;
+  forgedBy: PermittedForgedBy;
   image: string;
   createdAt: string;
   updatedAt: string;

@@ -31,12 +31,13 @@ export class User extends Model {
   }
 
   async passwordIsValid(password: string): Promise<boolean> {
-    return await bcrypt.compareSync(password, this.passwordHash);
+    const compare = await bcrypt.compare(password, this.passwordHash);
+    return compare;
   }
 
   @HasMany(() => Ring, {
     foreignKey: "userId",
-    onDelete: "SET NULL",
+    onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
   public rings!: Ring[];

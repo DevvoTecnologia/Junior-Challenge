@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
 
-import Header from "@/components/users/Header";
+import AuthProvider from "@/components/AuthContext";
 
 export const metadata: Metadata = {
-  title: {
-    default: "Users",
-    template: "Users - %s",
-  },
+  title: "Auth",
 };
 
 export default function RootLayout({
@@ -14,10 +11,5 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <>
-      <Header />
-      {children}
-    </>
-  );
+  return <AuthProvider>{children}</AuthProvider>;
 }

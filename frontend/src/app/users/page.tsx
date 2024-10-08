@@ -1,3 +1,5 @@
+import type { AxiosResponse } from "axios";
+
 import NoUsersFound from "@/components/users/NoUsersFound";
 import UsersFound from "@/components/users/UsersFound";
 import fetchServer from "@/lib/fetchServer";
@@ -5,7 +7,13 @@ import getSessionServer from "@/lib/getSessionServer";
 import type { Users } from "@/types/User";
 
 export default async function UsersProfilePage() {
-  const response = await fetchServer.get<Users>("/user");
+  let response: AxiosResponse<Users> | undefined;
+
+  try {
+    response = await fetchServer.get<Users>("/user");
+  } catch {
+    response = undefined;
+  }
 
   const { token, userId } = await getSessionServer();
 

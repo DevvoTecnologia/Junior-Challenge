@@ -8,6 +8,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { authenticateUser } from "@/lib/(auth)/login/auth";
 import { validatePassword, validateUsername } from "@/lib/(auth)/validators";
 
+import { useAuthForm } from "../AuthContext";
 import { LoadingIcon } from "../Loading";
 
 export default function LoginForm() {
@@ -15,8 +16,8 @@ export default function LoginForm() {
 
   const [isPending, startTransition] = useTransition();
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const { username, setUsername, password, setPassword } = useAuthForm();
+
   const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {

@@ -1,9 +1,11 @@
+import { CacheModule } from "@nestjs/cache-manager";
 import { BadRequestException, NotFoundException } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { getModelToken } from "@nestjs/sequelize";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
 import * as fs from "fs";
+import * as sharp from "sharp";
 
 import type { CreateRingDto } from "./dto/create-ring.dto";
 import type { UpdateRingDto } from "./dto/update-ring.dto";
@@ -44,6 +46,7 @@ describe("RingService", () => {
     createdAt: "2024-09-28T04:29:57.000Z",
     updatedAt: "2024-09-28T04:29:57.000Z",
     userId: 4,
+    url: "http://localhost:3000/uploads/ad35fcfe-08d0-42d7-b3ae-2f7ae67deb96-1727497797763-asd.jpg",
   };
 
   const mockRingModelCreateAndUpdate = {
@@ -56,7 +59,7 @@ describe("RingService", () => {
     userId: 4,
     updatedAt: "2024-09-28T04:29:57.766Z",
     createdAt: "2024-09-28T04:29:57.766Z",
-    url: "http://192.168.100.3:3000/uploads/ad35fcfe-08d0-42d7-b3ae-2f7ae67deb96-1727497797763-asd.jpg",
+    url: "http://localhost:3000/uploads/ad35fcfe-08d0-42d7-b3ae-2f7ae67deb96-1727497797763-asd.jpg",
     save: jest.fn(),
   };
 
@@ -69,11 +72,24 @@ describe("RingService", () => {
     count: jest.fn().mockResolvedValue(0),
   };
 
+  beforeAll(() => {
+    jest.spyOn(sharp.prototype, "metadata").mockResolvedValue({
+      width: 100,
+      height: 100,
+      format: "jpeg",
+    });
+  });
+
   beforeEach(async () => {
     jest.spyOn(fs, "writeFileSync").mockReturnValue(undefined);
 
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule],
+      imports: [
+        ConfigModule,
+        CacheModule.register({
+          ttl: 60000 * 10, // 10 minutes
+        }),
+      ],
       providers: [
         RingService,
         { provide: getModelToken(Ring), useValue: mockRingModel },
@@ -102,6 +118,17 @@ describe("RingService", () => {
         service.findAll({ user: { sub: 4 } } as ReqAuthUser),
       ).rejects.toThrow(new NotFoundException("No rings found"));
     });
+
+    it("should return rings from cache", async () => {
+      jest
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .spyOn((service as any).cacheManager, "get")
+        .mockResolvedValue([mockRingModelFind]);
+
+      const rings = await service.findAll({ user: { sub: 4 } } as ReqAuthUser);
+
+      expect(rings).toEqual([mockRingModelFind]);
+    });
   });
 
   describe("findOne", () => {
@@ -119,6 +146,19 @@ describe("RingService", () => {
       await expect(
         service.findOne(7, { user: { sub: 4 } } as ReqAuthUser),
       ).rejects.toThrow(new NotFoundException("Ring with id 7 not found"));
+    });
+
+    it("should return ring from cache", async () => {
+      jest
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .spyOn((service as any).cacheManager, "get")
+        .mockResolvedValue(mockRingModelFind);
+
+      const ring = await service.findOne(7, {
+        user: { sub: 4 },
+      } as ReqAuthUser);
+
+      expect(ring).toEqual(mockRingModelFind);
     });
   });
 
@@ -159,6 +199,27 @@ describe("RingService", () => {
       expect(ring).toEqual(mockRingModelCreateAndUpdate);
     });
 
+    it("should invalidate cache after creating a new ring", async () => {
+      const cacheManagerDelSpy = jest.spyOn(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (service as any).cacheManager,
+        "del",
+      );
+
+      const createRingDto = {
+        name: "Nenya, the Ring of Water",
+        power: "The ring of Nenya is set with a white stone.",
+        owner: "Galadriel",
+        forgedBy: "Elfos",
+      };
+
+      await service.create(createRingDto as CreateRingDto, imageMock, {
+        user: { sub: 4 },
+      } as ReqAuthUser);
+
+      expect(cacheManagerDelSpy).toHaveBeenCalledTimes(1);
+    });
+
     it("should throw BadRequestEx if an error occurs in database", async () => {
       jest.spyOn(ringModel, "create").mockRejectedValue(new Error());
 
@@ -193,6 +254,31 @@ describe("RingService", () => {
       ).rejects.toThrow(
         new BadRequestException("Invalid forgedBy value: INVALIDO"),
       );
+    });
+
+    it("should invalidate cache after updating a ring", async () => {
+      const cacheManagerDelSpy = jest.spyOn(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (service as any).cacheManager,
+        "del",
+      );
+
+      jest
+        .spyOn(ringModel, "findOne")
+        .mockResolvedValue(mockRingModelCreateAndUpdate as unknown as Ring);
+
+      const updateRingDto = {
+        name: "Nenya, the Ring of Water",
+        power: "The ring of Nenya is set with a white stone.",
+        owner: "Galadriel",
+        forgedBy: "Elfos",
+      };
+
+      await service.update(7, updateRingDto as UpdateRingDto, imageMock, {
+        user: { sub: 4 },
+      } as ReqAuthUser);
+
+      expect(cacheManagerDelSpy).toHaveBeenCalledTimes(2);
     });
 
     it("should throw NotFoundEx if the ring is not found", async () => {
@@ -268,6 +354,20 @@ describe("RingService", () => {
       await expect(
         service.delete(7, { user: { sub: 4 } } as ReqAuthUser),
       ).rejects.toThrow(new NotFoundException("Ring with id 7 not found"));
+    });
+
+    it("should invalidate cache after deleting a ring", async () => {
+      const cacheManagerDelSpy = jest.spyOn(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (service as any).cacheManager,
+        "del",
+      );
+
+      jest.spyOn(ringModel, "findOne").mockResolvedValue(ring);
+
+      await service.delete(7, { user: { sub: 4 } } as ReqAuthUser);
+
+      expect(cacheManagerDelSpy).toHaveBeenCalledTimes(2);
     });
 
     it("should delete a ring", async () => {
@@ -415,32 +515,6 @@ describe("RingService", () => {
       );
     });
 
-    it("should throw new Error if isUpdate is true and oldFileName is not provided", async () => {
-      const withoudOldFileName = {
-        ...mockRingModelCreateAndUpdate,
-        image: undefined,
-      };
-
-      jest
-        .spyOn(ringModel, "findOne")
-        .mockResolvedValue(withoudOldFileName as unknown as Ring);
-
-      const updateRingDto = {
-        name: "Nenya, the Ring of Water",
-        power: "The ring of Nenya is set with a white stone.",
-        owner: "Galadriel",
-        forgedBy: "Elfos",
-      };
-
-      await expect(
-        service.update(7, updateRingDto as UpdateRingDto, imageMock, {
-          user: { sub: 4 },
-        } as ReqAuthUser),
-      ).rejects.toThrow(
-        new Error("oldFileName must be provided when isUpdate is true"),
-      );
-    });
-
     it("should create folder uploads if it does not exist", async () => {
       jest
         .spyOn(ringModel, "create")
@@ -481,6 +555,27 @@ describe("RingService", () => {
 
       await expect(
         service.create(createRingDto as CreateRingDto, invalidImageMock, {
+          user: { sub: 4 },
+        } as ReqAuthUser),
+      ).rejects.toThrow(
+        new BadRequestException(
+          "Validation failed (expected type is /jpeg|png/)",
+        ),
+      );
+    });
+
+    it("should throw BadRequestEx if an error occurs in image validation with sharp", async () => {
+      jest.spyOn(sharp.prototype, "metadata").mockRejectedValue(new Error());
+
+      const createRingDto = {
+        name: "Nenya, the Ring of Water",
+        power: "The ring of Nenya is set with a white stone.",
+        owner: "Galadriel",
+        forgedBy: "Elfos",
+      };
+
+      await expect(
+        service.create(createRingDto as CreateRingDto, imageMock, {
           user: { sub: 4 },
         } as ReqAuthUser),
       ).rejects.toThrow(

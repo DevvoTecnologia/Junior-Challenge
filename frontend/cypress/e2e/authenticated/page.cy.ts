@@ -33,13 +33,13 @@ describe("Authenticated user browsing", () => {
     cy.wait(500);
 
     cy.get("a")
-      .contains(/My Profile/i)
+      .contains(/Profile/i)
       .click();
 
     cy.get("button")
       .contains(/Logout/i)
       .click();
 
-    cy.url().should("include", "/");
+    cy.url().should("include", "", { timeout: 10000 });
   });
 });

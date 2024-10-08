@@ -17,6 +17,12 @@ export class Ring extends Model {
   @Column
   public image!: string;
 
-  @Column({ type: DataType.VIRTUAL })
+  @Column({
+    type: DataType.VIRTUAL,
+    get() {
+      const url = process.env.IMAGES_URL ?? "http://localhost:3000/uploads";
+      return `${url}/${this.getDataValue("image")}`;
+    },
+  })
   public url!: string;
 }

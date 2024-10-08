@@ -2,7 +2,7 @@ import { type AxiosResponse } from "axios";
 import * as motion from "framer-motion/client";
 import Image from "next/image";
 import Link from "next/link";
-import { FaEdit, FaUserCircle } from "react-icons/fa";
+import { FaEdit } from "react-icons/fa";
 
 import RingsDeleteBtnIconRed from "@/components/form/RingsDelete/RingsDeleteBtnIconRed";
 import fetchServer from "@/lib/fetchServer";
@@ -12,7 +12,7 @@ import type { Rings } from "@/types/Ring";
 export default async function RingsPage() {
   let response: AxiosResponse<Rings> | undefined;
 
-  const { token, userId } = await getSessionServer();
+  const { token } = await getSessionServer();
 
   try {
     response = await fetchServer.get("/ring", {
@@ -31,19 +31,6 @@ export default async function RingsPage() {
       exit={{ opacity: 0 }}
       className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600 p-4 text-white"
     >
-      <div className="absolute right-2 top-2">
-        <Link href={`/users/${userId}`}>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-blue-500 px-5 py-3 text-sm font-medium text-white shadow-lg transition duration-300 hover:from-blue-700 hover:to-blue-600"
-          >
-            My Profile
-            <FaUserCircle className="ml-2 inline-block text-xl" />
-          </motion.button>
-        </Link>
-      </div>
-
       <h1 className="mb-6 text-4xl font-bold">Rings</h1>
       <p>
         {response?.data?.length ? response?.data?.length : "No"} ring
@@ -88,6 +75,7 @@ export default async function RingsPage() {
               className="h-16 w-16 rounded-lg"
               width={64}
               height={64}
+              priority
             />
             <div className="ml-4 flex flex-col items-start">
               <h2 className="text-lg font-bold">{ring.name}</h2>

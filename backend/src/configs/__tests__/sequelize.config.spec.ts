@@ -1,3 +1,4 @@
+import { Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
@@ -15,7 +16,7 @@ describe("sequelize.config", () => {
           useValue: {
             get: jest.fn((key: string) => {
               const config = {
-                "database.dialect": "postgres",
+                "database.dialect": "mysql",
                 "database.host": "localhost",
                 "database.port": 5432,
                 "database.username": "testuser",
@@ -39,7 +40,7 @@ describe("sequelize.config", () => {
     }
     const config = await sequelizeAsyncConfig.useFactory(configService);
     expect(config).toBeDefined();
-    expect(config.dialect).toBe("postgres");
+    expect(config.dialect).toBe("mysql");
     expect(config.host).toBe("localhost");
     expect(config.port).toBe(5432);
     expect(config.username).toBe("testuser");
@@ -66,13 +67,39 @@ describe("sequelize.config", () => {
     });
 
     const config = await sequelizeAsyncConfig.useFactory(configService);
-    const logSpy = jest.spyOn(console, "debug").mockImplementation(() => {});
+    const logSpy = jest
+      .spyOn(Logger.prototype, "debug")
+      .mockImplementation(() => {});
 
     const result =
       typeof config.logging === "function" ? config.logging("SELECT 1") : false;
 
     expect(result).toBe(false);
     expect(logSpy).not.toHaveBeenCalled();
+
+    logSpy.mockRestore();
+  });
+
+  it("should log SQL queries in development mode", async () => {
+    if (!sequelizeAsyncConfig.useFactory) {
+      throw new Error("sequelizeAsyncConfig.useFactory is undefined");
+    }
+
+    jest.spyOn(configService, "get").mockImplementation((key: string) => {
+      if (key === "nodeEnv") return "development";
+      return "test";
+    });
+
+    const config = await sequelizeAsyncConfig.useFactory(configService);
+    const logSpy = jest
+      .spyOn(Logger.prototype, "debug")
+      .mockImplementation(() => {});
+
+    const result =
+      typeof config.logging === "function" ? config.logging("SELECT 1") : false;
+
+    expect(result).toBeUndefined();
+    expect(logSpy).toHaveBeenCalledWith("SELECT 1");
 
     logSpy.mockRestore();
   });

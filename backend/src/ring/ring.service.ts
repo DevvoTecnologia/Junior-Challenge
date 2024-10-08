@@ -1,10 +1,11 @@
+import { Cache, CACHE_MANAGER } from "@nestjs/cache-manager";
 import {
   BadRequestException,
+  Inject,
   Injectable,
   Logger,
   NotFoundException,
 } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { InjectModel } from "@nestjs/sequelize";
 
 import RingGlobalValidations from "./RingGlobalValidations";
@@ -17,25 +18,23 @@ import { ReqAuthUser } from "./types/Req";
 export class RingService extends RingGlobalValidations {
   private readonly logger = new Logger(RingService.name);
 
-  private readonly host: string;
-  private readonly port: string;
-  private readonly nodeEnv: string;
-  private readonly baseUrl: string;
-
   constructor(
     @InjectModel(Ring)
     private readonly ringModel: typeof Ring,
-    private readonly configService: ConfigService,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
   ) {
     super();
-    this.host = this.configService.get<string>("host")!;
-    this.port = this.configService.get<string>("port")!;
-    this.nodeEnv = this.configService.get<string>("nodeEnv")!;
-    this.baseUrl =
-      this.nodeEnv === "development" ? `${this.host}:${this.port}` : this.host;
   }
 
   async findAll(req: ReqAuthUser): Promise<Ring[]> {
+    const cacheKey = `rings_user_${req.user.sub}`;
+
+    const cachedRings = await this.cacheManager.get<Ring[]>(cacheKey);
+
+    if (cachedRings) {
+      return cachedRings;
+    }
+
     const rings = await this.ringModel.findAll({
       where: {
         userId: req.user.sub,
@@ -46,14 +45,20 @@ export class RingService extends RingGlobalValidations {
       throw new NotFoundException("No rings found");
     }
 
-    rings.forEach((ring) => {
-      ring.url = `${this.baseUrl}/uploads/${ring.image}`;
-    });
+    await this.cacheManager.set(cacheKey, rings);
 
     return rings;
   }
 
   async findOne(id: number, req: ReqAuthUser): Promise<Ring> {
+    const cacheKey = `ring_${id}_user_${req.user.sub}`;
+
+    const cachedRing = await this.cacheManager.get<Ring>(cacheKey);
+
+    if (cachedRing) {
+      return cachedRing;
+    }
+
     const ring = await this.ringModel.findOne({
       where: {
         id: id,
@@ -65,7 +70,7 @@ export class RingService extends RingGlobalValidations {
       throw new NotFoundException(`Ring with id ${id} not found`);
     }
 
-    ring.url = `${this.baseUrl}/uploads/${ring.image}`;
+    await this.cacheManager.set(cacheKey, ring);
 
     return ring;
   }
@@ -77,19 +82,23 @@ export class RingService extends RingGlobalValidations {
   ): Promise<Ring> {
     const { name, power, owner, forgedBy } = createRingDto;
 
+    // Validate image type
+    await this.validateImageType(file.buffer);
+
     // Invalidate if forgedBy is not a valid ring
     if (!this.isValidRing(forgedBy)) {
       throw new BadRequestException(`Invalid forgedBy value: ${forgedBy}`);
     }
 
+    // Validate ring creation
     await this.validateRingCreation(
       this.ringModel,
       createRingDto.forgedBy,
       req.user.sub,
     );
 
-    // Save or update ring image
-    const imageSaved = await this.saveOrUpdateRingImage(file);
+    // Generate a new unique image name
+    const newImageName = this.generateNewUniqueImageName(file.originalname);
 
     let newRing: Ring;
 
@@ -99,14 +108,19 @@ export class RingService extends RingGlobalValidations {
         power,
         owner,
         forgedBy,
-        image: imageSaved,
+        image: newImageName,
         userId: req.user.sub,
       });
+
+      // Save or update ring image
+      await this.saveRingImage(file.buffer, newImageName);
     } catch {
       throw new BadRequestException("Error creating ring");
     }
 
-    newRing.url = `${this.baseUrl}/uploads/${newRing.image}`;
+    // Invalidate cache
+    const cacheKey = `rings_user_${req.user.sub}`;
+    await this.cacheManager.del(cacheKey);
 
     return newRing;
   }
@@ -136,6 +150,7 @@ export class RingService extends RingGlobalValidations {
     }
 
     if (updateRingDto.forgedBy) {
+      // Validate ring creation
       await this.validateRingCreation(
         this.ringModel,
         updateRingDto.forgedBy,
@@ -146,10 +161,7 @@ export class RingService extends RingGlobalValidations {
 
     // Save or update ring image
     if (file) {
-      const imageSaved = await this.saveOrUpdateRingImage(file, {
-        isUpdate: true,
-        oldFileName: ring.image,
-      });
+      const imageSaved = await this.updateRingImage(file, ring.image);
 
       ring.image = imageSaved;
     }
@@ -159,9 +171,13 @@ export class RingService extends RingGlobalValidations {
     ring.owner = owner || ring.owner; // nosonar
     ring.forgedBy = forgedBy || ring.forgedBy; // nosonar
 
-    ring.url = `${this.baseUrl}/uploads/${ring.image}`;
-
     await ring.save();
+
+    // Invalidate the cache for the updated ring
+    const ringCacheKey = `ring_${id}_user_${req.user.sub}`;
+    const ringsCacheKey = `rings_user_${req.user.sub}`;
+    await this.cacheManager.del(ringCacheKey);
+    await this.cacheManager.del(ringsCacheKey);
 
     return ring;
   }
@@ -178,9 +194,15 @@ export class RingService extends RingGlobalValidations {
       throw new NotFoundException(`Ring with id ${id} not found`);
     }
 
+    await this.deleteRingImage(ring.image);
+
     await ring.destroy();
 
-    await this.deleteRingImage(ring.image);
+    // Invalidate the cache for the deleted ring
+    const ringCacheKey = `ring_${id}_user_${req.user.sub}`;
+    const ringsCacheKey = `rings_user_${req.user.sub}`;
+    await this.cacheManager.del(ringCacheKey);
+    await this.cacheManager.del(ringsCacheKey);
 
     return null;
   }
