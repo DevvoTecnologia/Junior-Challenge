@@ -82,19 +82,23 @@ export class RingService extends RingGlobalValidations {
   ): Promise<Ring> {
     const { name, power, owner, forgedBy } = createRingDto;
 
+    // Validate image type
+    await this.validateImageType(file.buffer);
+
     // Invalidate if forgedBy is not a valid ring
     if (!this.isValidRing(forgedBy)) {
       throw new BadRequestException(`Invalid forgedBy value: ${forgedBy}`);
     }
 
+    // Validate ring creation
     await this.validateRingCreation(
       this.ringModel,
       createRingDto.forgedBy,
       req.user.sub,
     );
 
-    // Save or update ring image
-    const imageSaved = await this.saveOrUpdateRingImage(file);
+    // Generate a new unique image name
+    const newImageName = this.generateNewUniqueImageName(file.originalname);
 
     let newRing: Ring;
 
@@ -104,9 +108,12 @@ export class RingService extends RingGlobalValidations {
         power,
         owner,
         forgedBy,
-        image: imageSaved,
+        image: newImageName,
         userId: req.user.sub,
       });
+
+      // Save or update ring image
+      await this.saveRingImage(file.buffer, newImageName);
     } catch {
       throw new BadRequestException("Error creating ring");
     }
@@ -143,6 +150,7 @@ export class RingService extends RingGlobalValidations {
     }
 
     if (updateRingDto.forgedBy) {
+      // Validate ring creation
       await this.validateRingCreation(
         this.ringModel,
         updateRingDto.forgedBy,
@@ -153,10 +161,7 @@ export class RingService extends RingGlobalValidations {
 
     // Save or update ring image
     if (file) {
-      const imageSaved = await this.saveOrUpdateRingImage(file, {
-        isUpdate: true,
-        oldFileName: ring.image,
-      });
+      const imageSaved = await this.updateRingImage(file, ring.image);
 
       ring.image = imageSaved;
     }
@@ -189,9 +194,9 @@ export class RingService extends RingGlobalValidations {
       throw new NotFoundException(`Ring with id ${id} not found`);
     }
 
-    await ring.destroy();
-
     await this.deleteRingImage(ring.image);
+
+    await ring.destroy();
 
     // Invalidate the cache for the deleted ring
     const ringCacheKey = `ring_${id}_user_${req.user.sub}`;

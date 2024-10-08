@@ -2,12 +2,15 @@ import { BadRequestException } from "@nestjs/common";
 import { existsSync, mkdirSync, unlinkSync, writeFileSync } from "fs";
 import { isValidImage } from "multiform-validator";
 import { join } from "path";
+import * as sharp from "sharp";
 import { v4 as uuidv4 } from "uuid";
 
 import type { Ring } from "./entities/ring.entity";
 import type { ForgedBy } from "./types/ForgedBy";
 
 export default class RingGlobalValidations {
+  private readonly destinationPath = join(process.cwd(), "uploads");
+
   private async validateForgedByLimit(
     ringModel: typeof Ring,
     forgedBy: string,
@@ -72,45 +75,62 @@ export default class RingGlobalValidations {
     await this.validateForgedByLimit(ringModel, forgedBy, userId);
   }
 
+  protected async validateImageType(
+    buffer: Express.Multer.File["buffer"],
+  ): Promise<void> {
+    const errorMsg = "Validation failed (expected type is /jpeg|png/)";
+
+    if (
+      !isValidImage(buffer, {
+        exclude: ["gif", "ico"],
+      })
+    ) {
+      throw new BadRequestException(errorMsg);
+    }
+
+    try {
+      await sharp(buffer).metadata();
+    } catch {
+      throw new BadRequestException(errorMsg);
+    }
+  }
+
   protected isValidRing(forgedBy: ForgedBy): boolean {
     return ["Elfos", "Anões", "Homens", "Sauron"].includes(forgedBy);
   }
 
-  protected async saveOrUpdateRingImage(
+  protected generateNewUniqueImageName(originalname: string): string {
+    return `${uuidv4()}-${Date.now()}-${originalname}`;
+  }
+
+  protected async saveRingImage(
+    buffer: Express.Multer.File["buffer"],
+    newUniqueImageName: string,
+  ): Promise<void> {
+    const filePath = join(this.destinationPath, newUniqueImageName);
+
+    if (await !existsSync(this.destinationPath)) {
+      mkdirSync(this.destinationPath);
+    }
+
+    writeFileSync(filePath, buffer);
+  }
+
+  protected async updateRingImage(
     file: Express.Multer.File,
-    { isUpdate, oldFileName }: { isUpdate: boolean; oldFileName: string } = {
-      isUpdate: false,
-      oldFileName: "",
-    },
+    oldFileName: string,
   ): Promise<string> {
-    if (isUpdate && !oldFileName) {
-      throw new Error("oldFileName must be provided when isUpdate is true");
-    }
+    await this.validateImageType(file.buffer);
 
-    const destinationPath = join(process.cwd(), "uploads");
+    await this.deleteRingImage(oldFileName);
 
-    const newUniqueImageName = `${uuidv4()}-${Date.now()}-${file.originalname}`;
+    const newUniqueImageName = this.generateNewUniqueImageName(
+      file.originalname,
+    );
 
-    const filePath = join(destinationPath, newUniqueImageName);
+    const filePath = join(this.destinationPath, newUniqueImageName);
 
-    if (await !existsSync(destinationPath)) {
-      mkdirSync(destinationPath);
-    }
-
-    if (isUpdate) {
-      await this.deleteRingImage(oldFileName);
-    }
-
-    // Convert the image buffer to a file
-    const bufferImageData = Buffer.from(file.buffer);
-
-    if (!isValidImage(bufferImageData)) {
-      throw new BadRequestException(
-        "Validation failed (expected type is /jpeg|png/)",
-      );
-    }
-
-    writeFileSync(filePath, bufferImageData);
+    writeFileSync(filePath, file.buffer);
 
     return newUniqueImageName;
   }

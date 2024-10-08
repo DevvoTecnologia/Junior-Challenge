@@ -1,3 +1,4 @@
+import { Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
@@ -66,13 +67,39 @@ describe("sequelize.config", () => {
     });
 
     const config = await sequelizeAsyncConfig.useFactory(configService);
-    const logSpy = jest.spyOn(console, "debug").mockImplementation(() => {});
+    const logSpy = jest
+      .spyOn(Logger.prototype, "debug")
+      .mockImplementation(() => {});
 
     const result =
       typeof config.logging === "function" ? config.logging("SELECT 1") : false;
 
     expect(result).toBe(false);
     expect(logSpy).not.toHaveBeenCalled();
+
+    logSpy.mockRestore();
+  });
+
+  it("should log SQL queries in development mode", async () => {
+    if (!sequelizeAsyncConfig.useFactory) {
+      throw new Error("sequelizeAsyncConfig.useFactory is undefined");
+    }
+
+    jest.spyOn(configService, "get").mockImplementation((key: string) => {
+      if (key === "nodeEnv") return "development";
+      return "test";
+    });
+
+    const config = await sequelizeAsyncConfig.useFactory(configService);
+    const logSpy = jest
+      .spyOn(Logger.prototype, "debug")
+      .mockImplementation(() => {});
+
+    const result =
+      typeof config.logging === "function" ? config.logging("SELECT 1") : false;
+
+    expect(result).toBeUndefined();
+    expect(logSpy).toHaveBeenCalledWith("SELECT 1");
 
     logSpy.mockRestore();
   });

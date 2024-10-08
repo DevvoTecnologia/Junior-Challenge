@@ -5,6 +5,8 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
+import { existsSync, unlinkSync } from "fs";
+import { join } from "path";
 import { Ring } from "src/ring/entities/ring.entity";
 
 import { CreateUserDto } from "./dto/create-user.dto";
@@ -96,6 +98,7 @@ export class UserService {
     const { username, password, newPassword } = user;
     const { sub } = req.user;
 
+    // Check if user is trying to update his own data
     this.validateUpdateOrDeleteUser({
       id,
       sub,
@@ -145,13 +148,21 @@ export class UserService {
 
     const { sub } = req.user;
 
+    // Check if user is trying to delete his own data
     this.validateUpdateOrDeleteUser({
       id,
       sub,
       msg: "You can not delete this user",
     });
 
-    const user = await this.userModel.findByPk(id);
+    const user = await this.userModel.findByPk(id, {
+      include: [
+        {
+          model: Ring,
+          attributes: ["id", "image"],
+        },
+      ],
+    });
 
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
@@ -159,9 +170,27 @@ export class UserService {
 
     await this.validatePassword(user, password);
 
+    // Delete all rings images when user is deleted
+    const deleteImagesPromises = user.rings.map(async (ring) => {
+      await this.deleteRingImage(ring.image);
+    });
+
+    // Delete all rings
+    await Promise.all(deleteImagesPromises);
+
     await user.destroy();
 
     return null;
+  }
+
+  private async deleteRingImage(imageName: string): Promise<void> {
+    const destinationPath = join(process.cwd(), "uploads");
+
+    const filePath = join(destinationPath, imageName);
+
+    if (await existsSync(filePath)) {
+      unlinkSync(filePath);
+    }
   }
 
   private async validatePassword(user: User, password: string): Promise<void> {

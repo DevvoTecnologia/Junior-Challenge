@@ -5,6 +5,7 @@ import { getModelToken } from "@nestjs/sequelize";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
 import * as fs from "fs";
+import * as sharp from "sharp";
 
 import type { CreateRingDto } from "./dto/create-ring.dto";
 import type { UpdateRingDto } from "./dto/update-ring.dto";
@@ -70,6 +71,14 @@ describe("RingService", () => {
     findOne: jest.fn().mockResolvedValue(mockRingModelFind),
     count: jest.fn().mockResolvedValue(0),
   };
+
+  beforeAll(() => {
+    jest.spyOn(sharp.prototype, "metadata").mockResolvedValue({
+      width: 100,
+      height: 100,
+      format: "jpeg",
+    });
+  });
 
   beforeEach(async () => {
     jest.spyOn(fs, "writeFileSync").mockReturnValue(undefined);
@@ -506,32 +515,6 @@ describe("RingService", () => {
       );
     });
 
-    it("should throw new Error if isUpdate is true and oldFileName is not provided", async () => {
-      const withoudOldFileName = {
-        ...mockRingModelCreateAndUpdate,
-        image: undefined,
-      };
-
-      jest
-        .spyOn(ringModel, "findOne")
-        .mockResolvedValue(withoudOldFileName as unknown as Ring);
-
-      const updateRingDto = {
-        name: "Nenya, the Ring of Water",
-        power: "The ring of Nenya is set with a white stone.",
-        owner: "Galadriel",
-        forgedBy: "Elfos",
-      };
-
-      await expect(
-        service.update(7, updateRingDto as UpdateRingDto, imageMock, {
-          user: { sub: 4 },
-        } as ReqAuthUser),
-      ).rejects.toThrow(
-        new Error("oldFileName must be provided when isUpdate is true"),
-      );
-    });
-
     it("should create folder uploads if it does not exist", async () => {
       jest
         .spyOn(ringModel, "create")
@@ -572,6 +555,27 @@ describe("RingService", () => {
 
       await expect(
         service.create(createRingDto as CreateRingDto, invalidImageMock, {
+          user: { sub: 4 },
+        } as ReqAuthUser),
+      ).rejects.toThrow(
+        new BadRequestException(
+          "Validation failed (expected type is /jpeg|png/)",
+        ),
+      );
+    });
+
+    it("should throw BadRequestEx if an error occurs in image validation with sharp", async () => {
+      jest.spyOn(sharp.prototype, "metadata").mockRejectedValue(new Error());
+
+      const createRingDto = {
+        name: "Nenya, the Ring of Water",
+        power: "The ring of Nenya is set with a white stone.",
+        owner: "Galadriel",
+        forgedBy: "Elfos",
+      };
+
+      await expect(
+        service.create(createRingDto as CreateRingDto, imageMock, {
           user: { sub: 4 },
         } as ReqAuthUser),
       ).rejects.toThrow(
