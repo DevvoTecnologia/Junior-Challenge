@@ -1,6 +1,20 @@
 # Desafio Fullstack: Os Anéis de Poder
 _One Challenge to rule them all, One Challenge to find them, One Challenge to bring them all, and in the darkness bind them_
 
+---
+
+## 🌐 Demonstração do Projeto
+
+### Site em Produção
+Explore a aplicação desenvolvida para o desafio: [Visite o Site](https://gl-junior-challenge.vercel.app). Aqui, você pode interagir com a interface e ver como os anéis são gerenciados, incluindo as funcionalidades de criação, visualização e edição.
+
+### Documentação da API
+A documentação da API foi construída utilizando Swagger, permitindo uma visualização clara e interativa das rotas disponíveis. Acesse a documentação aqui: [Documentação da API](https://api-junior-challenge.vercel.app/api).
+
+Na documentação, você encontrará detalhes sobre cada endpoint, exemplos de requisições e respostas, além de descrições de erros comuns.
+
+--- 
+
 ## 💍 Contexto do Desafio
 
 O grande mago J.R.R. Tolkien nos deixou a famosa frase:
@@ -97,10 +111,10 @@ Desenvolver uma interface simples em **React** com as seguintes telas:
 ## 🛠️ Instruções
 
 1. Faça o **fork** deste repositório.
-2. Crie uma nova branch com o nome do seu desafio: `git checkout -b desafio-seu-nome`.
+2. Crie uma nova branch com o nome do seu desafio: `git checkout -b junior-challenge-desafio-fullstack-gabriel-logan`.
 3. Implemente sua solução backend e frontend conforme os requisitos descritos.
 4. Faça o **commit** das suas alterações: `git commit -m 'Desafio finalizado'`.
-5. Faça o **push** para a branch criada: `git push origin desafio-seu-nome`.
+5. Faça o **push** para a branch criada: `git push origin junior-challenge-desafio-fullstack-gabriel-logan`.
 6. Crie um **Pull Request** para o repositório principal.
 7. Envie um email para "contato@devvo.com.br" com o seu CV em anexo e o link do Pull Request, o assunto deve ser: "Desafio finalizado - Full Stack JR"
 
