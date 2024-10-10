@@ -31,8 +31,13 @@ export class RingService extends RingGlobalValidations {
 
     const cachedRings = await this.cacheManager.get<Ring[]>(cacheKey);
 
+    const notFoundMsg = "No rings found";
+
     if (cachedRings) {
-      return cachedRings;
+      if (cachedRings.length) {
+        return cachedRings;
+      }
+      throw new NotFoundException(notFoundMsg);
     }
 
     const rings = await this.ringModel.findAll({
@@ -41,11 +46,11 @@ export class RingService extends RingGlobalValidations {
       },
     });
 
-    if (!rings.length) {
-      throw new NotFoundException("No rings found");
-    }
-
     await this.cacheManager.set(cacheKey, rings);
+
+    if (!rings.length) {
+      throw new NotFoundException(notFoundMsg);
+    }
 
     return rings;
   }
@@ -53,9 +58,14 @@ export class RingService extends RingGlobalValidations {
   async findOne(id: number, req: ReqUser): Promise<Ring> {
     const cacheKey = `ring_${id}_user_${req.user.sub}`;
 
-    const cachedRing = await this.cacheManager.get<Ring>(cacheKey);
+    const cachedRing = await this.cacheManager.get<Ring | "NotFound">(cacheKey);
+
+    const notFoundMsg = `Ring with id ${id} not found`;
 
     if (cachedRing) {
+      if (cachedRing === "NotFound") {
+        throw new NotFoundException(notFoundMsg);
+      }
       return cachedRing;
     }
 
@@ -66,11 +76,11 @@ export class RingService extends RingGlobalValidations {
       },
     });
 
-    if (!ring) {
-      throw new NotFoundException(`Ring with id ${id} not found`);
-    }
+    await this.cacheManager.set(cacheKey, ring ?? "NotFound");
 
-    await this.cacheManager.set(cacheKey, ring);
+    if (!ring) {
+      throw new NotFoundException(notFoundMsg);
+    }
 
     return ring;
   }
