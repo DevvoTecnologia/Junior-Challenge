@@ -7,12 +7,12 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
+import type { ReqUser } from "src/global/types";
 
 import RingGlobalValidations from "./RingGlobalValidations";
 import { CreateRingDto } from "./dto/create-ring.dto";
 import { UpdateRingDto } from "./dto/update-ring.dto";
 import { Ring } from "./entities/ring.entity";
-import { ReqAuthUser } from "./types/Req";
 
 @Injectable()
 export class RingService extends RingGlobalValidations {
@@ -26,7 +26,7 @@ export class RingService extends RingGlobalValidations {
     super();
   }
 
-  async findAll(req: ReqAuthUser): Promise<Ring[]> {
+  async findAll(req: ReqUser): Promise<Ring[]> {
     const cacheKey = `rings_user_${req.user.sub}`;
 
     const cachedRings = await this.cacheManager.get<Ring[]>(cacheKey);
@@ -50,7 +50,7 @@ export class RingService extends RingGlobalValidations {
     return rings;
   }
 
-  async findOne(id: number, req: ReqAuthUser): Promise<Ring> {
+  async findOne(id: number, req: ReqUser): Promise<Ring> {
     const cacheKey = `ring_${id}_user_${req.user.sub}`;
 
     const cachedRing = await this.cacheManager.get<Ring>(cacheKey);
@@ -78,7 +78,7 @@ export class RingService extends RingGlobalValidations {
   async create(
     createRingDto: CreateRingDto,
     file: Express.Multer.File,
-    req: ReqAuthUser,
+    req: ReqUser,
   ): Promise<Ring> {
     const { name, power, owner, forgedBy } = createRingDto;
 
@@ -129,7 +129,7 @@ export class RingService extends RingGlobalValidations {
     id: number,
     updateRingDto: UpdateRingDto,
     file: Express.Multer.File | undefined,
-    req: ReqAuthUser,
+    req: ReqUser,
   ): Promise<Ring> {
     const { name, power, owner, forgedBy } = updateRingDto;
 
@@ -182,7 +182,7 @@ export class RingService extends RingGlobalValidations {
     return ring;
   }
 
-  async delete(id: number, req: ReqAuthUser): Promise<null> {
+  async delete(id: number, req: ReqUser): Promise<null> {
     const ring = await this.ringModel.findOne({
       where: {
         id: id,

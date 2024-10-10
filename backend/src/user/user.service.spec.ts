@@ -5,10 +5,10 @@ import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
 import * as fs from "fs";
 import * as path from "path";
+import type { ReqUser } from "src/global/types";
 import { Ring } from "src/ring/entities/ring.entity";
 
 import { User } from "./entities/user.entity";
-import type { ReqAuthUser } from "./types/Req";
 import { UserService } from "./user.service";
 
 describe("UserService", () => {
@@ -194,7 +194,7 @@ describe("UserService", () => {
           { username: "test", password: "test", newPassword: "" },
           {
             user: { sub: 2 },
-          } as ReqAuthUser,
+          } as ReqUser,
         ),
       ).rejects.toThrow(new NotFoundException("You can not update this user"));
     });
@@ -206,7 +206,7 @@ describe("UserService", () => {
           { username: "test", password: "test", newPassword: "" },
           {
             user: { sub: 1 },
-          } as ReqAuthUser,
+          } as ReqUser,
         ),
       ).rejects.toThrow(new NotFoundException("User with id 1 not found"));
     });
@@ -230,7 +230,7 @@ describe("UserService", () => {
           { username: "test", password: "test", newPassword: "123" },
           {
             user: { sub: 1 },
-          } as ReqAuthUser,
+          } as ReqUser,
         ),
       ).rejects.toThrow(
         new BadRequestException("Password must be at least 4 characters long"),
@@ -263,7 +263,7 @@ describe("UserService", () => {
           },
           {
             user: { sub: 1 },
-          } as ReqAuthUser,
+          } as ReqUser,
         ),
       ).rejects.toThrow(
         new BadRequestException("Password must be at most 255 characters long"),
@@ -292,7 +292,7 @@ describe("UserService", () => {
           { username: "test", password: "test", newPassword: "" },
           {
             user: { sub: 1 },
-          } as ReqAuthUser,
+          } as ReqUser,
         ),
       ).rejects.toThrow(new BadRequestException("Username already exists"));
 
@@ -319,7 +319,7 @@ describe("UserService", () => {
           { username: "test", password: "test", newPassword: "" },
           {
             user: { sub: 1 },
-          } as ReqAuthUser,
+          } as ReqUser,
         ),
       ).rejects.toThrow(new BadRequestException("Invalid password"));
 
@@ -343,7 +343,7 @@ describe("UserService", () => {
       await expect(
         service.update(1, { username: "test", password: "", newPassword: "" }, {
           user: { sub: 1 },
-        } as ReqAuthUser),
+        } as ReqUser),
       ).rejects.toThrow(new BadRequestException("Password is required"));
 
       expect(findByPkSpyOn).toHaveBeenCalledWith(1);
@@ -369,7 +369,7 @@ describe("UserService", () => {
           { username: "test", password: "test", newPassword: "test" },
           {
             user: { sub: 1 },
-          } as ReqAuthUser,
+          } as ReqUser,
         ),
       ).rejects.toThrow(
         new BadRequestException(
@@ -400,7 +400,7 @@ describe("UserService", () => {
           { username: "test", password: "test", newPassword: "newTest" },
           {
             user: { sub: 1 },
-          } as ReqAuthUser,
+          } as ReqUser,
         ),
       ).toEqual({
         id: 1,
@@ -430,7 +430,7 @@ describe("UserService", () => {
           { username: "", password: "test", newPassword: "" },
           {
             user: { sub: 1 },
-          } as ReqAuthUser,
+          } as ReqUser,
         ),
       ).toEqual({
         id: 1,
@@ -460,7 +460,7 @@ describe("UserService", () => {
           { username: "test", password: "test", newPassword: "" },
           {
             user: { sub: 1 },
-          } as ReqAuthUser,
+          } as ReqUser,
         ),
       ).toEqual({
         id: 1,
@@ -490,7 +490,7 @@ describe("UserService", () => {
           { username: "test", password: "test", newPassword: "" },
           {
             user: { sub: 1 },
-          } as ReqAuthUser,
+          } as ReqUser,
         ),
       ).toEqual({
         id: 1,
@@ -506,7 +506,7 @@ describe("UserService", () => {
       await expect(
         service.delete(1, { password: "test" }, {
           user: { sub: 2 },
-        } as ReqAuthUser),
+        } as ReqUser),
       ).rejects.toThrow(new NotFoundException("You can not delete this user"));
     });
 
@@ -514,7 +514,7 @@ describe("UserService", () => {
       await expect(
         service.delete(1, { password: "test" }, {
           user: { sub: 1 },
-        } as ReqAuthUser),
+        } as ReqUser),
       ).rejects.toThrow(new NotFoundException("User with id 1 not found"));
     });
 
@@ -532,7 +532,7 @@ describe("UserService", () => {
       await expect(
         service.delete(1, { password: "test" }, {
           user: { sub: 1 },
-        } as ReqAuthUser),
+        } as ReqUser),
       ).rejects.toThrow(new BadRequestException("Invalid password"));
 
       expect(findByPkSpyOn).toHaveBeenCalledWith(1, {
@@ -596,7 +596,7 @@ describe("UserService", () => {
       expect(
         await service.delete(1, { password: "test" }, {
           user: { sub: 1 },
-        } as ReqAuthUser),
+        } as ReqUser),
       ).toBeNull();
 
       expect(findByPkSpyOn).toHaveBeenCalledWith(1, {

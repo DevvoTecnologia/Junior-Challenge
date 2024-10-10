@@ -7,13 +7,13 @@ import {
 import { InjectModel } from "@nestjs/sequelize";
 import { existsSync, unlinkSync } from "fs";
 import { join } from "path";
+import type { ReqUser } from "src/global/types";
 import { Ring } from "src/ring/entities/ring.entity";
 
 import { CreateUserDto } from "./dto/create-user.dto";
 import { DeleteUserDto } from "./dto/delete-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./entities/user.entity";
-import { ReqAuthUser } from "./types/Req";
 
 @Injectable()
 export class UserService {
@@ -91,7 +91,7 @@ export class UserService {
   async update(
     id: number,
     user: UpdateUserDto,
-    req: ReqAuthUser,
+    req: ReqUser,
   ): Promise<Pick<User, "id" | "username">> {
     const { username, password, newPassword } = user;
     const { sub } = req.user;
@@ -140,7 +140,7 @@ export class UserService {
   async delete(
     id: number,
     deleteUserDto: DeleteUserDto,
-    req: ReqAuthUser,
+    req: ReqUser,
   ): Promise<null> {
     const { password } = deleteUserDto;
 

@@ -2,10 +2,10 @@ import { ConfigModule } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
+import type { ReqUser } from "src/global/types";
 
 import { RingController } from "./ring.controller";
 import { RingService } from "./ring.service";
-import type { ReqAuthUser } from "./types/Req";
 
 describe("RingController", () => {
   let controller: RingController;
@@ -63,7 +63,7 @@ describe("RingController", () => {
 
   describe("findAll", () => {
     it("should return an array of rings", async () => {
-      expect(await controller.findAll({} as ReqAuthUser)).toEqual([
+      expect(await controller.findAll({} as ReqUser)).toEqual([
         mockRingServiceFindAll,
       ]);
     });
@@ -71,7 +71,7 @@ describe("RingController", () => {
 
   describe("findOne", () => {
     it("should return a ring", async () => {
-      expect(await controller.findOne(7, {} as ReqAuthUser)).toEqual(
+      expect(await controller.findOne(7, {} as ReqUser)).toEqual(
         mockRingServiceFindAll,
       );
     });
@@ -88,7 +88,7 @@ describe("RingController", () => {
             forgedBy: "Elfos",
           },
           {} as Express.Multer.File,
-          {} as ReqAuthUser,
+          {} as ReqUser,
         ),
       ).toEqual(mockRingServiceCreateAndUpdate);
     });
@@ -106,7 +106,7 @@ describe("RingController", () => {
           },
           7,
           {} as Express.Multer.File,
-          {} as ReqAuthUser,
+          {} as ReqUser,
         ),
       ).toEqual(mockRingServiceCreateAndUpdate);
     });
@@ -114,7 +114,7 @@ describe("RingController", () => {
 
   describe("delete", () => {
     it("should delete a ring", async () => {
-      expect(await controller.delete(7, {} as ReqAuthUser)).toBeNull();
+      expect(await controller.delete(7, {} as ReqUser)).toBeNull();
     });
   });
 });

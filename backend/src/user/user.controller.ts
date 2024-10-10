@@ -19,7 +19,8 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 import { AuthGuard } from "src/auth/auth.guard";
-import { errorResponsePatternStructure } from "src/swagger.config";
+import type { ReqUser } from "src/global/types";
+import { errorResponsePatternStructure } from "src/global/swagger.config";
 
 import { CreateUserDto } from "./dto/create-user.dto";
 import { DeleteUserDto } from "./dto/delete-user.dto";
@@ -31,7 +32,6 @@ import {
   findOneApiOkResponse,
   updateApiOkResponse,
 } from "./swagger.config";
-import { ReqAuthUser } from "./types/Req";
 import { UserService } from "./user.service";
 
 @Controller("user")
@@ -72,7 +72,7 @@ export class UserController {
     @Param("id", ParseIntPipe) id: number,
     @Body(ValidationPipe) updateUserDto: UpdateUserDto,
     @Req()
-    req: ReqAuthUser,
+    req: ReqUser,
   ): Promise<Pick<User, "id" | "username">> {
     const user = await this.userService.update(id, updateUserDto, req);
     return user;
@@ -88,7 +88,7 @@ export class UserController {
   async delete(
     @Param("id", ParseIntPipe) id: number,
     @Body(ValidationPipe) deleteUserDto: DeleteUserDto,
-    @Req() req: ReqAuthUser,
+    @Req() req: ReqUser,
   ): Promise<null> {
     const user = await this.userService.delete(id, deleteUserDto, req);
     return user;

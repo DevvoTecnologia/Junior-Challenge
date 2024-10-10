@@ -2,9 +2,9 @@ import { ConfigModule } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
+import type { ReqUser } from "src/global/types";
 
 import type { CreateUserDto } from "./dto/create-user.dto";
-import type { ReqAuthUser } from "./types/Req";
 import { UserController } from "./user.controller";
 import { UserService } from "./user.service";
 
@@ -100,7 +100,7 @@ describe("UserController", () => {
           sub: 1,
           username: "test",
         },
-      } as ReqAuthUser;
+      } as ReqUser;
 
       expect(await controller.update(1, updateUserDto, req)).toEqual({
         id: 1,
@@ -116,7 +116,7 @@ describe("UserController", () => {
           sub: 1,
           username: "test",
         },
-      } as ReqAuthUser;
+      } as ReqUser;
 
       expect(
         await controller.delete(

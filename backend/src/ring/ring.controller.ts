@@ -25,7 +25,8 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 import { AuthGuard } from "src/auth/auth.guard";
-import { errorResponsePatternStructure } from "src/swagger.config";
+import type { ReqUser } from "src/global/types";
+import { errorResponsePatternStructure } from "src/global/swagger.config";
 
 import { CreateRingDto } from "./dto/create-ring.dto";
 import { UpdateRingDto } from "./dto/update-ring.dto";
@@ -39,7 +40,6 @@ import {
   updateApiBody,
   updateApiOkResponse,
 } from "./swagger.config";
-import { ReqAuthUser } from "./types/Req";
 
 @Controller("ring")
 @UseGuards(AuthGuard)
@@ -51,7 +51,7 @@ export class RingController {
   @Get()
   @ApiOkResponse(findAllApiOkResponse)
   @ApiResponse(errorResponsePatternStructure)
-  async findAll(@Req() req: ReqAuthUser): Promise<Ring[]> {
+  async findAll(@Req() req: ReqUser): Promise<Ring[]> {
     return await this.ringService.findAll(req);
   }
 
@@ -60,7 +60,7 @@ export class RingController {
   @ApiResponse(errorResponsePatternStructure)
   async findOne(
     @Param("id", ParseIntPipe) id: number,
-    @Req() req: ReqAuthUser,
+    @Req() req: ReqUser,
   ): Promise<Ring> {
     return await this.ringService.findOne(id, req);
   }
@@ -84,7 +84,7 @@ export class RingController {
         .build(),
     )
     file: Express.Multer.File,
-    @Req() req: ReqAuthUser,
+    @Req() req: ReqUser,
   ): Promise<Ring> {
     const ring = await this.ringService.create(createRingDto, file, req);
     return ring;
@@ -110,7 +110,7 @@ export class RingController {
         .build({ fileIsRequired: false }),
     )
     file: Express.Multer.File | undefined,
-    @Req() req: ReqAuthUser,
+    @Req() req: ReqUser,
   ): Promise<Ring> {
     const ring = await this.ringService.update(id, updateRingDto, file, req);
     return ring;
@@ -123,7 +123,7 @@ export class RingController {
   @ApiResponse(errorResponsePatternStructure)
   async delete(
     @Param("id", ParseIntPipe) id: number,
-    @Req() req: ReqAuthUser,
+    @Req() req: ReqUser,
   ): Promise<null> {
     const ring = await this.ringService.delete(id, req);
     return ring;

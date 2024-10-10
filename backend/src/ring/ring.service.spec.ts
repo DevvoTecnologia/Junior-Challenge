@@ -6,12 +6,12 @@ import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
 import * as fs from "fs";
 import * as sharp from "sharp";
+import type { ReqUser } from "src/global/types";
 
 import type { CreateRingDto } from "./dto/create-ring.dto";
 import type { UpdateRingDto } from "./dto/update-ring.dto";
 import { Ring } from "./entities/ring.entity";
 import { RingService } from "./ring.service";
-import type { ReqAuthUser } from "./types/Req";
 
 describe("RingService", () => {
   let service: RingService;
@@ -106,7 +106,7 @@ describe("RingService", () => {
 
   describe("findAll", () => {
     it("should return an array of rings", async () => {
-      const rings = await service.findAll({ user: { sub: 4 } } as ReqAuthUser);
+      const rings = await service.findAll({ user: { sub: 4 } } as ReqUser);
 
       expect(rings).toEqual([mockRingModelFind]);
     });
@@ -115,7 +115,7 @@ describe("RingService", () => {
       jest.spyOn(ringModel, "findAll").mockResolvedValue([]);
 
       await expect(
-        service.findAll({ user: { sub: 4 } } as ReqAuthUser),
+        service.findAll({ user: { sub: 4 } } as ReqUser),
       ).rejects.toThrow(new NotFoundException("No rings found"));
     });
 
@@ -125,7 +125,7 @@ describe("RingService", () => {
         .spyOn((service as any).cacheManager, "get")
         .mockResolvedValue([mockRingModelFind]);
 
-      const rings = await service.findAll({ user: { sub: 4 } } as ReqAuthUser);
+      const rings = await service.findAll({ user: { sub: 4 } } as ReqUser);
 
       expect(rings).toEqual([mockRingModelFind]);
     });
@@ -135,7 +135,7 @@ describe("RingService", () => {
     it("should return a ring", async () => {
       const ring = await service.findOne(7, {
         user: { sub: 4 },
-      } as ReqAuthUser);
+      } as ReqUser);
 
       expect(ring).toEqual(mockRingModelFind);
     });
@@ -144,7 +144,7 @@ describe("RingService", () => {
       jest.spyOn(ringModel, "findOne").mockResolvedValue(null);
 
       await expect(
-        service.findOne(7, { user: { sub: 4 } } as ReqAuthUser),
+        service.findOne(7, { user: { sub: 4 } } as ReqUser),
       ).rejects.toThrow(new NotFoundException("Ring with id 7 not found"));
     });
 
@@ -156,7 +156,7 @@ describe("RingService", () => {
 
       const ring = await service.findOne(7, {
         user: { sub: 4 },
-      } as ReqAuthUser);
+      } as ReqUser);
 
       expect(ring).toEqual(mockRingModelFind);
     });
@@ -174,7 +174,7 @@ describe("RingService", () => {
       await expect(
         service.create(createRingDto as CreateRingDto, imageMock, {
           user: { sub: 4 },
-        } as ReqAuthUser),
+        } as ReqUser),
       ).rejects.toThrow(
         new BadRequestException("Invalid forgedBy value: INVALIDO"),
       );
@@ -193,7 +193,7 @@ describe("RingService", () => {
         imageMock,
         {
           user: { sub: 4 },
-        } as ReqAuthUser,
+        } as ReqUser,
       );
 
       expect(ring).toEqual(mockRingModelCreateAndUpdate);
@@ -215,7 +215,7 @@ describe("RingService", () => {
 
       await service.create(createRingDto as CreateRingDto, imageMock, {
         user: { sub: 4 },
-      } as ReqAuthUser);
+      } as ReqUser);
 
       expect(cacheManagerDelSpy).toHaveBeenCalledTimes(1);
     });
@@ -233,7 +233,7 @@ describe("RingService", () => {
       await expect(
         service.create(createRingDto as CreateRingDto, imageMock, {
           user: { sub: 4 },
-        } as ReqAuthUser),
+        } as ReqUser),
       ).rejects.toThrow(new BadRequestException("Error creating ring"));
     });
   });
@@ -250,7 +250,7 @@ describe("RingService", () => {
       await expect(
         service.update(7, updateRingDto as UpdateRingDto, imageMock, {
           user: { sub: 4 },
-        } as ReqAuthUser),
+        } as ReqUser),
       ).rejects.toThrow(
         new BadRequestException("Invalid forgedBy value: INVALIDO"),
       );
@@ -276,7 +276,7 @@ describe("RingService", () => {
 
       await service.update(7, updateRingDto as UpdateRingDto, imageMock, {
         user: { sub: 4 },
-      } as ReqAuthUser);
+      } as ReqUser);
 
       expect(cacheManagerDelSpy).toHaveBeenCalledTimes(2);
     });
@@ -294,7 +294,7 @@ describe("RingService", () => {
       await expect(
         service.update(7, updateRingDto as UpdateRingDto, imageMock, {
           user: { sub: 4 },
-        } as ReqAuthUser),
+        } as ReqUser),
       ).rejects.toThrow(new NotFoundException("Ring with id 7 not found"));
     });
 
@@ -316,7 +316,7 @@ describe("RingService", () => {
         imageMock,
         {
           user: { sub: 4 },
-        } as ReqAuthUser,
+        } as ReqUser,
       );
 
       expect(updatedRing).toEqual(mockRingModelCreateAndUpdate);
@@ -335,7 +335,7 @@ describe("RingService", () => {
         imageMock,
         {
           user: { sub: 4 },
-        } as ReqAuthUser,
+        } as ReqUser,
       );
 
       expect(updatedRing).toEqual(mockRingModelCreateAndUpdate);
@@ -352,7 +352,7 @@ describe("RingService", () => {
       jest.spyOn(ringModel, "findOne").mockResolvedValue(null);
 
       await expect(
-        service.delete(7, { user: { sub: 4 } } as ReqAuthUser),
+        service.delete(7, { user: { sub: 4 } } as ReqUser),
       ).rejects.toThrow(new NotFoundException("Ring with id 7 not found"));
     });
 
@@ -365,7 +365,7 @@ describe("RingService", () => {
 
       jest.spyOn(ringModel, "findOne").mockResolvedValue(ring);
 
-      await service.delete(7, { user: { sub: 4 } } as ReqAuthUser);
+      await service.delete(7, { user: { sub: 4 } } as ReqUser);
 
       expect(cacheManagerDelSpy).toHaveBeenCalledTimes(2);
     });
@@ -373,7 +373,7 @@ describe("RingService", () => {
     it("should delete a ring", async () => {
       jest.spyOn(ringModel, "findOne").mockResolvedValue(ring);
 
-      await service.delete(7, { user: { sub: 4 } } as ReqAuthUser);
+      await service.delete(7, { user: { sub: 4 } } as ReqUser);
 
       expect(ring.destroy).toHaveBeenCalled();
     });
@@ -385,7 +385,7 @@ describe("RingService", () => {
 
       const fsSpyOn = jest.spyOn(fs, "unlinkSync").mockReturnValue(undefined);
 
-      await service.delete(7, { user: { sub: 4 } } as ReqAuthUser);
+      await service.delete(7, { user: { sub: 4 } } as ReqUser);
 
       expect(fsSpyOn).toHaveBeenCalled();
     });
@@ -405,7 +405,7 @@ describe("RingService", () => {
       await expect(
         service.create(createRingDto as CreateRingDto, imageMock, {
           user: { sub: 4 },
-        } as ReqAuthUser),
+        } as ReqUser),
       ).rejects.toThrow(
         new BadRequestException(`Elfos can't forge more than 3 rings`),
       );
@@ -424,7 +424,7 @@ describe("RingService", () => {
       await expect(
         service.create(createRingDto as CreateRingDto, imageMock, {
           user: { sub: 4 },
-        } as ReqAuthUser),
+        } as ReqUser),
       ).rejects.toThrow(
         new BadRequestException(`Anões can't forge more than 7 rings`),
       );
@@ -443,7 +443,7 @@ describe("RingService", () => {
       await expect(
         service.create(createRingDto as CreateRingDto, imageMock, {
           user: { sub: 4 },
-        } as ReqAuthUser),
+        } as ReqUser),
       ).rejects.toThrow(
         new BadRequestException(`Homens can't forge more than 9 rings`),
       );
@@ -462,7 +462,7 @@ describe("RingService", () => {
       await expect(
         service.create(createRingDto as CreateRingDto, imageMock, {
           user: { sub: 4 },
-        } as ReqAuthUser),
+        } as ReqUser),
       ).rejects.toThrow(
         new BadRequestException(`Sauron can't forge more than 1 ring`),
       );
@@ -486,7 +486,7 @@ describe("RingService", () => {
         imageMock,
         {
           user: { sub: 4 },
-        } as ReqAuthUser,
+        } as ReqUser,
       );
 
       expect(updatedRing).toEqual(mockRingModelCreateAndUpdate);
@@ -509,7 +509,7 @@ describe("RingService", () => {
       await expect(
         service.update(7, updateRingDto as UpdateRingDto, imageMock, {
           user: { sub: 4 },
-        } as ReqAuthUser),
+        } as ReqUser),
       ).rejects.toThrow(
         new BadRequestException(`Sauron can't forge more than 1 ring`),
       );
@@ -533,7 +533,7 @@ describe("RingService", () => {
 
       await service.create(createRingDto as CreateRingDto, imageMock, {
         user: { sub: 4 },
-      } as ReqAuthUser);
+      } as ReqUser);
 
       expect(fsSpyOn).toHaveBeenCalled();
     });
@@ -556,7 +556,7 @@ describe("RingService", () => {
       await expect(
         service.create(createRingDto as CreateRingDto, invalidImageMock, {
           user: { sub: 4 },
-        } as ReqAuthUser),
+        } as ReqUser),
       ).rejects.toThrow(
         new BadRequestException(
           "Validation failed (expected type is /jpeg|png/)",
@@ -577,7 +577,7 @@ describe("RingService", () => {
       await expect(
         service.create(createRingDto as CreateRingDto, imageMock, {
           user: { sub: 4 },
-        } as ReqAuthUser),
+        } as ReqUser),
       ).rejects.toThrow(
         new BadRequestException(
           "Validation failed (expected type is /jpeg|png/)",
