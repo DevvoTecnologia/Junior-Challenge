@@ -7,19 +7,18 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
-import { existsSync, unlinkSync } from "fs";
-import { join } from "path";
 import { cacheKeys } from "src/global/constants";
 import type { ReqUser } from "src/global/types";
 import { Ring } from "src/ring/entities/ring.entity";
 
+import UserGlobalValidations from "./UserGlobalValidations";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { DeleteUserDto } from "./dto/delete-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./entities/user.entity";
 
 @Injectable()
-export class UserService {
+export class UserService extends UserGlobalValidations {
   private readonly logger = new Logger(UserService.name);
   private readonly atributesToShow = ["id", "username"];
   private readonly includeAtributes = [
@@ -32,7 +31,9 @@ export class UserService {
   constructor(
     @InjectModel(User) private readonly userModel: typeof User,
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
-  ) {}
+  ) {
+    super();
+  }
 
   async findAll(): Promise<User[]> {
     const cachedUsers = await this.cacheManager.get<User[]>(cacheKeys.users());
@@ -221,55 +222,5 @@ export class UserService {
     await this.cacheManager.del(cacheKeys.user(id));
 
     return null;
-  }
-
-  private async deleteRingImage(imageName: string): Promise<void> {
-    const destinationPath = join(process.cwd(), "uploads");
-
-    const filePath = join(destinationPath, imageName);
-
-    if (await existsSync(filePath)) {
-      unlinkSync(filePath);
-    }
-  }
-
-  private async validatePassword(user: User, password: string): Promise<void> {
-    if (!(await user.passwordIsValid(password))) {
-      throw new BadRequestException("Invalid password");
-    }
-  }
-
-  private validateNewPassword(newPassword: string, oldPassword: string): void {
-    if (newPassword.length < 4) {
-      throw new BadRequestException(
-        "Password must be at least 4 characters long",
-      );
-    }
-
-    if (newPassword.length > 255) {
-      throw new BadRequestException(
-        "Password must be at most 255 characters long",
-      );
-    }
-
-    if (newPassword === oldPassword) {
-      throw new BadRequestException(
-        "New password can not be the same as the old one",
-      );
-    }
-  }
-
-  private validateUpdateOrDeleteUser({
-    id,
-    sub,
-    msg,
-  }: {
-    id: number;
-    sub: number;
-    msg: string;
-  }): void {
-    if (sub !== id) {
-      throw new BadRequestException(msg);
-    }
   }
 }
