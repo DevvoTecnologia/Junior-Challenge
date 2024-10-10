@@ -1,3 +1,4 @@
+import { CacheModule } from "@nestjs/cache-manager";
 import { BadRequestException, NotFoundException } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { getModelToken } from "@nestjs/sequelize";
@@ -25,7 +26,12 @@ describe("UserService", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule],
+      imports: [
+        ConfigModule,
+        CacheModule.register({
+          ttl: 60000 * 10, // 10 minutes
+        }),
+      ],
       providers: [
         UserService,
         {
@@ -55,6 +61,50 @@ describe("UserService", () => {
       await expect(service.findAll()).rejects.toThrow(
         new NotFoundException("No users found"),
       );
+    });
+
+    it("should throw error from cache if no users are found", async () => {
+      jest.spyOn(userModel, "findAll").mockResolvedValue([]);
+
+      jest.spyOn(service["cacheManager"], "get").mockResolvedValue([]);
+
+      await expect(service.findAll()).rejects.toThrow(
+        new NotFoundException("No users found"),
+      );
+    });
+
+    it("should return users from cache", async () => {
+      jest.spyOn(userModel, "findAll").mockResolvedValue([]);
+
+      jest.spyOn(service["cacheManager"], "get").mockResolvedValue([
+        {
+          id: 1,
+          username: "test",
+          rings: [
+            {
+              id: 1,
+              name: "test",
+              image: "test",
+              url: "undefined/uploads/test",
+            },
+          ],
+        } as User,
+      ]);
+
+      expect(await service.findAll()).toEqual([
+        {
+          id: 1,
+          username: "test",
+          rings: [
+            {
+              id: 1,
+              name: "test",
+              image: "test",
+              url: "undefined/uploads/test",
+            },
+          ],
+        } as User,
+      ]);
     });
 
     it("should return an array of users", async () => {
@@ -95,6 +145,46 @@ describe("UserService", () => {
       await expect(service.findByPk(1)).rejects.toThrow(
         new NotFoundException("User with id 1 not found"),
       );
+    });
+
+    it("should throw error from cache if no user is found", async () => {
+      jest.spyOn(userModel, "findByPk").mockResolvedValue(null);
+
+      jest.spyOn(service["cacheManager"], "get").mockResolvedValue("NotFound");
+
+      await expect(service.findByPk(1)).rejects.toThrow(
+        new NotFoundException("User with id 1 not found"),
+      );
+    });
+
+    it("should return a user from cache", async () => {
+      jest.spyOn(userModel, "findByPk").mockResolvedValue(null);
+
+      jest.spyOn(service["cacheManager"], "get").mockResolvedValue({
+        id: 1,
+        username: "test",
+        rings: [
+          {
+            id: 1,
+            name: "test",
+            image: "test",
+            url: "undefined/uploads/test",
+          },
+        ],
+      });
+
+      expect(await service.findByPk(1)).toEqual({
+        id: 1,
+        username: "test",
+        rings: [
+          {
+            id: 1,
+            name: "test",
+            image: "test",
+            url: "undefined/uploads/test",
+          },
+        ],
+      });
     });
 
     it("should return a user", async () => {
@@ -183,6 +273,26 @@ describe("UserService", () => {
         id: 1,
         username: "test",
       });
+    });
+
+    it("should invalidate cache when creating a new user", async () => {
+      jest.spyOn(userModel, "create").mockResolvedValue({
+        id: 1,
+        username: "test",
+      } as User);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const delSpyOn = jest.spyOn((service as any).cacheManager, "del");
+
+      expect(
+        await service.create({ username: "test", password: "test" }),
+      ).toEqual({
+        id: 1,
+        username: "test",
+      });
+
+      expect(delSpyOn).toHaveBeenCalledTimes(1);
+      expect(delSpyOn).toHaveBeenCalledWith("users");
     });
   });
 
@@ -471,6 +581,38 @@ describe("UserService", () => {
       expect(user.save).toHaveBeenCalled();
     });
 
+    it("should invalidate cache when updating a user", async () => {
+      const user = {
+        id: 1,
+        username: "test",
+        password: "test",
+        save: jest.fn(),
+        passwordIsValid: jest.fn().mockResolvedValue(true),
+      } as unknown as User;
+
+      jest.spyOn(userModel, "findByPk").mockResolvedValue(user);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const delSpyOn = jest.spyOn((service as any).cacheManager, "del");
+
+      expect(
+        await service.update(
+          1,
+          { username: "test", password: "test", newPassword: "" },
+          {
+            user: { sub: 1 },
+          } as ReqUser,
+        ),
+      ).toEqual({
+        id: 1,
+        username: "test",
+      });
+
+      expect(delSpyOn).toHaveBeenCalledTimes(2);
+      expect(delSpyOn).toHaveBeenCalledWith("users");
+      expect(delSpyOn).toHaveBeenCalledWith("user_1");
+    });
+
     test("if username|password is not provided, it should not update the user", async () => {
       const user = {
         id: 1,
@@ -607,6 +749,30 @@ describe("UserService", () => {
       expect(deleteRingImageSpy).toHaveBeenCalledTimes(2);
       expect(deleteRingImageSpy).toHaveBeenCalledWith("test");
       expect(deleteRingImageSpy).toHaveBeenCalledWith("test2");
+    });
+
+    it("should invalidate cache when deleting a user", async () => {
+      const user = {
+        id: 1,
+        destroy: jest.fn(),
+        passwordIsValid: jest.fn().mockResolvedValue(true),
+        rings: [],
+      } as unknown as User;
+
+      jest.spyOn(userModel, "findByPk").mockResolvedValue(user);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const delSpyOn = jest.spyOn((service as any).cacheManager, "del");
+
+      expect(
+        await service.delete(1, { password: "test" }, {
+          user: { sub: 1 },
+        } as ReqUser),
+      ).toBeNull();
+
+      expect(delSpyOn).toHaveBeenCalledTimes(2);
+      expect(delSpyOn).toHaveBeenCalledWith("users");
+      expect(delSpyOn).toHaveBeenCalledWith("user_1");
     });
   });
 });

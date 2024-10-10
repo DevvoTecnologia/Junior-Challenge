@@ -119,6 +119,17 @@ describe("RingService", () => {
       ).rejects.toThrow(new NotFoundException("No rings found"));
     });
 
+    it("should throw error from cache if no rings are found", async () => {
+      jest
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .spyOn((service as any).cacheManager, "get")
+        .mockResolvedValue([]);
+
+      await expect(
+        service.findAll({ user: { sub: 4 } } as ReqUser),
+      ).rejects.toThrow(new NotFoundException("No rings found"));
+    });
+
     it("should return rings from cache", async () => {
       jest
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -142,6 +153,17 @@ describe("RingService", () => {
 
     it("should throw NotFoundEx if the ring is not found", async () => {
       jest.spyOn(ringModel, "findOne").mockResolvedValue(null);
+
+      await expect(
+        service.findOne(7, { user: { sub: 4 } } as ReqUser),
+      ).rejects.toThrow(new NotFoundException("Ring with id 7 not found"));
+    });
+
+    it("should throw error from cache if the ring is not found", async () => {
+      jest
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .spyOn((service as any).cacheManager, "get")
+        .mockResolvedValue("NotFound");
 
       await expect(
         service.findOne(7, { user: { sub: 4 } } as ReqUser),
@@ -217,7 +239,7 @@ describe("RingService", () => {
         user: { sub: 4 },
       } as ReqUser);
 
-      expect(cacheManagerDelSpy).toHaveBeenCalledTimes(1);
+      expect(cacheManagerDelSpy).toHaveBeenCalledTimes(3);
     });
 
     it("should throw BadRequestEx if an error occurs in database", async () => {
@@ -278,7 +300,7 @@ describe("RingService", () => {
         user: { sub: 4 },
       } as ReqUser);
 
-      expect(cacheManagerDelSpy).toHaveBeenCalledTimes(2);
+      expect(cacheManagerDelSpy).toHaveBeenCalledTimes(4);
     });
 
     it("should throw NotFoundEx if the ring is not found", async () => {
@@ -367,7 +389,7 @@ describe("RingService", () => {
 
       await service.delete(7, { user: { sub: 4 } } as ReqUser);
 
-      expect(cacheManagerDelSpy).toHaveBeenCalledTimes(2);
+      expect(cacheManagerDelSpy).toHaveBeenCalledTimes(4);
     });
 
     it("should delete a ring", async () => {
