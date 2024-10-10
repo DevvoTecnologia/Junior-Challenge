@@ -50,8 +50,6 @@ export class UserService {
       include: this.includeAtributes,
     });
 
-    this.logger.log(user);
-
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }

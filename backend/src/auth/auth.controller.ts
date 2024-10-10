@@ -16,12 +16,14 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
+import type { ReqUser } from "src/global/types";
 import { errorResponsePatternStructure } from "src/swagger.config";
 
-import { AuthGuard } from "./auth.guard";
 import { AuthService } from "./auth.service";
 import { AuthDto } from "./dto/auth.dto";
+import { JwtAuthGuard } from "./jwt-auth.guard";
 import { getProfileApiOkResponse, signInApiOkResponse } from "./swagger.config";
+import type { SignInResponse } from "./types/SignIn";
 
 @Controller("auth")
 @UsePipes(ValidationPipe)
@@ -33,35 +35,17 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse(signInApiOkResponse)
   @ApiResponse(errorResponsePatternStructure)
-  async signIn(@Body() authDto: AuthDto): Promise<{
-    accessToken: string;
-    userId: number;
-    username: string;
-  }> {
+  async signIn(@Body() authDto: AuthDto): Promise<SignInResponse> {
     return await this.authService.signIn(authDto);
   }
 
   // 💡 This route is protected by the AuthGuard
   @Get("test")
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth("defaultBearerAuth")
   @ApiOkResponse(getProfileApiOkResponse)
   @ApiResponse(errorResponsePatternStructure)
-  getProfile(
-    @Request()
-    req: {
-      user: {
-        sub: number;
-        username: string;
-      };
-    },
-  ): {
-    sub: number;
-    username: string;
-  } {
-    return {
-      sub: req.user.sub,
-      username: req.user.username,
-    };
+  getProfile(@Request() req: ReqUser): ReqUser["user"] {
+    return req.user;
   }
 }

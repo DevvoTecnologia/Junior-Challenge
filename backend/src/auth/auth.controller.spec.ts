@@ -2,6 +2,7 @@ import { ConfigModule } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
+import type { ReqUser } from "src/global/types";
 
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
@@ -62,7 +63,7 @@ describe("AuthController", () => {
           sub: 1,
           username: "admin",
         },
-      });
+      } as ReqUser);
 
       expect(response).toEqual({
         sub: 1,
