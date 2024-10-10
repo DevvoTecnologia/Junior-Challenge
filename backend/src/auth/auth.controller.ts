@@ -21,6 +21,7 @@ import type { ReqUser } from "src/global/types";
 
 import { AuthService } from "./auth.service";
 import { AuthDto } from "./dto/auth.dto";
+import { GithubAuthGuard } from "./github-auth.guard";
 import { JwtAuthGuard } from "./jwt-auth.guard";
 import { getProfileApiOkResponse, signInApiOkResponse } from "./swagger.config";
 import type { SignInResponse } from "./types/SignIn";
@@ -37,6 +38,20 @@ export class AuthController {
   @ApiResponse(errorResponsePatternStructure)
   async signIn(@Body() authDto: AuthDto): Promise<SignInResponse> {
     return await this.authService.signIn(authDto);
+  }
+
+  @Get("github")
+  @UseGuards(GithubAuthGuard)
+  githubSignIn(): void {
+    return void 0;
+  }
+
+  @Get("github/callback")
+  @UseGuards(GithubAuthGuard)
+  async githubSignInCallback(
+    @Request() req: ReqUser,
+  ): Promise<ReqUser["user"]> {
+    return req.user;
   }
 
   // 💡 This route is protected by the AuthGuard
