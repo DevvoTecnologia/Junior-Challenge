@@ -16,12 +16,12 @@ describe("sequelize.config", () => {
           useValue: {
             get: jest.fn((key: string) => {
               const config = {
-                "database.dialect": "mysql",
-                "database.host": "localhost",
-                "database.port": 5432,
-                "database.username": "testuser",
-                "database.password": "testpass",
-                "database.name": "testdb",
+                "database.mysql.dialect": "mysql",
+                "database.mysql.host": "localhost",
+                "database.mysql.port": 5432,
+                "database.mysql.username": "testuser",
+                "database.mysql.password": "testpass",
+                "database.mysql.name": "testdb",
                 nodeEnv: "development",
               };
               return config[key as keyof typeof config];
