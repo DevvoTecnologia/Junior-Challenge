@@ -19,8 +19,7 @@ export class RingService extends RingGlobalValidations {
   private readonly logger = new Logger(RingService.name);
 
   constructor(
-    @InjectModel(Ring)
-    private readonly ringModel: typeof Ring,
+    @InjectModel(Ring) private readonly ringModel: typeof Ring,
     @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
   ) {
     super();
@@ -76,7 +75,7 @@ export class RingService extends RingGlobalValidations {
       },
     });
 
-    await this.cacheManager.set(cacheKey, ring ?? "NotFound");
+    await this.cacheManager.set(cacheKey, ring || "NotFound");
 
     if (!ring) {
       throw new NotFoundException(notFoundMsg);
@@ -131,6 +130,9 @@ export class RingService extends RingGlobalValidations {
     // Invalidate cache
     const cacheKey = `rings_user_${req.user.sub}`;
     await this.cacheManager.del(cacheKey);
+    // Invalidate the cache for all users
+    await this.cacheManager.del("users");
+    await this.cacheManager.del(`user_${newRing.userId}`);
 
     return newRing;
   }
@@ -188,6 +190,9 @@ export class RingService extends RingGlobalValidations {
     const ringsCacheKey = `rings_user_${req.user.sub}`;
     await this.cacheManager.del(ringCacheKey);
     await this.cacheManager.del(ringsCacheKey);
+    // Invalidate the cache for all users
+    await this.cacheManager.del("users");
+    await this.cacheManager.del(`user_${ring.userId}`);
 
     return ring;
   }
@@ -213,6 +218,9 @@ export class RingService extends RingGlobalValidations {
     const ringsCacheKey = `rings_user_${req.user.sub}`;
     await this.cacheManager.del(ringCacheKey);
     await this.cacheManager.del(ringsCacheKey);
+    // Invalidate the cache for all users
+    await this.cacheManager.del("users");
+    await this.cacheManager.del(`user_${ring.userId}`);
 
     return null;
   }

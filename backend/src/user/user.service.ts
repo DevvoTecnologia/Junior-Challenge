@@ -1,5 +1,7 @@
+import { Cache, CACHE_MANAGER } from "@nestjs/cache-manager";
 import {
   BadRequestException,
+  Inject,
   Injectable,
   Logger,
   NotFoundException,
@@ -27,37 +29,65 @@ export class UserService {
   ];
 
   constructor(
-    @InjectModel(User)
-    private readonly userModel: typeof User,
+    @InjectModel(User) private readonly userModel: typeof User,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
   ) {}
 
   async findAll(): Promise<User[]> {
+    const cacheKey = "users";
+    const cachedUsers = await this.cacheManager.get<User[]>(cacheKey);
+    const notFoundMsg = "No users found";
+
+    if (cachedUsers) {
+      if (cachedUsers.length) {
+        return cachedUsers;
+      }
+      throw new NotFoundException(notFoundMsg);
+    }
+
     const users = await this.userModel.findAll({
       attributes: this.atributesToShow,
       include: this.includeAtributes,
     });
 
+    await this.cacheManager.set(cacheKey, users);
+
     if (users.length === 0) {
-      throw new NotFoundException("No users found");
+      throw new NotFoundException(notFoundMsg);
     }
 
     return users;
   }
 
   async findByPk(id: number): Promise<User> {
+    const cacheKey = `user_${id}`;
+    const cachedUser = await this.cacheManager.get<User | "NotFound">(cacheKey);
+    const notFoundMsg = `User with id ${id} not found`;
+
+    if (cachedUser) {
+      if (cachedUser === "NotFound") {
+        throw new NotFoundException(notFoundMsg);
+      }
+      return cachedUser;
+    }
+
     const user = await this.userModel.findByPk(id, {
       attributes: this.atributesToShow,
       include: this.includeAtributes,
     });
 
+    await this.cacheManager.set(cacheKey, user || "NotFound");
+
     if (!user) {
-      throw new NotFoundException(`User with id ${id} not found`);
+      throw new NotFoundException(notFoundMsg);
     }
 
     return user;
   }
 
   async findOne(username: CreateUserDto["username"]): Promise<User> {
+    const notFoundMsg = `User with username ${username} not found`;
+
     const user = await this.userModel.findOne({
       where: { username },
       attributes: this.atributesToShow,
@@ -65,7 +95,7 @@ export class UserService {
     });
 
     if (!user) {
-      throw new NotFoundException(`User with username ${username} not found`);
+      throw new NotFoundException(notFoundMsg);
     }
 
     return user;
@@ -81,6 +111,9 @@ export class UserService {
     } catch {
       throw new BadRequestException("Username already exists");
     }
+
+    // Invalidate cache
+    await this.cacheManager.del("users");
 
     return {
       id: newUser.id,
@@ -131,6 +164,10 @@ export class UserService {
       throw new BadRequestException("Username already exists");
     }
 
+    // Invalidate cache
+    await this.cacheManager.del("users");
+    await this.cacheManager.del(`user_${id}`);
+
     return {
       id: userToUpdate.id,
       username: userToUpdate.username,
@@ -177,6 +214,10 @@ export class UserService {
     await Promise.all(deleteImagesPromises);
 
     await user.destroy();
+
+    // Invalidate cache
+    await this.cacheManager.del("users");
+    await this.cacheManager.del(`user_${id}`);
 
     return null;
   }
