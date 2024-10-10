@@ -1,11 +1,4 @@
-import {
-  Column,
-  DataType,
-  ForeignKey,
-  Model,
-  Table,
-} from "sequelize-typescript";
-import { User } from "src/user/entities/user.entity";
+import { Column, DataType, Model, Table } from "sequelize-typescript";
 
 @Table
 export class Ring extends Model {
@@ -32,8 +25,4 @@ export class Ring extends Model {
     },
   })
   public url!: string;
-
-  @ForeignKey(() => User)
-  @Column
-  public userId!: number;
 }

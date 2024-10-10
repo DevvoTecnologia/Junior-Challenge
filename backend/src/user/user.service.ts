@@ -9,6 +9,7 @@ import {
 import { InjectModel } from "@nestjs/sequelize";
 import { existsSync, unlinkSync } from "fs";
 import { join } from "path";
+import { cacheKeys } from "src/global/constants";
 import type { ReqUser } from "src/global/types";
 import { Ring } from "src/ring/entities/ring.entity";
 
@@ -34,8 +35,7 @@ export class UserService {
   ) {}
 
   async findAll(): Promise<User[]> {
-    const cacheKey = "users";
-    const cachedUsers = await this.cacheManager.get<User[]>(cacheKey);
+    const cachedUsers = await this.cacheManager.get<User[]>(cacheKeys.users());
     const notFoundMsg = "No users found";
 
     if (cachedUsers) {
@@ -50,7 +50,7 @@ export class UserService {
       include: this.includeAtributes,
     });
 
-    await this.cacheManager.set(cacheKey, users);
+    await this.cacheManager.set(cacheKeys.users(), users);
 
     if (users.length === 0) {
       throw new NotFoundException(notFoundMsg);
@@ -60,8 +60,9 @@ export class UserService {
   }
 
   async findByPk(id: number): Promise<User> {
-    const cacheKey = `user_${id}`;
-    const cachedUser = await this.cacheManager.get<User | "NotFound">(cacheKey);
+    const cachedUser = await this.cacheManager.get<User | "NotFound">(
+      cacheKeys.user(id),
+    );
     const notFoundMsg = `User with id ${id} not found`;
 
     if (cachedUser) {
@@ -76,7 +77,7 @@ export class UserService {
       include: this.includeAtributes,
     });
 
-    await this.cacheManager.set(cacheKey, user || "NotFound");
+    await this.cacheManager.set(cacheKeys.user(id), user || "NotFound");
 
     if (!user) {
       throw new NotFoundException(notFoundMsg);
@@ -113,7 +114,7 @@ export class UserService {
     }
 
     // Invalidate cache
-    await this.cacheManager.del("users");
+    await this.cacheManager.del(cacheKeys.users());
 
     return {
       id: newUser.id,
@@ -165,8 +166,8 @@ export class UserService {
     }
 
     // Invalidate cache
-    await this.cacheManager.del("users");
-    await this.cacheManager.del(`user_${id}`);
+    await this.cacheManager.del(cacheKeys.users());
+    await this.cacheManager.del(cacheKeys.user(id));
 
     return {
       id: userToUpdate.id,
@@ -216,8 +217,8 @@ export class UserService {
     await user.destroy();
 
     // Invalidate cache
-    await this.cacheManager.del("users");
-    await this.cacheManager.del(`user_${id}`);
+    await this.cacheManager.del(cacheKeys.users());
+    await this.cacheManager.del(cacheKeys.user(id));
 
     return null;
   }

@@ -7,6 +7,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
+import { cacheKeys } from "src/global/constants";
 import type { ReqUser } from "src/global/types";
 
 import RingGlobalValidations from "./RingGlobalValidations";
@@ -26,9 +27,9 @@ export class RingService extends RingGlobalValidations {
   }
 
   async findAll(req: ReqUser): Promise<Ring[]> {
-    const cacheKey = `rings_user_${req.user.sub}`;
-
-    const cachedRings = await this.cacheManager.get<Ring[]>(cacheKey);
+    const cachedRings = await this.cacheManager.get<Ring[]>(
+      cacheKeys.rings(req.user.sub),
+    );
 
     const notFoundMsg = "No rings found";
 
@@ -45,7 +46,7 @@ export class RingService extends RingGlobalValidations {
       },
     });
 
-    await this.cacheManager.set(cacheKey, rings);
+    await this.cacheManager.set(cacheKeys.rings(req.user.sub), rings);
 
     if (!rings.length) {
       throw new NotFoundException(notFoundMsg);
@@ -55,9 +56,9 @@ export class RingService extends RingGlobalValidations {
   }
 
   async findOne(id: number, req: ReqUser): Promise<Ring> {
-    const cacheKey = `ring_${id}_user_${req.user.sub}`;
-
-    const cachedRing = await this.cacheManager.get<Ring | "NotFound">(cacheKey);
+    const cachedRing = await this.cacheManager.get<Ring | "NotFound">(
+      cacheKeys.ring(id, req.user.sub),
+    );
 
     const notFoundMsg = `Ring with id ${id} not found`;
 
@@ -75,7 +76,10 @@ export class RingService extends RingGlobalValidations {
       },
     });
 
-    await this.cacheManager.set(cacheKey, ring || "NotFound");
+    await this.cacheManager.set(
+      cacheKeys.ring(id, req.user.sub),
+      ring || "NotFound",
+    );
 
     if (!ring) {
       throw new NotFoundException(notFoundMsg);
@@ -128,11 +132,10 @@ export class RingService extends RingGlobalValidations {
     }
 
     // Invalidate cache
-    const cacheKey = `rings_user_${req.user.sub}`;
-    await this.cacheManager.del(cacheKey);
+    await this.cacheManager.del(cacheKeys.rings(req.user.sub));
     // Invalidate the cache for all users
-    await this.cacheManager.del("users");
-    await this.cacheManager.del(`user_${newRing.userId}`);
+    await this.cacheManager.del(cacheKeys.users());
+    await this.cacheManager.del(cacheKeys.user(req.user.sub));
 
     return newRing;
   }
@@ -186,13 +189,11 @@ export class RingService extends RingGlobalValidations {
     await ring.save();
 
     // Invalidate the cache for the updated ring
-    const ringCacheKey = `ring_${id}_user_${req.user.sub}`;
-    const ringsCacheKey = `rings_user_${req.user.sub}`;
-    await this.cacheManager.del(ringCacheKey);
-    await this.cacheManager.del(ringsCacheKey);
+    await this.cacheManager.del(cacheKeys.rings(req.user.sub));
+    await this.cacheManager.del(cacheKeys.ring(id, req.user.sub));
     // Invalidate the cache for all users
-    await this.cacheManager.del("users");
-    await this.cacheManager.del(`user_${ring.userId}`);
+    await this.cacheManager.del(cacheKeys.users());
+    await this.cacheManager.del(cacheKeys.user(req.user.sub));
 
     return ring;
   }
@@ -214,13 +215,11 @@ export class RingService extends RingGlobalValidations {
     await ring.destroy();
 
     // Invalidate the cache for the deleted ring
-    const ringCacheKey = `ring_${id}_user_${req.user.sub}`;
-    const ringsCacheKey = `rings_user_${req.user.sub}`;
-    await this.cacheManager.del(ringCacheKey);
-    await this.cacheManager.del(ringsCacheKey);
+    await this.cacheManager.del(cacheKeys.rings(req.user.sub));
+    await this.cacheManager.del(cacheKeys.ring(id, req.user.sub));
     // Invalidate the cache for all users
-    await this.cacheManager.del("users");
-    await this.cacheManager.del(`user_${ring.userId}`);
+    await this.cacheManager.del(cacheKeys.users());
+    await this.cacheManager.del(cacheKeys.user(req.user.sub));
 
     return null;
   }
