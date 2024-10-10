@@ -3,20 +3,22 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import type { SequelizeModuleAsyncOptions } from "@nestjs/sequelize";
 import type { Dialect } from "sequelize";
 
+import envDatabase from "./env.database";
+
 const sequelizeAsyncConfig: SequelizeModuleAsyncOptions = {
-  imports: [ConfigModule],
+  imports: [ConfigModule.forFeature(envDatabase)],
   useFactory: (configService: ConfigService) => {
     const logger = new Logger("SequelizeConfig");
     const nodeEnv = configService.get("nodeEnv");
 
-    const host = configService.get("database.host");
-    const port = configService.get("database.port");
-    const username = configService.get("database.username");
-    const password = configService.get("database.password");
-    const database = configService.get("database.name");
+    const host = configService.get("database.mysql.host");
+    const port = configService.get("database.mysql.port");
+    const username = configService.get("database.mysql.username");
+    const password = configService.get("database.mysql.password");
+    const database = configService.get("database.mysql.name");
 
     return {
-      dialect: configService.get("database.dialect") as Dialect,
+      dialect: configService.get("database.mysql.dialect") as Dialect,
       host: host,
       port: port,
       username: username,
