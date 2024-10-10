@@ -8,8 +8,8 @@ import { User } from "src/user/entities/user.entity";
 
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
-import { GithubStrategy } from "./github.strategy";
-import { JwtStrategy } from "./jwt.strategy";
+import { GithubStrategy } from "../strategies/github.strategy";
+import { JwtStrategy } from "../strategies/jwt.strategy";
 
 @Module({
   imports: [
