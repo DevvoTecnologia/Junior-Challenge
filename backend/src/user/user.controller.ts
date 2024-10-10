@@ -19,8 +19,8 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 import { AuthGuard } from "src/auth/auth.guard";
-import type { ReqUser } from "src/global/types";
 import { errorResponsePatternStructure } from "src/global/swagger.config";
+import type { ReqUser } from "src/global/types";
 
 import { CreateUserDto } from "./dto/create-user.dto";
 import { DeleteUserDto } from "./dto/delete-user.dto";

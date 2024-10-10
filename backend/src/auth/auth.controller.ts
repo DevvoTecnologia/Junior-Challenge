@@ -16,8 +16,8 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import type { ReqUser } from "src/global/types";
 import { errorResponsePatternStructure } from "src/global/swagger.config";
+import type { ReqUser } from "src/global/types";
 
 import { AuthService } from "./auth.service";
 import { AuthDto } from "./dto/auth.dto";

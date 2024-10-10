@@ -25,8 +25,8 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 import { AuthGuard } from "src/auth/auth.guard";
-import type { ReqUser } from "src/global/types";
 import { errorResponsePatternStructure } from "src/global/swagger.config";
+import type { ReqUser } from "src/global/types";
 
 import { CreateRingDto } from "./dto/create-ring.dto";
 import { UpdateRingDto } from "./dto/update-ring.dto";
