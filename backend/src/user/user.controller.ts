@@ -18,7 +18,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { AuthGuard } from "src/auth/auth.guard";
+import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { errorResponsePatternStructure } from "src/global/swagger.config";
 import type { ReqUser } from "src/global/types";
 
@@ -64,7 +64,7 @@ export class UserController {
   }
 
   @Put(":id")
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth("defaultBearerAuth")
   @ApiOkResponse(updateApiOkResponse)
   @ApiResponse(errorResponsePatternStructure)
@@ -79,7 +79,7 @@ export class UserController {
   }
 
   @Delete(":id")
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth("defaultBearerAuth")
   @ApiOkResponse({
     description: "No body returned for response",

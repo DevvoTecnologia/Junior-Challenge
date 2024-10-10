@@ -24,7 +24,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { AuthGuard } from "src/auth/auth.guard";
+import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { errorResponsePatternStructure } from "src/global/swagger.config";
 import type { ReqUser } from "src/global/types";
 
@@ -42,7 +42,7 @@ import {
 } from "./swagger.config";
 
 @Controller("ring")
-@UseGuards(AuthGuard)
+@UseGuards(JwtAuthGuard)
 @ApiTags("Ring")
 @ApiBearerAuth("defaultBearerAuth")
 export class RingController {
