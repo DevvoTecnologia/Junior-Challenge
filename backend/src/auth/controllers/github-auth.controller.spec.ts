@@ -1,5 +1,6 @@
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
+import type { Response } from "express";
 import type { GithubReqUser } from "src/global/types";
 
 import { AuthService } from "../auth.service";
@@ -49,7 +50,9 @@ describe("GithubAuthController", () => {
         },
       } as unknown as GithubReqUser;
 
-      expect(await controller.githubSignInCallback(req)).toEqual({
+      expect(
+        await controller.githubSignInCallback(req, {} as Response),
+      ).toEqual({
         accessToken: "asdX0.hF60cVqQ2LSkEA1dkwXUZpPLasd6b5DnL1lw",
         userId: 1,
         username: "admin",

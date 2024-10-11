@@ -1,9 +1,7 @@
-import { ConfigModule } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { getModelToken } from "@nestjs/sequelize";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
-import envTest from "src/configs/env.test";
 import type { GithubReqUser } from "src/global/types";
 import { User } from "src/user/entities/user.entity";
 
@@ -28,7 +26,6 @@ describe("GithubAuthService", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule.forFeature(envTest)],
       providers: [
         { provide: getModelToken(User), useValue: mockUserModel },
         GithubAuthService,

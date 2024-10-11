@@ -1,5 +1,4 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/sequelize";
 import type { GithubReqUser, ReqUser } from "src/global/types";
@@ -13,15 +12,12 @@ export class GithubAuthService {
     @InjectModel(User)
     private readonly userModel: typeof User,
     private readonly jwtService: JwtService,
-    private readonly configServie: ConfigService,
   ) {}
 
   async createNewUser(req: GithubReqUser): Promise<SignInResponse> {
     const { username, email, githubUserId } = req.user;
 
     let newUser: User;
-
-    const clientUrl = this.configServie.get("allowedOrigin");
 
     try {
       newUser = await this.userModel.create({
@@ -41,8 +37,6 @@ export class GithubAuthService {
     };
 
     const accessToken = await this.jwtService.signAsync(payload);
-
-    req.res?.redirect(clientUrl + "/users");
 
     return {
       accessToken: accessToken,
