@@ -19,7 +19,11 @@ export default class UserGlobalValidations {
     user: User,
     password: string,
   ): Promise<void> {
-    if (!(await user.passwordIsValid(password))) {
+    try {
+      if (!(await user.passwordIsValid(password))) {
+        throw new BadRequestException("Invalid password");
+      }
+    } catch {
       throw new BadRequestException("Invalid password");
     }
   }
