@@ -43,18 +43,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
       id: "Credentials",
-      credentials: {
-        email: {
-          label: "Email",
-          placeholder: "Enter your email",
-          type: "email",
-        },
-        password: {
-          label: "Password",
-          placeholder: "Enter your password",
-          type: "password",
-        },
-      },
       async authorize(credentials) {
         const { email, password } = credentials;
 
@@ -81,12 +69,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       authorize(credentials) {
         const { accessToken, username, userId, email } = credentials;
 
-        console.log("credentials", credentials);
-
         return {
           accessToken: accessToken as string,
           username: username as string,
-          userId: userId as number,
+          userId: userId ? parseInt(userId as string, 10) : 0,
           email: email as string,
           isOAuth: true,
         };
