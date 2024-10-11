@@ -5,7 +5,7 @@ import { InjectModel } from "@nestjs/sequelize";
 import type { GithubReqUser, ReqUser } from "src/global/types";
 import { User } from "src/user/entities/user.entity";
 
-import type { SignInResponse } from "./types/SignIn";
+import type { SignInResponse } from "../types/SignIn";
 
 @Injectable()
 export class GithubAuthService {

@@ -21,8 +21,8 @@ import type { GithubReqUser, ReqUser } from "src/global/types";
 
 import { AuthService } from "./auth.service";
 import { AuthDto } from "./dto/auth.dto";
-import { GithubAuthGuard } from "./github-auth.guard";
-import { JwtAuthGuard } from "./jwt-auth.guard";
+import { GithubAuthGuard } from "./guards/github-auth.guard";
+import { JwtAuthGuard } from "./guards/jwt-auth.guard";
 import { getProfileApiOkResponse, signInApiOkResponse } from "./swagger.config";
 import type { SignInResponse } from "./types/SignIn";
 

@@ -18,7 +18,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
+import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { errorResponsePatternStructure } from "src/global/swagger.config";
 import type { ReqUser } from "src/global/types";
 

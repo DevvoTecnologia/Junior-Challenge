@@ -4,8 +4,8 @@ import type { GithubReqUser } from "src/global/types";
 import { User } from "src/user/entities/user.entity";
 
 import { AuthDto } from "./dto/auth.dto";
-import { GithubAuthService } from "./github-auth.service";
-import { LocalAuthService } from "./local-auth.service";
+import { GithubAuthService } from "./providers/github-auth.service";
+import { LocalAuthService } from "./providers/local-auth.service";
 import type { SignInResponse } from "./types/SignIn";
 
 @Injectable()

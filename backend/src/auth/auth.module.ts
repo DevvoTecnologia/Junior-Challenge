@@ -8,8 +8,8 @@ import { User } from "src/user/entities/user.entity";
 
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
-import { GithubAuthService } from "./github-auth.service";
-import { LocalAuthService } from "./local-auth.service";
+import { GithubAuthService } from "./providers/github-auth.service";
+import { LocalAuthService } from "./providers/local-auth.service";
 import { GithubStrategy } from "../strategies/github.strategy";
 import { JwtStrategy } from "../strategies/jwt.strategy";
 
