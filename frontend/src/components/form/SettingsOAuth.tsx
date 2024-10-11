@@ -34,6 +34,10 @@ export default function SettingsOAuthForm({
       return toast.error("Username should be at most 20 characters long");
     }
 
+    if (username && !username.trim()) {
+      return toast.error("Username should not be empty");
+    }
+
     try {
       await fetchClient.put<UpdateUserSuccess>(
         `/user/github/${userId}`,

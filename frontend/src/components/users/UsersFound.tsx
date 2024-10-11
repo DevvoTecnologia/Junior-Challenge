@@ -70,11 +70,12 @@ export default function UsersFound({
               >
                 <p className="text-yellow-300">No rings available</p>
                 <Image
-                  className="mt-6"
+                  className="mt-6 h-auto w-auto"
                   src="/ring.png"
                   alt="No ring"
                   width={150}
                   height={150}
+                  priority
                 />
               </motion.div>
             )}
