@@ -52,9 +52,8 @@ export class GithubAuthService {
     };
   }
 
-  async signIn(user: User, req: GithubReqUser): Promise<SignInResponse> {
-    const clientUrl = this.configServie.get("allowedOrigin");
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async signIn(user: User, _req: GithubReqUser): Promise<SignInResponse> {
     const payload: ReqUser["user"] = {
       sub: user.id,
       username: user.username,
@@ -62,8 +61,6 @@ export class GithubAuthService {
     };
 
     const accessToken = await this.jwtService.signAsync(payload);
-
-    req.res?.redirect(clientUrl + "/users");
 
     return {
       accessToken: accessToken,
