@@ -1,5 +1,6 @@
 "use client";
 
+import { validateEmail as multiformValidateEmail } from "multiform-validator";
 import { toast } from "react-toastify";
 
 export function validateUsername(username: string): boolean {
@@ -11,6 +12,19 @@ export function validateUsername(username: string): boolean {
     toast.error("Username should be at most 20 characters long");
     return false;
   }
+  return true;
+}
+
+export function validateEmail(email: string): boolean {
+  const validateEmailMV = multiformValidateEmail(email, {
+    maxLength: 255,
+  });
+
+  if (!validateEmailMV.isValid) {
+    toast.error(validateEmailMV.errorMsg);
+    return false;
+  }
+
   return true;
 }
 

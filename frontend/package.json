@@ -19,6 +19,7 @@
     "embla-carousel-autoplay": "^8.3.0",
     "embla-carousel-react": "^8.3.0",
     "framer-motion": "^11.9.0",
+    "multiform-validator": "^2.2.6",
     "next": "14.2.13",
     "next-auth": "^5.0.0-beta.22",
     "react": "^18",

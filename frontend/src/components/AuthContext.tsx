@@ -6,6 +6,8 @@ import { createContext, useContext, useMemo, useState } from "react";
 interface AuthContextType {
   username: string;
   setUsername: Dispatch<SetStateAction<string>>;
+  email: string;
+  setEmail: Dispatch<SetStateAction<string>>;
   password: string;
   setPassword: Dispatch<SetStateAction<string>>;
 }
@@ -16,11 +18,12 @@ export default function AuthProvider({
   children,
 }: Readonly<{ children: ReactNode }>) {
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const value = useMemo(
-    () => ({ username, setUsername, password, setPassword }),
-    [password, username],
+    () => ({ username, setUsername, email, setEmail, password, setPassword }),
+    [email, password, username],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

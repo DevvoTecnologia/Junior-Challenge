@@ -1,4 +1,5 @@
 import type { AxiosResponse } from "axios";
+import { redirect } from "next/navigation";
 
 import NoUsersFound from "@/components/users/NoUsersFound";
 import UsersFound from "@/components/users/UsersFound";
@@ -16,6 +17,10 @@ export default async function UsersProfilePage() {
   }
 
   const { token, userId } = await getSessionServer();
+
+  if (!userId && Number.isNaN(userId)) {
+    return redirect("/login");
+  }
 
   // Filter out the current user
   const filteredUsers = response?.data.filter((user) => user.id !== userId);

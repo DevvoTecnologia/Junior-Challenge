@@ -3943,6 +3943,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"multiform-validator@npm:^2.2.6":
+  version: 2.2.6
+  resolution: "multiform-validator@npm:2.2.6"
+  checksum: 10c0/d8b1ba2ccd9395d4cf8ad458cd0fdfee7a87ff3fcc4bdd4879d75527a0f506e2ebf8912b045c86708996456d09a4dbafd14dda642de0ae28d0e186f13f3e3718
+  languageName: node
+  linkType: hard
+
 "mz@npm:^2.7.0":
   version: 2.7.0
   resolution: "mz@npm:2.7.0"
@@ -4918,6 +4925,7 @@ __metadata:
     eslint-plugin-import: "npm:^2.30.0"
     eslint-plugin-prettier: "npm:^5.2.1"
     framer-motion: "npm:^11.9.0"
+    multiform-validator: "npm:^2.2.6"
     next: "npm:14.2.13"
     next-auth: "npm:^5.0.0-beta.22"
     postcss: "npm:^8"

@@ -1,9 +1,8 @@
 import * as motion from "framer-motion/client";
-import Link from "next/link";
 
 import LoginForm from "@/components/form/LoginUser";
 
-export default function LoginPage() {
+export default async function LoginPage() {
   return (
     <motion.div
       className="flex min-h-screen items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600"
@@ -22,14 +21,6 @@ export default function LoginPage() {
         </h1>
 
         <LoginForm />
-
-        <motion.button
-          whileHover={{ scale: 1.005 }}
-          whileTap={{ scale: 0.95 }}
-          className="mt-6 hover:underline focus:outline-none"
-        >
-          <Link href="/register">Don&apos;t have an account? Register</Link>
-        </motion.button>
       </motion.div>
     </motion.div>
   );

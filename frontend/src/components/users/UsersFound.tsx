@@ -42,7 +42,9 @@ export default function UsersFound({
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.4 }}
             >
-              {user.username.charAt(0).toUpperCase() + user.username.slice(1)}
+              {user.username
+                ? user.username.charAt(0).toUpperCase() + user.username.slice(1)
+                : "User"}
             </motion.h2>
 
             <Link datatype="user-link-profile" href={`/users/${user.id}`}>

@@ -3,15 +3,15 @@
 import { signIn } from "next-auth/react";
 import { toast } from "react-toastify";
 
-export async function authenticateUser(username: string, password: string) {
-  const response = await signIn("credentials", {
-    username,
+export async function authenticateUser(email: string, password: string) {
+  const response = await signIn("Credentials", {
+    email,
     password,
     redirect: false,
   });
 
   if (response?.error) {
-    toast.error("Invalid username or password");
+    toast.error("Invalid user or password");
     return false;
   }
 

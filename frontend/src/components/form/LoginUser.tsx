@@ -1,14 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import { authenticateUser } from "@/lib/(auth)/login/auth";
-import { validatePassword, validateUsername } from "@/lib/(auth)/validators";
+import { validatePassword, validateEmail } from "@/lib/(auth)/validators";
 
 import { useAuthForm } from "../AuthContext";
+import BtnLoginGithub from "../BtnLoginGithub";
 import { LoadingIcon } from "../Loading";
 
 export default function LoginForm() {
@@ -16,18 +18,18 @@ export default function LoginForm() {
 
   const [isPending, startTransition] = useTransition();
 
-  const { username, setUsername, password, setPassword } = useAuthForm();
+  const { email, setEmail, password, setPassword } = useAuthForm();
 
   const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!validateUsername(username) || !validatePassword(password)) {
+    if (!validateEmail(email) || !validatePassword(password)) {
       return;
     }
 
-    const isAuthenticated = await authenticateUser(username, password);
+    const isAuthenticated = await authenticateUser(email, password);
 
     if (isAuthenticated) {
       router.replace(`/users`);
@@ -46,18 +48,19 @@ export default function LoginForm() {
       <motion.div className="mb-4" whileHover={{ scale: 1.05 }}>
         <label
           className="mb-2 block text-sm font-bold text-gray-700 dark:text-gray-200"
-          htmlFor="username"
+          htmlFor="email"
         >
-          Username
+          Email
         </label>
         <input
           className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
-          id="username"
-          type="text"
-          name="username"
-          placeholder="Enter your username"
-          value={username}
-          onChange={(event) => setUsername(event.target.value)}
+          id="email"
+          type="email"
+          name="email"
+          disabled={isPending}
+          placeholder="Enter your email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
         />
       </motion.div>
       <motion.div className="relative mb-6" whileHover={{ scale: 1.05 }}>
@@ -72,6 +75,7 @@ export default function LoginForm() {
           id="password"
           name="password"
           type={showPassword ? "text" : "password"}
+          disabled={isPending}
           placeholder="Enter your password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
@@ -104,6 +108,22 @@ export default function LoginForm() {
         >
           Sign in
         </motion.button>
+      )}
+      <motion.button
+        whileHover={{ scale: 1.005 }}
+        whileTap={{ scale: 0.95 }}
+        className="mt-6 hover:underline focus:outline-none"
+      >
+        <Link href="/register">Don&apos;t have an account? Register</Link>
+      </motion.button>
+
+      <div className="mt-6 flex items-center justify-center" />
+
+      {!isPending && (
+        <BtnLoginGithub
+          startTransition={startTransition}
+          isPending={isPending}
+        />
       )}
     </motion.form>
   );

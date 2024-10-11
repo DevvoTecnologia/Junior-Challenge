@@ -6,10 +6,15 @@ import catchErrorClient from "@/global/catchErrorClient";
 import axiosInstance from "@/service/axiosInstance";
 import type { RegisterSuccess } from "@/types/User";
 
-export async function registerUser(username: string, password: string) {
+export async function registerUser(
+  username: string,
+  email: string,
+  password: string,
+) {
   try {
     await axiosInstance.post<RegisterSuccess>("/user", {
       username,
+      email,
       password,
     });
 

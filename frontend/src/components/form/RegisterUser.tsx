@@ -6,7 +6,11 @@ import { useState, useTransition } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import { registerUser } from "@/lib/(auth)/register/auth";
-import { validatePassword, validateUsername } from "@/lib/(auth)/validators";
+import {
+  validateEmail,
+  validatePassword,
+  validateUsername,
+} from "@/lib/(auth)/validators";
 
 import { useAuthForm } from "../AuthContext";
 import { LoadingIcon } from "../Loading";
@@ -16,18 +20,23 @@ export default function RegisterForm() {
 
   const [isPending, startTransition] = useTransition();
 
-  const { username, setUsername, password, setPassword } = useAuthForm();
+  const { username, setUsername, email, setEmail, password, setPassword } =
+    useAuthForm();
 
   const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!validateUsername(username) || !validatePassword(password)) {
+    if (
+      !validateUsername(username) ||
+      !validateEmail(email) ||
+      !validatePassword(password)
+    ) {
       return;
     }
 
-    const isRegistered = await registerUser(username, password);
+    const isRegistered = await registerUser(username, email, password);
 
     if (isRegistered) {
       router.push("/login");
@@ -59,6 +68,25 @@ export default function RegisterForm() {
           onChange={(event) => setUsername(event.target.value)}
         />
       </motion.div>
+
+      <motion.div className="mb-4" whileHover={{ scale: 1.05 }}>
+        <label
+          className="mb-2 block text-sm font-bold text-gray-700 dark:text-gray-200"
+          htmlFor="email"
+        >
+          Email
+        </label>
+        <input
+          className="focus:shadow-outline w-full appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none"
+          id="email"
+          type="email"
+          name="email"
+          placeholder="Enter your email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+        />
+      </motion.div>
+
       <motion.div className="relative mb-6" whileHover={{ scale: 1.05 }}>
         <label
           className="mb-2 block text-sm font-bold text-gray-700 dark:text-gray-200"

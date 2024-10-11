@@ -10,5 +10,7 @@ export default async function getSessionServer() {
     token: session?.user.accessToken,
     userId: session?.user.userId,
     username: session?.user.username,
+    email: session?.user.email,
+    isOAuth: session?.user.isOAuth,
   };
 }
