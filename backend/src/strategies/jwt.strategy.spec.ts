@@ -42,6 +42,10 @@ describe("JwtStrategy", () => {
       exp: 651651,
     };
     const result = jwtStrategy.validate(payload);
-    expect(result).toEqual({ sub: 123, username: "testUser" });
+    expect(result).toEqual({
+      sub: 123,
+      email: "admin@admin.com",
+      username: "testUser",
+    });
   });
 });

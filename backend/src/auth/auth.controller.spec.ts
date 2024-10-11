@@ -15,10 +15,12 @@ describe("AuthController", () => {
       accessToken: "asdX0.hF60cVqQ2LSkEA1dkwXUZpPLasd6b5DnL1lw",
       userId: 1,
       username: "admin",
+      email: "admin@admin.com",
     }),
     test: jest.fn().mockResolvedValue({
       sub: 1,
       username: "admin",
+      email: "admin@admin.com",
     }),
   };
 
@@ -42,7 +44,7 @@ describe("AuthController", () => {
   describe("signIn", () => {
     it("should return an object with accessToken, userId, and username", async () => {
       const authDto = {
-        username: "admin",
+        email: "admin",
         password: "password",
       };
 
@@ -52,6 +54,7 @@ describe("AuthController", () => {
         accessToken: "asdX0.hF60cVqQ2LSkEA1dkwXUZpPLasd6b5DnL1lw",
         userId: 1,
         username: "admin",
+        email: "admin@admin.com",
       });
     });
   });
@@ -61,12 +64,14 @@ describe("AuthController", () => {
       const response = controller.getProfile({
         user: {
           sub: 1,
+          email: "admin@admin.com",
           username: "admin",
         },
       } as ReqUser);
 
       expect(response).toEqual({
         sub: 1,
+        email: "admin@admin.com",
         username: "admin",
       });
     });

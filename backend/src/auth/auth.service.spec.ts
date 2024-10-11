@@ -1,3 +1,4 @@
+import { ConfigModule } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import { getModelToken } from "@nestjs/sequelize";
 import type { TestingModule } from "@nestjs/testing";
@@ -5,6 +6,8 @@ import { Test } from "@nestjs/testing";
 import { User } from "src/user/entities/user.entity";
 
 import { AuthService } from "./auth.service";
+import { GithubAuthService } from "./providers/github-auth.service";
+import { LocalAuthService } from "./providers/local-auth.service";
 
 describe("AuthService", () => {
   let service: AuthService;
@@ -14,6 +17,7 @@ describe("AuthService", () => {
     findOne: jest.fn().mockResolvedValue({
       id: 1,
       username: "admin",
+      email: "admin@admin.com",
       passwordIsValid: jest.fn(),
     }),
   };
@@ -25,12 +29,25 @@ describe("AuthService", () => {
           secret: "secret",
           signOptions: { expiresIn: "60s" },
         }),
+        ConfigModule,
       ],
       providers: [
-        AuthService,
         { provide: getModelToken(User), useValue: mockUserModel },
+        AuthService,
+        GithubAuthService,
+        LocalAuthService,
       ],
-    }).compile();
+    })
+      .overrideProvider(LocalAuthService)
+      .useValue({
+        signIn: jest.fn().mockResolvedValue({
+          accessToken: "accessToken",
+          userId: 1,
+          username: "admin",
+          email: "admin@admin.com",
+        }),
+      })
+      .compile();
 
     service = module.get<AuthService>(AuthService);
     userModel = module.get<typeof User>(getModelToken(User));
@@ -40,13 +57,30 @@ describe("AuthService", () => {
     expect(service).toBeDefined();
   });
 
-  describe("signIn", () => {
+  describe("signIn Local", () => {
     it("should throw UnauthorizedException if user does not exist", async () => {
       jest.spyOn(userModel, "findOne").mockResolvedValue(null);
 
       await expect(
         service.signIn({
-          username: "admin",
+          email: "admin",
+          password: "password",
+        }),
+      ).rejects.toThrow("User or password incorrect");
+    });
+
+    it("should throw UnauthorizedException if user cannot sign with email and password", async () => {
+      const mockUser = {
+        canSignWithEmailAndPassword: false,
+      };
+
+      jest
+        .spyOn(userModel, "findOne")
+        .mockResolvedValue(mockUser as unknown as User);
+
+      await expect(
+        service.signIn({
+          email: "admin",
           password: "password",
         }),
       ).rejects.toThrow("User or password incorrect");
@@ -63,7 +97,7 @@ describe("AuthService", () => {
 
       await expect(
         service.signIn({
-          username: "admin",
+          email: "admin@admin.com",
           password: "password",
         }),
       ).rejects.toThrow("User or password incorrect");
@@ -74,6 +108,7 @@ describe("AuthService", () => {
         id: 1,
         username: "admin",
         passwordIsValid: jest.fn().mockResolvedValue(true),
+        canSignWithEmailAndPassword: true,
       };
 
       jest
@@ -81,7 +116,7 @@ describe("AuthService", () => {
         .mockResolvedValue(mockUser as unknown as User);
 
       const response = await service.signIn({
-        username: "admin",
+        email: "admin@admin.com",
         password: "password",
       });
 
@@ -89,6 +124,7 @@ describe("AuthService", () => {
         accessToken: expect.any(String),
         userId: 1,
         username: "admin",
+        email: "admin@admin.com",
       });
     });
   });

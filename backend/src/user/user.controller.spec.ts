@@ -14,6 +14,7 @@ describe("UserController", () => {
   const userMock = {
     id: 1,
     username: "as",
+    email: "admin@admin.com",
     rings: [
       {
         id: 1,
@@ -80,6 +81,7 @@ describe("UserController", () => {
     it("create should return a user", async () => {
       const createUserDto = {
         username: "test",
+        email: "test@test.com",
         password: "test",
       };
       expect(await controller.create(createUserDto)).toEqual({
