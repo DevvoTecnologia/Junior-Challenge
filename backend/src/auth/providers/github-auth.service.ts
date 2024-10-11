@@ -1,6 +1,8 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { Cache, CACHE_MANAGER } from "@nestjs/cache-manager";
+import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/sequelize";
+import { cacheKeys } from "src/global/constants";
 import type { GithubReqUser, ReqUser } from "src/global/types";
 import { User } from "src/user/entities/user.entity";
 
@@ -12,6 +14,7 @@ export class GithubAuthService {
     @InjectModel(User)
     private readonly userModel: typeof User,
     private readonly jwtService: JwtService,
+    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
   ) {}
 
   async createNewUser(req: GithubReqUser): Promise<SignInResponse> {
@@ -37,6 +40,9 @@ export class GithubAuthService {
     };
 
     const accessToken = await this.jwtService.signAsync(payload);
+
+    // invalidate cache for users
+    await this.cacheManager.del(cacheKeys.users());
 
     return {
       accessToken: accessToken,

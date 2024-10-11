@@ -1,3 +1,4 @@
+import { CacheModule } from "@nestjs/cache-manager";
 import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
@@ -27,6 +28,9 @@ import { GithubAuthController } from "./controllers/github-auth.controller";
       inject: [ConfigService],
     }),
     PassportModule,
+    CacheModule.register({
+      ttl: 60000 * 10, // 10 minutes
+    }),
   ],
   controllers: [AuthController, GithubAuthController],
   providers: [
