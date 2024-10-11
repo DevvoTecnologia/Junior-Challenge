@@ -64,7 +64,7 @@ export class UserService extends UserGlobalValidations {
     const cachedUser = await this.cacheManager.get<User | "NotFound">(
       cacheKeys.user(id),
     );
-    const notFoundMsg = `User with id ${id} not found`;
+    const notFoundMsg = `User not found`;
 
     if (cachedUser) {
       if (cachedUser === "NotFound") {
@@ -87,11 +87,11 @@ export class UserService extends UserGlobalValidations {
     return user;
   }
 
-  async findOne(username: CreateUserDto["username"]): Promise<User> {
-    const notFoundMsg = `User with username ${username} not found`;
+  async findOne(email: CreateUserDto["email"]): Promise<User> {
+    const notFoundMsg = `User with email ${email} not found`;
 
     const user = await this.userModel.findOne({
-      where: { username },
+      where: { email },
       attributes: this.atributesToShow,
       include: this.includeAtributes,
     });
@@ -149,7 +149,7 @@ export class UserService extends UserGlobalValidations {
     const userToUpdate = await this.userModel.findByPk(id);
 
     if (!userToUpdate) {
-      throw new NotFoundException(`User with id ${id} not found`);
+      throw new NotFoundException(`User not found`);
     }
 
     if (password) {
@@ -172,7 +172,7 @@ export class UserService extends UserGlobalValidations {
     try {
       await userToUpdate.save();
     } catch {
-      throw new BadRequestException("Username already exists");
+      throw new BadRequestException("User already exists");
     }
 
     // Invalidate cache
@@ -212,7 +212,7 @@ export class UserService extends UserGlobalValidations {
     });
 
     if (!user) {
-      throw new NotFoundException(`User with id ${id} not found`);
+      throw new NotFoundException(`User not found`);
     }
 
     await this.validatePassword(user, password);
