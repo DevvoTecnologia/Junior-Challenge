@@ -12,9 +12,7 @@ describe("AuthModule", () => {
   beforeAll(async () => {
     module = await Test.createTestingModule({
       imports: [
-        ConfigModule.forRoot({
-          load: [envTest],
-        }),
+        ConfigModule.forFeature(envTest),
         AuthModule,
         SequelizeModule.forRoot({ dialect: "sqlite" }),
       ],

@@ -1,6 +1,5 @@
 import { CacheModule } from "@nestjs/cache-manager";
 import { BadRequestException, NotFoundException } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
 import { getModelToken } from "@nestjs/sequelize";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
@@ -27,7 +26,6 @@ describe("UserService", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        ConfigModule,
         CacheModule.register({
           ttl: 60000 * 10, // 10 minutes
         }),
@@ -297,6 +295,7 @@ describe("UserService", () => {
       const user = {
         id: 1,
         username: "test",
+        email: "test@test.com",
         password: "test",
         save: jest.fn(),
         passwordIsValid: jest.fn().mockResolvedValue(true),
@@ -326,6 +325,7 @@ describe("UserService", () => {
       const user = {
         id: 1,
         username: "test",
+        email: "test@test.com",
         password: "test",
         save: jest.fn(),
         passwordIsValid: jest.fn().mockResolvedValue(true),
@@ -436,6 +436,7 @@ describe("UserService", () => {
       const user = {
         id: 1,
         username: "test",
+        email: "test@test.com",
         password: "test",
         save: jest.fn(),
         passwordIsValid: jest.fn().mockResolvedValue(true),
@@ -467,6 +468,7 @@ describe("UserService", () => {
       const user = {
         id: 1,
         username: "test",
+        email: "test@test.com",
         password: "test",
         save: jest.fn(),
         passwordIsValid: jest.fn().mockResolvedValue(true),
@@ -487,6 +489,7 @@ describe("UserService", () => {
       ).toEqual({
         id: 1,
         username: "test",
+        email: "test@test.com",
       });
 
       expect(findByPkSpyOn).toHaveBeenCalledWith(1);
@@ -497,6 +500,7 @@ describe("UserService", () => {
       const user = {
         id: 1,
         username: "test",
+        email: "test@test.com",
         password: "test",
         save: jest.fn(),
         passwordIsValid: jest.fn().mockResolvedValue(true),
@@ -517,6 +521,7 @@ describe("UserService", () => {
       ).toEqual({
         id: 1,
         username: "test",
+        email: "test@test.com",
       });
 
       expect(findByPkSpyOn).toHaveBeenCalledWith(1);
@@ -527,6 +532,7 @@ describe("UserService", () => {
       const user = {
         id: 1,
         username: "test",
+        email: "test@test.com",
         password: "test",
         save: jest.fn(),
         passwordIsValid: jest.fn().mockResolvedValue(true),
@@ -547,6 +553,7 @@ describe("UserService", () => {
       ).toEqual({
         id: 1,
         username: "test",
+        email: "test@test.com",
       });
 
       expect(findByPkSpyOn).toHaveBeenCalledWith(1);
@@ -557,6 +564,7 @@ describe("UserService", () => {
       const user = {
         id: 1,
         username: "test",
+        email: "test@test.com",
         password: "test",
         save: jest.fn(),
         passwordIsValid: jest.fn().mockResolvedValue(true),
@@ -578,6 +586,7 @@ describe("UserService", () => {
       ).toEqual({
         id: 1,
         username: "test",
+        email: "test@test.com",
       });
 
       expect(delSpyOn).toHaveBeenCalledTimes(2);

@@ -1,5 +1,3 @@
-import { ConfigModule } from "@nestjs/config";
-import { JwtModule } from "@nestjs/jwt";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
 import type { ReqUser } from "src/global/types";
@@ -50,7 +48,6 @@ describe("UserController", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [JwtModule, ConfigModule],
       controllers: [UserController],
       providers: [UserService],
     })

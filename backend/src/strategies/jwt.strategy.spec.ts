@@ -1,6 +1,7 @@
-import { ConfigService } from "@nestjs/config";
+import { ConfigModule } from "@nestjs/config";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
+import envTest from "src/configs/env.test";
 import type { JwtPayload } from "src/global/types";
 
 import { JwtStrategy } from "./jwt.strategy";
@@ -10,20 +11,8 @@ describe("JwtStrategy", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        JwtStrategy,
-        {
-          provide: ConfigService,
-          useValue: {
-            get: jest.fn((key: string) => {
-              if (key === "token.secret") {
-                return "testSecret";
-              }
-              return null;
-            }),
-          },
-        },
-      ],
+      imports: [ConfigModule.forFeature(envTest)],
+      providers: [JwtStrategy],
     }).compile();
 
     jwtStrategy = module.get<JwtStrategy>(JwtStrategy);
@@ -41,7 +30,9 @@ describe("JwtStrategy", () => {
       iat: 651651,
       exp: 651651,
     };
+
     const result = jwtStrategy.validate(payload);
+
     expect(result).toEqual({
       sub: 123,
       email: "admin@admin.com",

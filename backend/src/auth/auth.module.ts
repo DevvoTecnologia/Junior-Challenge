@@ -12,6 +12,7 @@ import { GithubAuthService } from "./providers/github-auth.service";
 import { LocalAuthService } from "./providers/local-auth.service";
 import { GithubStrategy } from "../strategies/github.strategy";
 import { JwtStrategy } from "../strategies/jwt.strategy";
+import { GithubAuthController } from "./controllers/github-auth.controller";
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { JwtStrategy } from "../strategies/jwt.strategy";
     }),
     PassportModule,
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, GithubAuthController],
   providers: [
     AuthService,
     JwtStrategy,

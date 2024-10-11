@@ -3,6 +3,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { getModelToken } from "@nestjs/sequelize";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
+import type { GithubReqUser } from "src/global/types";
 import { User } from "src/user/entities/user.entity";
 
 import { AuthService } from "./auth.service";
@@ -19,6 +20,30 @@ describe("AuthService", () => {
       username: "admin",
       email: "admin@admin.com",
       passwordIsValid: jest.fn(),
+    }),
+  };
+
+  const mockLocalAuthService = {
+    signIn: jest.fn().mockResolvedValue({
+      accessToken: "accessToken",
+      userId: 1,
+      username: "admin",
+      email: "admin@admin.com",
+    }),
+  };
+
+  const mockGithubAuthService = {
+    createNewUser: jest.fn().mockResolvedValue({
+      accessToken: "accessToken",
+      userId: 1,
+      username: "admin",
+      email: null,
+    }),
+    signIn: jest.fn().mockResolvedValue({
+      accessToken: "accessToken",
+      userId: 1,
+      username: "admin",
+      email: null,
     }),
   };
 
@@ -39,14 +64,9 @@ describe("AuthService", () => {
       ],
     })
       .overrideProvider(LocalAuthService)
-      .useValue({
-        signIn: jest.fn().mockResolvedValue({
-          accessToken: "accessToken",
-          userId: 1,
-          username: "admin",
-          email: "admin@admin.com",
-        }),
-      })
+      .useValue(mockLocalAuthService)
+      .overrideProvider(GithubAuthService)
+      .useValue(mockGithubAuthService)
       .compile();
 
     service = module.get<AuthService>(AuthService);
@@ -107,6 +127,7 @@ describe("AuthService", () => {
       const mockUser = {
         id: 1,
         username: "admin",
+        email: "admin@admin.com",
         passwordIsValid: jest.fn().mockResolvedValue(true),
         canSignWithEmailAndPassword: true,
       };
@@ -125,6 +146,54 @@ describe("AuthService", () => {
         userId: 1,
         username: "admin",
         email: "admin@admin.com",
+      });
+    });
+  });
+
+  describe("signInWithGithub", () => {
+    it("should return an new user if user does not exist", async () => {
+      jest.spyOn(userModel, "findOne").mockResolvedValue(null);
+
+      const response = await service.signInWithGithub({
+        user: {
+          githubUserId: "awdawd",
+          email: undefined,
+          username: "admin",
+        },
+      } as GithubReqUser);
+
+      expect(response).toEqual({
+        accessToken: expect.any(String),
+        userId: 1,
+        username: "admin",
+        email: null,
+      });
+    });
+
+    it("should return an object with accessToken, userId and username", async () => {
+      const mockUser = {
+        id: 1,
+        username: "admin",
+        email: undefined,
+      };
+
+      jest
+        .spyOn(userModel, "findOne")
+        .mockResolvedValue(mockUser as unknown as User);
+
+      const response = await service.signInWithGithub({
+        user: {
+          githubUserId: "1231",
+          email: undefined,
+          username: "admin",
+        },
+      } as GithubReqUser);
+
+      expect(response).toEqual({
+        accessToken: expect.any(String),
+        userId: 1,
+        username: "admin",
+        email: null,
       });
     });
   });

@@ -14,11 +14,11 @@ export class GithubStrategy extends PassportStrategy(Strategy) {
     } as StrategyOptions);
   }
 
-  async validate(
+  validate(
     _accessToken: string,
     _refreshToken: string,
     profile: Profile,
-  ): Promise<GithubReqUser["user"]> {
+  ): GithubReqUser["user"] {
     const { username, id, emails } = profile;
 
     const email = emails?.[0].value;
