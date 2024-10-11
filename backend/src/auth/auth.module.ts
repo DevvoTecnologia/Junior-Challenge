@@ -8,6 +8,8 @@ import { User } from "src/user/entities/user.entity";
 
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
+import { GithubAuthService } from "./github-auth.service";
+import { LocalAuthService } from "./local-auth.service";
 import { GithubStrategy } from "../strategies/github.strategy";
 import { JwtStrategy } from "../strategies/jwt.strategy";
 
@@ -26,6 +28,12 @@ import { JwtStrategy } from "../strategies/jwt.strategy";
     PassportModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, GithubStrategy],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    GithubStrategy,
+    LocalAuthService,
+    GithubAuthService,
+  ],
 })
 export class AuthModule {}

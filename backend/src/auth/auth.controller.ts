@@ -5,7 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  Request,
+  Req,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -17,7 +17,7 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 import { errorResponsePatternStructure } from "src/global/swagger.config";
-import type { ReqUser } from "src/global/types";
+import type { GithubReqUser, ReqUser } from "src/global/types";
 
 import { AuthService } from "./auth.service";
 import { AuthDto } from "./dto/auth.dto";
@@ -49,9 +49,9 @@ export class AuthController {
   @Get("github/callback")
   @UseGuards(GithubAuthGuard)
   async githubSignInCallback(
-    @Request() req: ReqUser,
-  ): Promise<ReqUser["user"]> {
-    return req.user;
+    @Req() req: GithubReqUser,
+  ): Promise<SignInResponse> {
+    return await this.authService.signInWithGithub(req);
   }
 
   // 💡 This route is protected by the AuthGuard
@@ -60,7 +60,7 @@ export class AuthController {
   @ApiBearerAuth("defaultBearerAuth")
   @ApiOkResponse(getProfileApiOkResponse)
   @ApiResponse(errorResponsePatternStructure)
-  getProfile(@Request() req: ReqUser): ReqUser["user"] {
+  getProfile(@Req() req: ReqUser): ReqUser["user"] {
     return req.user;
   }
 }

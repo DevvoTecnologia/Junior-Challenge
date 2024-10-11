@@ -39,8 +39,11 @@ export class User extends Model {
 
   @BeforeSave({ name: "hashPassword" })
   static async hashPassword(instance: User): Promise<void> {
-    const newPassword = await bcrypt.hash(instance.password, 8);
-    instance.passwordHash = newPassword;
+    // Only hash the password if it has been set
+    if (instance.password) {
+      const newPassword = await bcrypt.hash(instance.password, 8);
+      instance.passwordHash = newPassword;
+    }
   }
 
   async passwordIsValid(password: string): Promise<boolean> {

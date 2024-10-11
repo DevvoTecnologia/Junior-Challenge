@@ -1,10 +1,11 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/sequelize";
-import { ReqUser } from "src/global/types";
+import type { GithubReqUser } from "src/global/types";
 import { User } from "src/user/entities/user.entity";
 
 import { AuthDto } from "./dto/auth.dto";
+import { GithubAuthService } from "./github-auth.service";
+import { LocalAuthService } from "./local-auth.service";
 import type { SignInResponse } from "./types/SignIn";
 
 @Injectable()
@@ -12,7 +13,8 @@ export class AuthService {
   constructor(
     @InjectModel(User)
     private readonly userModel: typeof User,
-    private readonly jwtService: JwtService,
+    private readonly githubAuthService: GithubAuthService,
+    private readonly localAuthService: LocalAuthService,
   ) {}
 
   async signIn(authDto: AuthDto): Promise<SignInResponse> {
@@ -28,50 +30,20 @@ export class AuthService {
       throw new UnauthorizedException("User or password incorrect");
     }
 
-    const payload: ReqUser["user"] = {
-      sub: user.id,
-      username: user.username,
-      email: user.email,
-    };
-
-    const accessToken = await this.jwtService.signAsync(payload);
-
-    return {
-      accessToken: accessToken,
-      userId: user.id,
-      username: user.username,
-      email: user.email,
-    };
+    return await this.localAuthService.signIn(user);
   }
 
-  async signInWithGithub({
-    username,
-    githubUserId,
-  }: {
-    username: string;
-    githubUserId: string;
-  }): Promise<SignInResponse> {
+  async signInWithGithub(req: GithubReqUser): Promise<SignInResponse> {
+    const { githubUserId } = req.user;
+
     const user = await this.userModel.findOne({
-      where: { username, githubUserId },
+      where: { githubUserId },
     });
 
     if (!user) {
-      throw new UnauthorizedException("User not found");
+      return await this.githubAuthService.createNewUser(req);
     }
 
-    const payload: ReqUser["user"] = {
-      sub: user.id,
-      username: user.username,
-      email: user.email,
-    };
-
-    const accessToken = await this.jwtService.signAsync(payload);
-
-    return {
-      accessToken: accessToken,
-      userId: user.id,
-      username: user.username,
-      email: user.email,
-    };
+    return await this.githubAuthService.signIn(user, req);
   }
 }

@@ -1,14 +1,9 @@
 import { ConfigService } from "@nestjs/config";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
-import type { ReqUser } from "src/global/types";
+import type { JwtPayload } from "src/global/types";
 
 import { JwtStrategy } from "./jwt.strategy";
-
-type JwtPayload = ReqUser["user"] & {
-  iat: number;
-  exp: number;
-};
 
 describe("JwtStrategy", () => {
   let jwtStrategy: JwtStrategy;
