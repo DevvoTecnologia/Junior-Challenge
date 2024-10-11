@@ -17,7 +17,7 @@ export async function handleLoginOAuthServer() {
   const userId = cookies().get("userId")?.value;
   const fromServer = cookies().get("fromServer")?.value;
 
-  if (fromServer) {
+  if (fromServer && JSON.parse(fromServer) === true) {
     await signIn("Github", {
       accessToken,
       username,

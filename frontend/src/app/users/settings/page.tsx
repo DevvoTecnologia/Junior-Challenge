@@ -1,10 +1,11 @@
 import * as motion from "framer-motion/client";
 
 import SettingsForm from "@/components/form/Settings";
+import SettingsOAuthForm from "@/components/form/SettingsOAuth";
 import getSessionServer from "@/lib/getSessionServer";
 
 export default async function UsersSettingsPage() {
-  const { token, userId, username } = await getSessionServer();
+  const { token, userId, username, isOAuth } = await getSessionServer();
 
   return (
     <motion.div
@@ -32,7 +33,19 @@ export default async function UsersSettingsPage() {
         Settings
       </motion.h2>
 
-      <SettingsForm usernameSession={username} userId={userId} token={token} />
+      {isOAuth ? (
+        <SettingsOAuthForm
+          usernameSession={username}
+          userId={userId}
+          token={token}
+        />
+      ) : (
+        <SettingsForm
+          usernameSession={username}
+          userId={userId}
+          token={token}
+        />
+      )}
     </motion.div>
   );
 }

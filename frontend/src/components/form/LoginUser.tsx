@@ -109,13 +109,16 @@ export default function LoginForm() {
           Sign in
         </motion.button>
       )}
-      <motion.button
-        whileHover={{ scale: 1.005 }}
-        whileTap={{ scale: 0.95 }}
-        className="mt-6 hover:underline focus:outline-none"
-      >
-        <Link href="/register">Don&apos;t have an account? Register</Link>
-      </motion.button>
+
+      {!isPending && (
+        <motion.button
+          whileHover={{ scale: 1.005 }}
+          whileTap={{ scale: 0.95 }}
+          className="mt-6 hover:underline focus:outline-none"
+        >
+          <Link href="/register">Don&apos;t have an account? Register</Link>
+        </motion.button>
+      )}
 
       <div className="mt-6 flex items-center justify-center" />
 
