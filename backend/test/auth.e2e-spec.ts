@@ -25,7 +25,7 @@ describe("AuthController (e2e)", () => {
     it("should login with valid credentials", () => {
       return request(app.getHttpServer())
         .post("/auth/login")
-        .send({ username: "admin", password: "admin" })
+        .send({ email: "admin@admin.com", password: "admin" })
         .expect(HttpStatus.OK)
         .expect((res) => {
           expect(res.body).toHaveProperty("accessToken");
@@ -35,7 +35,7 @@ describe("AuthController (e2e)", () => {
     it("should return unauthorized with invalid credentials", () => {
       return request(app.getHttpServer())
         .post("/auth/login")
-        .send({ username: "admin", password: "wrong" })
+        .send({ email: "admin@admin.com", password: "wrong" })
         .expect(HttpStatus.UNAUTHORIZED);
     });
 
@@ -48,28 +48,35 @@ describe("AuthController (e2e)", () => {
     it("should return unauthorized with empty credentials", () => {
       return request(app.getHttpServer())
         .post("/auth/login")
-        .send({ username: "", password: "" })
+        .send({ email: "", password: "" })
         .expect(HttpStatus.BAD_REQUEST);
     });
 
-    it("should return unauthorized with empty username", () => {
+    it("should return unauthorized with empty email", () => {
       return request(app.getHttpServer())
         .post("/auth/login")
-        .send({ username: "", password: "password" })
+        .send({ email: "", password: "password" })
         .expect(HttpStatus.BAD_REQUEST);
     });
 
     it("should return unauthorized with empty password", () => {
       return request(app.getHttpServer())
         .post("/auth/login")
-        .send({ username: "admin", password: "" })
+        .send({ email: "admin@admin.com", password: "" })
         .expect(HttpStatus.BAD_REQUEST);
     });
 
-    it("should return BadRequest when user not found", () => {
+    it("should return BadRequest when isNotEmail", () => {
       return request(app.getHttpServer())
         .post("/auth/login")
-        .send({ username: "notfound", password: "password" })
+        .send({ email: "notfound", password: "password" })
+        .expect(HttpStatus.BAD_REQUEST);
+    });
+
+    it("should return unauthorized when user not found", () => {
+      return request(app.getHttpServer())
+        .post("/auth/login")
+        .send({ email: "adminasdasdasdasdasd@aa.com", password: "password" })
         .expect(HttpStatus.UNAUTHORIZED);
     });
   });

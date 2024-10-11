@@ -31,6 +31,7 @@ describe("UserController (e2e)", () => {
           res.body.forEach((user: unknown) => {
             expect(user).toHaveProperty("id");
             expect(user).toHaveProperty("username");
+            expect(user).toHaveProperty("email");
             expect(user).toHaveProperty("rings");
           });
         });
@@ -45,6 +46,7 @@ describe("UserController (e2e)", () => {
         .expect((res) => {
           expect(res.body).toHaveProperty("id");
           expect(res.body).toHaveProperty("username");
+          expect(res.body).toHaveProperty("email");
           expect(res.body).toHaveProperty("rings");
         });
     });

@@ -60,7 +60,7 @@ For e2e testing, remember to check if the information passed exists in the datab
 Make sure you have a test user
 
 id: 1
-username: admin
+email: admin@admin.com
 password: admin
 for supertest to work properly, OR add a user and modify the tests
 
