@@ -20,7 +20,11 @@ export class AuthService {
       where: { email: authDto.email },
     });
 
-    if (!user || !(await user.passwordIsValid(authDto.password))) {
+    if (
+      !user ||
+      !user.canSignWithEmailAndPassword ||
+      !(await user.passwordIsValid(authDto.password))
+    ) {
       throw new UnauthorizedException("User or password incorrect");
     }
 

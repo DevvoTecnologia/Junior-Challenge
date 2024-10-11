@@ -29,6 +29,11 @@ export class User extends Model {
   })
   public password!: string;
 
+  @Column({
+    allowNull: false,
+  })
+  public canSignWithEmailAndPassword!: boolean;
+
   @Column
   public githubUserId!: string;
 

@@ -111,7 +111,12 @@ export class UserService extends UserGlobalValidations {
     let newUser: User;
 
     try {
-      newUser = await this.userModel.create({ username, email, password });
+      newUser = await this.userModel.create({
+        username,
+        email,
+        password,
+        canSignWithEmailAndPassword: true,
+      });
     } catch {
       throw new BadRequestException("User already exists");
     }
