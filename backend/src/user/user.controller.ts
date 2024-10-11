@@ -58,7 +58,7 @@ export class UserController {
   @ApiResponse(errorResponsePatternStructure)
   async create(
     @Body(ValidationPipe) createUserDto: CreateUserDto,
-  ): Promise<Pick<User, "id" | "username">> {
+  ): Promise<Pick<User, "id" | "username" | "email">> {
     const user = await this.userService.create(createUserDto);
     return user;
   }
@@ -73,7 +73,7 @@ export class UserController {
     @Body(ValidationPipe) updateUserDto: UpdateUserDto,
     @Req()
     req: ReqUser,
-  ): Promise<Pick<User, "id" | "username">> {
+  ): Promise<Pick<User, "id" | "username" | "email">> {
     const user = await this.userService.update(id, updateUserDto, req);
     return user;
   }

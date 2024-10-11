@@ -20,7 +20,7 @@ import { User } from "./entities/user.entity";
 @Injectable()
 export class UserService extends UserGlobalValidations {
   private readonly logger = new Logger(UserService.name);
-  private readonly atributesToShow = ["id", "username"];
+  private readonly atributesToShow = ["id", "username", "email"];
   private readonly includeAtributes = [
     {
       model: Ring,
@@ -103,15 +103,17 @@ export class UserService extends UserGlobalValidations {
     return user;
   }
 
-  async create(user: CreateUserDto): Promise<Pick<User, "id" | "username">> {
-    const { username, password } = user;
+  async create(
+    user: CreateUserDto,
+  ): Promise<Pick<User, "id" | "username" | "email">> {
+    const { username, email, password } = user;
 
     let newUser: User;
 
     try {
-      newUser = await this.userModel.create({ username, password });
+      newUser = await this.userModel.create({ username, email, password });
     } catch {
-      throw new BadRequestException("Username already exists");
+      throw new BadRequestException("User already exists");
     }
 
     // Invalidate cache
@@ -120,6 +122,7 @@ export class UserService extends UserGlobalValidations {
     return {
       id: newUser.id,
       username: newUser.username,
+      email: newUser.email,
     };
   }
 
@@ -127,8 +130,8 @@ export class UserService extends UserGlobalValidations {
     id: number,
     user: UpdateUserDto,
     req: ReqUser,
-  ): Promise<Pick<User, "id" | "username">> {
-    const { username, password, newPassword } = user;
+  ): Promise<Pick<User, "id" | "username" | "email">> {
+    const { username, email, password, newPassword } = user;
     const { sub } = req.user;
 
     // Check if user is trying to update his own data
@@ -159,6 +162,7 @@ export class UserService extends UserGlobalValidations {
     }
 
     userToUpdate.username = username || userToUpdate.username; // nosonar
+    userToUpdate.email = email || userToUpdate.email; // nosonar
 
     try {
       await userToUpdate.save();
@@ -173,6 +177,7 @@ export class UserService extends UserGlobalValidations {
     return {
       id: userToUpdate.id,
       username: userToUpdate.username,
+      email: userToUpdate.email,
     };
   }
 

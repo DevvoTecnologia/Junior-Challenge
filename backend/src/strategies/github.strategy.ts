@@ -17,7 +17,12 @@ export class GithubStrategy extends PassportStrategy(Strategy) {
     accessToken: string,
     refreshToken: string,
     profile: Profile,
-  ): Promise<Profile> {
-    return profile;
+  ): Promise<{
+    username: string | undefined;
+    githubUserId: string;
+  }> {
+    const { username, id } = profile;
+
+    return { username, githubUserId: id };
   }
 }

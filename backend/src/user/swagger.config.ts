@@ -3,6 +3,7 @@ import type { ApiResponseOptions } from "@nestjs/swagger";
 const userResponseGet = {
   id: 1,
   username: "admin",
+  email: "admin@admin.com",
   rings: [
     {
       id: 4,
@@ -19,6 +20,7 @@ const userResponseGet = {
 const userResponseCreateOrUpdate = {
   id: 1,
   username: "admin",
+  email: "admin@admin.com",
 };
 
 export const findAllApiOkResponse: ApiResponseOptions = {

@@ -4,6 +4,7 @@ const authResponse = {
   accessToken: "TOKEN_STRING",
   userId: 1,
   username: "admin",
+  email: "admin@admin.com",
 };
 
 export const signInApiOkResponse: ApiResponseOptions = {
@@ -14,5 +15,6 @@ export const getProfileApiOkResponse: ApiResponseOptions = {
   example: {
     sub: 1,
     username: "admin",
+    email: "admin@admin.com",
   },
 };

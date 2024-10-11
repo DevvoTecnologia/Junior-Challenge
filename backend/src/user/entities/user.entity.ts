@@ -4,6 +4,7 @@ import {
   Column,
   DataType,
   HasMany,
+  IsEmail,
   Model,
   Table,
 } from "sequelize-typescript";
@@ -11,10 +12,14 @@ import { Ring } from "src/ring/entities/ring.entity";
 
 @Table
 export class User extends Model {
+  @Column
+  public username!: string;
+
+  @IsEmail
   @Column({
     unique: true,
   })
-  public username!: string;
+  public email!: string;
 
   @Column
   public passwordHash!: string;
@@ -23,6 +28,9 @@ export class User extends Model {
     type: DataType.VIRTUAL,
   })
   public password!: string;
+
+  @Column
+  public githubUserId!: string;
 
   @BeforeSave({ name: "hashPassword" })
   static async hashPassword(instance: User): Promise<void> {
