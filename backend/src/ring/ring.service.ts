@@ -95,6 +95,9 @@ export class RingService extends RingGlobalValidations {
   ): Promise<Ring> {
     const { name, power, owner, forgedBy } = createRingDto;
 
+    // Validate if all fields are filled
+    this.fieldsIsEmptyTrimmed({ name, power, owner, forgedBy });
+
     // Validate image type
     await this.validateImageType(file.buffer);
 
@@ -147,6 +150,9 @@ export class RingService extends RingGlobalValidations {
     req: ReqUser,
   ): Promise<Ring> {
     const { name, power, owner, forgedBy } = updateRingDto;
+
+    // Validate if all fields are filled
+    this.updateFieldsIsEmptyTrimmed({ name, power, owner, forgedBy });
 
     // Invalidate if forgedBy is not a valid ring
     if (forgedBy && !this.isValidRing(forgedBy)) {

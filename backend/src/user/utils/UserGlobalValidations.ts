@@ -19,12 +19,14 @@ export default class UserGlobalValidations {
     user: User,
     password: string,
   ): Promise<void> {
+    const msg = "Invalid password";
+
     try {
-      if (!(await user.passwordIsValid(password))) {
-        throw new BadRequestException("Invalid password");
+      if (!password.trim() || !(await user.passwordIsValid(password))) {
+        throw new BadRequestException(msg);
       }
     } catch {
-      throw new BadRequestException("Invalid password");
+      throw new BadRequestException(msg);
     }
   }
 
@@ -32,6 +34,12 @@ export default class UserGlobalValidations {
     newPassword: string,
     oldPassword: string,
   ): void {
+    if (!newPassword.trim()) {
+      throw new BadRequestException(
+        "New password when provided can not be empty",
+      );
+    }
+
     if (newPassword.length < 4) {
       throw new BadRequestException(
         "Password must be at least 4 characters long",

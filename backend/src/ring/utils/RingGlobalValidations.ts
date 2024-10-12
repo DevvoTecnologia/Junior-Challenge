@@ -57,6 +57,50 @@ export default class RingGlobalValidations {
     }
   }
 
+  protected fieldsIsEmptyTrimmed({
+    name,
+    power,
+    owner,
+    forgedBy,
+  }: {
+    name: string;
+    power: string;
+    owner: string;
+    forgedBy: string;
+  }): void {
+    if (!name.trim() || !power.trim() || !owner.trim() || !forgedBy.trim()) {
+      throw new BadRequestException("All fields are required");
+    }
+  }
+
+  protected updateFieldsIsEmptyTrimmed({
+    name,
+    power,
+    owner,
+    forgedBy,
+  }: {
+    name?: string;
+    power?: string;
+    owner?: string;
+    forgedBy?: string;
+  }): void {
+    if (name && !name.trim()) {
+      throw new BadRequestException("Name if provided must not be empty");
+    }
+
+    if (power && !power.trim()) {
+      throw new BadRequestException("Power if provided must not be empty");
+    }
+
+    if (owner && !owner.trim()) {
+      throw new BadRequestException("Owner if provided must not be empty");
+    }
+
+    if (forgedBy && !forgedBy.trim()) {
+      throw new BadRequestException("ForgedBy if provided must not be empty");
+    }
+  }
+
   protected async validateRingCreation(
     ringModel: typeof Ring,
     forgedBy: string,

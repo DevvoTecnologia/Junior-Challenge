@@ -185,6 +185,20 @@ describe("RingService", () => {
   });
 
   describe("create", () => {
+    it("should throw BadRequestEx if all fields are not filled", async () => {
+      const createRingDto = {
+        name: "  ",
+        power: "The ring of Nenya is set with a white stone.",
+        owner: "Galadriel",
+        forgedBy: "Elfos",
+      };
+
+      await expect(
+        service.create(createRingDto as CreateRingDto, imageMock, {
+          user: { sub: 4 },
+        } as ReqUser),
+      ).rejects.toThrow(new BadRequestException("All fields are required"));
+    });
     it("should throw BadRequestEx if is not a valid forgedBy ring", async () => {
       const createRingDto = {
         name: "Nenya, the Ring of Water",
@@ -261,6 +275,76 @@ describe("RingService", () => {
   });
 
   describe("update", () => {
+    describe("provide but empty fields", () => {
+      it("should throw BadRequestEx if the name provided is empty", async () => {
+        const updateRingDto = {
+          name: "  ",
+          power: "The ring of",
+          owner: "Galadriel",
+          forgedBy: "Elfos",
+        };
+
+        await expect(
+          service.update(7, updateRingDto as UpdateRingDto, imageMock, {
+            user: { sub: 4 },
+          } as ReqUser),
+        ).rejects.toThrow(
+          new BadRequestException("Name if provided must not be empty"),
+        );
+      });
+
+      it("should throw BadRequestEx if the power provided is empty", async () => {
+        const updateRingDto = {
+          name: "Nenya, the Ring of Water",
+          power: "  ",
+          owner: "Galadriel",
+          forgedBy: "Elfos",
+        };
+
+        await expect(
+          service.update(7, updateRingDto as UpdateRingDto, imageMock, {
+            user: { sub: 4 },
+          } as ReqUser),
+        ).rejects.toThrow(
+          new BadRequestException("Power if provided must not be empty"),
+        );
+      });
+
+      it("should throw BadRequestEx if the owner provided is empty", async () => {
+        const updateRingDto = {
+          name: "Nenya, the Ring of Water",
+          power: "The ring of Nenya is set with a white stone.",
+          owner: "  ",
+          forgedBy: "Elfos",
+        };
+
+        await expect(
+          service.update(7, updateRingDto as UpdateRingDto, imageMock, {
+            user: { sub: 4 },
+          } as ReqUser),
+        ).rejects.toThrow(
+          new BadRequestException("Owner if provided must not be empty"),
+        );
+      });
+
+      it("should throw BadRequestEx if the forgedBy provided is empty", async () => {
+        const updateRingDto = {
+          name: "Nenya, the Ring of Water",
+          power: "The ring of Nenya is set with a white stone.",
+          owner: "Galadriel",
+          forgedBy: "  ",
+        };
+
+        await expect(
+          service.update(7, updateRingDto as UpdateRingDto, imageMock, {
+            user: { sub: 4 },
+          } as ReqUser),
+        ).rejects.toThrow(
+          new BadRequestException("ForgedBy if provided must not be empty"),
+        );
+      });
+    });
+
     it("should throw BadRequestEx if is not a valid forgedBy ring", async () => {
       const updateRingDto = {
         name: "Nenya, the Ring of Water",

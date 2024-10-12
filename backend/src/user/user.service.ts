@@ -108,6 +108,10 @@ export class UserService extends UserGlobalValidations {
   ): Promise<Pick<User, "id" | "username" | "email">> {
     const { username, email, password } = user;
 
+    if (!password.trim()) {
+      throw new BadRequestException("Password can not be empty");
+    }
+
     let newUser: User;
 
     try {

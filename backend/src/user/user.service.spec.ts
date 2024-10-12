@@ -291,6 +291,16 @@ describe("UserService", () => {
       ).rejects.toThrow(new NotFoundException("User not found"));
     });
 
+    it("should throw an BadRequestEx if password is provided but !password.trim()", async () => {
+      await expect(
+        service.create({
+          username: "test",
+          email: "test@test.com",
+          password: "   ",
+        } as User),
+      ).rejects.toThrow(new BadRequestException("Password can not be empty"));
+    });
+
     it("should throw an BadRequestEx if new password.length < 4", async () => {
       const user = {
         id: 1,
@@ -380,6 +390,31 @@ describe("UserService", () => {
 
       expect(findByPkSpyOn).toHaveBeenCalledWith(1);
       expect(user.save).toHaveBeenCalled();
+    });
+
+    it("should throw an BadRequestEx if new password.trim() is empty", async () => {
+      const user = {
+        id: 1,
+        username: "test",
+        email: "admin@admin.com",
+        password: "test",
+        save: jest.fn(),
+        passwordIsValid: jest.fn().mockResolvedValue(true),
+      } as unknown as User;
+
+      jest.spyOn(userModel, "findByPk").mockResolvedValue(user);
+
+      await expect(
+        service.update(
+          1,
+          { username: "test", password: "test", newPassword: "    " },
+          {
+            user: { sub: 1 },
+          } as ReqUser,
+        ),
+      ).rejects.toThrow(
+        new BadRequestException("New password when provided can not be empty"),
+      );
     });
 
     it("should throw an BadRequestException if the password is passed and is invalid", async () => {
