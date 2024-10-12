@@ -42,7 +42,7 @@ export default function UsersFound({
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.4 }}
             >
-              {user.username
+              {user.username.trim()
                 ? user.username.charAt(0).toUpperCase() + user.username.slice(1)
                 : "User"}
             </motion.h2>

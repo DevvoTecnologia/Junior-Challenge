@@ -36,11 +36,13 @@ export default async function UserProfilePage({
           UserRings={response.data.rings}
           isMyProfile={isMyProfile}
           token={token}
-          username={response.data.username}
+          username={
+            response.data.username.trim() || "User" // nosonar
+          }
         />
       ) : (
         <NoRingsFound
-          username={response?.data.username}
+          username={response?.data.username.trim() || "User"} // nosonar
           isMyProfile={isMyProfile}
         />
       )}
