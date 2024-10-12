@@ -34,25 +34,15 @@ export class GithubAuthController {
     const clientUrl = this.configService.get("allowedOrigin");
     const nodeEnv = this.configService.get("nodeEnv");
 
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: nodeEnv !== "development",
+    const payloadStringfied = JSON.stringify({
+      accessToken,
+      username,
+      email,
+      userId,
+      fromServer: true,
     });
 
-    res.cookie("username", username, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: nodeEnv !== "development",
-    });
-
-    res.cookie("email", email, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: nodeEnv !== "development",
-    });
-
-    res.cookie("userId", userId, {
+    res.cookie("serverResponseData", payloadStringfied, {
       httpOnly: true,
       sameSite: "lax",
       secure: nodeEnv !== "development",

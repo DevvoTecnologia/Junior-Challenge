@@ -46,8 +46,6 @@ describe("GithubAuthController", () => {
     it("should return undefined", async () => {
       const req = {
         user: {
-          accessToken: "asdX0.hF6awdSkEA1dkwXUZpPLasd6b5DnL1lw",
-          userId: 1,
           username: "admin",
           email: null,
         },
@@ -60,28 +58,28 @@ describe("GithubAuthController", () => {
 
       expect(await controller.githubSignInCallback(req, res)).toBeUndefined();
 
-      expect(res.cookie).toHaveBeenCalledTimes(5);
+      expect(res.cookie).toHaveBeenCalledTimes(2);
+
+      const payloadStringfied = JSON.stringify({
+        accessToken: "asdX0.hF60cVqQ2LSkEA1dkwXUZpPLasd6b5DnL1lw",
+        username: req.user.username,
+        email: req.user.email,
+        userId: 1,
+        fromServer: true,
+      });
+
       expect(res.cookie).toHaveBeenCalledWith(
-        "accessToken",
-        "asdX0.hF60cVqQ2LSkEA1dkwXUZpPLasd6b5DnL1lw",
+        "serverResponseData",
+        payloadStringfied,
         expect.any(Object),
       );
-      expect(res.cookie).toHaveBeenCalledWith(
-        "username",
-        "admin",
-        expect.any(Object),
-      );
-      expect(res.cookie).toHaveBeenCalledWith(
-        "email",
-        null,
-        expect.any(Object),
-      );
-      expect(res.cookie).toHaveBeenCalledWith("userId", 1, expect.any(Object));
+
       expect(res.cookie).toHaveBeenCalledWith(
         "fromServer",
         "true",
         expect.any(Object),
       );
+
       expect(res.redirect).toHaveBeenCalledWith(
         expect.stringContaining("/login"),
       );
