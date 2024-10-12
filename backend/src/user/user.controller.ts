@@ -26,13 +26,13 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { DeleteUserDto } from "./dto/delete-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./entities/user.entity";
+import { UserService } from "./user.service";
 import {
   createApiOkResponse,
   findAllApiOkResponse,
   findOneApiOkResponse,
   updateApiOkResponse,
-} from "./swagger.config";
-import { UserService } from "./user.service";
+} from "./utils/swagger.config";
 
 @Controller("user")
 @ApiTags("User")

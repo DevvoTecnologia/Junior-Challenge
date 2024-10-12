@@ -10,7 +10,6 @@ import { User } from "src/user/entities/user.entity";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { GithubAuthService } from "./providers/github-auth.service";
-import { LocalAuthService } from "./providers/local-auth.service";
 import { GithubStrategy } from "../strategies/github.strategy";
 import { JwtStrategy } from "../strategies/jwt.strategy";
 import { GithubAuthController } from "./controllers/github-auth.controller";
@@ -33,12 +32,6 @@ import { GithubAuthController } from "./controllers/github-auth.controller";
     }),
   ],
   controllers: [AuthController, GithubAuthController],
-  providers: [
-    AuthService,
-    JwtStrategy,
-    GithubStrategy,
-    LocalAuthService,
-    GithubAuthService,
-  ],
+  providers: [AuthService, JwtStrategy, GithubStrategy, GithubAuthService],
 })
 export class AuthModule {}

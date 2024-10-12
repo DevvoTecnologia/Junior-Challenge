@@ -52,8 +52,17 @@ export class GithubAuthService {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async signIn(user: User, _req: GithubReqUser): Promise<SignInResponse> {
+  async signIn(req: GithubReqUser): Promise<SignInResponse> {
+    const { githubUserId } = req.user;
+
+    const user = await this.userModel.findOne({
+      where: { githubUserId },
+    });
+
+    if (!user) {
+      return await this.createNewUser(req);
+    }
+
     const payload: ReqUser["user"] = {
       sub: user.id,
       username: user.username,

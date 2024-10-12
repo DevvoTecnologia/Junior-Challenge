@@ -5,8 +5,8 @@ import { join } from "path";
 import * as sharp from "sharp";
 import { v4 as uuidv4 } from "uuid";
 
-import type { Ring } from "./entities/ring.entity";
-import type { ForgedBy } from "./types/ForgedBy";
+import type { Ring } from "../entities/ring.entity";
+import type { ForgedBy } from "../types/ForgedBy";
 
 export default class RingGlobalValidations {
   private readonly destinationPath = join(process.cwd(), "uploads");

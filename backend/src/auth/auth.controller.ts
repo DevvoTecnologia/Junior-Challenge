@@ -22,8 +22,11 @@ import type { ReqUser } from "src/global/types";
 import { AuthService } from "./auth.service";
 import { AuthDto } from "./dto/auth.dto";
 import { JwtAuthGuard } from "./guards/jwt-auth.guard";
-import { getProfileApiOkResponse, signInApiOkResponse } from "./swagger.config";
 import type { SignInResponse } from "./types/SignIn";
+import {
+  getProfileApiOkResponse,
+  signInApiOkResponse,
+} from "./utils/swagger.config";
 
 @Controller("auth")
 @UsePipes(ValidationPipe)

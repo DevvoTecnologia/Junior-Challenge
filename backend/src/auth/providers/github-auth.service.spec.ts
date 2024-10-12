@@ -1,5 +1,5 @@
 import { CacheModule } from "@nestjs/cache-manager";
-import { JwtService } from "@nestjs/jwt";
+import { JwtModule } from "@nestjs/jwt";
 import { getModelToken } from "@nestjs/sequelize";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
@@ -13,16 +13,8 @@ describe("GithubAuthService", () => {
   let userModel: typeof User;
 
   const mockUserModel = {
-    create: jest.fn().mockResolvedValue({
-      id: 1,
-      username: "admin",
-      email: null,
-      githubUserId: "123",
-    }),
-  };
-
-  const mockJwtService = {
-    signAsync: jest.fn().mockResolvedValue("accessToken"),
+    create: jest.fn(),
+    findOne: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -31,16 +23,16 @@ describe("GithubAuthService", () => {
         CacheModule.register({
           ttl: 60000 * 10, // 10 minutes
         }),
+        JwtModule.register({
+          secret: "secret",
+          signOptions: { expiresIn: "1d" },
+        }),
       ],
       providers: [
         { provide: getModelToken(User), useValue: mockUserModel },
         GithubAuthService,
-        JwtService,
       ],
-    })
-      .overrideProvider(JwtService)
-      .useValue(mockJwtService)
-      .compile();
+    }).compile();
 
     service = module.get<GithubAuthService>(GithubAuthService);
     userModel = module.get<typeof User>(getModelToken(User));
@@ -55,37 +47,12 @@ describe("GithubAuthService", () => {
   });
 
   describe("createNewUser", () => {
-    it("should return a SignInResponse", async () => {
+    it("should throw BadRequestEx with message 'Something went wrong creating the user'", async () => {
       const req = {
         user: {
           username: "admin",
-          email: null,
+          email: undefined,
           githubUserId: "123",
-        },
-        res: {
-          redirect: jest.fn(),
-        },
-      } as unknown as GithubReqUser;
-
-      const result = await service.createNewUser(req);
-
-      expect(result).toEqual({
-        accessToken: "accessToken",
-        userId: 1,
-        username: "admin",
-        email: null,
-      });
-    });
-
-    it("should throw BadRequestEx if something goes wrong creating the user", async () => {
-      const req = {
-        user: {
-          username: "admin",
-          email: null,
-          githubUserId: "123",
-        },
-        res: {
-          redirect: jest.fn(),
         },
       } as unknown as GithubReqUser;
 
@@ -96,55 +63,105 @@ describe("GithubAuthService", () => {
       );
     });
 
-    it("should create a new user", async () => {
+    it("should invalidate cache for users", async () => {
       const req = {
         user: {
           username: "admin",
-          email: null,
+          email: undefined,
           githubUserId: "123",
-        },
-        res: {
-          redirect: jest.fn(),
         },
       } as unknown as GithubReqUser;
 
+      mockUserModel.create.mockResolvedValueOnce({
+        id: 1,
+        username: "admin",
+        email: undefined,
+        githubUserId: "123",
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const delCacheSpyOn = jest.spyOn((service as any).cacheManager, "del");
+
       await service.createNewUser(req);
 
-      expect(mockUserModel.create).toHaveBeenCalledWith({
+      expect(delCacheSpyOn).toHaveBeenCalledTimes(1);
+    });
+
+    it("should return an object with accessToken, userId, username and email", async () => {
+      const req = {
+        user: {
+          username: "admin",
+          email: undefined,
+          githubUserId: "123",
+        },
+      } as unknown as GithubReqUser;
+
+      mockUserModel.create.mockResolvedValueOnce({
+        id: 1,
         username: "admin",
-        email: null,
+        email: undefined,
         githubUserId: "123",
-        canSignWithEmailAndPassword: false,
+      });
+
+      const response = await service.createNewUser(req);
+
+      expect(response).toEqual({
+        accessToken: expect.any(String),
+        userId: 1,
+        username: "admin",
+        email: undefined,
       });
     });
   });
 
   describe("signIn", () => {
-    it("should return a SignInResponse", async () => {
-      const user = {
-        id: 1,
-        username: "admin",
-        email: null,
-      } as unknown as User;
-
+    it("should call createNewUser when user is not found", async () => {
       const req = {
         user: {
           username: "admin",
-          email: null,
+          email: undefined,
           githubUserId: "123",
-        },
-        res: {
-          redirect: jest.fn(),
         },
       } as unknown as GithubReqUser;
 
-      const result = await service.signIn(user, req);
+      mockUserModel.findOne.mockResolvedValueOnce(null);
+      mockUserModel.create.mockResolvedValueOnce({
+        id: 1,
+        username: "admin",
+        email: undefined,
+        githubUserId: "123",
+      });
 
-      expect(result).toEqual({
-        accessToken: "accessToken",
+      const createNewUserSpyOn = jest.spyOn(service, "createNewUser");
+
+      await service.signIn(req);
+
+      expect(createNewUserSpyOn).toHaveBeenCalledTimes(1);
+    });
+
+    it("should return an object with accessToken, userId, username and email", async () => {
+      const req = {
+        user: {
+          username: "admin",
+          email: undefined,
+          githubUserId: "123",
+        },
+      } as unknown as GithubReqUser;
+
+      mockUserModel.findOne.mockResolvedValueOnce({
+        id: 1,
+        username: "admin",
+        email: undefined,
+        githubUserId: "123",
+      });
+
+      const response = await service.signIn(req);
+
+      expect(response).toEqual({
+        accessToken: expect.any(String),
         userId: 1,
         username: "admin",
-        email: null,
+        email: undefined,
       });
     });
   });

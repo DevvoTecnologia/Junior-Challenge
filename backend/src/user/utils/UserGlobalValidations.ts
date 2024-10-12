@@ -2,7 +2,7 @@ import { BadRequestException } from "@nestjs/common";
 import { existsSync, unlinkSync } from "fs";
 import { join } from "path";
 
-import type { User } from "./entities/user.entity";
+import type { User } from "../entities/user.entity";
 
 export default class UserGlobalValidations {
   protected async deleteRingImage(imageName: string): Promise<void> {

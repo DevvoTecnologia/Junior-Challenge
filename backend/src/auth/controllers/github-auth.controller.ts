@@ -4,15 +4,15 @@ import { ApiTags } from "@nestjs/swagger";
 import type { Response } from "express";
 import type { GithubReqUser } from "src/global/types";
 
-import { AuthService } from "../auth.service";
 import { GithubAuthGuard } from "../guards/github-auth.guard";
+import { GithubAuthService } from "../providers/github-auth.service";
 
 @Controller("auth")
 @ApiTags("Auth/Github")
 export class GithubAuthController {
   constructor(
-    private readonly authService: AuthService,
     private readonly configService: ConfigService,
+    private readonly githubAuthService: GithubAuthService,
   ) {}
 
   @Get("github")
@@ -27,7 +27,7 @@ export class GithubAuthController {
     @Req() req: GithubReqUser,
     @Res() res: Response,
   ): Promise<void> {
-    const response = await this.authService.signInWithGithub(req);
+    const response = await this.githubAuthService.signIn(req);
 
     const { accessToken, username, email, userId } = response;
 

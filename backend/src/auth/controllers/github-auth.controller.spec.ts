@@ -4,14 +4,14 @@ import { Test } from "@nestjs/testing";
 import { type Response } from "express";
 import type { GithubReqUser } from "src/global/types";
 
-import { AuthService } from "../auth.service";
 import { GithubAuthController } from "./github-auth.controller";
+import { GithubAuthService } from "../providers/github-auth.service";
 
 describe("GithubAuthController", () => {
   let controller: GithubAuthController;
 
   const mockAuthService = {
-    signInWithGithub: jest.fn().mockResolvedValue({
+    signIn: jest.fn().mockResolvedValue({
       accessToken: "asdX0.hF60cVqQ2LSkEA1dkwXUZpPLasd6b5DnL1lw",
       userId: 1,
       username: "admin",
@@ -23,9 +23,9 @@ describe("GithubAuthController", () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [ConfigModule],
       controllers: [GithubAuthController],
-      providers: [AuthService],
+      providers: [GithubAuthService],
     })
-      .overrideProvider(AuthService)
+      .overrideProvider(GithubAuthService)
       .useValue(mockAuthService)
       .compile();
 

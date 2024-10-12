@@ -23,7 +23,7 @@ import { DeleteUserGithubDto } from "../dto/delete-user.github.dto";
 import { UpdateUserGithubDto } from "../dto/update-user.github.dto";
 import { User } from "../entities/user.entity";
 import { GithubUserService } from "../providers/github-user.service";
-import { updateApiOkResponse } from "../swagger.config";
+import { updateApiOkResponse } from "../utils/swagger.config";
 
 @Controller("user/github")
 @ApiTags("User/Github")

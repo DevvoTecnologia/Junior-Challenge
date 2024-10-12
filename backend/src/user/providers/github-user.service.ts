@@ -5,10 +5,10 @@ import { cacheKeys } from "src/global/constants";
 import type { ReqUser } from "src/global/types";
 import { Ring } from "src/ring/entities/ring.entity";
 
-import UserGlobalValidations from "../UserGlobalValidations";
 import { DeleteUserGithubDto } from "../dto/delete-user.github.dto";
 import { UpdateUserGithubDto } from "../dto/update-user.github.dto";
 import { User } from "../entities/user.entity";
+import UserGlobalValidations from "../utils/UserGlobalValidations";
 
 @Injectable()
 export class GithubUserService extends UserGlobalValidations {

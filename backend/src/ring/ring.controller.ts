@@ -39,7 +39,7 @@ import {
   findOneApiOkResponse,
   updateApiBody,
   updateApiOkResponse,
-} from "./swagger.config";
+} from "./utils/swagger.config";
 
 @Controller("ring")
 @UseGuards(JwtAuthGuard)
