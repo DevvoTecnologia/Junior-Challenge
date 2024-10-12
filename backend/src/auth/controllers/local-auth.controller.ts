@@ -19,27 +19,27 @@ import {
 import { errorResponsePatternStructure } from "src/global/swagger.config";
 import type { ReqUser } from "src/global/types";
 
-import { AuthService } from "./auth.service";
-import { AuthDto } from "./dto/auth.dto";
-import { JwtAuthGuard } from "./guards/jwt-auth.guard";
-import type { SignInResponse } from "./types/SignIn";
+import { AuthDto } from "../dto/auth.dto";
+import { JwtAuthGuard } from "../guards/jwt-auth.guard";
+import { LocalAuthService } from "../providers/local-auth.service";
+import type { SignInResponse } from "../types/SignIn";
 import {
   getProfileApiOkResponse,
   signInApiOkResponse,
-} from "./utils/swagger.config";
+} from "../utils/swagger.config";
 
 @Controller("auth")
 @UsePipes(ValidationPipe)
 @ApiTags("Auth")
-export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+export class LocalAuthController {
+  constructor(private readonly localAuthService: LocalAuthService) {}
 
   @Post("login")
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse(signInApiOkResponse)
   @ApiResponse(errorResponsePatternStructure)
   async signIn(@Body() authDto: AuthDto): Promise<SignInResponse> {
-    return await this.authService.signIn(authDto);
+    return await this.localAuthService.signIn(authDto);
   }
 
   // 💡 This route is protected by the AuthGuard

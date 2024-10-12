@@ -11,15 +11,15 @@ import { cacheKeys } from "src/global/constants";
 import type { ReqUser } from "src/global/types";
 import { Ring } from "src/ring/entities/ring.entity";
 
-import { CreateUserDto } from "./dto/create-user.dto";
-import { DeleteUserDto } from "./dto/delete-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import { User } from "./entities/user.entity";
-import UserGlobalValidations from "./utils/UserGlobalValidations";
+import { CreateUserDto } from "../dto/create-user.dto";
+import { DeleteUserDto } from "../dto/delete-user.dto";
+import { UpdateUserDto } from "../dto/update-user.dto";
+import { User } from "../entities/user.entity";
+import UserGlobalValidations from "../utils/UserGlobalValidations";
 
 @Injectable()
-export class UserService extends UserGlobalValidations {
-  private readonly logger = new Logger(UserService.name);
+export class LocalUserService extends UserGlobalValidations {
+  private readonly logger = new Logger(LocalUserService.name);
   private readonly atributesToShow = ["id", "username", "email"];
   private readonly includeAtributes = [
     {

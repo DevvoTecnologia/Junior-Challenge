@@ -2,11 +2,11 @@ import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
 import type { ReqUser } from "src/global/types";
 
-import { AuthController } from "./auth.controller";
-import { AuthService } from "./auth.service";
+import { LocalAuthController } from "./local-auth.controller";
+import { LocalAuthService } from "../providers/local-auth.service";
 
-describe("AuthController", () => {
-  let controller: AuthController;
+describe("LocalAuthController", () => {
+  let controller: LocalAuthController;
 
   const mockAuthService = {
     signIn: jest.fn().mockResolvedValue({
@@ -24,14 +24,14 @@ describe("AuthController", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [AuthController],
-      providers: [AuthService],
+      controllers: [LocalAuthController],
+      providers: [LocalAuthService],
     })
-      .overrideProvider(AuthService)
+      .overrideProvider(LocalAuthService)
       .useValue(mockAuthService)
       .compile();
 
-    controller = module.get<AuthController>(AuthController);
+    controller = module.get<LocalAuthController>(LocalAuthController);
   });
 
   it("should be defined", () => {

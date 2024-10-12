@@ -7,12 +7,12 @@ import { SequelizeModule } from "@nestjs/sequelize";
 import envGithub from "src/configs/env.github";
 import { User } from "src/user/entities/user.entity";
 
-import { AuthController } from "./auth.controller";
-import { AuthService } from "./auth.service";
+import { GithubAuthController } from "./controllers/github-auth.controller";
+import { LocalAuthController } from "./controllers/local-auth.controller";
 import { GithubAuthService } from "./providers/github-auth.service";
+import { LocalAuthService } from "./providers/local-auth.service";
 import { GithubStrategy } from "../strategies/github.strategy";
 import { JwtStrategy } from "../strategies/jwt.strategy";
-import { GithubAuthController } from "./controllers/github-auth.controller";
 
 @Module({
   imports: [
@@ -31,7 +31,7 @@ import { GithubAuthController } from "./controllers/github-auth.controller";
       ttl: 60000 * 10, // 10 minutes
     }),
   ],
-  controllers: [AuthController, GithubAuthController],
-  providers: [AuthService, JwtStrategy, GithubStrategy, GithubAuthService],
+  controllers: [LocalAuthController, GithubAuthController],
+  providers: [LocalAuthService, JwtStrategy, GithubStrategy, GithubAuthService],
 })
 export class AuthModule {}

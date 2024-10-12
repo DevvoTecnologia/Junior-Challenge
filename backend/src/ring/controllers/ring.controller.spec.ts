@@ -3,7 +3,7 @@ import { Test } from "@nestjs/testing";
 import type { ReqUser } from "src/global/types";
 
 import { RingController } from "./ring.controller";
-import { RingService } from "./ring.service";
+import { RingService } from "../providers/ring.service";
 
 describe("RingController", () => {
   let controller: RingController;

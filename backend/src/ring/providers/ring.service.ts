@@ -10,10 +10,10 @@ import { InjectModel } from "@nestjs/sequelize";
 import { cacheKeys } from "src/global/constants";
 import type { ReqUser } from "src/global/types";
 
-import { CreateRingDto } from "./dto/create-ring.dto";
-import { UpdateRingDto } from "./dto/update-ring.dto";
-import { Ring } from "./entities/ring.entity";
-import RingGlobalValidations from "./utils/RingGlobalValidations";
+import { CreateRingDto } from "../dto/create-ring.dto";
+import { UpdateRingDto } from "../dto/update-ring.dto";
+import { Ring } from "../entities/ring.entity";
+import RingGlobalValidations from "../utils/RingGlobalValidations";
 
 @Injectable()
 export class RingService extends RingGlobalValidations {

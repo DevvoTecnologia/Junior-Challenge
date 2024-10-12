@@ -8,10 +8,10 @@ import * as fs from "fs";
 import * as sharp from "sharp";
 import type { ReqUser } from "src/global/types";
 
-import type { CreateRingDto } from "./dto/create-ring.dto";
-import type { UpdateRingDto } from "./dto/update-ring.dto";
-import { Ring } from "./entities/ring.entity";
 import { RingService } from "./ring.service";
+import type { CreateRingDto } from "../dto/create-ring.dto";
+import type { UpdateRingDto } from "../dto/update-ring.dto";
+import { Ring } from "../entities/ring.entity";
 
 describe("RingService", () => {
   let service: RingService;

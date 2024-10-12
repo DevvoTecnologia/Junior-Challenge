@@ -5,10 +5,10 @@ import { JwtModule } from "@nestjs/jwt";
 import { SequelizeModule } from "@nestjs/sequelize";
 
 import { GithubUserController } from "./controllers/github-user.controller";
+import { LocalUserController } from "./controllers/local-user.controller";
 import { User } from "./entities/user.entity";
 import { GithubUserService } from "./providers/github-user.service";
-import { UserController } from "./user.controller";
-import { UserService } from "./user.service";
+import { LocalUserService } from "./providers/local-user.service";
 
 @Module({
   imports: [
@@ -19,7 +19,7 @@ import { UserService } from "./user.service";
       ttl: 60000 * 10, // 10 minutes
     }),
   ],
-  controllers: [UserController, GithubUserController],
-  providers: [UserService, GithubUserService],
+  controllers: [LocalUserController, GithubUserController],
+  providers: [LocalUserService, GithubUserService],
 })
 export class UserModule {}

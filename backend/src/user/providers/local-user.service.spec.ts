@@ -8,11 +8,11 @@ import * as path from "path";
 import type { ReqUser } from "src/global/types";
 import { Ring } from "src/ring/entities/ring.entity";
 
-import { User } from "./entities/user.entity";
-import { UserService } from "./user.service";
+import { LocalUserService } from "./local-user.service";
+import { User } from "../entities/user.entity";
 
-describe("UserService", () => {
-  let service: UserService;
+describe("LocalUserService", () => {
+  let service: LocalUserService;
   let userModel: typeof User;
 
   const mockUserService = {
@@ -31,7 +31,7 @@ describe("UserService", () => {
         }),
       ],
       providers: [
-        UserService,
+        LocalUserService,
         {
           provide: getModelToken(User),
           useValue: mockUserService,
@@ -39,7 +39,7 @@ describe("UserService", () => {
       ],
     }).compile();
 
-    service = module.get<UserService>(UserService);
+    service = module.get<LocalUserService>(LocalUserService);
     userModel = module.get<typeof User>(getModelToken(User));
   });
 

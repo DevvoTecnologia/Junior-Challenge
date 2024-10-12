@@ -2,12 +2,12 @@ import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
 import type { ReqUser } from "src/global/types";
 
-import type { CreateUserDto } from "./dto/create-user.dto";
-import { UserController } from "./user.controller";
-import { UserService } from "./user.service";
+import { LocalUserController } from "./local-user.controller";
+import type { CreateUserDto } from "../dto/create-user.dto";
+import { LocalUserService } from "../providers/local-user.service";
 
-describe("UserController", () => {
-  let controller: UserController;
+describe("LocalUserController", () => {
+  let controller: LocalUserController;
 
   const userMock = {
     id: 1,
@@ -48,14 +48,14 @@ describe("UserController", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [UserController],
-      providers: [UserService],
+      controllers: [LocalUserController],
+      providers: [LocalUserService],
     })
-      .overrideProvider(UserService)
+      .overrideProvider(LocalUserService)
       .useValue(mockUserService)
       .compile();
 
-    controller = module.get<UserController>(UserController);
+    controller = module.get<LocalUserController>(LocalUserController);
   });
 
   it("should be defined", () => {

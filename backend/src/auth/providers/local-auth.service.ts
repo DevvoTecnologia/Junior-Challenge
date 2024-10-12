@@ -4,11 +4,11 @@ import { InjectModel } from "@nestjs/sequelize";
 import type { ReqUser } from "src/global/types";
 import { User } from "src/user/entities/user.entity";
 
-import { AuthDto } from "./dto/auth.dto";
-import type { SignInResponse } from "./types/SignIn";
+import { AuthDto } from "../dto/auth.dto";
+import type { SignInResponse } from "../types/SignIn";
 
 @Injectable()
-export class AuthService {
+export class LocalAuthService {
   constructor(
     @InjectModel(User)
     private readonly userModel: typeof User,

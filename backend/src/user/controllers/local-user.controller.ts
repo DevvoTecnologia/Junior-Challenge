@@ -22,35 +22,35 @@ import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { errorResponsePatternStructure } from "src/global/swagger.config";
 import type { ReqUser } from "src/global/types";
 
-import { CreateUserDto } from "./dto/create-user.dto";
-import { DeleteUserDto } from "./dto/delete-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import { User } from "./entities/user.entity";
-import { UserService } from "./user.service";
+import { CreateUserDto } from "../dto/create-user.dto";
+import { DeleteUserDto } from "../dto/delete-user.dto";
+import { UpdateUserDto } from "../dto/update-user.dto";
+import { User } from "../entities/user.entity";
+import { LocalUserService } from "../providers/local-user.service";
 import {
   createApiOkResponse,
   findAllApiOkResponse,
   findOneApiOkResponse,
   updateApiOkResponse,
-} from "./utils/swagger.config";
+} from "../utils/swagger.config";
 
 @Controller("user")
 @ApiTags("User")
-export class UserController {
-  constructor(private readonly userService: UserService) {}
+export class LocalUserController {
+  constructor(private readonly localUserService: LocalUserService) {}
 
   @Get()
   @ApiOkResponse(findAllApiOkResponse)
   @ApiResponse(errorResponsePatternStructure)
   async findAll(): Promise<User[]> {
-    return await this.userService.findAll();
+    return await this.localUserService.findAll();
   }
 
   @Get(":id")
   @ApiOkResponse(findOneApiOkResponse)
   @ApiResponse(errorResponsePatternStructure)
   async findByPk(@Param("id", ParseIntPipe) id: number): Promise<User> {
-    return await this.userService.findByPk(id);
+    return await this.localUserService.findByPk(id);
   }
 
   @Post()
@@ -59,7 +59,7 @@ export class UserController {
   async create(
     @Body(ValidationPipe) createUserDto: CreateUserDto,
   ): Promise<Pick<User, "id" | "username" | "email">> {
-    const user = await this.userService.create(createUserDto);
+    const user = await this.localUserService.create(createUserDto);
     return user;
   }
 
@@ -74,7 +74,7 @@ export class UserController {
     @Req()
     req: ReqUser,
   ): Promise<Pick<User, "id" | "username" | "email">> {
-    const user = await this.userService.update(id, updateUserDto, req);
+    const user = await this.localUserService.update(id, updateUserDto, req);
     return user;
   }
 
@@ -90,7 +90,7 @@ export class UserController {
     @Body(ValidationPipe) deleteUserDto: DeleteUserDto,
     @Req() req: ReqUser,
   ): Promise<null> {
-    const user = await this.userService.delete(id, deleteUserDto, req);
+    const user = await this.localUserService.delete(id, deleteUserDto, req);
     return user;
   }
 }

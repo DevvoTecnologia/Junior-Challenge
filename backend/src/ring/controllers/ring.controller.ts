@@ -28,10 +28,10 @@ import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { errorResponsePatternStructure } from "src/global/swagger.config";
 import type { ReqUser } from "src/global/types";
 
-import { CreateRingDto } from "./dto/create-ring.dto";
-import { UpdateRingDto } from "./dto/update-ring.dto";
-import { Ring } from "./entities/ring.entity";
-import { RingService } from "./ring.service";
+import { CreateRingDto } from "../dto/create-ring.dto";
+import { UpdateRingDto } from "../dto/update-ring.dto";
+import { Ring } from "../entities/ring.entity";
+import { RingService } from "../providers/ring.service";
 import {
   createApiBody,
   createApiOkResponse,
@@ -39,7 +39,7 @@ import {
   findOneApiOkResponse,
   updateApiBody,
   updateApiOkResponse,
-} from "./utils/swagger.config";
+} from "../utils/swagger.config";
 
 @Controller("ring")
 @UseGuards(JwtAuthGuard)
@@ -80,6 +80,7 @@ export class RingController {
         })
         .addMaxSizeValidator({
           maxSize: 1024 * 1024, // 1MB,
+          message: "File is too large. Max size is 1MB",
         })
         .build(),
     )
@@ -106,6 +107,7 @@ export class RingController {
         })
         .addMaxSizeValidator({
           maxSize: 1024 * 1024, // 1MB,
+          message: "File is too large. Max size is 1MB",
         })
         .build({ fileIsRequired: false }),
     )

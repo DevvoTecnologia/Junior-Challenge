@@ -5,11 +5,11 @@ import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
 import { User } from "src/user/entities/user.entity";
 
-import { AuthService } from "./auth.service";
-import type { AuthDto } from "./dto/auth.dto";
+import { LocalAuthService } from "./local-auth.service";
+import type { AuthDto } from "../dto/auth.dto";
 
-describe("AuthService", () => {
-  let service: AuthService;
+describe("LocalAuthService", () => {
+  let service: LocalAuthService;
   let userModel: typeof User;
 
   const mockUserModel = {
@@ -33,11 +33,11 @@ describe("AuthService", () => {
       ],
       providers: [
         { provide: getModelToken(User), useValue: mockUserModel },
-        AuthService,
+        LocalAuthService,
       ],
     }).compile();
 
-    service = module.get<AuthService>(AuthService);
+    service = module.get<LocalAuthService>(LocalAuthService);
     userModel = module.get<typeof User>(getModelToken(User));
   });
 
