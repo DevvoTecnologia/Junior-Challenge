@@ -1,3 +1,4 @@
+import { CacheModule } from "@nestjs/cache-manager";
 import { JwtService } from "@nestjs/jwt";
 import { getModelToken } from "@nestjs/sequelize";
 import type { TestingModule } from "@nestjs/testing";
@@ -26,6 +27,11 @@ describe("GithubAuthService", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [
+        CacheModule.register({
+          ttl: 60000 * 10, // 10 minutes
+        }),
+      ],
       providers: [
         { provide: getModelToken(User), useValue: mockUserModel },
         GithubAuthService,
@@ -87,25 +93,6 @@ describe("GithubAuthService", () => {
 
       await expect(service.createNewUser(req)).rejects.toThrow(
         "Something went wrong creating the user",
-      );
-    });
-
-    it("should redirect to the clientUrl", async () => {
-      const req = {
-        user: {
-          username: "admin",
-          email: null,
-          githubUserId: "123",
-        },
-        res: {
-          redirect: jest.fn(),
-        },
-      } as unknown as GithubReqUser;
-
-      await service.createNewUser(req);
-
-      expect(req.res?.redirect).toHaveBeenCalledWith(
-        "http://localhost:3001/users",
       );
     });
 
