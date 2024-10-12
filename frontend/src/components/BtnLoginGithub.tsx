@@ -1,6 +1,6 @@
 "use client";
 
-import { hasCookie } from "cookies-next";
+import { deleteCookie, hasCookie } from "cookies-next";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import type { TransitionStartFunction } from "react";
@@ -17,6 +17,8 @@ interface BtnLoginGithubProps {
 
 const serverUrl = process.env.NEXT_PUBLIC_API_BASE_HOST;
 
+const cookieIdentifier = "fromServer";
+
 export default function BtnLoginGithub({
   startTransition,
   isPending,
@@ -24,7 +26,8 @@ export default function BtnLoginGithub({
   const router = useRouter();
 
   useEffect(() => {
-    if (hasCookie("fromServer")) {
+    if (hasCookie(cookieIdentifier)) {
+      deleteCookie(cookieIdentifier);
       startTransition(async () => {
         await handleLoginOAuthServer();
 

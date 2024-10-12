@@ -11,25 +11,26 @@ export async function handleLogoutServer() {
 }
 
 export async function handleLoginOAuthServer() {
-  const accessToken = cookies().get("accessToken")?.value;
-  const username = cookies().get("username")?.value;
-  const email = cookies().get("email")?.value;
-  const userId = cookies().get("userId")?.value;
-  const fromServer = cookies().get("fromServer")?.value;
+  const serverResponseData = cookies().get("serverResponseData")?.value;
 
-  if (fromServer && JSON.parse(fromServer) === true) {
-    await signIn("Github", {
-      accessToken,
-      username,
-      email,
-      userId: userId ? parseInt(userId, 10) : undefined,
-      redirect: false,
-    });
+  if (serverResponseData) {
+    const parsedData = JSON.parse(serverResponseData);
+    const accessToken = parsedData.accessToken;
+    const username = parsedData.username;
+    const email = parsedData.email;
+    const userId = parsedData.userId;
+    const fromServer = parsedData.fromServer;
+
+    if (fromServer) {
+      await signIn("Github", {
+        accessToken,
+        username,
+        email,
+        userId: userId ? parseInt(userId, 10) : undefined,
+        redirect: false,
+      });
+    }
   }
 
-  cookies().delete("accessToken");
-  cookies().delete("username");
-  cookies().delete("email");
-  cookies().delete("userId");
-  cookies().delete("fromServer");
+  cookies().delete("serverResponseData");
 }
