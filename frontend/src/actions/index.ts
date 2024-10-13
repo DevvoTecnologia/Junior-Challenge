@@ -45,7 +45,9 @@ export async function handleLoginOAuthServer(payload: string) {
     }
 
     return false;
-  } catch {
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error("Failed to login", error);
     return false;
   }
 }

@@ -34,6 +34,8 @@ export default function BtnLoginGithub({
 
           router.replace("/users");
           router.refresh();
+        } else {
+          router.replace("/login");
         }
       } catch {
         // eslint-disable-next-line no-console
