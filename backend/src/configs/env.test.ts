@@ -13,6 +13,12 @@ interface EnvConfig {
     callbackUrl: string;
   };
 
+  queryParams: {
+    secret: string;
+    algorithm: string;
+    ivSize: number;
+  };
+
   token: {
     secret?: string;
     expiration: string;
@@ -32,6 +38,13 @@ export default (): EnvConfig => ({
     clientId: "github-client-id",
     clientSecret: "github-client-secret",
     callbackUrl: "http://localhost:3000/auth/github/callback",
+  },
+
+  queryParams: {
+    // should be 32 characters
+    secret: "awdawdawdawdawdawdawdawda12wdawd",
+    algorithm: "aes-256-cbc",
+    ivSize: 16,
   },
 
   token: {

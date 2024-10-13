@@ -6,6 +6,13 @@ To set up the project, follow these steps:
 
 Start by creating a `.env` file with the same variables and values as found in the `.env.example` file.
 
+```IMPORTANT```
+
+Don't forget to configure the same key for the `frontend`, I'm using node crypto to encrypt the url
+
+QUERYPARAMS_OAUTH_PRIVATE_KEY
+QUERYPARAMS_OAUTH_ALGORITHM
+
 ### 2. Database Setup
 
 Create a schema in MySQL, and set its name as the `DB_NAME` value in the `.env` file.

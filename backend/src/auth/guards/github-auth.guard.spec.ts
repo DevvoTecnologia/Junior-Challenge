@@ -1,5 +1,4 @@
 import type { ExecutionContext } from "@nestjs/common";
-import { UnauthorizedException } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
@@ -47,24 +46,9 @@ describe("GithubAuthGuard", () => {
       ).toStrictEqual(true);
     });
 
-    it("should redirect and throw UnauthorizedException if error is present", () => {
-      expect(() =>
-        guard.handleRequest(
-          new Error("test error"),
-          false,
-          null as never,
-          context,
-        ),
-      ).toThrow(UnauthorizedException);
-      expect(response.redirect).toHaveBeenCalledWith(
-        "http://localhost:3001/login",
-      );
-    });
+    it("should redirect to client login page if error or no user", () => {
+      guard.handleRequest(new Error(), false, null as never, context);
 
-    it("should redirect and throw UnauthorizedException if user is not present", () => {
-      expect(() =>
-        guard.handleRequest(null, false, null as never, context),
-      ).toThrow(UnauthorizedException);
       expect(response.redirect).toHaveBeenCalledWith(
         "http://localhost:3001/login",
       );

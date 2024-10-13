@@ -60,11 +60,4 @@ describe("env.global", () => {
       process.env.IMAGES_URL ?? "http://localhost:3000/uploads",
     );
   });
-
-  it("should have a token configuration", () => {
-    const config = envGlobal();
-    expect(config.token).toBeDefined();
-    expect(config.token.secret).toBe(process.env.TOKEN_SECRET);
-    expect(config.token.expiration).toBe(process.env.TOKEN_EXPIRATION ?? "1d");
-  });
 });

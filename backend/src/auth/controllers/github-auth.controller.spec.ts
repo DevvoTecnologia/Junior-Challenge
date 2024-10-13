@@ -2,6 +2,7 @@ import { ConfigModule } from "@nestjs/config";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
 import { type Response } from "express";
+import envTest from "src/configs/env.test";
 import type { GithubReqUser } from "src/global/types";
 
 import { GithubAuthController } from "./github-auth.controller";
@@ -21,7 +22,7 @@ describe("GithubAuthController", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule],
+      imports: [ConfigModule.forFeature(envTest)],
       controllers: [GithubAuthController],
       providers: [GithubAuthService],
     })
@@ -57,28 +58,6 @@ describe("GithubAuthController", () => {
       } as unknown as Response;
 
       expect(await controller.githubSignInCallback(req, res)).toBeUndefined();
-
-      expect(res.cookie).toHaveBeenCalledTimes(2);
-
-      const payloadStringfied = JSON.stringify({
-        accessToken: "asdX0.hF60cVqQ2LSkEA1dkwXUZpPLasd6b5DnL1lw",
-        username: req.user.username,
-        email: req.user.email,
-        userId: 1,
-        fromServer: true,
-      });
-
-      expect(res.cookie).toHaveBeenCalledWith(
-        "serverResponseData",
-        payloadStringfied,
-        expect.any(Object),
-      );
-
-      expect(res.cookie).toHaveBeenCalledWith(
-        "fromServer",
-        "true",
-        expect.any(Object),
-      );
 
       expect(res.redirect).toHaveBeenCalledWith(
         expect.stringContaining("/login"),
