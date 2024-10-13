@@ -17,7 +17,13 @@ export default function NoUsersFound() {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <Image src="/no-content.png" alt="No users" width={300} height={300} />
+        <Image
+          src="/no-content.png"
+          alt="No users"
+          width={300}
+          height={300}
+          priority
+        />
       </motion.div>
     </motion.div>
   );

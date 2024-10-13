@@ -1,8 +1,7 @@
 "use server";
 
-import { cookies } from "next/headers";
-
 import { signIn, signOut } from "@/auth";
+import { decrypt } from "@/lib/crypto";
 
 export async function handleLogoutServer() {
   await signOut({
@@ -10,27 +9,43 @@ export async function handleLogoutServer() {
   });
 }
 
-export async function handleLoginOAuthServer() {
-  const serverResponseData = cookies().get("serverResponseData")?.value;
+export async function handleLoginOAuthServer(payload: string) {
+  try {
+    const parsedPayload = JSON.parse(payload);
 
-  if (serverResponseData) {
-    const parsedData = JSON.parse(serverResponseData);
-    const accessToken = parsedData.accessToken;
-    const username = parsedData.username;
-    const email = parsedData.email;
-    const userId = parsedData.userId;
-    const fromServer = parsedData.fromServer;
+    const algorithm = process.env
+      .QUERYPARAMS_OAUTH_ALGORITHM as Algorithm["name"];
+    const secretKey = process.env.QUERYPARAMS_OAUTH_PRIVATE_KEY as string;
 
-    if (fromServer) {
-      await signIn("Github", {
-        accessToken,
-        username,
-        email,
-        userId: userId ? parseInt(userId, 10) : undefined,
-        redirect: false,
-      });
+    // decript payload
+    if (parsedPayload) {
+      const decryptedPayload = decrypt(parsedPayload, algorithm, secretKey);
+
+      const parsedDecryptedPayload = JSON.parse(decryptedPayload);
+
+      const accessToken = parsedDecryptedPayload.accessToken;
+      const username = parsedDecryptedPayload.username;
+      const email = parsedDecryptedPayload.email;
+      const userId = parsedDecryptedPayload.userId;
+      const fromServer = parsedDecryptedPayload.fromServer;
+
+      if (fromServer) {
+        await signIn("Github", {
+          accessToken,
+          username,
+          email,
+          userId,
+          redirect: false,
+        });
+
+        return true;
+      }
+
+      return false;
     }
-  }
 
-  cookies().delete("serverResponseData");
+    return false;
+  } catch {
+    return false;
+  }
 }

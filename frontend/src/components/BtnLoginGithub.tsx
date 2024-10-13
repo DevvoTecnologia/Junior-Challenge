@@ -1,10 +1,9 @@
 "use client";
 
-import { deleteCookie, hasCookie } from "cookies-next";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import type { TransitionStartFunction } from "react";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { FaGithub } from "react-icons/fa";
 import { toast } from "react-toastify";
 
@@ -17,27 +16,40 @@ interface BtnLoginGithubProps {
 
 const serverUrl = process.env.NEXT_PUBLIC_API_BASE_HOST;
 
-const cookieIdentifier = "fromServer";
-
 export default function BtnLoginGithub({
   startTransition,
   isPending,
 }: Readonly<BtnLoginGithubProps>) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const payload = searchParams.get("payload");
+
+  const handleLoginGithub = useCallback(
+    async (payload: string) => {
+      try {
+        const response = await handleLoginOAuthServer(payload);
+
+        if (response) {
+          toast.success("Logged in successfully");
+
+          router.replace("/users");
+          router.refresh();
+        }
+      } catch {
+        // eslint-disable-next-line no-console
+        console.error("Failed to login");
+      }
+    },
+    [router],
+  );
 
   useEffect(() => {
-    if (hasCookie(cookieIdentifier)) {
-      deleteCookie(cookieIdentifier);
+    if (payload) {
       startTransition(async () => {
-        await handleLoginOAuthServer();
-
-        toast.success("Logged in successfully");
-
-        router.replace("/users");
-        router.refresh();
+        await handleLoginGithub(payload);
       });
     }
-  }, [router, startTransition]);
+  }, [handleLoginGithub, payload, startTransition]);
 
   return (
     <motion.button

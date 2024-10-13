@@ -6,11 +6,6 @@ interface EnvConfig {
   host: string;
   port: number;
   imagesUrl: string;
-
-  token: {
-    secret?: string;
-    expiration: string;
-  };
 }
 
 export default (): EnvConfig => ({
@@ -21,9 +16,4 @@ export default (): EnvConfig => ({
   host: process.env.HOST ?? "localhost",
   port: process.env.PORT ? parseInt(process.env.PORT, 10) : 3000,
   imagesUrl: process.env.IMAGES_URL ?? "http://localhost:3000/uploads",
-
-  token: {
-    secret: process.env.TOKEN_SECRET,
-    expiration: process.env.TOKEN_EXPIRATION ?? "1d",
-  },
 });

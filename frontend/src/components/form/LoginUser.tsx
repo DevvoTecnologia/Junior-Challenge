@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { Suspense, useState, useTransition } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import { authenticateUser } from "@/lib/(auth)/login/auth";
@@ -122,12 +122,20 @@ export default function LoginForm() {
 
       <div className="mt-6 flex items-center justify-center" />
 
-      {!isPending && (
-        <BtnLoginGithub
-          startTransition={startTransition}
-          isPending={isPending}
-        />
-      )}
+      <Suspense
+        fallback={
+          <motion.div className="flex items-center justify-center">
+            <LoadingIcon />
+          </motion.div>
+        }
+      >
+        {!isPending && (
+          <BtnLoginGithub
+            startTransition={startTransition}
+            isPending={isPending}
+          />
+        )}
+      </Suspense>
     </motion.form>
   );
 }

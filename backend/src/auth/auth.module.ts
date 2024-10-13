@@ -5,6 +5,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
 import { SequelizeModule } from "@nestjs/sequelize";
 import envGithub from "src/configs/env.github";
+import envSecrets from "src/configs/env.secrets";
 import { User } from "src/user/entities/user.entity";
 
 import { GithubAuthController } from "./controllers/github-auth.controller";
@@ -17,6 +18,7 @@ import { JwtStrategy } from "../strategies/jwt.strategy";
 @Module({
   imports: [
     ConfigModule.forFeature(envGithub),
+    ConfigModule.forFeature(envSecrets),
     SequelizeModule.forFeature([User]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
