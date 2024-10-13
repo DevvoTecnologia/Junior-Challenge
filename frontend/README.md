@@ -13,6 +13,8 @@ QUERYPARAMS_OAUTH_PRIVATE_KEY
 
 QUERYPARAMS_OAUTH_ALGORITHM
 
+This setting is only essential for logging in via OAuth using github. As an additional form of security.
+
 ### 2. Essential Configuration
 
 When testing the production build using `yarn build` and `yarn start`, ensure that the `AUTH_TRUST_HOST` variable is set to match the URL you're testing with.
