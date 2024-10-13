@@ -45,7 +45,7 @@ export class GithubAuthController {
 
     const algorithm = this.configService.get("queryParams.algorithm");
     const secretKey = this.configService.get("queryParams.secret");
-    const ivSize = this.configService.get("queryParams.ivSize");
+    const ivSize = this.configService.get<number>("queryParams.ivSize")!;
 
     const encryptedPayload = encrypt(
       payloadStringfied,
