@@ -7,10 +7,10 @@ To set up the project, follow these steps:
 Begin by creating a `.env.local` file in the root folder. Use the variables and values from the `.env.local.example` file as a starting point.
 
 ```IMPORTANT```
-
 Don't forget to configure the same key for the `backend`, I'm using node crypto to encrypt the url
 
 QUERYPARAMS_OAUTH_PRIVATE_KEY
+
 QUERYPARAMS_OAUTH_ALGORITHM
 
 ### 2. Essential Configuration
