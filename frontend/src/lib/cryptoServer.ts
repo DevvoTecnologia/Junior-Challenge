@@ -1,3 +1,5 @@
+import "server-only";
+
 import type { CipherKey } from "crypto";
 import {
   createCipheriv,
@@ -12,7 +14,7 @@ function generateHmac(secretKey: CipherKey, data: string): string {
 }
 
 export function decrypt(
-  hash: { iv: string; content: string; hmac: string }, // Now includes the HMAC
+  hash: { iv: string; content: string; hmac: string },
   algorithm: Algorithm["name"],
   secretKey: CipherKey,
 ): string {
@@ -36,9 +38,11 @@ export function decrypt(
       decipher.final(),
     ]);
     return decrypted.toString();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (err: any) {
-    throw new Error("Decryption failed: " + err.message);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      throw new Error("Decryption failed: " + err.message);
+    }
+    throw new Error("Decryption failed: unknown error");
   }
 }
 

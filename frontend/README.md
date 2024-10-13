@@ -11,8 +11,6 @@ Don't forget to configure the same key for the `backend`, I'm using node crypto 
 
 QUERYPARAMS_OAUTH_PRIVATE_KEY
 
-QUERYPARAMS_OAUTH_ALGORITHM
-
 This setting is only essential for logging in via OAuth using github. As an additional form of security.
 
 ### 2. Essential Configuration

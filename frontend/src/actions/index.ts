@@ -1,7 +1,7 @@
 "use server";
 
 import { signIn, signOut } from "@/auth";
-import { decrypt } from "@/lib/crypto";
+import { decrypt } from "@/lib/cryptoServer";
 
 export async function handleLogoutServer() {
   await signOut({
@@ -13,8 +13,7 @@ export async function handleLoginOAuthServer(payload: string) {
   try {
     const parsedPayload = JSON.parse(payload);
 
-    const algorithm = process.env
-      .QUERYPARAMS_OAUTH_ALGORITHM as Algorithm["name"];
+    const algorithm = "aes-256-ctr";
     const secretKey = process.env.QUERYPARAMS_OAUTH_PRIVATE_KEY as string;
 
     // decript payload
@@ -46,6 +45,10 @@ export async function handleLoginOAuthServer(payload: string) {
 
     return false;
   } catch (error) {
+    if (error instanceof Error) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to login", error.message);
+    }
     // eslint-disable-next-line no-console
     console.error("Failed to login", error);
     return false;

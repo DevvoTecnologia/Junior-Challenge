@@ -5,6 +5,8 @@ _One Challenge to rule them all, One Challenge to find them, One Challenge to br
 
 ## 🌐 Demonstração do Projeto
 
+Leia o README de cada monorepo para obter informações mais completas sobre o desafio.
+
 ### Site em Produção
 Explore a aplicação desenvolvida para o desafio: [Visite o Site](https://gl-junior-challenge.vercel.app). Aqui, você pode interagir com a interface e ver como os anéis são gerenciados, incluindo as funcionalidades de criação, visualização e edição.
 

@@ -1,7 +1,7 @@
 describe("Authenticated user browsing", () => {
   it("Should navigate into protected routes", () => {
     cy.visit("http://localhost:3001/login");
-    cy.get("input[name=username]").type("admin");
+    cy.get("input[name=email]").type("admin@admin.com");
     cy.get("input[name=password]").type("admin");
 
     cy.get("button[type=submit]").click();

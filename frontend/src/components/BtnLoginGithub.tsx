@@ -29,13 +29,13 @@ export default function BtnLoginGithub({
       try {
         const response = await handleLoginOAuthServer(payload);
 
-        if (response) {
+        if (!response) {
+          router.replace("/login");
+        } else {
           toast.success("Logged in successfully");
 
           router.replace("/users");
           router.refresh();
-        } else {
-          router.replace("/login");
         }
       } catch {
         // eslint-disable-next-line no-console
