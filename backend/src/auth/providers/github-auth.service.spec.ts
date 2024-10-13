@@ -3,6 +3,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { getModelToken } from "@nestjs/sequelize";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
+import { cacheModuleOptions } from "src/global/constants";
 import type { GithubReqUser } from "src/global/types";
 import { User } from "src/user/entities/user.entity";
 
@@ -20,9 +21,7 @@ describe("GithubAuthService", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        CacheModule.register({
-          ttl: 60000 * 10, // 10 minutes
-        }),
+        CacheModule.register(cacheModuleOptions),
         JwtModule.register({
           secret: "secret",
           signOptions: { expiresIn: "1d" },

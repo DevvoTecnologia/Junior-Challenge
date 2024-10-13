@@ -144,7 +144,8 @@ export default class RingGlobalValidations {
   }
 
   protected generateNewUniqueImageName(originalname: string): string {
-    return `${uuidv4()}-${Date.now()}-${originalname}`;
+    const mimeType = originalname.substring(originalname.lastIndexOf(".") + 1);
+    return `${uuidv4()}-${Date.now()}.${mimeType}`;
   }
 
   protected async saveRingImage(

@@ -14,7 +14,8 @@ export class GithubAuthService {
     @InjectModel(User)
     private readonly userModel: typeof User,
     private readonly jwtService: JwtService,
-    @Inject(CACHE_MANAGER) private readonly cacheManager: Cache,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
   ) {}
 
   async createNewUser(req: GithubReqUser): Promise<SignInResponse> {

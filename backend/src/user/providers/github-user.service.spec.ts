@@ -5,6 +5,7 @@ import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
 import * as fs from "fs";
 import * as path from "path";
+import { cacheModuleOptions } from "src/global/constants";
 import type { ReqUser } from "src/global/types";
 import { Ring } from "src/ring/entities/ring.entity";
 
@@ -25,11 +26,7 @@ describe("GithubUserService", () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        CacheModule.register({
-          ttl: 60000 * 10, // 10 minutes
-        }),
-      ],
+      imports: [CacheModule.register(cacheModuleOptions)],
       providers: [
         GithubUserService,
         {

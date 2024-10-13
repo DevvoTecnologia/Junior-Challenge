@@ -9,7 +9,7 @@ interface EnvConfig {
 }
 
 export default (): EnvConfig => ({
-  nodeEnv: process.env.NODE_ENV ?? "development",
+  nodeEnv: process.env.NODE_ENV ?? "production",
 
   allowedOrigin: process.env.ALLOWED_ORIGIN ?? "http://localhost:3001",
 

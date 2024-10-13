@@ -1,4 +1,3 @@
-import { ConfigModule } from "@nestjs/config";
 import { JwtModule } from "@nestjs/jwt";
 import { getModelToken } from "@nestjs/sequelize";
 import type { TestingModule } from "@nestjs/testing";
@@ -25,7 +24,6 @@ describe("LocalAuthService", () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
-        ConfigModule,
         JwtModule.register({
           secret: "secret",
           signOptions: { expiresIn: "1d" },

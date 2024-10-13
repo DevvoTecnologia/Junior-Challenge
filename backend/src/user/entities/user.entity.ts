@@ -18,11 +18,14 @@ export class User extends Model {
   @IsEmail
   @Column({
     unique: true,
+    type: DataType.STRING,
   })
-  public email!: string;
+  public email!: string | null;
 
-  @Column
-  public passwordHash!: string;
+  @Column({
+    type: DataType.STRING,
+  })
+  public passwordHash!: string | null;
 
   @Column({
     type: DataType.VIRTUAL,
@@ -34,8 +37,10 @@ export class User extends Model {
   })
   public canSignWithEmailAndPassword!: boolean;
 
-  @Column
-  public githubUserId!: string;
+  @Column({
+    type: DataType.STRING,
+  })
+  public githubUserId!: string | null;
 
   @BeforeSave({ name: "hashPassword" })
   static async hashPassword(instance: User): Promise<void> {
@@ -47,6 +52,9 @@ export class User extends Model {
   }
 
   async passwordIsValid(password: string): Promise<boolean> {
+    if (!this.passwordHash) {
+      return false;
+    }
     const compare = await bcrypt.compare(password, this.passwordHash);
     return compare;
   }

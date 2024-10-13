@@ -6,6 +6,7 @@ import { PassportModule } from "@nestjs/passport";
 import { SequelizeModule } from "@nestjs/sequelize";
 import envGithub from "src/configs/env.github";
 import envSecrets from "src/configs/env.secrets";
+import { cacheTtl } from "src/global/constants";
 import { User } from "src/user/entities/user.entity";
 
 import { GithubAuthController } from "./controllers/github-auth.controller";
@@ -30,7 +31,7 @@ import { JwtStrategy } from "../strategies/jwt.strategy";
     }),
     PassportModule,
     CacheModule.register({
-      ttl: 60000 * 10, // 10 minutes
+      ttl: cacheTtl,
     }),
   ],
   controllers: [LocalAuthController, GithubAuthController],

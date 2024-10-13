@@ -25,6 +25,7 @@ import {
   ApiTags,
 } from "@nestjs/swagger";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
+import { fileValidation } from "src/global/constants";
 import { errorResponsePatternStructure } from "src/global/swagger.config";
 import type { ReqUser } from "src/global/types";
 
@@ -76,12 +77,9 @@ export class RingController {
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
-          fileType: /jpeg|png/,
+          fileType: fileValidation.image.allowedTypes,
         })
-        .addMaxSizeValidator({
-          maxSize: 1024 * 1024, // 1MB,
-          message: "File is too large. Max size is 1MB",
-        })
+        .addMaxSizeValidator(fileValidation.image.size)
         .build(),
     )
     file: Express.Multer.File,
@@ -103,12 +101,9 @@ export class RingController {
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
-          fileType: /jpeg|png/,
+          fileType: fileValidation.image.allowedTypes,
         })
-        .addMaxSizeValidator({
-          maxSize: 1024 * 1024, // 1MB,
-          message: "File is too large. Max size is 1MB",
-        })
+        .addMaxSizeValidator(fileValidation.image.size)
         .build({ fileIsRequired: false }),
     )
     file: Express.Multer.File | undefined,

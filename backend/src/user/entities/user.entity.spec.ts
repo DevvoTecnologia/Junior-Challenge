@@ -28,7 +28,17 @@ describe("User Entity", () => {
     await User.hashPassword(user);
 
     expect(user.passwordHash).not.toBe("plainPassword");
-    expect(bcrypt.compareSync("plainPassword", user.passwordHash)).toBe(true);
+    expect(
+      bcrypt.compareSync("plainPassword", user.passwordHash as string),
+    ).toBe(true);
+  });
+
+  it("should return false if the passwordHash is null", async () => {
+    const user = new User();
+    user.passwordHash = null;
+
+    const isValid = await user.passwordIsValid("plainPassword");
+    expect(isValid).toBe(false);
   });
 
   it("should validate the password correctly", async () => {

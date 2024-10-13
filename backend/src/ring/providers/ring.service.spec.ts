@@ -1,11 +1,11 @@
 import { CacheModule } from "@nestjs/cache-manager";
 import { BadRequestException, NotFoundException } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
 import { getModelToken } from "@nestjs/sequelize";
 import type { TestingModule } from "@nestjs/testing";
 import { Test } from "@nestjs/testing";
 import * as fs from "fs";
 import * as sharp from "sharp";
+import { cacheModuleOptions } from "src/global/constants";
 import type { ReqUser } from "src/global/types";
 
 import { RingService } from "./ring.service";
@@ -84,12 +84,7 @@ describe("RingService", () => {
     jest.spyOn(fs, "writeFileSync").mockReturnValue(undefined);
 
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        ConfigModule,
-        CacheModule.register({
-          ttl: 60000 * 10, // 10 minutes
-        }),
-      ],
+      imports: [CacheModule.register(cacheModuleOptions)],
       providers: [
         RingService,
         { provide: getModelToken(Ring), useValue: mockRingModel },

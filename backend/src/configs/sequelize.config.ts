@@ -16,9 +16,10 @@ const sequelizeAsyncConfig: SequelizeModuleAsyncOptions = {
     const username = configService.get("database.mysql.username");
     const password = configService.get("database.mysql.password");
     const database = configService.get("database.mysql.name");
+    const dialect = configService.get("database.mysql.dialect") as Dialect;
 
     return {
-      dialect: configService.get("database.mysql.dialect") as Dialect,
+      dialect: dialect,
       host: host,
       port: port,
       username: username,
