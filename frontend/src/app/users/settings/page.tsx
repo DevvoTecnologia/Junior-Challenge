@@ -5,7 +5,7 @@ import SettingsOAuthForm from "@/components/form/SettingsOAuth";
 import getSessionServer from "@/lib/getSessionServer";
 
 export default async function UsersSettingsPage() {
-  const { token, userId, username, isOAuth } = await getSessionServer();
+  const { token, userId, username, isOAuth, email } = await getSessionServer();
 
   return (
     <motion.div
@@ -44,6 +44,7 @@ export default async function UsersSettingsPage() {
       ) : (
         <SettingsForm
           usernameSession={username}
+          emailSession={email}
           userId={userId}
           token={token}
         />

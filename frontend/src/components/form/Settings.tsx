@@ -8,6 +8,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 import catchErrorClient from "@/global/catchErrorClient";
+import { validateEmail } from "@/lib/(auth)/validators";
 import fetchClient from "@/lib/fetchClient";
 import type { UpdateUserSuccess } from "@/types/User";
 
@@ -16,16 +17,19 @@ import Modal from "../Modal";
 
 interface SettingsFormProps {
   usernameSession: string | undefined;
+  emailSession: string | undefined;
   userId: number | undefined;
   token: string | undefined;
 }
 
 export default function SettingsForm({
   usernameSession = "",
+  emailSession = "",
   userId = 0,
   token = "",
 }: Readonly<SettingsFormProps>) {
   const [username, setUsername] = useState(usernameSession);
+  const [email, setEmail] = useState(emailSession);
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [isPending, startTransition] = useTransition();
@@ -55,6 +59,10 @@ export default function SettingsForm({
 
     if (username.length > 20) {
       return toast.error("Username should be at most 20 characters long");
+    }
+
+    if (!validateEmail(email)) {
+      return;
     }
 
     try {
@@ -120,6 +128,22 @@ export default function SettingsForm({
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
+
+        <div className="mb-4">
+          <label htmlFor="username" className="mb-2 block text-sm font-medium">
+            Email:
+          </label>
+          <input
+            className="w-full rounded border border-gray-300 p-2"
+            type="email"
+            id="email"
+            name="email"
+            placeholder={emailSession}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+
         <div className="relative mb-6">
           <label htmlFor="password" className="mb-2 block text-sm font-medium">
             Password:
