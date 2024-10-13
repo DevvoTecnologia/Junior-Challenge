@@ -44,14 +44,18 @@ export class GithubAuthController {
 
     res.cookie("serverResponseData", payloadStringfied, {
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "strict",
       secure: nodeEnv !== "development",
+      maxAge: 1000 * 5, // 5 seconds
+      priority: "high",
     });
 
     res.cookie("fromServer", "true", {
       httpOnly: false,
-      sameSite: "lax",
+      sameSite: "strict",
       secure: nodeEnv !== "development",
+      maxAge: 1000 * 5, // 5 seconds
+      priority: "high",
     });
 
     return res.redirect(clientUrl + "/login");

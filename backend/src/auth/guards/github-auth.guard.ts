@@ -1,8 +1,4 @@
-import {
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from "@nestjs/common";
+import { ExecutionContext, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { AuthGuard } from "@nestjs/passport";
 import type { Response } from "express";
@@ -19,14 +15,13 @@ export class GithubAuthGuard extends AuthGuard("github") {
     user: TUser | false,
     _info: never,
     context: ExecutionContext,
-  ): TUser {
+  ): TUser | void {
     const res: Response = context.switchToHttp().getResponse();
 
     const clientUrl = this.configService.get("allowedOrigin");
 
     if (err || !user) {
-      res.redirect(clientUrl + "/login");
-      throw new UnauthorizedException("Failed to authenticate with GitHub");
+      return res.redirect(clientUrl + "/login");
     }
 
     return user;

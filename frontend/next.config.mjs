@@ -7,6 +7,10 @@ const nextConfig = {
                 hostname: "localhost",
             },
             {
+                protocol: "http",
+                hostname: "192.168.100.3",
+            },
+            {
                 protocol: "https",
                 hostname: "api-junior-challenge.vercel.app",
             },
