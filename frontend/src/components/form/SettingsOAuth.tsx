@@ -55,6 +55,9 @@ export default function SettingsOAuthForm({
 
       toast.success("User updated successfully.");
 
+      // Wait for the toast
+      await new Promise((resolve) => setTimeout(resolve, 600));
+
       await signOut({
         redirectTo: "/login",
       });
@@ -155,6 +158,9 @@ export function BtnDeleteUser({
         });
 
         toast.success("User deleted successfully.");
+
+        // Wait for the toast
+        await new Promise((resolve) => setTimeout(resolve, 600));
 
         return await signOut({
           redirectTo: "/",

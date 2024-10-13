@@ -122,7 +122,7 @@ export class LocalUserService extends UserGlobalValidations {
         canSignWithEmailAndPassword: true,
       });
     } catch {
-      throw new BadRequestException("User already exists");
+      throw new BadRequestException("Email already exists");
     }
 
     // Invalidate cache
@@ -176,7 +176,7 @@ export class LocalUserService extends UserGlobalValidations {
     try {
       await userToUpdate.save();
     } catch {
-      throw new BadRequestException("User already exists");
+      throw new BadRequestException("Email already exists");
     }
 
     // Invalidate cache

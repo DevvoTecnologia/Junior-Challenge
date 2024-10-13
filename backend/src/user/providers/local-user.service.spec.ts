@@ -213,7 +213,7 @@ describe("LocalUserService", () => {
           email: "test@test.com",
           password: "test",
         }),
-      ).rejects.toThrow(new NotFoundException("User already exists"));
+      ).rejects.toThrow(new NotFoundException("Email already exists"));
     });
 
     it("should return a user", async () => {
@@ -383,7 +383,7 @@ describe("LocalUserService", () => {
             user: { sub: 1 },
           } as ReqUser,
         ),
-      ).rejects.toThrow(new BadRequestException("User already exists"));
+      ).rejects.toThrow(new BadRequestException("Email already exists"));
 
       expect(findByPkSpyOn).toHaveBeenCalledWith(1);
       expect(user.save).toHaveBeenCalled();
