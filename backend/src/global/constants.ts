@@ -3,6 +3,7 @@ import type {
   FileTypeValidatorOptions,
   MaxFileSizeValidatorOptions,
 } from "@nestjs/common";
+import { minutes, seconds } from "@nestjs/throttler";
 
 export const cacheKeys = {
   users: (): string => "users",
@@ -30,5 +31,20 @@ export const fileValidation: {
       message: "File is too large. Max size is 1MB",
     },
     allowedTypes: /jpeg|png/,
+  },
+};
+
+export const throttler = {
+  global: {
+    ttl: seconds(10),
+    limit: 5,
+    blockDuration: {
+      POST: {
+        "/user": seconds(8),
+      },
+      DELETE: minutes(1),
+      PUT: seconds(15),
+      default: seconds(20),
+    },
   },
 };
