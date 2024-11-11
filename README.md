@@ -119,7 +119,7 @@ Acesse primeiro backend para definir a porta para http://localhost:3000.
 ### Uso do Front-End:
 
 ```
-yarn dev
+   yarn dev
 ```
 
 Verifique que o local foi definido para:
