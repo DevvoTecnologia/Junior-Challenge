@@ -51,7 +51,7 @@ Este projeto é dividido em servidor e cliente, permitindo gerenciar anéis de p
    ```
 4. Inicie o servidor (modo de produção) ou em desenvolvimento:
    ```bash
-   npm start/dev
+   npm run start:dev
    ```
 
 ### 3. Instalação e Execução do Cliente
@@ -64,10 +64,12 @@ Este projeto é dividido em servidor e cliente, permitindo gerenciar anéis de p
     ```
 
 2.  Instale as dependências:
+
     ```bash
     npm install
 
     ```
+
 3.  Inicie o cliente:
     ```bash
     npm start

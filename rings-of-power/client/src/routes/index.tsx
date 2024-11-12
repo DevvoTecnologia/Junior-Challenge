@@ -10,7 +10,7 @@ const Routing: FC = () => {
       <Routes>
         <Route path="/" element={<Home />} />
 
-        <Route path="/ring/:id" element={<Register />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </>
   );

@@ -12,19 +12,6 @@ const GlobalStyle = createGlobalStyle`
     font-size: 62.5%;
   }
 
-  body{
-    ::-webkit-scrollbar {
-      width: 10px;
-      height: 5px;
-
-    }
-    
-    ::-webkit-scrollbar-thumb {
-      border-radius: 10px;
-      background: var(--white-gray);
-    }
-  }
-
   :root{
     --white: #FFFFFF;
     --dark-blue: #042C69;
@@ -33,7 +20,9 @@ const GlobalStyle = createGlobalStyle`
     --dark-gray: #2F3136;
     --gray: #4F545C;  
     --white-gray: #EBEDEF;
-    --red: #ff0000
+    --red: #ff0000;
+    --black: #11010b;
+    --green-dark: #98956a
     }
 
   a{
@@ -49,6 +38,20 @@ const GlobalStyle = createGlobalStyle`
 
   ol, ul{
     list-style: none;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px; 
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--black); 
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color:var(--green-dark) ; 
+    border-radius: 8px; 
+    border: 2px solid var(--black); 
   }
 `;
 export default GlobalStyle;

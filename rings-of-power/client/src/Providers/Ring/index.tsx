@@ -7,7 +7,7 @@ import {
 } from "react";
 import api from "../../services/api";
 
-interface Ring {
+export interface Ring {
   id: number;
   nome: string;
   poder: string;
@@ -35,10 +35,6 @@ export const RingProvider: React.FC<RingProviderProps> = ({ children }) => {
 
   function loadRings() {
     api.get("/ring").then((response) => setRings(response.data));
-  }
-
-  function createRing() {
-    api.post("/ring").then(loadRings);
   }
 
   useEffect(() => {
