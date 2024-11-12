@@ -1,0 +1,11 @@
+{
+  "name": "Junior-Challenge",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:YasminWalsh/Junior-Challenge.git",
+  "author": "Yasmin Walsh <yasminlwalsh@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express-validator": "^7.2.0"
+  }
+}
