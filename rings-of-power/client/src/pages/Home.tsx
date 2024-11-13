@@ -45,7 +45,6 @@ const NotFound = styled.div`
 
 export const Home = () => {
   const { loadRings, rings } = useRing();
-  console.log({ rings });
   useEffect(() => loadRings, []);
 
   return (

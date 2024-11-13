@@ -2,8 +2,11 @@ import styled from "styled-components";
 import { Ring, useRing } from "../Providers/Ring";
 import { Background } from "../components/backgroundPage";
 import { SubmitHandler, useForm } from "react-hook-form";
-import ringImg from "../assets/ring.webp";
 import api from "../services/api";
+import { useState } from "react";
+import { Alert } from "@mui/material";
+import CheckIcon from "@mui/icons-material/Check";
+
 const FormContainer = styled.div`
   display: flex;
   width: 75%;
@@ -11,7 +14,8 @@ const FormContainer = styled.div`
   flex-direction: column;
   gap: 1em;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  overflow: auto;
   @media (max-width: 600px) {
     width: 90%;
   }
@@ -28,6 +32,11 @@ const FormContainer = styled.div`
     @media (max-width: 600px) {
       max-width: 100%;
       width: 90%;
+    }
+    > label {
+      font-size: 1em;
+      color: var(--light);
+      margin-bottom: -1em;
     }
 
     > input {
@@ -55,6 +64,12 @@ const FormContainer = styled.div`
       @media (min-width: 3000px) {
         font-size: 3em;
       }
+    }
+    > span {
+      text-align: start;
+      color: var(--red);
+      font-size: 1em;
+      margin-top: -1em;
     }
 
     > select {
@@ -117,9 +132,23 @@ const ImgBox = styled.div`
     border-radius: 0.5em;
   }
 `;
+const ErrorBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  color: var(--red);
+  background-color: var(--red-opacity);
+  padding: 1em;
+  border-radius: 0.5em;
+  margin-bottom: 1em;
+  font-size: 0.9em;
+  line-height: 1.2em;
 
+  > p {
+    margin: 0.2em 0;
+  }
+`;
 export const Register = () => {
-  const { loadRings, rings } = useRing();
   const defaultUrlImage =
     "https://ovicio.com.br/wp-content/uploads/2022/01/20220119-ovicio-lord-of-the-ring-rise-to-war.jpg";
   const {
@@ -128,6 +157,10 @@ export const Register = () => {
     watch,
     formState: { errors },
   } = useForm<Ring>();
+  const [apiErrors, setApiErrors] = useState<string[]>([]);
+
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false); // Estado para controlar o alerta
+
   const onSubmit: SubmitHandler<Ring> = (data) => {
     const formattedData = {
       nome: data.nome,
@@ -136,12 +169,24 @@ export const Register = () => {
       forjadoPorId: Number(data.forjadoPor),
       portador: { nome: data.portador },
     };
-
-    console.log(data, formattedData);
     api
       .post("/ring", formattedData)
-      .then((response) => console.log(response.data))
-      .catch((error) => console.error({ error }));
+      .then((response) => {
+        setShowSuccessAlert(true);
+        setTimeout(() => {
+          setShowSuccessAlert(false);
+        }, 3000);
+        setApiErrors([]);
+      })
+      .catch((error) => {
+        const apiErrorMessages = Array.isArray(error.response?.data?.errors)
+          ? error.response.data.errors.map(
+              (err: { message: string }) => err.message
+            )
+          : [error.response?.data?.message || "Erro desconhecido"];
+
+        setApiErrors(apiErrorMessages);
+      });
   };
 
   const imageUrl = watch("imagem") || defaultUrlImage;
@@ -149,28 +194,57 @@ export const Register = () => {
   return (
     <Background page="register" redirect="/">
       <FormContainer>
+        {showSuccessAlert && (
+          <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+            O anel foi criado com sucesso!
+          </Alert>
+        )}
         <h2>Criar um anel</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <input placeholder="Nome do anel" {...register("nome")} />
-
-          <input placeholder="Portador" {...register("portador")} />
-          {errors.portador && <span>This field is required</span>}
-
-          <input placeholder="Poder do anel" {...register("poder")} />
-          {errors.poder && <span>This field is required</span>}
+          <label htmlFor="nome">Nome do Anel</label>
           <input
+            id="nome"
+            placeholder="Nome do anel"
+            {...register("nome", { required: "Nome é obrigatório" })}
+          />
+          {errors.nome && <span>{errors.nome.message}</span>}
+
+          <label htmlFor="portador">Portador</label>
+          <input
+            id="portador"
+            placeholder="Portador"
+            {...register("portador", { required: "Portador é obrigatório" })}
+          />
+          {errors.portador && <span>{errors.portador.message}</span>}
+
+          <label htmlFor="poder">Poder do Anel</label>
+          <input
+            id="poder"
+            placeholder="Poder do anel"
+            {...register("poder", { required: "Poder é obrigatório" })}
+          />
+          {errors.poder && <span>{errors.poder.message}</span>}
+
+          <label htmlFor="imagem">URL da Imagem</label>
+          <input
+            id="imagem"
             defaultValue={defaultUrlImage}
             placeholder="Url da imagem"
-            {...register("imagem")}
+            {...register("imagem", { required: "Imagem é obrigatório" })}
           />
-          {errors.imagem && <span>This field is required</span>}
+          {errors.imagem && <span>{errors.imagem.message}</span>}
+
           <ImgBox>
             <img src={imageUrl} alt="Visualização do anel" />
             <p>Pré-visualização da imagem</p>
           </ImgBox>
 
-          <select {...register("forjadoPor")}>
-            <option value="" disabled selected hidden>
+          <label htmlFor="forjadoPor">Forjado por</label>
+          <select
+            id="forjadoPor"
+            {...register("forjadoPor", { required: "Forjador é obrigatório" })}
+          >
+            <option value="" disabled hidden>
               Escolha um forjador
             </option>
             <option value={1}>Elfos</option>
@@ -178,11 +252,20 @@ export const Register = () => {
             <option value={3}>Homens</option>
             <option value={4}>Sauron</option>
           </select>
-          {errors.forjadoPor && <span>This field is required</span>}
+          {errors.forjadoPor && <span>{errors.forjadoPor.message}</span>}
+
           <button className="submit-button" type="submit">
             Enviar
           </button>
         </form>
+
+        {apiErrors.length > 0 && (
+          <ErrorBox>
+            {apiErrors.map((error, index) => (
+              <p key={index}>{error}</p>
+            ))}
+          </ErrorBox>
+        )}
       </FormContainer>
     </Background>
   );

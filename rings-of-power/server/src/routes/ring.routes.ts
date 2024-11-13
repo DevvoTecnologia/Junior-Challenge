@@ -13,6 +13,11 @@ ringRouter.post(
   validateFields,
   RingController.createRing
 );
-ringRouter.put("/:id", RingController.updateRing);
+ringRouter.put(
+  "/:id",
+  createRingValidationRules(),
+  validateFields,
+  RingController.updateRing
+);
 ringRouter.delete("/:id", RingController.deleteRing);
 export { ringRouter };

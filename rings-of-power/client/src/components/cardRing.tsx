@@ -69,6 +69,8 @@ const Container = styled.div<{ isModalOpen: boolean }>`
   transition: transform 0.3s;
   box-shadow: 0 0.5px 4px var(--green-dark);
   background-color: var(--black);
+  justify-content: center;
+
   &:hover {
     transform: ${({ isModalOpen }) => (isModalOpen ? "none" : "scale(1.05)")};
   }
@@ -142,7 +144,6 @@ export const CardRing: FC<{ data: Ring; loadRings(): void }> = ({
       await api
         .delete(`/ring/${id}`)
         .then((response) => {
-          console.log(response.data);
           loadRings();
         })
         .catch((error) => console.error({ error }));
@@ -150,8 +151,6 @@ export const CardRing: FC<{ data: Ring; loadRings(): void }> = ({
       console.log("Anel deletado com sucesso");
       setShowModal(false);
     } catch (error: any) {
-      console.error({ error });
-
       const errorMessage =
         error.response?.data?.message || "Erro ao deletar o anel";
       console.error(errorMessage);
