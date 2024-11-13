@@ -6,6 +6,7 @@ import { validateFields } from "../middlewares/validation.middleware";
 const ringRouter = Router();
 
 ringRouter.get("/", RingController.getAllRings);
+ringRouter.get("/:id", RingController.getRingById);
 ringRouter.post(
   "/",
   createRingValidationRules(),

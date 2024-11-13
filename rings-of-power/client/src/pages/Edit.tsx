@@ -2,7 +2,8 @@ import styled from "styled-components";
 import { Ring, useRing } from "../Providers/Ring";
 import { Background } from "../components/backgroundPage";
 import { SubmitHandler, useForm } from "react-hook-form";
-import ringImg from "../assets/ring.webp";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
 import api from "../services/api";
 const FormContainer = styled.div`
   display: flex;
@@ -26,14 +27,13 @@ const FormContainer = styled.div`
     gap: 1em;
     max-width: 75%;
     @media (max-width: 600px) {
-      max-width: 100%;
       width: 90%;
+      max-width: 100%;
     }
 
     > input {
       border-radius: 1em;
       border: 0.1em solid;
-      border-color: var(--black);
       height: 2.5em;
       padding: 1em;
 
@@ -41,20 +41,6 @@ const FormContainer = styled.div`
       font-weight: 300;
       font-size: 1em;
       line-height: 1em;
-
-      @media (max-width: 500px) {
-        font-size: 1.2em;
-      }
-      @media (min-width: 1200px) {
-        font-size: 1.5em;
-      }
-      @media (min-width: 1800px) {
-        font-size: 2em;
-      }
-
-      @media (min-width: 3000px) {
-        font-size: 3em;
-      }
     }
 
     > select {
@@ -67,19 +53,6 @@ const FormContainer = styled.div`
       font-weight: 300;
       font-size: 1em;
       line-height: 1em;
-      @media (max-width: 500px) {
-        font-size: 1.2em;
-      }
-      @media (min-width: 1200px) {
-        font-size: 1.5em;
-      }
-      @media (min-width: 1800px) {
-        font-size: 2em;
-      }
-
-      @media (min-width: 3000px) {
-        font-size: 3em;
-      }
     }
 
     .submit-button {
@@ -118,30 +91,55 @@ const ImgBox = styled.div`
   }
 `;
 
-export const Register = () => {
-  const { loadRings, rings } = useRing();
+export const Edit = () => {
   const defaultUrlImage =
     "https://ovicio.com.br/wp-content/uploads/2022/01/20220119-ovicio-lord-of-the-ring-rise-to-war.jpg";
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
+    reset,
     formState: { errors },
   } = useForm<Ring>();
-  const onSubmit: SubmitHandler<Ring> = (data) => {
-    const formattedData = {
-      nome: data.nome,
-      poder: data.poder,
-      imagem: data.imagem,
-      forjadoPorId: Number(data.forjadoPor),
-      portador: { nome: data.portador },
+
+  useEffect(() => {
+    const fetchRingData = async () => {
+      try {
+        const response = await api.get(`/ring/${id}`);
+        const ringData = response.data;
+        reset(ringData);
+      } catch (error) {
+        console.error("Erro ao buscar dados do anel:", error);
+      }
     };
 
-    console.log(data, formattedData);
-    api
-      .post("/ring", formattedData)
-      .then((response) => console.log(response.data))
-      .catch((error) => console.error({ error }));
+    fetchRingData();
+  }, [id, reset]);
+
+  const editRing = async (id: number, data: Ring): Promise<void> => {
+    try {
+      await api
+        .put(`/ring/${id}`, data)
+        .then((response) => console.log(response.data))
+        .catch((error) => console.error({ error }));
+
+      console.log("Anel editado com sucesso");
+      navigate("/");
+    } catch (error: any) {
+      console.error({ error });
+
+      const errorMessage =
+        error.response?.data?.message || "Erro ao editar o anel";
+      console.error(errorMessage);
+    }
+  };
+
+  const onSubmit: SubmitHandler<Ring> = (data) => {
+    console.log(data, typeof data.forjadoPor);
+    editRing(data.id, data);
   };
 
   const imageUrl = watch("imagem") || defaultUrlImage;
@@ -149,7 +147,7 @@ export const Register = () => {
   return (
     <Background page="register" redirect="/">
       <FormContainer>
-        <h2>Criar um anel</h2>
+        <h2>Editar um anel</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input placeholder="Nome do anel" {...register("nome")} />
 
@@ -158,11 +156,7 @@ export const Register = () => {
 
           <input placeholder="Poder do anel" {...register("poder")} />
           {errors.poder && <span>This field is required</span>}
-          <input
-            defaultValue={defaultUrlImage}
-            placeholder="Url da imagem"
-            {...register("imagem")}
-          />
+          <input placeholder="Url da imagem" {...register("imagem")} />
           {errors.imagem && <span>This field is required</span>}
           <ImgBox>
             <img src={imageUrl} alt="Visualização do anel" />

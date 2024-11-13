@@ -22,7 +22,8 @@ const GlobalStyle = createGlobalStyle`
     --white-gray: #EBEDEF;
     --red: #ff0000;
     --black: #11010b;
-    --green-dark: #98956a
+    --green-dark: #98956a;
+    --light: #f5ebce
     }
 
   a{

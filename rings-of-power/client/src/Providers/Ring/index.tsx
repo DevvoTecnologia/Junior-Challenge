@@ -6,6 +6,7 @@ import {
   ReactNode,
 } from "react";
 import api from "../../services/api";
+import { error } from "console";
 
 export interface Ring {
   id: number;
@@ -34,7 +35,10 @@ export const RingProvider: React.FC<RingProviderProps> = ({ children }) => {
   const [rings, setRings] = useState<Ring[]>([]);
 
   function loadRings() {
-    api.get("/ring").then((response) => setRings(response.data));
+    api
+      .get("/ring")
+      .then((response) => setRings(response.data))
+      .catch((error) => console.error({ error }));
   }
 
   useEffect(() => {

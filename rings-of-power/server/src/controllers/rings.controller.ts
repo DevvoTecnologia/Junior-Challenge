@@ -3,6 +3,7 @@ import { createRingService, IRingCreate } from "../services/createRing.service";
 import { getRingsService } from "../services/getAllRings.service";
 import { IRingEdit, updateRingService } from "../services/updateRing.service";
 import { deleteRingService } from "../services/deleteRing.service";
+import { getRingByIdService } from "../services/getRingById.service";
 
 export class RingController {
   static async createRing(req: Request, res: Response, next: NextFunction) {
@@ -25,6 +26,23 @@ export class RingController {
       return;
     } catch (error) {
       return next(error);
+    }
+  }
+
+  static async getRingById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      const ringId = parseInt(id, 10);
+
+      if (isNaN(ringId)) {
+        res.status(400).json({ message: "ID inválido" });
+        return;
+      }
+
+      const ring = await getRingByIdService(ringId);
+      res.json(ring);
+    } catch (error) {
+      next(error);
     }
   }
 
