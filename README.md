@@ -19,16 +19,6 @@ Este projeto é dividido em servidor e cliente, permitindo gerenciar anéis de p
 
   ```
 
-- **Opção 2**: MySQL Local
-
-1. Execute um servidor MySQL local.
-2. Configure as variáveis de ambiente no arquivo `.env` com as credenciais do banco de dados:
-
-> DB_HOST=localhost
-> DB_USER=seu_usuario
-> DB_PASSWORD=sua_senha
-> DB_DATABASE=nome_do_banco
-
 ### 2. Instalação e Execução do Servidor
 
 1. Entre no diretório do servidor:
