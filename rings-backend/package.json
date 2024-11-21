@@ -1,0 +1,47 @@
+{
+  "name": "rings-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "node index.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "ntl": {
+    "runner": "yarn",
+    "descriptions": {
+      "start": "Run the backend in a production environment",
+      "dev": "Run the backend in a development environment"
+    }
+  },
+  "dependencies": {
+    "@types/express": "^4.17.21",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "express-jwt": "^8.4.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.6.2",
+    "multer": "1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.10.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/eslint__js": "^8.42.3",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/multer": "^1.4.12",
+    "eslint": "^9.10.0",
+    "globals": "^15.9.0",
+    "ntl": "^5.1.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.5.0"
+  }
+}
