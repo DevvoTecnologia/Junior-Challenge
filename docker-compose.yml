@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: desafio_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: desafio_aneis
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    container_name: desafio_backend
+    environment:
+      DATABASE_URL: "postgres://postgres:password@postgres:5432/desafio_aneis"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    command: ["npm", "run", "start"] # Garantir que use o script start corretamente
+
+  frontend:
+    build: ./frontend
+    container_name: desafio_frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: "http://localhost:3000/api" # URL ajustada para o ambiente local
+
+volumes:
+  postgres_data:

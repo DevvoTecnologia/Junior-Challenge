@@ -1,0 +1,23 @@
+# Backend Dockerfile
+FROM node:18-alpine
+
+# Define o diretório de trabalho
+WORKDIR /app
+
+# Copia os arquivos de dependências
+COPY package*.json ./
+
+# Instala as dependências
+RUN npm install
+
+# Copia o restante dos arquivos para o container
+COPY . .
+
+# Compila o TypeScript para JavaScript na pasta dist
+RUN npm run build
+
+# Expõe a porta 3000 para o backend
+EXPOSE 3000
+
+# Define o comando padrão para iniciar o servidor
+CMD ["npm", "start"]
