@@ -1,0 +1,142 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Desafio Fullstack Júnior: Os Anéis de Poder",
+      "version": "1.0.0",
+      "description": "API para gerenciar anéis, conforme o desafio."
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000/api",
+        "description": "Servidor local"
+      }
+    ],
+    "paths": {
+      "/rings": {
+        "get": {
+          "summary": "Lista todos os anéis",
+          "description": "Retorna todos os anéis cadastrados.",
+          "responses": {
+            "200": {
+              "description": "Lista de anéis retornada com sucesso.",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": { "$ref": "#/components/schemas/Ring" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "summary": "Cria um novo anel",
+          "description": "Cria um anel com base nas informações fornecidas.",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/RingCreate" }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Anel criado com sucesso."
+            },
+            "400": {
+              "description": "Erro de validação ou limites de anéis excedidos."
+            }
+          }
+        }
+      },
+      "/rings/{id}": {
+        "put": {
+          "summary": "Atualiza um anel existente",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "description": "ID do anel a ser atualizado",
+              "schema": { "type": "integer" }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/RingUpdate" }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Anel atualizado com sucesso."
+            },
+            "404": {
+              "description": "Anel não encontrado."
+            }
+          }
+        },
+        "delete": {
+          "summary": "Deleta um anel",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "description": "ID do anel a ser deletado",
+              "schema": { "type": "integer" }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Anel deletado com sucesso."
+            },
+            "404": {
+              "description": "Anel não encontrado."
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Ring": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "number" },
+            "nome": { "type": "string" },
+            "poder": { "type": "string" },
+            "portador": { "type": "string" },
+            "forjadoPor": { "type": "string" },
+            "imagem": { "type": "string" }
+          }
+        },
+        "RingCreate": {
+          "type": "object",
+          "required": ["nome", "poder", "portador", "forjadoPor"],
+          "properties": {
+            "nome": { "type": "string" },
+            "poder": { "type": "string" },
+            "portador": { "type": "string" },
+            "forjadoPor": { "type": "string" },
+            "imagem": { "type": "string" }
+          }
+        },
+        "RingUpdate": {
+          "type": "object",
+          "properties": {
+            "nome": { "type": "string" },
+            "poder": { "type": "string" },
+            "portador": { "type": "string" },
+            "forjadoPor": { "type": "string" },
+            "imagem": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+  
