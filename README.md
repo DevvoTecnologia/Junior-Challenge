@@ -100,6 +100,7 @@ Este projeto foi hospedado utilizando **Render** (para o backend e banco de dado
 1. **Primeiro Acesso**: Pode haver demora no carregamento inicial devido ao serviço gratuito de backend.
 2. **Recarregar**: Se a página parecer travada ou não carregar, tente atualizar após alguns segundos.
 3. **Erro de Tempo de Resposta**: Se a API retornar erro inicialmente, aguarde e tente novamente após alguns segundos.
+4. **Duração**: Esta aplicação estará disponível até o dia ***13/01/2025***(período de teste gratuito)
 
 Obrigado pela paciência e por testar este projeto!
 ## 🧪 Testes
