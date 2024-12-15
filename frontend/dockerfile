@@ -1,0 +1,26 @@
+# Frontend Dockerfile
+FROM node:18-alpine
+
+# Define o diretório de trabalho
+WORKDIR /app
+
+# Copia os arquivos de dependências
+COPY package*.json ./
+
+# Instala as dependências
+RUN npm install
+
+# Copia o restante dos arquivos para o container
+COPY . .
+
+# Compila o projeto React/Vite
+RUN npm run build
+
+# Instala o servidor `serve` para servir os arquivos estáticos
+RUN npm install -g serve
+
+# Expõe a porta 5173 para o frontend
+EXPOSE 5173
+
+# Define o comando padrão para servir os arquivos estáticos
+CMD ["serve", "-s", "dist", "-l", "5173"]
